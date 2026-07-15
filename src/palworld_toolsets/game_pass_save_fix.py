@@ -428,7 +428,8 @@ class GamePassSaveFixWidget(QWidget):
         return ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
     def move_save_steam(self, saveName):
         try:
-            steam_default = os.path.expandvars('%localappdata%\\Pal\\Saved\\SaveGames')
+            from common import get_preferred_save_path
+            steam_default = get_preferred_save_path()
             initial = steam_default if os.path.isdir(steam_default) else root_dir
             self.raise_()
             self.activateWindow()

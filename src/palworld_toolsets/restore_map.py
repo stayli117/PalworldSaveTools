@@ -9,7 +9,8 @@ from palworld_aio.ui.chrome.styles import ThemeManager
 from palworld_aio import constants
 from resource_resolver import get_data_base
 import os, time, shutil
-savegames_path = os.path.join(os.environ['LOCALAPPDATA'], 'Pal', 'Saved', 'SaveGames')
+from common import get_preferred_save_path
+savegames_path = get_preferred_save_path()
 restore_map_path = os.path.join(get_data_base(), 'Backups', 'Restore Map')
 os.makedirs(restore_map_path, exist_ok=True)
 def backup_local_data(subfolder_path):

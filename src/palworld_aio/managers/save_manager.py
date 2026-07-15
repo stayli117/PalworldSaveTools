@@ -111,7 +111,9 @@ class SaveManager(QObject):
         return True
     def load_save(self, path=None, parent=None):
         if path is None:
-            p, _ = QFileDialog.getOpenFileName(parent, 'Select Level.sav', '', 'SAV Files(*.sav)')
+            from common import get_preferred_save_path
+            default_dir = get_preferred_save_path()
+            p, _ = QFileDialog.getOpenFileName(parent, 'Select Level.sav', default_dir, 'SAV Files(*.sav)')
         else:
             p = path
         if not p:
@@ -128,6 +130,8 @@ class SaveManager(QObject):
         self.load_started.emit()
         constants.current_save_path = d
         constants.backup_save_path = constants.current_save_path
+        from common import set_last_save_path
+        set_last_save_path(d)
         backup_whole_directory(constants.backup_save_path, 'Backups/AllinOneTools')
         def load_task():
             try:

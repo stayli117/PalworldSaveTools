@@ -173,6 +173,8 @@ def run_aio():
         print('Loading save...')
         constants.current_save_path = d
         constants.backup_save_path = constants.current_save_path
+        from common import set_last_save_path
+        set_last_save_path(d)
         from import_libs import backup_whole_directory
         backup_whole_directory(constants.backup_save_path, 'Backups/AllinOneTools')
         import time

@@ -50,6 +50,30 @@ def is_standalone():
         return False
 def get_current_version():
     return APP_VERSION
+def get_steam_save_path() -> str:
+    if sys.platform == 'win32':
+        return os.path.expandvars(r'%LOCALAPPDATA%\Pal\Saved\SaveGames')
+    elif sys.platform == 'darwin':
+        return os.path.expanduser(
+            '~/Library/Containers/com.pocketpair.palworld.mac/Data/'
+            'Library/Application Support/Epic/Pal/Saved/SaveGames'
+        )
+    return ''
+
+
+def get_preferred_save_path() -> str:
+    from i18n import get_config_value
+    stored = get_config_value('last_save_path', '')
+    if stored and os.path.isdir(stored):
+        return stored
+    return get_steam_save_path()
+
+
+def set_last_save_path(path: str) -> None:
+    from i18n import set_config_value
+    set_config_value('last_save_path', path)
+
+
 def open_file_with_default_app(file_path):
     import platform
     if not os.path.exists(file_path):

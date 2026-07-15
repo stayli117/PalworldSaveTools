@@ -3,8 +3,9 @@ from loading_manager import show_warning, show_critical
 from palworld_aio.ui.chrome.styles import ThemeManager
 import nerdfont as nf
 from palworld_aio import constants
+from common import get_preferred_save_path
 def get_steam_id_from_local():
-    local_app_data_path = os.path.expandvars('%localappdata%\\Pal\\Saved\\SaveGames')
+    local_app_data_path = get_preferred_save_path()
     if os.path.exists(local_app_data_path):
         subdirs = [d for d in os.listdir(local_app_data_path) if os.path.isdir(os.path.join(local_app_data_path, d))]
         return subdirs[0] if subdirs else None

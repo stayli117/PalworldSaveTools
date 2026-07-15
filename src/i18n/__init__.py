@@ -51,6 +51,16 @@ def get_config_value(key: str, default: Any=None) -> Any:
         cfg = _load_json(cfg_path)
         return cfg.get(key, default)
     return default
+
+
+def set_config_value(key: str, value: Any) -> None:
+    try:
+        os.makedirs(os.path.dirname(_CFG), exist_ok=True)
+        cfg = _load_json(_CFG) if os.path.exists(_CFG) else {}
+        cfg[key] = value
+        json_tools.dump(cfg, _CFG)
+    except Exception:
+        pass
 def init_language(default_lang: str='zh_CN') -> None:
     global _RES, _LANG
     lang = default_lang

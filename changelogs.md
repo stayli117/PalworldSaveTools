@@ -1,6 +1,7 @@
 #2.0.9
 - Updated game data to palworld v1.0.1
 - **Breeding formula fixes** — case-insensitive name/tribe mapping prevents missed pal parents; pals produced by unique breeding combos are excluded from the generic formula's candidate pool; `closest_pal()` tiebreaker picks higher combi-rank instead of rarity
+- **macOS save path support** — new `get_steam_save_path()` resolves Steam saves on Windows (`%LOCALAPPDATA%\Pal\Saved\SaveGames`) and macOS (`~/Library/Containers/com.pocketpair.palworld.mac/.../SaveGames`); `get_preferred_save_path()` persists last-used directory across sessions in user config; `restore_map.py` no longer crashes on non-Windows
 - Bumped version to 2.0.9
 
 #2.0.8

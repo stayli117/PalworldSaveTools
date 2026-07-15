@@ -1,0 +1,118 @@
+name: Nexus Mods Upload
+
+# Uploads release assets to Nexus Mods when a GitHub release is published.
+# Also supports manual workflow_dispatch for testing or re-uploads.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag to upload (e.g. v2.0.3). Leave empty to use the latest published release."
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - variant: windows
+            asset_glob: "PalworldSaveTools-V*-win.exe"
+            file_id: "7648655"
+          - variant: linux
+            asset_glob: "PalworldSaveTools-V*-linux.AppImage"
+            file_id: "7648652"
+          - variant: macos
+            asset_glob: "PalworldSaveTools-V*-macos.dmg"
+            file_id: "7648646"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
+      - name: Bootstrap environment
+        id: env
+        uses: ./.github/actions/setup-build-env
+
+      - name: Resolve tag and version
+        id: meta
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "${{ github.event_name }}" = "release" ]; then
+            tag="${{ github.event.release.tag_name }}"
+          else
+            tag="${{ github.event.inputs.tag }}"
+            if [ -z "$tag" ]; then
+              echo "No tag provided — fetching latest published release..."
+              tag=$(gh release list --repo "${{ github.repository }}" \
+                --limit 1 --json tagName --jq '.[0].tagName' 2>/dev/null || true)
+              echo "Latest: $tag"
+            fi
+          fi
+          if [ -z "$tag" ]; then
+            echo "::error::No tag resolved and no published releases found"
+            exit 1
+          fi
+          version="${tag#v}"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "resolved tag=$tag version=$version"
+
+      - name: Download release asset
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tag="${{ steps.meta.outputs.tag }}"
+          echo "Downloading asset matching '${{ matrix.asset_glob }}' from release '$tag'..."
+          mkdir -p "downloads/${{ matrix.variant }}"
+          if ! gh release download "$tag" \
+              --repo "${{ github.repository }}" \
+              --pattern "${{ matrix.asset_glob }}" \
+              --dir "downloads/${{ matrix.variant }}"; then
+            echo "::error:: Could not download '${{ matrix.asset_glob }}' from release '$tag'."
+            echo "Available assets:"
+            gh release view "$tag" --repo "${{ github.repository }}" \
+              --json assets --jq '.assets[].name // "(none)"' 2>&1 || true
+            exit 1
+          fi
+          echo "Downloaded:"
+          ls -la "downloads/${{ matrix.variant }}/"
+
+      - name: Find & zip asset
+        id: package
+        run: |
+          dir="downloads/${{ matrix.variant }}"
+          asset=$(find "$dir" -name "${{ matrix.asset_glob }}" -type f 2>/dev/null | head -1)
+          if [ -z "$asset" ]; then
+            echo "::error::No asset matching '${{ matrix.asset_glob }}' in $dir"
+            find downloads -type f 2>/dev/null || echo "(empty)"
+            exit 1
+          fi
+          echo "Found: $asset"
+          case "$asset" in
+            *.zip)
+              echo "upload_file=$asset" >> "$GITHUB_OUTPUT"
+              ;;
+            *)
+              zip_name="${asset%.*}.zip"
+              zip -j "$zip_name" "$asset"
+              echo "upload_file=$zip_name" >> "$GITHUB_OUTPUT"
+              ;;
+          esac
+
+      - name: Upload to Nexus Mods
+        uses: Nexus-Mods/upload-action@v1.0.0-beta.8
+        with:
+          api_key: ${{ secrets.NEXUSMODS_API_KEY }}
+          file_id: ${{ matrix.file_id }}
+          filename: ${{ steps.package.outputs.upload_file }}
+          version: ${{ steps.meta.outputs.version }}
+          display_name: ${{ steps.meta.outputs.tag }}_${{ matrix.variant }}
+          archive_existing_version: true

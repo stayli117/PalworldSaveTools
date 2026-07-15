@@ -215,6 +215,8 @@ class PalInfoHandlerMixin:
             exp_val = exp_table[str(value)]['PalTotalEXP']
         except Exception:
             exp_val = 0
+        if exp_val == 0 and value >= 80:
+            exp_val = _data.PAL_EXP_TABLE.get('100', {}).get('PalTotalEXP', 282766395)
         raw['Exp'] = {'id': None, 'type': 'Int64Property', 'value': exp_val}
         talent_hp = extract_value(raw, 'Talent_HP', 0)
         rank_hp = extract_value(raw, 'Rank_HP', 0)

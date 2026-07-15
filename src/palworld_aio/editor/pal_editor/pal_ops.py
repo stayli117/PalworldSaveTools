@@ -228,6 +228,8 @@ def _max_stats_raw(raw):
     raw['bIsAwakening'] = {'id': None, 'type': 'BoolProperty', 'value': True}
     raw['Level'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': lv_cap}}
     exp_val = _data.PAL_EXP_TABLE.get(str(lv_cap), {}).get('PalTotalEXP', 0)
+    if exp_val == 0 and lv_cap >= 80:
+        exp_val = _data.PAL_EXP_TABLE.get('100', {}).get('PalTotalEXP', 282766395)
     raw['Exp'] = {'id': None, 'type': 'Int64Property', 'value': exp_val}
     cid = extract_value(raw, 'CharacterID', '')
     base_data = _data.get_pal_base_data(cid)

@@ -836,6 +836,8 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
                     _set_work_suitability(tr, k, 10)
             tr['Level'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': lv_cap}}
             exp_val = _data.PAL_EXP_TABLE.get(str(lv_cap), {}).get('PalTotalEXP', 0)
+            if exp_val == 0 and lv_cap >= 80:
+                exp_val = _data.PAL_EXP_TABLE.get('100', {}).get('PalTotalEXP', 282766395)
             tr['Exp'] = {'id': None, 'type': 'Int64Property', 'value': exp_val}
             count += 1
         for pi in pals:

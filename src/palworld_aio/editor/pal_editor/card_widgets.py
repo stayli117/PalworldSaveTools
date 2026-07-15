@@ -630,7 +630,7 @@ class PalCardWidget(QFrame):
 
         exp_bar.setFixedHeight(6)
 
-        exp_ratio = min(exp / 1000.0, 1.0) if exp else 0
+        exp_ratio = 1.0 if int(level) >= 80 else (min(exp / 1000.0, 1.0) if exp else 0)
 
         exp_bar.setStyleSheet('background: rgba(55,65,81,0.5); border-radius: 3px; border: 1px solid rgba(99,102,241,0.15);')
 

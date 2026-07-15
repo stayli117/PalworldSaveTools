@@ -53363,9 +53363,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Creates acidic clouds that\r\npour down acid rain on enemies.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.125,
+            "MaxHitNum": 99,
+            "HitInterval": 0.5
         },
         {
             "name": "Air Blade",
@@ -53388,7 +53388,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Sends out sharp blades of air in a fan shape.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.8325,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -53438,9 +53438,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Generates several dark vortexes around the enemy.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.1,
+            "MaxHitNum": 10,
+            "HitInterval": 0.12
         },
         {
             "name": "Hydro Jet",
@@ -53488,7 +53488,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Mows down the area in front with a beam imbued with dragon power.\r\nThe area struck by the beam will also explode after a short delay.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.2,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -53513,9 +53513,9 @@
             "is_explosion_damage": true,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Fires an energy bullet imbued with dragon power at the enemy's location.\r\nUpon impact, the bullet shatters and creates a frontal long-range explosion.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.2,
             "MaxHitNum": null,
-            "HitInterval": null
+            "HitInterval": 1.0
         },
         {
             "name": "Iceberg",
@@ -53588,9 +53588,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Fires numerous bubbles\r\nthat slowly pursue an enemy.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.166667,
+            "MaxHitNum": 999,
+            "HitInterval": 0.1
         },
         {
             "name": "Poison Shower",
@@ -53613,9 +53613,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Focuses energy into the body and scatters poison orbs in all directions.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.3,
             "MaxHitNum": null,
-            "HitInterval": null
+            "HitInterval": 1.0
         },
         {
             "name": "Charge Cannon",
@@ -53638,9 +53638,9 @@
             "is_explosion_damage": true,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Fires an energy orb infused with draconic power at the enemy. \r\nThe orb causes a wide-area explosion upon impact.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.1,
             "MaxHitNum": null,
-            "HitInterval": null
+            "HitInterval": 1.0
         },
         {
             "name": "Comet Strike",
@@ -53663,7 +53663,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Drops a meteorite straight down,\r\ngenerating a shock wave around the impact area.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.3,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -53688,7 +53688,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Drops countless meteorites,\r\ngenerating an array of shock waves.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.075,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -53738,7 +53738,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Conjures blades of wind in front of the enemy, converging to deliver a cutting cross attack.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.5,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -53763,9 +53763,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Fires off dark energy\r\nthat homes in on an enemy.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.333333,
             "MaxHitNum": null,
-            "HitInterval": null
+            "HitInterval": 0.1
         },
         {
             "name": "Dark Ball",
@@ -53813,9 +53813,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_S",
             "description": "Hurls an energy ball imbued\r\nwith dark energy at an enemy.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.1,
             "MaxHitNum": null,
-            "HitInterval": null
+            "HitInterval": 1.0
         },
         {
             "name": "Dark Laser",
@@ -53838,9 +53838,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Charges dark energy before\r\nblasting enemies with a powerful beam.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.066667,
+            "MaxHitNum": 15,
+            "HitInterval": 0.1
         },
         {
             "name": "Dark Whisp",
@@ -53863,7 +53863,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Fires a menacing ball of dark energy that pursues enemies.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.090909,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -53938,7 +53938,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Creates numerous lumps of ice that are\r\nconsecutively dropped on a foe's head.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.05,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -53963,7 +53963,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Fires a high-pressure stream of water forward.\r\nAfter a short delay, the stream branches off to the left and right.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.333333,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -53988,7 +53988,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Creates two huge ice blocks\r\nand fires them at the enemy one after another.\r\nOn impact, it also shocks those close by.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.15,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -54013,7 +54013,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Exhales breath imbued with draconic energy,\r\ndealing continuous damage to those in front of it.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.052632,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -54040,7 +54040,7 @@
             "description": "Hurls an energy ball imbued\r\nwith draconic energy at an enemy.",
             "WazaPowerRate": null,
             "MaxHitNum": null,
-            "HitInterval": null
+            "HitInterval": 1.0
         },
         {
             "name": "Dragon Meteor",
@@ -54063,7 +54063,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Summons numerous small meteorites\r\nand launches them at an enemy.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.066667,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -54113,9 +54113,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_S",
             "description": "Quickly discharges electricity,\r\nshocking those around it.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.333333,
+            "MaxHitNum": 3,
+            "HitInterval": 0.15
         },
         {
             "name": "Volcanic Rain",
@@ -54138,9 +54138,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Fires countless volcanic bombs into the sky.\r\nAfter a while, the bombs rain down around their originator.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.2,
             "MaxHitNum": null,
-            "HitInterval": null
+            "HitInterval": 1.0
         },
         {
             "name": "Fire Ball",
@@ -54163,9 +54163,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Creates a giant ball of flame and hurls it at an enemy.\r\nThe ball explodes over a wide area upon impact.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.1,
+            "MaxHitNum": 4,
+            "HitInterval": 0.3
         },
         {
             "name": "Ignis Blast",
@@ -54213,7 +54213,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_S",
             "description": "Shoots fireballs towards an enemy. \r\nThe fireballs explode after a short distance, \r\ngenerating smaller fireballs that spread forward.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.1,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -54238,7 +54238,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Creates multiple spheres of fiery energy,\r\nfrom which countless fireballs shoot towards the enemy.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.058824,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -54263,7 +54263,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Shoots flames at an enemy,\r\ndealing continuous damage.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.052632,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -54288,9 +54288,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Creates a wall of flames at the enemy's location.\r\nThe wall of flames will remain for a while,\r\nand deal damage to the enemies it touches.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.01,
+            "MaxHitNum": 10,
+            "HitInterval": 1.0
         },
         {
             "name": "Flare Arrow",
@@ -54313,9 +54313,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Fires three flaming arrows in succession\r\nthat home in on an enemy.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.333333,
             "MaxHitNum": null,
-            "HitInterval": null
+            "HitInterval": 0.1
         },
         {
             "name": "Flare Storm",
@@ -54338,9 +54338,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Generates two flaming tornadoes on either side \r\nbefore launching them at an enemy.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.1,
+            "MaxHitNum": 5,
+            "HitInterval": 0.1
         },
         {
             "name": "Crystal Breath",
@@ -54363,7 +54363,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Enshrouds an enemy in a frigid blast of air,\r\ndealing continuous damage.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.052632,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -54463,9 +54463,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Fires three balls of malice\r\nthat relentlessly pursue an enemy.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.333333,
+            "MaxHitNum": 3,
+            "HitInterval": 1.0
         },
         {
             "name": "Corruption Laser",
@@ -54513,9 +54513,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.033333,
+            "MaxHitNum": 30,
+            "HitInterval": 0.1
         },
         {
             "name": "Grass Tornado",
@@ -54538,9 +54538,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Generates two tornadoes on either side \r\nbefore launching them at an enemy.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.1,
+            "MaxHitNum": 5,
+            "HitInterval": 0.1
         },
         {
             "name": "Dark Shot",
@@ -54588,8 +54588,8 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Creates a wide explosion of light\r\nat the enemy's location and around it.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
+            "WazaPowerRate": 0.071429,
+            "MaxHitNum": 7,
             "HitInterval": null
         },
         {
@@ -54663,9 +54663,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Shoots pressurized water at extreme velocities,\r\nsweeping over a wide area in front of it.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.066667,
+            "MaxHitNum": 15,
+            "HitInterval": 0.1
         },
         {
             "name": "Hydro Slicer",
@@ -54688,7 +54688,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Mows down the frontal area with a blast of compressed water.\r\nThe area struck by the blast erupts with water after a short delay.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.2,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -54713,9 +54713,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Charges destructive energy before firing\r\na high-powered beam forward across a wide area.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.066667,
+            "MaxHitNum": 15,
+            "HitInterval": 0.1
         },
         {
             "name": "Absolute Frost",
@@ -54738,7 +54738,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Throws icicles in a wide area from under the enemy's feet.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.37,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -54788,9 +54788,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_S",
             "description": "Creates ice lances in the air\r\nthat fly towards enemies.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.333333,
+            "MaxHitNum": 3,
+            "HitInterval": 0.1
         },
         {
             "name": "Freeze Wall",
@@ -54838,7 +54838,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Generates pillars of ice that move in a straight line in three directions.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.346875,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -54863,9 +54863,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Generates multiple sharp ice blocks in the sky\r\nand fires them at the enemy.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.166667,
+            "MaxHitNum": 3,
+            "HitInterval": 0.1
         },
         {
             "name": "Blizzard Spike",
@@ -54888,7 +54888,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Creates a giant lump of ice and hurls it at an enemy.\r\nIt deals damage to those in the surrounding area upon impact.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.3,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -54913,7 +54913,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Infuses the surrounding ground with energy, \r\ncausing it to explode after a set amount of time.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.333,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -54988,7 +54988,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Generates a lightning bolt \r\nthat moves forward in a line.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.8325,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -55014,8 +55014,8 @@
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Takes aim at an enemy before\r\nfiring a super high speed laser.",
             "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "MaxHitNum": 0,
+            "HitInterval": 0.25
         },
         {
             "name": "Bog Blast",
@@ -55039,8 +55039,8 @@
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_S",
             "description": "Hurls sticky mud\r\nat an enemy.",
             "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "MaxHitNum": 3,
+            "HitInterval": 0.25
         },
         {
             "name": "Poison Fog",
@@ -55089,8 +55089,8 @@
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_S",
             "description": "Hurls poison sludge\r\nat an enemy.",
             "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "MaxHitNum": 3,
+            "HitInterval": 0.25
         },
         {
             "name": "Sentinel of the Great Sea",
@@ -55138,7 +55138,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.07,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -55189,8 +55189,8 @@
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_S",
             "description": "Charges energy\r\ninto a focused blast.",
             "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "MaxHitNum": 3,
+            "HitInterval": 0.25
         },
         {
             "name": "Predator Blast",
@@ -55213,9 +55213,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.066667,
+            "MaxHitNum": 15,
+            "HitInterval": 0.2
         },
         {
             "name": "Predator Mark",
@@ -55288,7 +55288,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Utilizes gravity to deprive enemies of their freedom, \r\nthen slams them into the ground from high above.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.5,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -55313,7 +55313,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Unleashes a sphere of light that slowly tracks down an enemy. \r\nAs it nears its target, it splits into countless light bullets that strike all at once.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.17,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -55338,7 +55338,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Shoots countless wind swords \r\nthat fly straight towards the enemy.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.2,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -55388,7 +55388,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Generates lightning strikes that travel \r\nin a straight line in all directions.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.1,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -55438,7 +55438,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Generates waves that surge around the enemy from all sides. \r\nThey converge and explode at the center, erupting into a column of water.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.3,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -55463,7 +55463,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Shakes the ground and lifts a massive boulder into the air.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.5,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -55563,9 +55563,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Generates two sand tornadoes on either side\r\nbefore launching them at an enemy.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.1,
+            "MaxHitNum": 5,
+            "HitInterval": 0.1
         },
         {
             "name": "Sand Twister",
@@ -55588,9 +55588,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Creates multiple sand tornadoes.\r\nThe tornadoes continuously spin in circles.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.2,
+            "MaxHitNum": 5,
+            "HitInterval": 0.3
         },
         {
             "name": "en Text",
@@ -55638,7 +55638,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Erupts massive pillars of water beneath and around the enemy.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.25,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -55663,9 +55663,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_S",
             "description": "Fires a volley of hard seeds\r\nat enemies in front of it.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.1,
+            "MaxHitNum": 10,
+            "HitInterval": 0.1
         },
         {
             "name": "Seed Mine",
@@ -55688,7 +55688,7 @@
             "is_explosion_damage": true,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Launches a deadly seed.\r\nIf it hits an enemy, the seed explodes.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.2,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -55813,9 +55813,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "After aiming at the enemy,\r\nfires multiple ultra-fast lightning lasers.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.2,
+            "MaxHitNum": 0,
+            "HitInterval": 0.25
         },
         {
             "name": "Solar Blast",
@@ -55838,9 +55838,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Charges solar energy before\r\nblasting enemies with a powerful beam.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.066667,
+            "MaxHitNum": 15,
+            "HitInterval": 0.1
         },
         {
             "name": "Multicutter",
@@ -55863,7 +55863,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_S",
             "description": "The user fires three high-speed blades of wind\r\nin quick succession that fly straight at enemies.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.33,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -55888,7 +55888,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_S",
             "description": "Releases lightning orbs in a fan shape, \r\nspreading as they travel.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.2,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -55913,7 +55913,7 @@
             "is_explosion_damage": true,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Generates stars around the enemy that explode on contact.\r\nStars also explode after some time.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.1,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -55938,8 +55938,8 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_S",
             "description": "Fires a barrage of stones forward.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
+            "WazaPowerRate": 0.15,
+            "MaxHitNum": 10,
             "HitInterval": null
         },
         {
@@ -55963,7 +55963,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Drops meteorites one after another,\r\ngenerating shock waves around the impact areas.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.1,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -55988,7 +55988,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Generates lightning that strikes\r\nan enemy three times from above.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.333333,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -56088,9 +56088,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Charges electric energy before\r\nblasting enemies with a powerful shock.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.066667,
+            "MaxHitNum": 15,
+            "HitInterval": 0.1
         },
         {
             "name": "Plasma Funnel",
@@ -56113,8 +56113,8 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Creates two balls of electric energy\r\nthat fire numerous lightning orbs at enemies.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
+            "WazaPowerRate": 0.05,
+            "MaxHitNum": 999,
             "HitInterval": null
         },
         {
@@ -56138,7 +56138,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Calls lightning that strikes an enemy\r\nafter a set amount of time has passed.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.15,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -56188,9 +56188,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Generates a huge tornado of lightning\r\nthat moves slowly towards the enemy.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.05,
+            "MaxHitNum": 20,
+            "HitInterval": 0.25
         },
         {
             "name": "Rockburst",
@@ -56213,7 +56213,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Causes the ground to shake before hurling a massive stone mass at its surroundings.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.1,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -56238,7 +56238,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "A high-speed lightning ball that flies in a straight line.\r\nSimultaneously fires slow lightning balls that track the enemy.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.4,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -56638,7 +56638,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Charges forward, generating orbs of light that automatically target enemies \r\nand unleash a barrage of lasers.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.05,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -56663,9 +56663,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Shadowbeak's exclusive skill. \r\nAs it charges forward, emits countless blue rays that automatically locate and pursue the enemy.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.042105,
             "MaxHitNum": null,
-            "HitInterval": null
+            "HitInterval": 1.0
         },
         {
             "name": "Firefist Breathstorm",
@@ -56688,9 +56688,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_S",
             "description": "Astegon's exclusive skill.\r\nAfter throwing two punches forward, it exhales a dragon breath downward.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.022222,
+            "MaxHitNum": 18,
+            "HitInterval": 0.1
         },
         {
             "name": "Fierce Fang (Dark)",
@@ -56813,9 +56813,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Shaolong's exclusive skill.\r\nSummons a massive vortex reaching into the heavens.\r\nThe vortex draws in and eliminates all surrounding enemies at once.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.083333,
+            "MaxHitNum": 12,
+            "HitInterval": 0.2
         },
         {
             "name": "Unique_BlueSkyDragon_GYM_Act",
@@ -56838,9 +56838,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.083333,
+            "MaxHitNum": 36,
+            "HitInterval": 0.2
         },
         {
             "name": "Azure Dracoflare",
@@ -56863,9 +56863,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Shaolong's exclusive skill.\r\nBreathes Dragon-elemental flames in a sweeping motion, scorching the surrounding area.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.25,
+            "MaxHitNum": 4,
+            "HitInterval": 0.1
         },
         {
             "name": "Hydra Charge",
@@ -57063,7 +57063,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Dupin's exclusive skill.\r\nCreates two illusions to distract enemies, then launches fire birds from its top hat.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.05,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -57263,9 +57263,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Xenolord's exclusive skill.\r\nSummons the light of destruction from subspace and continuously fires it in all directions, burning everything in its sight to ashes.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.1,
+            "MaxHitNum": 5,
+            "HitInterval": 1.0
         },
         {
             "name": "Satellite Bit",
@@ -57288,7 +57288,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Xenolord's exclusive skill.\r\nGenerates four satellite-like wings with auto-attack functionality. \r\nThese wings will automatically track and attack the enemy when the next attack is launched.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.25,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -57313,7 +57313,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Xenolord's exclusive skill.\r\nSoars into the air at the speed of light and releases countless meteor projectiles. \r\nAfterwards, transforms into a comet and charges forward, causing a massive explosion upon impact.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.025,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -57413,7 +57413,7 @@
             "is_explosion_damage": true,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Aegidron's exclusive skill.\r\nLaunches countless explosive missiles from its wings.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.041667,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -57513,7 +57513,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Grizzbolt's exclusive skill.\r\nPulls out a minigun out of nowhere and starts blasting. \r\nFinishes with a single, charged power shot.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.25,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -57613,9 +57613,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Elphidran's exclusive skill.\r\nGenerates twin whirlwinds imbued with a mysterious power\r\nthat pursues enemies.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.1,
+            "MaxHitNum": 5,
+            "HitInterval": 0.1
         },
         {
             "name": "Earth Dash",
@@ -57738,9 +57738,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Pyrin's exclusive skill.\r\nCharges forward while engulfed in a veil of flames.\r\nFlames continue to burn in its path.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.04,
+            "MaxHitNum": 99,
+            "HitInterval": 0.5
         },
         {
             "name": "Blazing Horn",
@@ -57988,7 +57988,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Maraith's exclusive skill.\r\nWhile running slowly, it continuously launches flickering fireballs toward the enemy.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.166667,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -58013,9 +58013,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Eidrolon's exclusive skill.\r\nEmits a superheated light beam for a short time.\r\nAt the final moment, the targeted area is engulfed in a massive explosion.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.5,
+            "MaxHitNum": 10,
+            "HitInterval": 0.2
         },
         {
             "name": "Tail Slash",
@@ -58113,7 +58113,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Gildane's exclusive skill.\r\nCharges forward, hurling rocks to the left and right with great force.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.07,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -58163,7 +58163,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Gorirat's exclusive skill.\r\nPounds the ground twice before leaping into the air\r\nand delivers a powerful punch.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.5,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -58188,7 +58188,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Dualiths exclusive skill.\r\nFires a Grass-elemental energy projectile from its arm.\r\nUpon impact, the blast transforms into persistent roots that track and pierce the enemy from below.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.333333,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -58238,7 +58238,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Dualiths exclusive skill.\r\nDetaches its left arm to sweep enemies, then launches its right arm.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.7,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -58288,7 +58288,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Elgrove's exclusive skill.\r\nEnters a violent frenzy and unleashes four consecutive rage-fueled Grass-element charge attacks.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.25,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -58313,7 +58313,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Elgrove's exclusive skill.\r\nEnters a wild frenzy and unleashes two consecutive Grass-element charge attacks.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.5,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -58363,7 +58363,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Elgrove Cryst's exclusive skill.\r\nEnters a wild frenzy and unleashes two consecutive Ice-element charge attacks.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.5,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -58463,7 +58463,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Splatterina's exclusive skill.\r\nTeleports instantly and launches a slash. It then teleports above the enemy, \r\ndrives its weapon into them, and unleashes a wave of dark energy.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.25,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -58538,9 +58538,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Nitewing's exclusive skill.\r\nGenerates a tornado ahead before soaring towards its target.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.1,
+            "MaxHitNum": 5,
+            "HitInterval": 0.1
         },
         {
             "name": "Giga Horn",
@@ -58588,9 +58588,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Faleris' exclusive skill.\r\nAfter creating scorching tornadoes, it cloaks itself in hellfire and charges forward.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.02,
+            "MaxHitNum": 5,
+            "HitInterval": 0.1
         },
         {
             "name": "Raging Flame Wave",
@@ -58613,9 +58613,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Faleris' exclusive skill.\r\nGenerates multiple scorching tornadoes and charges forward while gliding.\r\nThe tornadoes converge in the center and eventually merge into a single massive tornado.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.006667,
+            "MaxHitNum": 5,
+            "HitInterval": 0.1
         },
         {
             "name": "Phoenix Tide",
@@ -58638,9 +58638,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Faleris Aqua's exclusive skill.\r\nAfter summoning a massive tornado, it envelops its body in water and charges forward.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.1,
+            "MaxHitNum": 5,
+            "HitInterval": 0.1
         },
         {
             "name": "Chaotic Spray",
@@ -58663,7 +58663,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Munchill's exclusive skill.\r\nCoughs up three cold grenades kept undigested inside its body and lobs them at enemies.\r\nMay occasionally spit out something more dangerous...?",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 2.0,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -58713,7 +58713,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Frostallion Noct's exclusive skill. \r\nDashes forward while concentrating dark energy around its wings,\r\nusing them to slash enemies,\r\nthen converting that energy into homing shots",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.04,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -58738,7 +58738,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Frostallion's exclusive skill.\r\nDashes forward while concentrating frigid air around its wings,\r\nusing them to slash enemies with icy blade.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.04,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -58763,7 +58763,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Whalaska's exclusive skill.\r\nCharges straight ahead and briefly submerges, then bursts high into the air to launch an attack.\r\nAn ice-element explosion occurs upon emerging.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.1,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -58788,7 +58788,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Jetragon's exclusive skill.\r\nIlluminates its wings and fires innumerable beams as it flies towards the enemy.\r\nThe beams explode on impact.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.071429,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -58863,7 +58863,7 @@
             "is_explosion_damage": true,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Blazamut Ryu's exclusive skill.\r\nAfter a big jump, moves at high speed in the air,\r\ngathering strength to unleash a powerful punch.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.1,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -58888,7 +58888,7 @@
             "is_explosion_damage": true,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Blazamut's exclusive skill.\r\nRaises and inflates its arms, then slams them together, \r\ncausing a massive explosion in the surrounding area.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.5,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -58939,8 +58939,8 @@
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Panthalus's exclusive skill.\r\nSoars into the sky and generates multiple massive tornadoes that slowly track enemies.",
             "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "MaxHitNum": 99,
+            "HitInterval": 2.0
         },
         {
             "name": "Grand Breach",
@@ -59013,7 +59013,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Panthalus's exclusive skill.\r\nCreates a vortex around the enemy. \r\nThe vortex pulls targets toward its center while shrinking, ending in a high-pressure water pillar explosion.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.2,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -59039,7 +59039,7 @@
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::None",
             "description": "",
             "WazaPowerRate": null,
-            "MaxHitNum": null,
+            "MaxHitNum": 0,
             "HitInterval": null
         },
         {
@@ -59063,9 +59063,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::None",
             "description": "",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.2,
             "MaxHitNum": null,
-            "HitInterval": null
+            "HitInterval": 0.2
         },
         {
             "name": "Tidal Charge",
@@ -59138,7 +59138,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Univolt's exclusive skill.\r\nGenerates bolts of lightning all around\r\nwhile charging at its target.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.3,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -59163,7 +59163,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Loomen's exclusive skill.\r\nRaises a lantern and summons multiple spirits that relentlessly pursue enemies.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.111111,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -59238,9 +59238,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.001,
+            "MaxHitNum": 10,
+            "HitInterval": 0.2
         },
         {
             "name": "Unique_LegendDeer_BarrierRelease_Water",
@@ -59314,8 +59314,8 @@
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Hartalis' exclusive skill.\r\nLeaps high into the air, condensing immense energy into a descending sphere of light.\r\nWhen it strikes the ground, it purifies all on the ground below.",
             "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "MaxHitNum": 5,
+            "HitInterval": 0.2
         },
         {
             "name": "Divine Wing",
@@ -59363,9 +59363,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Hartalis' exclusive skill. \r\nFades from sight, then calls down a massive barrage of light pillars centered on its position.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.075,
+            "MaxHitNum": 18,
+            "HitInterval": 0.15
         },
         {
             "name": "Unique_LilyQueen_GYM_Act",
@@ -59389,7 +59389,7 @@
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "",
             "WazaPowerRate": null,
-            "MaxHitNum": null,
+            "MaxHitNum": 0,
             "HitInterval": null
         },
         {
@@ -59463,9 +59463,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "A skill exclusive to the Lilikin species.\r\nSurround yourself with a wind barrier,\r\nReturns the blade of wind to the attacking opponent.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.5,
+            "MaxHitNum": 10,
+            "HitInterval": 0.4
         },
         {
             "name": "Lotus Bloom",
@@ -59564,7 +59564,7 @@
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "",
             "WazaPowerRate": null,
-            "MaxHitNum": null,
+            "MaxHitNum": 0,
             "HitInterval": null
         },
         {
@@ -59613,7 +59613,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Selyne's exclusive skill.\r\nFires three consecutive high-speed slashes \r\nimbued with the power of moonlight.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.333333,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -59638,9 +59638,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Selyne's exclusive skill.\r\nStores energy in the moon on its back,\r\nthen fires a crescent-shaped beam forward.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.03,
+            "MaxHitNum": 35,
+            "HitInterval": 0.15
         },
         {
             "name": "Seigetsu Blade",
@@ -59663,7 +59663,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Selyne's exclusive skill.\r\nFires two consecutive high-speed blades\r\nimbued with the power of moonlight.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.5,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -59713,7 +59713,7 @@
             "is_explosion_damage": true,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Silvance's exclusive skill.\r\nScatters explosive spores over a wide area, \r\nthen triggers a mass explosion after a set period of time.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.1,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -59763,7 +59763,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Omasculs exclusive skill.\r\nSuddenly appears near the enemy, firmly restraining them with its arms, \r\nand absorbs the HP of the restrained enemy.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.166667,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -59813,7 +59813,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Starryon's exclusive skill.\r\nConfuses enemies with flickering steps and launches slashing attack with its sharp horn.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.333333,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -59913,9 +59913,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Bellanoir Libero's exclusive skill.\r\nWith a graceful dance, conjuries expanding rings of fire, \r\nthen unleashes eerie flames that seek the enemies.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.3,
             "MaxHitNum": null,
-            "HitInterval": null
+            "HitInterval": 1.0
         },
         {
             "name": "Nightmare Bloom",
@@ -59938,9 +59938,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Bellanoir Libero's exclusive skill.\r\nDisappears suddenly, then reappears while firing a barrage of beams.\r\nThe beams spread like a beautiful flower in bloom.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.00625,
+            "MaxHitNum": 20,
+            "HitInterval": 0.2
         },
         {
             "name": "Nightmare Ray",
@@ -59988,7 +59988,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 1e-06,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -60013,7 +60013,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Leafan's exclusive skill.\r\nRapidly delivers a series of consecutive roundhouse kicks, finishing with an engery blast.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.4,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -60063,9 +60063,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Braloha's exclusive skill.\r\nFrom the base of its long neck to the tip of its snout,\r\nit gradually spreads the breath of grass element.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.05,
+            "MaxHitNum": 18,
+            "HitInterval": 0.1
         },
         {
             "name": "Thalassonic Laser",
@@ -60088,9 +60088,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Neptilius's exclusive skill.\r\nRising slightly, it gathers water at its mouth,\r\nthen sweeps a high-pressure stream vertically and horizontally three times.\r\nFissures form at the swept locations, erupting with water.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.2,
+            "MaxHitNum": 3,
+            "HitInterval": 0.6
         },
         {
             "name": "Webstrike Impact",
@@ -60113,7 +60113,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Tarantriss's exclusive skill.\r\nSpits out a ball of thread, entangling the target it hits. \r\nThen, rushes at full speed to the trapped target and delivers three slashing strikes to finish it off.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.1,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -60263,7 +60263,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Pierdon's exclusive skill.\r\nRakes the ground with its horn, then hurls a rock projectile at enemies.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.5,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -60638,7 +60638,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Venusa's exclusive skill. \r\nThe snakes on her head spit toxic globs in a wide arc.\r\nThe poisonous pool left at the impact point inflicts Poison on anyone who touches it.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.37,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -60663,7 +60663,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Bastigor's exclusive skill.\r\nLet out a mighty roar and leap into the air. Then, embed both arms into the ground to create a massive ice crack. \r\nContinue to channel power into the ground, ultimately causing a large explosion of ice energy",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.3,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -60688,7 +60688,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Bastigor's exclusive skill.\r\nStomps the ground, creating a fissure of ice ahead. \r\nThen, rapidly closes the distance and slashes with the right hand.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.5,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -60738,7 +60738,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Finsider's exclusive skill.\r\nDraws twin water blasters from its mouth, firing six shots alternately left and right,\r\nthen finishes by combining both blasters to unleash one powerful shot.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.1,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -60813,7 +60813,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Beakon Cryst's exclusive skill\r\nIce first erupts from the ground at the target's location.\r\nThen glides forward in a rushing charge, causing ice to burst from the ground on both sides along its path.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.3,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -60838,7 +60838,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Beakon's exclusive skill.\r\nFirst, it strikes the enemy's location with lightning. \r\nThen, while gliding forward, it drops lightning to the left and right.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.3,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -60963,7 +60963,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Rayhound Cryst's exclusive skill.\r\nGenerates ice pillars ahead and charges forward at high speed through the gaps between them.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.3,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -60988,7 +60988,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Rayhound's exclusive skill.\r\nSummons lightning one after another in front, \r\nthen charges forward at high speed through the gaps between the falling bolts.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.3,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -61014,8 +61014,8 @@
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "",
             "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "MaxHitNum": 99,
+            "HitInterval": 1.0
         },
         {
             "name": "Polykeraunos",
@@ -61038,7 +61038,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Orserk's exclusive skill.\r\nSummons numerous thunder spears and hurls them at the enemy.\r\nThe first spear is imbued with the power of lightning and explodes after a few seconds.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.25,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -61063,7 +61063,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Orserk's exclusive skill.\r\nSummons a spear of lightning while leaping into the air\r\nbefore throwing it at an enemy.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.2,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -61188,7 +61188,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Reptyro's exclusive skill.\r\nRaises its front legs and slams them into the ground,\r\ncausing a volcanic eruptions under its enemies.\r\nIt simultaneously bombards them with volcanic bombs from above.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.9,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -61263,9 +61263,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Moldron's exclusive skill.\r\nSpits a mass of magma from its mouth.\r\nThe impact creates magma pools that damage enemies on contact.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.05,
+            "MaxHitNum": 99,
+            "HitInterval": 1.2
         },
         {
             "name": "Magma Laser",
@@ -61288,9 +61288,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_S",
             "description": "Moldron's exclusive skill.\r\nEmits a thermal beam from its mouth that scorches the ground.\r\nHeated ground forms magma pools that damage enemies on contact.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.05,
+            "MaxHitNum": 99,
+            "HitInterval": 1.2
         },
         {
             "name": "Rocket Slam",
@@ -61388,7 +61388,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Celesdir Noct's exclusive skill.\r\nAfter igniting a burst of darkness across a vast area ahead, it strides forward, generating pillars of darkness around itself.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.05,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -61413,7 +61413,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Celesdir's exclusive skill.\r\nAfter igniting a burst of holy light across a vast area ahead, \r\nit strides forward, radiating holy light around itself.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.111,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -61488,7 +61488,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Cryolinx's exclusive skill.\r\nFirst, it strikes with its claws, followed by a second slash, and culminates with a powerful slash using its entire body.\r\nWhen swinging the claws, ice pillars are launched forward in a fan shape.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.1,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -61563,7 +61563,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.166667,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -61588,9 +61588,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_S",
             "description": "",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.1,
+            "MaxHitNum": 999,
+            "HitInterval": 0.05
         },
         {
             "name": "Unique_WorldTreeDragon_HaloCutter",
@@ -61638,7 +61638,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_S",
             "description": "",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.5,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -61713,8 +61713,8 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_S",
             "description": "",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
+            "WazaPowerRate": 0.5,
+            "MaxHitNum": 0,
             "HitInterval": null
         },
         {
@@ -61738,7 +61738,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_S",
             "description": "",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.166667,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -61763,8 +61763,8 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_S",
             "description": "",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
+            "WazaPowerRate": 1e-06,
+            "MaxHitNum": 0,
             "HitInterval": null
         },
         {
@@ -61788,7 +61788,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Eye of Cthulhu's exclusive skill. \r\nRepeatedly charges at the enemy.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.25,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -61838,7 +61838,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Eye of Cthulhu's exclusive skill. \r\nSummons four Servants that charge at enemies to deal damage. \r\nServants disappear after taking damage or after a short time.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.075,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -62488,7 +62488,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Wumpo Botan's exclusive skill.\r\nRolls a ball made of grass as it moves forward, and when it grows large enough, \r\nit throws it to cause an explosion.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.7,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -62513,7 +62513,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Wumpo's exclusive skill.\r\nRolls a snowball as it moves forward, and when it grows large enough, \r\nit throws it to cause an explosion.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.7,
             "MaxHitNum": null,
             "HitInterval": null
         },
@@ -62538,9 +62538,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Continously creates walls made from water columns at the enemy's location.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.33333,
+            "MaxHitNum": 3,
+            "HitInterval": 0.6
         },
         {
             "name": "Aqua Burst",
@@ -62589,8 +62589,8 @@
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_S",
             "description": "Hurls a ball of water\r\nstraight at an enemy.",
             "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "MaxHitNum": 3,
+            "HitInterval": 0.25
         },
         {
             "name": "Use Weapon",
@@ -62638,9 +62638,9 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_L",
             "description": "Summons a massive wind vortex around itself and unleashes a powerful attack.",
-            "WazaPowerRate": null,
-            "MaxHitNum": null,
-            "HitInterval": null
+            "WazaPowerRate": 0.1,
+            "MaxHitNum": 10,
+            "HitInterval": 0.2
         },
         {
             "name": "Wind Cutter",
@@ -62688,7 +62688,7 @@
             "is_explosion_damage": false,
             "camera_shake": "EPalPlayerDamageCameraShakeCategory::Waza_M",
             "description": "Launches sharp blades of air that fan out.",
-            "WazaPowerRate": null,
+            "WazaPowerRate": 0.333333,
             "MaxHitNum": null,
             "HitInterval": null
         },

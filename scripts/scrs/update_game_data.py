@@ -2794,7 +2794,7 @@ def update_breeding_data():
             if k.startswith('PAL_NAME_') and v:
                 cid = k[len('PAL_NAME_'):]
                 if v.lower() not in ('en text', 'en_text', '', 'none'):
-                    nm[cid] = v
+                    nm[cid.upper()] = v
         return nm
     name_map = _name_map()
     pals = []
@@ -2819,12 +2819,18 @@ def update_breeding_data():
         else:
             seen_tribes[tribe] = {'tribe': tribe, 'internal_id': internal_id, 'rank': rank, 'rarity': rarity, 'index': idx, 'is_variant': is_variant, 'ignore_combi': ignore_combi, 'is_base': is_base}
     pals = list(seen_tribes.values())
-    tribe_map = {p['tribe']: p for p in pals if p['tribe'] in name_map}
-    pals = [p for p in pals if p['tribe'] in name_map]
+    tribe_map = {p['tribe']: p for p in pals if p['tribe'].upper() in name_map}
+    pals = [p for p in pals if p['tribe'].upper() in name_map]
     rank_map = {p['tribe']: p['rank'] for p in pals}
+    unique_child_tribes = set()
+    for _, row in get_rows(unique_data).items():
+        child = row.get('ChildCharacterID', '')
+        if isinstance(child, str) and child:
+            unique_child_tribes.add(child)
     breedable = [p for p in pals if not p['ignore_combi']]
+    candidate_pool = [p for p in breedable if p['tribe'] not in unique_child_tribes]
     rank_to_best = {}
-    for p in breedable:
+    for p in candidate_pool:
         r = p['rank']
         if r not in rank_to_best:
             rank_to_best[r] = p
@@ -2833,7 +2839,7 @@ def update_breeding_data():
             if p['index'] < e['index'] or (p['index'] == e['index'] and not p['is_variant'] and e['is_variant']):
                 rank_to_best[r] = p
     sorted_ranks = sorted(rank_to_best.keys())
-    def closest_pal(cp, parent_rarity_avg=None):
+    def closest_pal(cp):
         import bisect
         idx = bisect.bisect_left(sorted_ranks, cp)
         cand = []
@@ -2842,23 +2848,12 @@ def update_breeding_data():
         if idx > 0:
             cand.append(sorted_ranks[idx - 1])
         best, best_diff = None, float('inf')
-        best_rarity_diff = float('inf')
         for r in cand:
             p = rank_to_best[r]
             diff = abs(r - cp)
-            if diff < best_diff:
+            if diff < best_diff or (diff == best_diff and p['rank'] > best['rank']):
                 best_diff = diff
                 best = p
-                if parent_rarity_avg is not None:
-                    best_rarity_diff = abs(p.get('rarity', 999) - parent_rarity_avg)
-            elif diff == best_diff:
-                if parent_rarity_avg is not None:
-                    rd = abs(p.get('rarity', 999) - parent_rarity_avg)
-                    if rd < best_rarity_diff or (rd == best_rarity_diff and p.get('rarity', 999) < best.get('rarity', 999)):
-                        best = p
-                        best_rarity_diff = rd
-                elif p.get('rarity', 999) < best.get('rarity', 999):
-                    best = p
         return best
     pair_to_child = {}
     child_to_pairs = {}
@@ -2868,8 +2863,7 @@ def update_breeding_data():
         for j in range(i, len(breedable)):
             p2 = breedable[j]
             cp = (p1['rank'] + p2['rank'] + 1) // 2
-            pra = (p1.get('rarity', 0) + p2.get('rarity', 0)) / 2.0
-            best = closest_pal(cp, pra)
+            best = closest_pal(cp)
             if best:
                 key = (p1['tribe'], p2['tribe'])
                 pair_to_child[key] = best['tribe']
@@ -2885,8 +2879,7 @@ def update_breeding_data():
             if partner['tribe'] == p['tribe']:
                 continue
             cp = (p['rank'] + partner['rank'] + 1) // 2
-            pra = (p.get('rarity', 0) + partner.get('rarity', 0)) / 2.0
-            best = closest_pal(cp, pra)
+            best = closest_pal(cp)
             if best:
                 child = best['tribe']
                 parent_to_children_formula.setdefault(p['tribe'], []).append({'partner': partner['tribe'], 'child': child})
@@ -2915,7 +2908,7 @@ def update_breeding_data():
         tribe = p['tribe']
         asset_lower = tribe.lower()
         icon = pal_icon_map.get(asset_lower, pal_icon_map.get(tribe.lower(), f'/icons/pals/T_{tribe}_icon_normal.webp'))
-        pal_info[tribe] = {'name': name_map.get(tribe, tribe), 'combi_rank': p['rank'], 'rarity': p.get('rarity', 0), 'ignore_combi': p['ignore_combi'], 'icon': icon}
+        pal_info[tribe] = {'name': name_map.get(tribe.upper(), tribe), 'combi_rank': p['rank'], 'rarity': p.get('rarity', 0), 'ignore_combi': p['ignore_combi'], 'icon': icon}
     child_to_parents_ignore = {}
     for parent_tribe, entries in parent_to_children_formula.items():
         for e in entries:

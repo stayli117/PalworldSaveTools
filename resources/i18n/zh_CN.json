@@ -832,6 +832,8 @@
     "settings_theme_label": "主题：",
     "settings_title": "设置",
     "sidebar.close": "关闭",
+    "sidebar.collapse": "折叠",
+    "sidebar.expand": "展开",
     "sidebar.open": "打开",
     "skins_removed": "已移除 {count} 个皮肤",
     "slot.apply": "应用修改",
@@ -1813,5 +1815,10 @@
     "fix_illegal_pal.fix_selected": "修复选定的",
     "fix_illegal_pal.no_selection": "没有选择任何球员。",
     "fix_illegal_pal.no_illegals_title": "没有非法好友",
-    "fix_illegal_pal.no_illegals_msg": "保存中未发现非法好友。"
+    "fix_illegal_pal.no_illegals_msg": "保存中未发现非法好友。",
+    "player.stats.health": "健康",
+    "player.stats.stamina": "耐力",
+    "player.stats.attack": "攻击",
+    "player.stats.weight": "重量",
+    "inventory.max_all_stats": "最大所有统计数据"
 }

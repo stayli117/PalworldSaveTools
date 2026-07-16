@@ -85,6 +85,10 @@ src/
   import_libs.py        # Star-import re-export hub
 ```
 
+## Changelog convention
+
+Entries in `changelogs.md` must be compact user-facing summaries. Group related changes into bullet points. Use plain English, describe what the user gains or what bug got fixed. NO internal details: no file paths, variable names, refactoring, or code internals. Each entry should be readable by an end user who just wants to know what's new.
+
 ## Repo exclusions
 
 `.venv/`, `dist/`, `build/`, `Backups/`, `*.sav`, `*.savc`, `*.7z`, `uv.lock` — all gitignored.

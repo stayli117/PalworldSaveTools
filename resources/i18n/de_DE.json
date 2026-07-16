@@ -853,6 +853,8 @@
     "settings_theme_label": "Design:",
     "settings_title": "Einstellungen",
     "sidebar.close": "Schließen",
+    "sidebar.collapse": "Einklappen",
+    "sidebar.expand": "Ausklappen",
     "sidebar.open": "Öffnen",
     "skins_removed": "{count} Skins entfernt",
     "slot.apply": "Update anwenden",
@@ -1835,5 +1837,10 @@
     "fix_illegal_pal.fix_selected": "Ausgewählte reparieren",
     "fix_illegal_pal.no_selection": "Keine Spieler ausgewählt.",
     "fix_illegal_pal.no_illegals_title": "Keine illegalen Freunde",
-    "fix_illegal_pal.no_illegals_msg": "Im Speicher wurden keine illegalen Freunde gefunden."
+    "fix_illegal_pal.no_illegals_msg": "Im Speicher wurden keine illegalen Freunde gefunden.",
+    "player.stats.health": "Gesundheit",
+    "player.stats.stamina": "Ausdauer",
+    "player.stats.attack": "Angriff",
+    "player.stats.weight": "Gewicht",
+    "inventory.max_all_stats": "Alle Statistiken maximieren"
 }

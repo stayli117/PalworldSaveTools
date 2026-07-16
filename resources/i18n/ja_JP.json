@@ -771,7 +771,7 @@
     "player.stats.max_hp": "最大HP",
     "player.stats.max_sp": "最大SP",
     "player.stats.points": "ステータスポイント:",
-    "player.stats.work_speed": "作業速度",
+    "player.stats.work_speed": "作業スピード",
     "player.stats_failed": "プレイヤーステータスの更新に失敗しました",
     "player.stats_updated": "プレイヤーステータスを正常に更新しました",
     "player.swap.confirm_ui": "プレイヤー1（{name1}, UID: {uid1}）とプレイヤー2（{name2}, UID: {uid2}）のGUIDを入れ替えようとしています。これは元に戻せません。続行しますか？",
@@ -829,6 +829,8 @@
     "settings_theme_label": "テーマ:",
     "settings_title": "設定",
     "sidebar.close": "閉じる",
+    "sidebar.collapse": "折りたたむ",
+    "sidebar.expand": "展開する",
     "sidebar.open": "開く",
     "skins_removed": "{count} 個のスキンを削除しました",
     "slot.apply": "更新を適用",
@@ -1811,5 +1813,10 @@
     "fix_illegal_pal.fix_selected": "選択したものを修正",
     "fix_illegal_pal.no_selection": "選手が選択されていません。",
     "fix_illegal_pal.no_illegals_title": "不法な友達はいません",
-    "fix_illegal_pal.no_illegals_msg": "セーブに違法な仲間は見つかりませんでした。"
+    "fix_illegal_pal.no_illegals_msg": "セーブに違法な仲間は見つかりませんでした。",
+    "player.stats.health": "健康",
+    "player.stats.stamina": "スタミナ",
+    "player.stats.attack": "攻撃",
+    "player.stats.weight": "重さ",
+    "inventory.max_all_stats": "すべてのステータスを最大化する"
 }

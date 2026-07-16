@@ -771,7 +771,7 @@
     "player.stats.max_hp": "최대 HP",
     "player.stats.max_sp": "최대 SP",
     "player.stats.points": "스탯 포인트:",
-    "player.stats.work_speed": "작업 속도",
+    "player.stats.work_speed": "작업속도",
     "player.stats_failed": "플레이어 통계 업데이트 실패",
     "player.stats_updated": "플레이어 통계가 성공적으로 업데이트되었습니다",
     "player.swap.confirm_ui": "플레이어 1({name1}, UID: {uid1})과 플레이어 2({name2}, UID: {uid2})의 GUID를 교체하려고 합니다. 이 작업은 되돌릴 수 없습니다. 계속하시겠습니까?",
@@ -829,6 +829,8 @@
     "settings_theme_label": "테마:",
     "settings_title": "설정",
     "sidebar.close": "닫기",
+    "sidebar.collapse": "접기",
+    "sidebar.expand": "펼치기",
     "sidebar.open": "열기",
     "skins_removed": "{count}개의 스킨이 제거되었습니다",
     "slot.apply": "업데이트 적용",
@@ -1810,5 +1812,10 @@
     "fix_illegal_pal.fix_selected": "선택한 항목 수정",
     "fix_illegal_pal.no_selection": "선택한 플레이어가 없습니다.",
     "fix_illegal_pal.no_illegals_title": "불법적인 친구는 없습니다",
-    "fix_illegal_pal.no_illegals_msg": "저장 파일에는 불법적인 친구가 없습니다."
+    "fix_illegal_pal.no_illegals_msg": "저장 파일에는 불법적인 친구가 없습니다.",
+    "player.stats.health": "건강",
+    "player.stats.stamina": "내구력",
+    "player.stats.attack": "공격",
+    "player.stats.weight": "무게",
+    "inventory.max_all_stats": "최대 모든 통계"
 }

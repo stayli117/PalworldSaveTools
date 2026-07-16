@@ -262,33 +262,59 @@ def _load_exp_table():
         return [0]
 EXP_TABLE = _load_exp_table()
 class StatsPanelWidget(QFrame):
+    HERO_STATS = [
+        ('hp',         'player.stats.health',     500, 100),
+        ('stamina',    'player.stats.stamina',    100, 10),
+        ('attack',     'player.stats.attack',     100, 2),
+        ('work_speed', 'player.stats.work_speed', 100, 50),
+        ('weight',     'player.stats.weight',     300, 50),
+    ]
+    HERO_MAX = 50
+
     stats_changed = Signal()
+
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setFixedWidth(160)
         self._stat_values = {}
         self._stat_inputs = {}
         self._stat_name_labels = {}
+        self._stat_display_labels = {}
         self._current_level = 1
         self._current_exp = 0
+        self._player_uid = None
+        self._player_name = None
+        self._ability_widgets = []
         self._setup_ui()
         self._apply_style()
+
+    def _computed(self, key, pts):
+        for k, _, base, mult in self.HERO_STATS:
+            if k == key:
+                return base + pts * mult
+        return pts
+
+    def _make_btn(self, text, fixed_size=(20, 20)):
+        btn = QPushButton(text)
+        btn.setFixedSize(*fixed_size)
+        btn.setStyleSheet('QPushButton { background-color: #333; color: #fff; border: 1px solid #555; border-radius: 3px; font-weight: bold; font-size: 11px; } QPushButton:hover { background-color: #444; } QPushButton:pressed { background-color: #555; }')
+        return btn
+
     def _setup_ui(self):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(6, 6, 6, 6)
         layout.setSpacing(4)
+
         self.stats_title = QLabel(t('inventory.stats', default='Stats'))
         self.stats_title.setStyleSheet('font-size: 11px; font-weight: bold; color: #fff;')
         self.stats_title.setAlignment(Qt.AlignCenter)
         layout.addWidget(self.stats_title)
+
         level_frame = QFrame()
         level_layout = QHBoxLayout(level_frame)
         level_layout.setContentsMargins(0, 0, 0, 0)
         level_layout.setSpacing(2)
-        minus_btn = QPushButton('-')
-        minus_btn.setFixedSize(20, 20)
-        minus_btn.setStyleSheet('QPushButton { background-color: #333; color: #fff; border: 1px solid #555; border-radius: 3px; font-weight: bold; } QPushButton:hover { background-color: #444; } QPushButton:pressed { background-color: #555; }')
-        minus_btn.clicked.connect(self._decrease_level)
+        minus_lvl = self._make_btn('-')
+        minus_lvl.clicked.connect(self._decrease_level)
         self.level_label = QLabel(t('inventory.level', default='Lv.'))
         self.level_label.setStyleSheet('font-size: 11px; font-weight: bold; color: #aaa;')
         self.level_input = QLineEdit('1')
@@ -297,16 +323,16 @@ class StatsPanelWidget(QFrame):
         self.level_input.setStyleSheet('QLineEdit { background: rgba(255,255,255,0.06); color: #e2e8f0; border: 1px solid rgba(125,211,252,0.2); border-radius: 3px; padding: 2px; font-size: 12px; font-weight: bold; }')
         self.level_input.returnPressed.connect(self._on_level_input_changed)
         self.level_input.editingFinished.connect(self._on_level_input_changed)
-        plus_btn = QPushButton('+')
-        plus_btn.setFixedSize(20, 20)
-        plus_btn.setStyleSheet('QPushButton { background-color: #333; color: #fff; border: 1px solid #555; border-radius: 3px; font-weight: bold; } QPushButton:hover { background-color: #444; } QPushButton:pressed { background-color: #555; }')
-        plus_btn.clicked.connect(self._increase_level)
-        level_layout.addWidget(minus_btn)
+        plus_lvl = self._make_btn('+')
+        plus_lvl.clicked.connect(self._increase_level)
+        level_layout.addStretch()
+        level_layout.addWidget(minus_lvl)
         level_layout.addWidget(self.level_label)
         level_layout.addWidget(self.level_input)
+        level_layout.addWidget(plus_lvl)
         level_layout.addStretch()
-        level_layout.addWidget(plus_btn)
         layout.addWidget(level_frame)
+
         self.exp_bar = QProgressBar()
         self.exp_bar.setFixedHeight(6)
         self.exp_bar.setRange(0, 100)
@@ -314,45 +340,189 @@ class StatsPanelWidget(QFrame):
         self.exp_bar.setTextVisible(False)
         self.exp_bar.setStyleSheet('QProgressBar { background-color: #333; border: 1px solid #555; border-radius: 3px; } QProgressBar::chunk { background-color: #43b581; border-radius: 2px; }')
         layout.addWidget(self.exp_bar)
+
+        self.max_all_btn = QPushButton(t('inventory.max_all_stats', default='Max All Stats'))
+        self.max_all_btn.setStyleSheet('QPushButton { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); border-radius: 6px; padding: 4px 8px; font-weight: 600; font-size: 10px; } QPushButton:hover { background: rgba(251,191,36,0.25); color: #FFFFFF; }')
+        self.max_all_btn.setCursor(Qt.PointingHandCursor)
+        self.max_all_btn.clicked.connect(self._max_all)
+        layout.addWidget(self.max_all_btn)
+
         sep = QFrame()
         sep.setFrameShape(QFrame.HLine)
         sep.setStyleSheet('background-color: #444;')
         sep.setFixedHeight(1)
         layout.addWidget(sep)
-        stat_names = [('hp', t('inventory.stats.hp', default='HP'), 0), ('stamina', t('inventory.stats.stamina', default='Stamina'), 0), ('attack', t('inventory.stats.attack', default='Attack'), 0), ('defense', t('inventory.stats.defense', default='Defense'), 0), ('work_speed', t('inventory.stats.work_speed', default='Work'), 0), ('weight', t('inventory.stats.weight', default='Weight'), 0)]
-        for key, label, default in stat_names:
-            stat_frame = QFrame()
-            stat_frame.setFixedHeight(26)
-            stat_layout = QHBoxLayout(stat_frame)
-            stat_layout.setContentsMargins(0, 2, 0, 2)
-            stat_layout.setSpacing(3)
-            minus_btn = QPushButton('-')
-            minus_btn.setFixedSize(22, 22)
-            minus_btn.setStyleSheet('QPushButton { background-color: #333; color: #fff; border: 1px solid #555; border-radius: 3px; font-weight: bold; font-size: 12px; } QPushButton:hover { background-color: #444; } QPushButton:pressed { background-color: #555; }')
+
+        for key, t_key, base, mult in self.HERO_STATS:
+            row = QFrame()
+            row.setFixedHeight(28)
+            row_layout = QHBoxLayout(row)
+            row_layout.setContentsMargins(0, 2, 0, 2)
+            row_layout.setSpacing(3)
+
+            name_lbl = QLabel(t(t_key) if t else t_key.split('.')[-1].replace('_', ' ').title())
+            name_lbl.setStyleSheet('font-size: 10px; color: #aaa;')
+            name_lbl.setFixedWidth(70)
+            row_layout.addWidget(name_lbl)
+
+            display_lbl = QLabel('0')
+            display_lbl.setStyleSheet('font-size: 12px; font-weight: bold; color: #e2e8f0; min-width: 50px;')
+            display_lbl.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+            row_layout.addWidget(display_lbl)
+            row_layout.addStretch()
+
+            minus_btn = self._make_btn('-', (20, 20))
             minus_btn.clicked.connect(lambda checked, k=key: self._adjust_stat(k, -1))
-            name_label = QLabel(label)
-            name_label.setStyleSheet('font-size: 10px; color: #aaa;')
-            name_label.setFixedWidth(48)
-            stat_input = QLineEdit(str(default))
-            stat_input.setFixedWidth(48)
-            stat_input.setAlignment(Qt.AlignCenter)
-            stat_input.setStyleSheet('QLineEdit { background: rgba(255,255,255,0.06); color: #e2e8f0; border: 1px solid rgba(125,211,252,0.2); border-radius: 3px; padding: 2px; font-size: 11px; } QLineEdit:focus { border-color: rgba(125,211,252,0.4); }')
-            stat_input.returnPressed.connect(lambda k=key: self._on_stat_input_changed(k))
-            stat_input.editingFinished.connect(lambda k=key: self._on_stat_input_changed(k))
-            plus_btn = QPushButton('+')
-            plus_btn.setFixedSize(22, 22)
-            plus_btn.setStyleSheet('QPushButton { background-color: #333; color: #fff; border: 1px solid #555; border-radius: 3px; font-weight: bold; font-size: 12px; } QPushButton:hover { background-color: #444; } QPushButton:pressed { background-color: #555; }')
+            row_layout.addWidget(minus_btn)
+
+            spin = QLineEdit('0')
+            spin.setFixedWidth(34)
+            spin.setAlignment(Qt.AlignCenter)
+            spin.setStyleSheet('QLineEdit { background: rgba(255,255,255,0.06); color: #7dd3fc; border: 1px solid rgba(125,211,252,0.2); border-radius: 3px; padding: 2px; font-size: 11px; font-weight: bold; } QLineEdit:focus { border-color: rgba(125,211,252,0.4); }')
+            spin.returnPressed.connect(lambda k=key: self._on_stat_input_changed(k))
+            spin.editingFinished.connect(lambda k=key: self._on_stat_input_changed(k))
+            row_layout.addWidget(spin)
+
+            plus_btn = self._make_btn('+', (20, 20))
             plus_btn.clicked.connect(lambda checked, k=key: self._adjust_stat(k, 1))
-            stat_layout.addWidget(minus_btn)
-            stat_layout.addWidget(name_label)
-            stat_layout.addWidget(stat_input)
-            stat_layout.addStretch()
-            stat_layout.addWidget(plus_btn)
-            layout.addWidget(stat_frame)
-            self._stat_name_labels[key] = name_label
-            self._stat_inputs[key] = stat_input
-            self._stat_values[key] = default
+            row_layout.addWidget(plus_btn)
+
+            layout.addWidget(row)
+            self._stat_name_labels[key] = name_lbl
+            self._stat_inputs[key] = spin
+            self._stat_display_labels[key] = display_lbl
+            self._stat_values[key] = 0
+
+        sep_tp = QFrame()
+        sep_tp.setFrameShape(QFrame.HLine)
+        sep_tp.setStyleSheet('background-color: #444;')
+        sep_tp.setFixedHeight(1)
+        layout.addWidget(sep_tp)
+
+        tp_row = QFrame()
+        tp_row.setFixedHeight(26)
+        tp_l = QHBoxLayout(tp_row)
+        tp_l.setContentsMargins(0, 2, 0, 2)
+        tp_l.setSpacing(3)
+        self.tp_label = QLabel(t('player.tech_points', default='Technology Points'))
+        self.tp_label.setStyleSheet('font-size: 10px; color: #aaa;')
+        self.tp_spin = QSpinBox()
+        self.tp_spin.setRange(0, 9999999)
+        self.tp_spin.setFixedWidth(90)
+        self.tp_spin.setStyleSheet('QSpinBox { background: rgba(255,255,255,0.06); color: #e2e8f0; border: 1px solid rgba(125,211,252,0.2); border-radius: 3px; padding: 2px; font-size: 11px; } QSpinBox:focus { border-color: rgba(125,211,252,0.4); }')
+        tp_l.addWidget(self.tp_label)
+        tp_l.addStretch()
+        tp_l.addWidget(self.tp_spin)
+        layout.addWidget(tp_row)
+
+        atp_row = QFrame()
+        atp_row.setFixedHeight(26)
+        atp_l = QHBoxLayout(atp_row)
+        atp_l.setContentsMargins(0, 2, 0, 2)
+        atp_l.setSpacing(3)
+        self.atp_label = QLabel(t('player.ancient_tech_points', default='Ancient Technology Points'))
+        self.atp_label.setStyleSheet('font-size: 10px; color: #aaa;')
+        self.atp_spin = QSpinBox()
+        self.atp_spin.setRange(0, 9999999)
+        self.atp_spin.setFixedWidth(90)
+        self.atp_spin.setStyleSheet('QSpinBox { background: rgba(255,255,255,0.06); color: #e2e8f0; border: 1px solid rgba(125,211,252,0.2); border-radius: 3px; padding: 2px; font-size: 11px; } QSpinBox:focus { border-color: rgba(125,211,252,0.4); }')
+        atp_l.addWidget(self.atp_label)
+        atp_l.addStretch()
+        atp_l.addWidget(self.atp_spin)
+        layout.addWidget(atp_row)
+
+        sep2 = QFrame()
+        sep2.setFrameShape(QFrame.HLine)
+        sep2.setStyleSheet('background-color: #444;')
+        sep2.setFixedHeight(1)
+        layout.addWidget(sep2)
+
+        ab_header = QHBoxLayout()
+        self.abilities_title = QLabel(t('inventory.abilities', default='Abilities'))
+        self.abilities_title.setStyleSheet('font-size: 11px; font-weight: bold; color: #fff;')
+        self.abilities_title.setAlignment(Qt.AlignCenter)
+        ab_header.addWidget(self.abilities_title)
+        ab_header.addStretch()
+        self.abilities_sel_all = QPushButton(t('player_item.select_all', default='All'))
+        self.abilities_sel_all.setFixedHeight(20)
+        self.abilities_sel_all.setStyleSheet('QPushButton { background: rgba(74,222,128,0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.2); border-radius: 4px; padding: 2px 6px; font-weight: 600; font-size: 9px; } QPushButton:hover { background: rgba(74,222,128,0.2); color: #FFFFFF; }')
+        self.abilities_sel_all.setCursor(Qt.PointingHandCursor)
+        self.abilities_sel_all.clicked.connect(lambda: [w['toggle'].setChecked(True) for w in self._ability_widgets])
+        ab_header.addWidget(self.abilities_sel_all)
+        self.abilities_sel_none = QPushButton(t('player_item.deselect_all', default='None'))
+        self.abilities_sel_none.setFixedHeight(20)
+        self.abilities_sel_none.setStyleSheet('QPushButton { background: rgba(251,113,133,0.12); color: #FB7185; border: 1px solid rgba(251,113,133,0.2); border-radius: 4px; padding: 2px 6px; font-weight: 600; font-size: 9px; } QPushButton:hover { background: rgba(251,113,133,0.2); color: #FFFFFF; }')
+        self.abilities_sel_none.setCursor(Qt.PointingHandCursor)
+        self.abilities_sel_none.clicked.connect(lambda: [w['toggle'].setChecked(False) for w in self._ability_widgets])
+        ab_header.addWidget(self.abilities_sel_none)
+        layout.addLayout(ab_header)
+
+        self._ability_status = QLabel('')
+        self._ability_status.setStyleSheet('color: #94a3b8; font-size: 10px; padding: 2px 4px;')
+        layout.addWidget(self._ability_status)
+
+        scroll = QListWidget()
+        scroll.setSelectionMode(QAbstractItemView.NoSelection)
+        scroll.setMaximumHeight(200)
+        self._ability_scroll = scroll
+
+        from palworld_aio.managers.player_manager import RELIC_TO_STATUS_NAME, RELIC_CUMULATIVE_MAX
+        from palworld_aio.inventory.inventory_manager import ASSET_TO_RELIC_TYPE, RELIC_TYPE_TO_EFFIGY
+
+        for asset, relic_type in sorted(ASSET_TO_RELIC_TYPE.items(), key=lambda x: x[0]):
+            jp_name = RELIC_TO_STATUS_NAME.get(relic_type, relic_type.split('::')[-1])
+            display = f'{jp_name} ({relic_type.split("::")[-1]})'
+            row_w = QWidget()
+            row_l = QHBoxLayout(row_w)
+            row_l.setContentsMargins(4, 2, 4, 2)
+            row_l.setSpacing(6)
+            toggle = ToggleCheckBtn(display)
+            toggle.setProperty('relic_type', relic_type)
+            toggle.setProperty('cumulative_max', RELIC_CUMULATIVE_MAX.get(relic_type, 1))
+            toggle.setChecked(True)
+            row_l.addWidget(toggle, 1)
+            icon_lbl = QLabel()
+            icon_lbl.setFixedSize(18, 18)
+            icon_lbl.setAlignment(Qt.AlignCenter)
+            e_asset = RELIC_TYPE_TO_EFFIGY.get(relic_type, 'Relic')
+            info = ItemData.get_item_by_asset(e_asset)
+            icon_path = info.get('icon', '') if info else ''
+            if icon_path:
+                px = ItemData.get_item_icon(icon_path, QSize(18, 18))
+                if not px.isNull():
+                    icon_lbl.setPixmap(px)
+            row_l.addWidget(icon_lbl)
+            cur_lbl = QLabel('0')
+            cur_lbl.setStyleSheet('color: #94a3b8; font-size: 10px; min-width: 22px;')
+            cur_lbl.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+            row_l.addWidget(cur_lbl)
+            spinner = QSpinBox()
+            max_v = RELIC_CUMULATIVE_MAX.get(relic_type, 999999)
+            spinner.setRange(0, max_v)
+            spinner.setValue(max_v)
+            spinner.setFixedWidth(60)
+            row_l.addWidget(spinner)
+            row_l.addSpacing(8)
+            item_w = QListWidgetItem()
+            item_w.setSizeHint(QSize(0, 32))
+            scroll.addItem(item_w)
+            scroll.setItemWidget(item_w, row_w)
+            self._ability_widgets.append({
+                'toggle': toggle, 'spinner': spinner, 'cur_label': cur_lbl,
+                'icon_label': icon_lbl, 'relic_type': relic_type,
+                'asset': asset, 'cumulative_max': max_v,
+            })
+
+        layout.addWidget(scroll, 1)
+
+        self._abilities_apply_btn = QPushButton(t('inventory.edit_abilities_apply', default='Apply Ability Changes'))
+        self._abilities_apply_btn.setStyleSheet('QPushButton { background: rgba(74,222,128,0.15); color: #4ade80; border: 1px solid rgba(74,222,128,0.3); border-radius: 6px; padding: 5px 12px; font-weight: 600; font-size: 10px; } QPushButton:hover { background: rgba(74,222,128,0.25); color: #FFFFFF; }')
+        self._abilities_apply_btn.setCursor(Qt.PointingHandCursor)
+        self._abilities_apply_btn.clicked.connect(self._on_apply_abilities)
+        layout.addWidget(self._abilities_apply_btn)
+
         layout.addStretch()
+
     def _on_level_input_changed(self):
         try:
             new_level = int(self.level_input.text())
@@ -364,18 +534,21 @@ class StatsPanelWidget(QFrame):
                 self.stats_changed.emit()
         except ValueError:
             self.level_input.setText(str(self._current_level))
+
     def _increase_level(self):
         if self._current_level < 80:
             self._current_level += 1
             self._current_exp = EXP_TABLE[self._current_level - 1]
             self._update_level_display()
             self.stats_changed.emit()
+
     def _decrease_level(self):
         if self._current_level > 1:
             self._current_level -= 1
             self._current_exp = EXP_TABLE[self._current_level - 1]
             self._update_level_display()
             self.stats_changed.emit()
+
     def _update_level_display(self):
         self.level_input.blockSignals(True)
         self.level_input.setText(str(self._current_level))
@@ -383,23 +556,24 @@ class StatsPanelWidget(QFrame):
         if self._current_level >= 80:
             self.exp_bar.setValue(100)
         else:
-            current_level_exp = EXP_TABLE[self._current_level - 1]
-            next_level_exp = EXP_TABLE[self._current_level]
-            exp_in_level = self._current_exp - current_level_exp
-            exp_needed = next_level_exp - current_level_exp
-            if exp_needed > 0:
-                percent = int(exp_in_level / exp_needed * 100)
-                self.exp_bar.setValue(min(100, max(0, percent)))
+            cur_exp = EXP_TABLE[self._current_level - 1]
+            next_exp = EXP_TABLE[self._current_level]
+            in_level = self._current_exp - cur_exp
+            needed = next_exp - cur_exp
+            if needed > 0:
+                self.exp_bar.setValue(min(100, max(0, int(in_level / needed * 100))))
             else:
                 self.exp_bar.setValue(0)
-    def _on_stat_input_changed(self, key: str):
+
+    def _on_stat_input_changed(self, key):
         if key not in self._stat_inputs:
             return
         try:
             new_val = int(self._stat_inputs[key].text())
-            new_val = max(0, min(9999, new_val))
+            new_val = max(0, min(self.HERO_MAX, new_val))
             if new_val != self._stat_values[key]:
                 self._stat_values[key] = new_val
+                self._update_display(key)
                 self.stats_changed.emit()
             else:
                 self._stat_inputs[key].blockSignals(True)
@@ -409,18 +583,52 @@ class StatsPanelWidget(QFrame):
             self._stat_inputs[key].blockSignals(True)
             self._stat_inputs[key].setText(str(self._stat_values[key]))
             self._stat_inputs[key].blockSignals(False)
-    def _adjust_stat(self, key: str, delta: int):
+
+    def _adjust_stat(self, key, delta):
         if key in self._stat_values:
             new_val = self._stat_values[key] + delta
-            new_val = max(0, min(9999, new_val))
+            new_val = max(0, min(self.HERO_MAX, new_val))
             self._stat_values[key] = new_val
             self._stat_inputs[key].blockSignals(True)
             self._stat_inputs[key].setText(str(new_val))
             self._stat_inputs[key].blockSignals(False)
+            self._update_display(key)
             self.stats_changed.emit()
+
+    def _update_display(self, key):
+        if key in self._stat_display_labels:
+            computed = self._computed(key, self._stat_values[key])
+            self._stat_display_labels[key].setText(str(computed))
+
+    def _update_all_displays(self):
+        for key in self._stat_values:
+            self._update_display(key)
+
+    def _max_all(self):
+        for key in self._stat_values:
+            self._stat_values[key] = self.HERO_MAX
+            self._stat_inputs[key].blockSignals(True)
+            self._stat_inputs[key].setText(str(self.HERO_MAX))
+            self._stat_inputs[key].blockSignals(False)
+        self._update_all_displays()
+        self._current_level = 80
+        self._current_exp = EXP_TABLE[self._current_level - 1]
+        self._update_level_display()
+        self.tp_spin.setValue(9999999)
+        self.atp_spin.setValue(9999999)
+        for w in self._ability_widgets:
+            w['spinner'].setValue(w['cumulative_max'])
+        self.stats_changed.emit()
+
     def _apply_style(self):
         self.setStyleSheet(STATS_PANEL_STYLE)
-    def update_stats(self, stats: dict):
+
+    def set_player(self, uid, name=None):
+        self._player_uid = uid
+        self._player_name = name
+        self._load_abilities()
+
+    def update_stats(self, stats):
         for key, value in stats.items():
             if key in self._stat_inputs:
                 if isinstance(value, str):
@@ -434,23 +642,107 @@ class StatsPanelWidget(QFrame):
                 self._stat_inputs[key].blockSignals(True)
                 self._stat_inputs[key].setText(str(val))
                 self._stat_inputs[key].blockSignals(False)
-    def get_stats(self) -> dict:
+                self._update_display(key)
+
+    def get_stats(self):
         return {key: val for key, val in self._stat_values.items()}
-    def get_level(self) -> int:
+
+    def get_level(self):
         return self._current_level
-    def get_exp(self) -> int:
+
+    def get_exp(self):
         return self._current_exp
-    def set_level(self, level: int, exp_percent: int):
+
+    def set_level(self, level, exp_percent):
         self._current_level = max(1, min(80, level))
         self._current_exp = EXP_TABLE[self._current_level - 1]
         self._update_level_display()
+
+    def _load_abilities(self):
+        for w in self._ability_widgets:
+            w['cur_label'].setText('0')
+            w['spinner'].setValue(0)
+        self.tp_spin.setValue(0)
+        self.atp_spin.setValue(0)
+        if not self._player_uid or not constants.current_save_path:
+            self._ability_status.setText(t('inventory.abilities_no_player_selected', default='No player loaded'))
+            self._ability_status.setStyleSheet('color: #fbbf24; font-size: 10px; padding: 2px 4px;')
+            return
+        from palworld_aio.utils import sav_to_gvasfile
+        try:
+            uid_clean = str(self._player_uid).replace('-', '').upper()
+            sav_path = os.path.join(constants.current_save_path, 'Players', f'{uid_clean}.sav')
+            if not os.path.exists(sav_path):
+                self._ability_status.setText(t('inventory.abilities_no_player_selected', default='No player loaded'))
+                self._ability_status.setStyleSheet('color: #fbbf24; font-size: 10px; padding: 2px 4px;')
+                return
+            gvas = sav_to_gvasfile(sav_path)
+            sd = gvas.properties.get('SaveData', {}).get('value', {})
+            rd = sd.get('RecordData', {}).get('value', {})
+            rmap = rd.get('RelicPossessNumMap', {}).get('value', [])
+            current_values = {e['key']: e['value'] for e in rmap}
+            for w in self._ability_widgets:
+                w['cur_label'].setText(str(current_values.get(w['relic_type'], 0)))
+                w['spinner'].setValue(current_values.get(w['relic_type'], 0))
+            tp = sd.get('TechnologyPoint', {})
+            if isinstance(tp, dict):
+                self.tp_spin.setValue(tp.get('value', 0))
+            atp = sd.get('bossTechnologyPoint', {})
+            if isinstance(atp, dict):
+                self.atp_spin.setValue(atp.get('value', 0))
+            name = self._player_name or str(self._player_uid)
+            self._ability_status.setText(t('inventory.abilities_loaded', default='Loaded abilities for {name}').format(name=name))
+            self._ability_status.setStyleSheet('color: #7dd3fc; font-size: 10px; padding: 2px 4px;')
+        except Exception as e:
+            self._ability_status.setText(f'Error: {e}')
+            self._ability_status.setStyleSheet('color: #f87171; font-size: 10px; padding: 2px 4px;')
+
+    def _on_apply_abilities(self):
+        if not self._player_uid:
+            return
+        ability_values = {}
+        checked_count = 0
+        for w in self._ability_widgets:
+            if w['toggle'].isChecked():
+                ability_values[w['relic_type']] = w['spinner'].value()
+                checked_count += 1
+        if not ability_values:
+            self._ability_status.setText(t('inventory.edit_abilities_none_checked', default='No abilities selected'))
+            self._ability_status.setStyleSheet('color: #fbbf24; font-size: 10px; padding: 2px 4px;')
+            return
+        from palworld_aio.managers.player_manager import set_ability_values, set_player_tech_points, set_player_boss_tech_points
+        tech_ok = set_player_tech_points(self._player_uid, self.tp_spin.value())
+        boss_ok = set_player_boss_tech_points(self._player_uid, self.atp_spin.value())
+        abilities_ok = set_ability_values([self._player_uid], ability_values)
+        if abilities_ok and tech_ok and boss_ok:
+            self._ability_status.setText(t('inventory.edit_abilities_done', default='Abilities updated successfully.'))
+            self._ability_status.setStyleSheet('color: #4ade80; font-size: 10px; padding: 2px 4px;')
+            self._load_abilities()
+        else:
+            self._ability_status.setText(t('inventory.edit_abilities_failed', default='Failed to apply abilities.'))
+            self._ability_status.setStyleSheet('color: #f87171; font-size: 10px; padding: 2px 4px;')
+
     def refresh_labels(self):
-        stat_names = {'hp': t('inventory.stats.hp', default='HP'), 'stamina': t('inventory.stats.stamina', default='Stamina'), 'attack': t('inventory.stats.attack', default='Attack'), 'defense': t('inventory.stats.defense', default='Defense'), 'work_speed': t('inventory.stats.work_speed', default='Work'), 'weight': t('inventory.stats.weight', default='Weight')}
+        hero_tkeys = {
+            'hp': 'player.stats.health',
+            'stamina': 'player.stats.stamina',
+            'attack': 'player.stats.attack',
+            'work_speed': 'player.stats.work_speed',
+            'weight': 'player.stats.weight',
+        }
+        for key, t_key in hero_tkeys.items():
+            if hasattr(self, '_stat_name_labels') and key in self._stat_name_labels:
+                self._stat_name_labels[key].setText(t(t_key) if t else t_key.split('.')[-1].replace('_', ' ').title())
         self.stats_title.setText(t('inventory.stats', default='Stats'))
         self.level_label.setText(t('inventory.level', default='Lv.'))
-        for key, label_name in stat_names.items():
-            if key in self._stat_name_labels:
-                self._stat_name_labels[key].setText(label_name)
+        self.max_all_btn.setText(t('inventory.max_all_stats', default='Max All Stats'))
+        self.tp_label.setText(t('player.tech_points', default='Technology Points'))
+        self.atp_label.setText(t('player.ancient_tech_points', default='Ancient Technology Points'))
+        self.abilities_title.setText(t('inventory.abilities', default='Abilities'))
+        self.abilities_sel_all.setText(t('player_item.select_all', default='All'))
+        self.abilities_sel_none.setText(t('player_item.deselect_all', default='None'))
+        self._abilities_apply_btn.setText(t('inventory.edit_abilities_apply', default='Apply Ability Changes'))
+
     def clear(self):
         self._current_level = 1
         self._current_exp = 0
@@ -460,6 +752,13 @@ class StatsPanelWidget(QFrame):
             self._stat_inputs[key].blockSignals(True)
             self._stat_inputs[key].setText('0')
             self._stat_inputs[key].blockSignals(False)
+            self._update_display(key)
+        for w in self._ability_widgets:
+            w['cur_label'].setText('0')
+            w['spinner'].setValue(0)
+        self.tp_spin.setValue(0)
+        self.atp_spin.setValue(0)
+        self._ability_status.setText('')
 class InventoryGridWidget(QWidget):
     item_added = Signal(int, str, int)
     item_removed = Signal(int, int)
@@ -890,10 +1189,7 @@ class PlayerInventoryTab(QWidget):
         self.stats_panel = StatsPanelWidget()
         self.stats_panel.stats_changed.connect(self._on_stats_changed)
         stats_tab_layout.addWidget(self.stats_panel)
-        self._build_abilities_panel()
-        stats_tab_layout.addWidget(self.abilities_panel, 1)
         self.inv_tabs.addTab(self.stats_tab, t('inventory.stats', default='Stats'))
-        self.inv_tabs.currentChanged.connect(self._on_inv_tab_changed)
         inner_content.addWidget(self.inv_tabs, 2)
         equip_wrapper = QWidget()
         self.equip_wrapper = equip_wrapper
@@ -1587,164 +1883,24 @@ class PlayerInventoryTab(QWidget):
                     level = level_data.get('value', {}).get('value', 1)
                 else:
                     level = 1
-                if 'GotStatusPointList' in sp_val:
-                    got_status_list = sp_val['GotStatusPointList']['value']['values']
-                    stat_map = {'最大HP': 'hp', '最大SP': 'stamina', '攻撃力': 'attack', '防御力': 'defense', '作業速度': 'work_speed', '所持重量': 'weight'}
-                    for status_item in got_status_list:
-                        stat_name_jp = status_item['StatusName'].get('value', '') if isinstance(status_item.get('StatusName'), dict) else ''
-                        stat_point = status_item['StatusPoint'].get('value', 0) if isinstance(status_item.get('StatusPoint'), dict) else 0
-                        if stat_name_jp in stat_map:
-                            stat_key = stat_map[stat_name_jp]
-                            if stat_key == 'weight':
-                                base_weight = 50
-                                weight_per_point = 50
-                                stats[stat_key] = f'{base_weight + stat_point * weight_per_point}'
-                            else:
+                got_list = sp_val.get('GotStatusPointList')
+                if isinstance(got_list, dict):
+                    got_val = got_list.get('value')
+                    if isinstance(got_val, dict):
+                        got_status_list = got_val.get('values', [])
+                        stat_map = {'最大HP': 'hp', '最大SP': 'stamina', '攻撃力': 'attack', '防御力': 'defense', '作業速度': 'work_speed', '所持重量': 'weight'}
+                        for status_item in got_status_list:
+                            stat_name_jp = status_item['StatusName'].get('value', '') if isinstance(status_item.get('StatusName'), dict) else ''
+                            stat_point = status_item['StatusPoint'].get('value', 0) if isinstance(status_item.get('StatusPoint'), dict) else 0
+                            if stat_name_jp in stat_map:
+                                stat_key = stat_map[stat_name_jp]
                                 stats[stat_key] = stat_point
                 if 'UnusedStatusPoint' in sp_val:
                     unused_points = sp_val['UnusedStatusPoint'].get('value', 0) if isinstance(sp_val.get('UnusedStatusPoint'), dict) else 0
                 break
         self.stats_panel.update_stats(stats)
         self.stats_panel.set_level(level, 0)
-        self._load_abilities_from_current_player()
-    def _build_abilities_panel(self):
-        from palworld_aio.managers.player_manager import RELIC_TO_STATUS_NAME, RELIC_CUMULATIVE_MAX
-        from palworld_aio.inventory.inventory_manager import ASSET_TO_RELIC_TYPE, RELIC_TYPE_TO_EFFIGY
-        self.abilities_panel = QFrame()
-        self.abilities_panel.setObjectName('abilitiesPanel')
-        self.abilities_panel.setStyleSheet('QFrame#abilitiesPanel { background: rgba(18,20,24,0.95); border: 1px solid rgba(125,211,252,0.2); border-radius: 8px; }')
-        panel_layout = QVBoxLayout(self.abilities_panel)
-        panel_layout.setContentsMargins(8, 6, 8, 6)
-        panel_layout.setSpacing(4)
-        self.abilities_title = QLabel(t('inventory.abilities', default='Abilities'))
-        self.abilities_title.setStyleSheet('font-size: 11px; font-weight: bold; color: #fff;')
-        self.abilities_title.setAlignment(Qt.AlignCenter)
-        panel_layout.addWidget(self.abilities_title)
-        btn_row = QHBoxLayout()
-        self.abilities_sel_all = QPushButton(t('player_item.select_all', default='All'))
-        self.abilities_sel_all.setFixedHeight(24)
-        self.abilities_sel_all.setStyleSheet('QPushButton { background: rgba(74,222,128,0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.2); border-radius: 6px; padding: 4px 8px; font-weight: 600; font-size: 10px; } QPushButton:hover { background: rgba(74,222,128,0.2); border-color: rgba(74,222,128,0.4); color: #FFFFFF; }')
-        self.abilities_sel_all.setCursor(Qt.PointingHandCursor)
-        self.abilities_sel_all.clicked.connect(lambda: [w['toggle'].setChecked(True) for w in self.ability_widgets])
-        btn_row.addWidget(self.abilities_sel_all)
-        self.abilities_sel_none = QPushButton(t('player_item.deselect_all', default='None'))
-        self.abilities_sel_none.setFixedHeight(24)
-        self.abilities_sel_none.setStyleSheet('QPushButton { background: rgba(251,113,133,0.12); color: #FB7185; border: 1px solid rgba(251,113,133,0.2); border-radius: 6px; padding: 4px 8px; font-weight: 600; font-size: 10px; } QPushButton:hover { background: rgba(251,113,133,0.2); border-color: rgba(251,113,133,0.4); color: #FFFFFF; }')
-        self.abilities_sel_none.setCursor(Qt.PointingHandCursor)
-        self.abilities_sel_none.clicked.connect(lambda: [w['toggle'].setChecked(False) for w in self.ability_widgets])
-        btn_row.addWidget(self.abilities_sel_none)
-        panel_layout.addLayout(btn_row)
-        self.ability_status = QLabel('')
-        self.ability_status.setStyleSheet('color: #94a3b8; font-size: 10px; padding: 2px 4px;')
-        panel_layout.addWidget(self.ability_status)
-        scroll = QListWidget()
-        scroll.setSelectionMode(QAbstractItemView.NoSelection)
-        self.ability_widgets = []
-        relic_types = sorted(ASSET_TO_RELIC_TYPE.items(), key=lambda x: x[0])
-        for asset, relic_type in relic_types:
-            jp_name = RELIC_TO_STATUS_NAME.get(relic_type, relic_type.split('::')[-1])
-            display = f'{jp_name} ({relic_type.split("::")[-1]})'
-            row = QWidget()
-            row_layout = QHBoxLayout(row)
-            row_layout.setContentsMargins(4, 2, 4, 2)
-            row_layout.setSpacing(6)
-            toggle = ToggleCheckBtn(display)
-            toggle.setProperty('relic_type', relic_type)
-            toggle.setProperty('cumulative_max', RELIC_CUMULATIVE_MAX.get(relic_type, 1))
-            row_layout.addWidget(toggle, 1)
-            icon_label = QLabel()
-            icon_label.setFixedSize(20, 20)
-            icon_label.setAlignment(Qt.AlignCenter)
-            effigy_asset = RELIC_TYPE_TO_EFFIGY.get(relic_type, 'Relic')
-            info = ItemData.get_item_by_asset(effigy_asset)
-            icon_path = info.get('icon', '') if info else ''
-            if icon_path:
-                pixmap = ItemData.get_item_icon(icon_path, QSize(20, 20))
-                if not pixmap.isNull():
-                    icon_label.setPixmap(pixmap)
-            row_layout.addWidget(icon_label)
-            cur_label = QLabel('0')
-            cur_label.setStyleSheet('color: #94a3b8; font-size: 10px; min-width: 24px;')
-            cur_label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-            row_layout.addWidget(cur_label)
-            spinner = QSpinBox()
-            max_val = RELIC_CUMULATIVE_MAX.get(relic_type, 999999)
-            spinner.setRange(0, max_val)
-            spinner.setValue(max_val)
-            spinner.setFixedWidth(70)
-            row_layout.addWidget(spinner)
-            row_layout.addSpacing(16)
-            row_widget = QListWidgetItem()
-            row_widget.setSizeHint(QSize(0, 36))
-            scroll.addItem(row_widget)
-            scroll.setItemWidget(row_widget, row)
-            self.ability_widgets.append({
-                'toggle': toggle,
-                'spinner': spinner,
-                'cur_label': cur_label,
-                'icon_label': icon_label,
-                'relic_type': relic_type,
-                'asset': asset,
-                'cumulative_max': max_val,
-            })
-        panel_layout.addWidget(scroll, 1)
-        self.abilities_apply_btn = QPushButton(t('inventory.edit_abilities_apply', default='Apply Ability Changes'))
-        self.abilities_apply_btn.setStyleSheet('QPushButton { background: rgba(74,222,128,0.15); color: #4ade80; border: 1px solid rgba(74,222,128,0.3); border-radius: 6px; padding: 6px 16px; font-weight: 600; font-size: 11px; } QPushButton:hover { background: rgba(74,222,128,0.25); border-color: rgba(74,222,128,0.5); color: #FFFFFF; }')
-        self.abilities_apply_btn.setCursor(Qt.PointingHandCursor)
-        self.abilities_apply_btn.clicked.connect(self._on_apply_abilities_from_stats)
-        panel_layout.addWidget(self.abilities_apply_btn)
-    def _on_inv_tab_changed(self, idx):
-        if idx == 3:
-            self._load_abilities_from_current_player()
-    def _load_abilities_from_current_player(self):
-        for w in self.ability_widgets:
-            w['cur_label'].setText('0')
-            w['spinner'].setValue(0)
-        if not self.current_player_uid or not constants.current_save_path:
-            self.ability_status.setText(t('inventory.abilities_no_player_selected', default='No player loaded'))
-            self.ability_status.setStyleSheet('color: #fbbf24; font-size: 10px; padding: 2px 4px;')
-            return
-        from palworld_aio.utils import sav_to_gvasfile
-        try:
-            uid_clean = str(self.current_player_uid).replace('-', '').upper()
-            sav_path = os.path.join(constants.current_save_path, 'Players', f'{uid_clean}.sav')
-            if not os.path.exists(sav_path):
-                self.ability_status.setText(t('inventory.abilities_no_player_selected', default='No player loaded'))
-                self.ability_status.setStyleSheet('color: #fbbf24; font-size: 10px; padding: 2px 4px;')
-                return
-            gvas = sav_to_gvasfile(sav_path)
-            rd = gvas.properties['SaveData']['value']['RecordData']['value']
-            rmap = rd.get('RelicPossessNumMap', {}).get('value', [])
-            current_values = {e['key']: e['value'] for e in rmap}
-            for w in self.ability_widgets:
-                rt = w['relic_type']
-                val = current_values.get(rt, 0)
-                w['cur_label'].setText(str(val))
-                w['spinner'].setValue(val)
-            name = self.current_player_name or str(self.current_player_uid)
-            self.ability_status.setText(t('inventory.abilities_loaded', default='Loaded abilities for {name}').format(name=name))
-            self.ability_status.setStyleSheet('color: #7dd3fc; font-size: 10px; padding: 2px 4px;')
-        except Exception as e:
-            self.ability_status.setText(f'Error: {e}')
-            self.ability_status.setStyleSheet('color: #f87171; font-size: 10px; padding: 2px 4px;')
-    def _on_apply_abilities_from_stats(self):
-        if not self.current_player_uid:
-            return
-        ability_values = {}
-        checked_count = 0
-        for w in self.ability_widgets:
-            if w['toggle'].isChecked():
-                ability_values[w['relic_type']] = w['spinner'].value()
-                checked_count += 1
-        if not ability_values:
-            self.ability_status.setText(t('inventory.edit_abilities_none_checked', default='No abilities selected'))
-            self.ability_status.setStyleSheet('color: #fbbf24; font-size: 10px; padding: 2px 4px;')
-            return
-        from palworld_aio.managers.player_manager import set_ability_values
-        if set_ability_values([self.current_player_uid], ability_values):
-            self.ability_status.setText(t('inventory.edit_abilities_done', default='Abilities updated successfully.'))
-            self.ability_status.setStyleSheet('color: #4ade80; font-size: 10px; padding: 2px 4px;')
-            self._load_abilities_from_current_player()
+        self.stats_panel.set_player(self.current_player_uid, self.current_player_name)
     def _on_item_selected(self, slot_data):
         self.selected_item = slot_data
     def _show_item_context_menu(self, slot_data, pos):
@@ -2152,22 +2308,21 @@ class PlayerInventoryTab(QWidget):
             if player_uid == uid_clean:
                 if 'Exp' in sp_val:
                     sp_val['Exp']['value'] = new_exp
-                if 'GotStatusPointList' in sp_val:
-                    got_status_list = sp_val['GotStatusPointList']['value']['values']
-                    for status_item in got_status_list:
-                        stat_name_jp = status_item['StatusName'].get('value', '') if isinstance(status_item.get('StatusName'), dict) else ''
-                        for key, jp_name in stat_map_reverse.items():
-                            if jp_name == stat_name_jp and key in modified_stats:
-                                if key == 'weight':
-                                    weight_val = modified_stats[key]
-                                    stat_point = (weight_val - 50) // 50
-                                else:
+                got_list = sp_val.get('GotStatusPointList')
+                if isinstance(got_list, dict):
+                    got_val = got_list.get('value')
+                    if isinstance(got_val, dict):
+                        got_status_list = got_val.get('values', [])
+                        for status_item in got_status_list:
+                            stat_name_jp = status_item['StatusName'].get('value', '') if isinstance(status_item.get('StatusName'), dict) else ''
+                            for key, jp_name in stat_map_reverse.items():
+                                if jp_name == stat_name_jp and key in modified_stats:
                                     stat_point = modified_stats[key]
-                                if 'StatusPoint' in status_item:
-                                    status_item['StatusPoint']['value'] = stat_point
-                                else:
-                                    status_item['StatusPoint'] = {'value': stat_point}
-                                break
+                                    if 'StatusPoint' in status_item:
+                                        status_item['StatusPoint']['value'] = stat_point
+                                    else:
+                                        status_item['StatusPoint'] = {'value': stat_point}
+                                    break
                 return
     def _update_raw_save_data_with_recursive_clean(self, container_type, container, slot_index):
         if not self.inventory or not container:
@@ -2250,15 +2405,6 @@ class PlayerInventoryTab(QWidget):
         self.inv_tabs.setTabText(0, t('inventory.main', default='Inventory'))
         self.inv_tabs.setTabText(1, t('inventory.key_items', default='Key Items'))
         self.inv_tabs.setTabText(2, t('inventory.stats', default='Stats'))
-        if hasattr(self, 'abilities_title'):
-            self.abilities_title.setText(t('inventory.abilities', default='Abilities'))
-        if hasattr(self, 'abilities_sel_all'):
-            self.abilities_sel_all.setText(t('player_item.select_all', default='All'))
-        if hasattr(self, 'abilities_sel_none'):
-            self.abilities_sel_none.setText(t('player_item.deselect_all', default='None'))
-        if hasattr(self, 'abilities_apply_btn'):
-            self.abilities_apply_btn.setText(t('inventory.edit_abilities_apply', default='Apply Ability Changes'))
-        self._load_abilities_from_current_player()
         if not self.current_player_uid:
             self.player_select_btn.setText(t('inventory.select_player', default='Select Player...'))
         self.equip_title.setText(t('inventory.equipment', default='Equipment'))

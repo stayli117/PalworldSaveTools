@@ -13,13 +13,12 @@ except ImportError:
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 LANGUAGES = {'zh_CN': {'name': 'Simplified Chinese', 'code': 'zh-CN'}, 'de_DE': {'name': 'German', 'code': 'de'}, 'es_ES': {'name': 'Spanish', 'code': 'es'}, 'fr_FR': {'name': 'French', 'code': 'fr'}, 'ru_RU': {'name': 'Russian', 'code': 'ru'}, 'ja_JP': {'name': 'Japanese', 'code': 'ja'}, 'ko_KR': {'name': 'Korean', 'code': 'ko'}}
 NEW_TRANSLATIONS = {
-    'fix_illegal_pal.title': 'Fix Illegal Pals',
-    'fix_illegal_pal.description': 'Select players whose illegal pals will be fixed:',
-    'fix_illegal_pal.summary': 'Found {players} player(s) with {pals} illegal pal(s)',
-    'fix_illegal_pal.fix_selected': 'Fix Selected',
-    'fix_illegal_pal.no_selection': 'No players selected.',
-    'fix_illegal_pal.no_illegals_title': 'No Illegal Pals',
-    'fix_illegal_pal.no_illegals_msg': 'No illegal pals found in the save.',
+    'player.stats.health': 'Health',
+    'player.stats.stamina': 'Stamina',
+    'player.stats.attack': 'Attack',
+    'player.stats.work_speed': 'Work Speed',
+    'player.stats.weight': 'Weight',
+    'inventory.max_all_stats': 'Max All Stats',
 }
 OLD_KEYS = []
 def _clean_uv_locks():

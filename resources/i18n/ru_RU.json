@@ -826,6 +826,8 @@
     "settings_theme_label": "Тема:",
     "settings_title": "Настройки",
     "sidebar.close": "Закрыть",
+    "sidebar.collapse": "Свернуть",
+    "sidebar.expand": "Развернуть",
     "sidebar.open": "Открыть",
     "skins_removed": "Удалено скинов: {count}",
     "slot.apply": "Применить обновление",
@@ -1809,5 +1811,10 @@
     "fix_illegal_pal.fix_selected": "Исправить выбранное",
     "fix_illegal_pal.no_selection": "Игроки не выбраны.",
     "fix_illegal_pal.no_illegals_title": "Никаких нелегальных друзей",
-    "fix_illegal_pal.no_illegals_msg": "В сохранении не обнаружено незаконных приятелей."
+    "fix_illegal_pal.no_illegals_msg": "В сохранении не обнаружено незаконных приятелей.",
+    "player.stats.health": "Здоровье",
+    "player.stats.stamina": "Выносливость",
+    "player.stats.attack": "Атака",
+    "player.stats.weight": "Масса",
+    "inventory.max_all_stats": "Макс. все характеристики"
 }

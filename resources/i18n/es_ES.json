@@ -822,6 +822,8 @@
     "settings_theme_label": "Tema:",
     "settings_title": "Ajustes",
     "sidebar.close": "Cerrar",
+    "sidebar.collapse": "Contraer",
+    "sidebar.expand": "Expandir",
     "sidebar.open": "Abrir",
     "skins_removed": "{count} skins eliminadas",
     "slot.apply": "Aplicar actualización",
@@ -1805,5 +1807,10 @@
     "fix_illegal_pal.fix_selected": "Arreglar seleccionado",
     "fix_illegal_pal.no_selection": "No hay jugadores seleccionados.",
     "fix_illegal_pal.no_illegals_title": "Sin amigos ilegales",
-    "fix_illegal_pal.no_illegals_msg": "No se encontraron amigos ilegales en el guardado."
+    "fix_illegal_pal.no_illegals_msg": "No se encontraron amigos ilegales en el guardado.",
+    "player.stats.health": "Salud",
+    "player.stats.stamina": "Aguante",
+    "player.stats.attack": "Ataque",
+    "player.stats.weight": "Peso",
+    "inventory.max_all_stats": "Máximo de todas las estadísticas"
 }

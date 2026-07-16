@@ -1145,6 +1145,8 @@
     "settings.saved.message": "Update settings saved.",
     "settings.saved.title": "Settings Saved",
     "sidebar.close": "Close",
+    "sidebar.collapse": "Collapse",
+    "sidebar.expand": "Expand",
     "sidebar.open": "Open",
     "skins_removed": "Removed {count} skins",
     "slot.apply": "Apply Update",
@@ -2098,5 +2100,10 @@
     "fix_illegal_pal.fix_selected": "Fix Selected",
     "fix_illegal_pal.no_selection": "No players selected.",
     "fix_illegal_pal.no_illegals_title": "No Illegal Pals",
-    "fix_illegal_pal.no_illegals_msg": "No illegal pals found in the save."
+    "fix_illegal_pal.no_illegals_msg": "No illegal pals found in the save.",
+    "player.stats.health": "Health",
+    "player.stats.stamina": "Stamina",
+    "player.stats.attack": "Attack",
+    "player.stats.weight": "Weight",
+    "inventory.max_all_stats": "Max All Stats"
 }

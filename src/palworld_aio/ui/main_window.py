@@ -291,10 +291,12 @@ class MainWindow(QMainWindow):
         body_layout.setContentsMargins(0, 0, 0, 0)
         body_layout.setSpacing(0)
         from .chrome.sidebar_widget import SidebarWidget
-        self.sidebar = SidebarWidget()
+        collapsed = self.user_settings.get('sidebar_collapsed', True)
+        self.sidebar = SidebarWidget(collapsed=collapsed)
         self.sidebar.nav_changed.connect(self._on_nav_changed)
         self.sidebar.console_toggled.connect(self._detach_status)
         self.sidebar.right_panel_toggled.connect(self._toggle_dashboard)
+        self.sidebar.collapsed_changed.connect(self._on_sidebar_collapsed_changed)
         body_layout.addWidget(self.sidebar)
         self._dashboard_collapsed = False
         self._dashboard_sizes = [1000, 400]
@@ -435,7 +437,7 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.excl_bases_panel)
         self.stacked_widget.addWidget(exclusions_tab)
     def _setup_menus(self):
-        menu_actions = {'file': [(t('menu.file.load_save') if t else 'Load Save', self._load_save), (t('menu.file.load_xgp_save') if t else 'Load GamePass Save', self._load_xgp_save), (t('menu.file.load_worldoption') if t else 'Load WorldOption', self._load_worldoption), (t('menu.file.save_changes') if t else 'Save Changes', self._save_changes), (t('menu.file.rename_world') if t else 'Rename World', self._rename_world), (t('aio.menu.open_data_folder') if t else 'Open Data Folder', self._open_data_folder)], 'functions': [(t('deletion.menu.delete_empty_guilds') if t else 'Delete Empty Guilds', self._delete_empty_guilds), (t('deletion.menu.delete_inactive_bases') if t else 'Delete Inactive Bases', self._delete_inactive_bases), (t('deletion.menu.delete_duplicate_players') if t else 'Delete Duplicate Players', self._delete_duplicate_players), (t('deletion.menu.delete_inactive_players') if t else 'Delete Inactive Players', self._delete_inactive_players), (t('deletion.menu.delete_unreferenced') if t else 'Delete Unreferenced Data', self._delete_unreferenced), (t('deletion.menu.delete_non_base_map_objs') if t else 'Delete Non-Base Map Objects', self._delete_non_base_map_objs), (t('deletion.menu.delete_all_skins') if t else 'Delete All Skins', self._delete_all_skins), (t('deletion.menu.unlock_private_chests') if t else 'Unlock Private Chests', self._unlock_private_chests), (t('deletion.menu.remove_invalid_items') if t else 'Remove Invalid Items', self._remove_invalid_items), (t('deletion.menu.remove_invalid_structures') if t else 'Remove Invalid Structures', self._remove_invalid_structures), (t('deletion.menu.repair_structures') if t else 'Repair All Structures', self._repair_structures), (t('deletion.menu.remove_invalid_pals') if t else 'Remove Invalid Pals', self._remove_invalid_pals), (t('deletion.menu.remove_invalid_passives') if t else 'Remove Invalid Passives', self._remove_invalid_passives), (t('deletion.menu.restore_all_pals') if t else 'Restore All Pals', self._restore_all_pals), (t('deletion.menu.max_all_pals') if t else 'Max All Pals', self._max_all_pals), (t('deletion.menu.fix_illegal_pals') if t else 'Fix Illegal Pals', self._fix_illegal_pals), (t('func_manager.fix_unassigned_pals.title') if t else 'Fix Unassigned Pals', self._fix_unassigned_pals), (t('deletion.menu.reset_missions') if t else 'Reset Missions', self._reset_missions), (t('deletion.menu.reset_anti_air') if t else 'Reset Anti-Air Turrets', self._reset_anti_air), (t('deletion.menu.reset_oilrig') if t else 'Reset Oil Rigs', self._reset_oilrig), (t('deletion.menu.reset_invader') if t else 'Reset Invaders', self._reset_invader), (t('deletion.menu.reset_supply') if t else 'Reset Supply', self._reset_supply), (t('deletion.menu.reset_dungeons') if t else 'Reset Dungeons', self._reset_dungeons), (t('deletion.menu.paldefender') if t else 'PalDefender Commands', self._open_paldefender, 'separator_after'), (t('deletion.menu.fix_timestamps') if t else 'Fix All Negative Timestamps', self._fix_all_timestamps, 'separator_after'), (t('base.export_all') if t else 'Export All Bases', self._export_all_bases), (t('guild.menu.rebuild_all_guilds') if t else 'Rebuild All Guilds', self._rebuild_all_guilds), (t('guild.menu.move_selected_player_to_selected_guild') if t else 'Move Player to Guild', self._move_player_to_guild), (t('deletion.menu.trim_overfilled_inventories') if t else 'Trim Overfilled Inventories', self._trim_overfilled_inventories), (t('modify_container_slots') if t else 'Modify Container Slots', self._modify_container_slots), (t('gamedays.menu') if t else 'Edit Game Days', self._edit_game_days), 'separator_after'], 'player_editing': [(t('player.edit_tech_points') if t else 'Edit Tech Points', self._edit_player_tech_points), (t('player.edit_stats') if t else 'Edit Player Stats', self._edit_player_stats), 'separator_after'], 'maps': [(t('deletion.menu.show_map') if t else 'Show Map', self._show_map), (t('deletion.menu.generate_map') if t else 'Generate Map', self._generate_map)], 'exclusions': [(t('deletion.menu.save_exclusions') if t else 'Save Exclusions', self._save_exclusions)], 'languages': [(t(f'lang.{code}') if t else code, partial(self._change_language, code), {'en_US': '🇺🇸', 'zh_CN': '🇨🇳', 'ru_RU': '🇷', 'fr_FR': '🇫🇷', 'es_ES': '🇪🇸', 'de_DE': '🇩🇪', 'ja_JP': '🇯🇵', 'ko_KR': '🇰🇷'}[code]) for code in ['en_US', 'zh_CN', 'ru_RU', 'fr_FR', 'es_ES', 'de_DE', 'ja_JP', 'ko_KR']]}
+        menu_actions = {'file': [(t('menu.file.load_save') if t else 'Load Save', self._load_save), (t('menu.file.load_xgp_save') if t else 'Load GamePass Save', self._load_xgp_save), (t('menu.file.load_worldoption') if t else 'Load WorldOption', self._load_worldoption), (t('menu.file.save_changes') if t else 'Save Changes', self._save_changes), (t('menu.file.rename_world') if t else 'Rename World', self._rename_world), (t('aio.menu.open_data_folder') if t else 'Open Data Folder', self._open_data_folder)], 'functions': [(t('deletion.menu.delete_empty_guilds') if t else 'Delete Empty Guilds', self._delete_empty_guilds), (t('deletion.menu.delete_inactive_bases') if t else 'Delete Inactive Bases', self._delete_inactive_bases), (t('deletion.menu.delete_duplicate_players') if t else 'Delete Duplicate Players', self._delete_duplicate_players), (t('deletion.menu.delete_inactive_players') if t else 'Delete Inactive Players', self._delete_inactive_players), (t('deletion.menu.delete_unreferenced') if t else 'Delete Unreferenced Data', self._delete_unreferenced), (t('deletion.menu.delete_non_base_map_objs') if t else 'Delete Non-Base Map Objects', self._delete_non_base_map_objs), (t('deletion.menu.delete_all_skins') if t else 'Delete All Skins', self._delete_all_skins), (t('deletion.menu.unlock_private_chests') if t else 'Unlock Private Chests', self._unlock_private_chests), (t('deletion.menu.remove_invalid_items') if t else 'Remove Invalid Items', self._remove_invalid_items), (t('deletion.menu.remove_invalid_structures') if t else 'Remove Invalid Structures', self._remove_invalid_structures), (t('deletion.menu.repair_structures') if t else 'Repair All Structures', self._repair_structures), (t('deletion.menu.remove_invalid_pals') if t else 'Remove Invalid Pals', self._remove_invalid_pals), (t('deletion.menu.remove_invalid_passives') if t else 'Remove Invalid Passives', self._remove_invalid_passives), (t('deletion.menu.restore_all_pals') if t else 'Restore All Pals', self._restore_all_pals), (t('deletion.menu.max_all_pals') if t else 'Max All Pals', self._max_all_pals), (t('deletion.menu.fix_illegal_pals') if t else 'Fix Illegal Pals', self._fix_illegal_pals), (t('func_manager.fix_unassigned_pals.title') if t else 'Fix Unassigned Pals', self._fix_unassigned_pals), (t('deletion.menu.reset_missions') if t else 'Reset Missions', self._reset_missions), (t('deletion.menu.reset_anti_air') if t else 'Reset Anti-Air Turrets', self._reset_anti_air), (t('deletion.menu.reset_oilrig') if t else 'Reset Oil Rigs', self._reset_oilrig), (t('deletion.menu.reset_invader') if t else 'Reset Invaders', self._reset_invader), (t('deletion.menu.reset_supply') if t else 'Reset Supply', self._reset_supply), (t('deletion.menu.reset_dungeons') if t else 'Reset Dungeons', self._reset_dungeons), (t('deletion.menu.paldefender') if t else 'PalDefender Commands', self._open_paldefender, 'separator_after'), (t('deletion.menu.fix_timestamps') if t else 'Fix All Negative Timestamps', self._fix_all_timestamps, 'separator_after'), (t('base.export_all') if t else 'Export All Bases', self._export_all_bases), (t('guild.menu.rebuild_all_guilds') if t else 'Rebuild All Guilds', self._rebuild_all_guilds), (t('guild.menu.move_selected_player_to_selected_guild') if t else 'Move Player to Guild', self._move_player_to_guild), (t('deletion.menu.trim_overfilled_inventories') if t else 'Trim Overfilled Inventories', self._trim_overfilled_inventories), (t('modify_container_slots') if t else 'Modify Container Slots', self._modify_container_slots), (t('gamedays.menu') if t else 'Edit Game Days', self._edit_game_days), 'separator_after'], 'maps': [(t('deletion.menu.show_map') if t else 'Show Map', self._show_map), (t('deletion.menu.generate_map') if t else 'Generate Map', self._generate_map)], 'exclusions': [(t('deletion.menu.save_exclusions') if t else 'Save Exclusions', self._save_exclusions)], 'languages': [(t(f'lang.{code}') if t else code, partial(self._change_language, code), {'en_US': '🇺🇸', 'zh_CN': '🇨🇳', 'ru_RU': '🇷', 'fr_FR': '🇫🇷', 'es_ES': '🇪🇸', 'de_DE': '🇩🇪', 'ja_JP': '🇯🇵', 'ko_KR': '🇰🇷'}[code]) for code in ['en_US', 'zh_CN', 'ru_RU', 'fr_FR', 'es_ES', 'de_DE', 'ja_JP', 'ko_KR']]}
         self.header_widget.set_menu_actions(menu_actions)
     def _open_data_folder(self):
         from resource_resolver import get_user_config_dir
@@ -492,7 +494,7 @@ class MainWindow(QMainWindow):
         user_cfg_path = str(USER_CONFIG_DIR / 'user.cfg')
         if not os.path.exists(user_cfg_path):
             user_cfg_path = os.path.join(str(CONFIG_DIR), 'user.cfg')
-        default_settings = {'language': 'en_US', 'show_icons': True, 'boot_preference': 'menu', 'console_detached': False, 'console_window_geometry': None, 'right_panel_visible': True}
+        default_settings = {'language': 'en_US', 'show_icons': True, 'boot_preference': 'menu', 'console_detached': False, 'console_window_geometry': None, 'right_panel_visible': True, 'sidebar_collapsed': False}
         if os.path.exists(user_cfg_path):
             try:
                 self.user_settings = json_tools.load(user_cfg_path)
@@ -528,6 +530,9 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'sidebar') and self.sidebar:
             self.sidebar.set_right_panel_visible(not self._dashboard_collapsed)
         self.user_settings['right_panel_visible'] = not self._dashboard_collapsed
+        self._save_user_settings()
+    def _on_sidebar_collapsed_changed(self, collapsed):
+        self.user_settings['sidebar_collapsed'] = collapsed
         self._save_user_settings()
     def _toggle_maximize(self):
         if self.isMaximized():
@@ -1004,8 +1009,6 @@ class MainWindow(QMainWindow):
         menu.add_action(self._create_action(t('player.viewing_cage.menu'), lambda: self._unlock_viewing_cage(item.text(4))))
         menu.add_action(self._create_action(t('player.reset_timestamp.menu') if t else 'Reset Timestamp', lambda: self._reset_player_timestamp(item.text(4))))
         menu.add_action(self._create_action(t('player.unlock_technologies.menu') if t else 'Unlock All Technologies', lambda: self._unlock_all_technologies_for_player(item.text(4))))
-        menu.add_action(self._create_action(t('player.edit_tech_points') if t else 'Edit Tech Points', lambda: self._edit_player_tech_points()))
-        menu.add_action(self._create_action(t('player.edit_stats') if t else 'Edit Player Stats', lambda: self._edit_player_stats()))
         menu.addSeparator()
         menu.add_action(self._create_action('Set Player Level' if not t else t('player.set_level'), lambda: self._set_player_level(item.text(4))))
         menu.addSeparator()
@@ -1917,162 +1920,7 @@ class MainWindow(QMainWindow):
                 self.refresh_all()
                 self._show_info(t('Done'), t('modify_container_slots_result', modified=modified) if t else f'Modified {modified} containers')
             run_with_loading(on_finished, task)
-    def _edit_player_tech_points(self):
-        if not constants.loaded_level_json:
-            self._show_warning(t('Error'), t('error.no_save_loaded'))
-            return
-        player_data = self.players_panel.get_selected_data()
-        if not player_data:
-            self._show_warning(t('Error'), t('player.select_player_first'))
-            return
-        uid = player_data[4]
-        name = player_data[0].replace('[L]', '')
-        from ..managers.player_manager import get_player_info
-        player_info = get_player_info(uid)
-        if not player_info:
-            self._show_warning(t('Error'), t('player.not_found'))
-            return
-        from ..utils import sav_to_gvasfile
-        uid_clean = str(uid).replace('-', '').upper()
-        sav_file = os.path.join(constants.current_save_path, 'Players', f'{uid_clean}.sav')
-        try:
-            gvas = sav_to_gvasfile(sav_file)
-            current_tech = gvas.properties.get('SaveData', {}).get('value', {}).get('TechnologyPoint', {}).get('value', 0)
-            current_boss_tech = gvas.properties.get('SaveData', {}).get('value', {}).get('bossTechnologyPoint', {}).get('value', 0)
-        except:
-            current_tech = 0
-            current_boss_tech = 0
-        from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QSpinBox, QPushButton, QDialogButtonBox
-        dialog = QDialog(self)
-        dialog.setWindowTitle(t('player.edit_tech_points.title') if t else 'Edit Technology Points')
-        dialog.setModal(True)
-        layout = QVBoxLayout(dialog)
-        tech_row = QHBoxLayout()
-        tech_label = QLabel(t('player.tech_points') if t else 'Technology Points:')
-        tech_spinbox = QSpinBox()
-        tech_spinbox.setRange(0, 999999)
-        tech_spinbox.setValue(current_tech)
-        tech_row.addWidget(tech_label)
-        tech_row.addWidget(tech_spinbox)
-        layout.addLayout(tech_row)
-        boss_tech_row = QHBoxLayout()
-        boss_tech_label = QLabel(t('player.ancient_tech_points') if t else 'Ancient Technology Points:')
-        boss_tech_spinbox = QSpinBox()
-        boss_tech_spinbox.setRange(0, 999999)
-        boss_tech_spinbox.setValue(current_boss_tech)
-        boss_tech_row.addWidget(boss_tech_label)
-        boss_tech_row.addWidget(boss_tech_spinbox)
-        layout.addLayout(boss_tech_row)
-        buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
-        buttons.accepted.connect(dialog.accept)
-        buttons.rejected.connect(dialog.reject)
-        layout.addWidget(buttons)
-        if dialog.exec() == QDialog.Accepted:
-            new_tech = tech_spinbox.value()
-            new_boss_tech = boss_tech_spinbox.value()
-            from ..managers.player_manager import set_player_tech_points, set_player_boss_tech_points
-            success = True
-            if set_player_tech_points(uid, new_tech):
-                print(f'Technology points updated to {new_tech}')
-            else:
-                success = False
-                print('Failed to update Technology points')
-            if set_player_boss_tech_points(uid, new_boss_tech):
-                pass
-            else:
-                success = False
-            if success:
-                self._show_info(t('Done'), t('player.tech_points_both_updated', new_tech=new_tech, new_boss_tech=new_boss_tech))
-            else:
-                self._show_warning(t('Error'), t('player.tech_points_failed'))
-    def _edit_player_stats(self):
-        if not constants.loaded_level_json:
-            self._show_warning(t('Error'), t('error.no_save_loaded'))
-            return
-        player_data = self.players_panel.get_selected_data()
-        if not player_data:
-            self._show_warning(t('Error'), t('player.select_player_first'))
-            return
-        uid = player_data[4]
-        name = player_data[0].replace('[L]', '')
-        current_stats = {}
-        unused_stat_points = 0
-        wsd = constants.loaded_level_json['properties']['worldSaveData']['value']
-        char_map = wsd.get('CharacterSaveParameterMap', {}).get('value', [])
-        uid_clean = str(uid).replace('-', '')
-        stat_order = []
-        wsd = constants.loaded_level_json['properties']['worldSaveData']['value']
-        char_map = wsd.get('CharacterSaveParameterMap', {}).get('value', [])
-        for entry in char_map:
-            raw = entry.get('value', {}).get('RawData', {}).get('value', {})
-            sp = raw.get('object', {}).get('SaveParameter', {})
-            if sp.get('struct_type') != 'PalIndividualCharacterSaveParameter':
-                continue
-            sp_val = sp.get('value', {})
-            if not sp_val.get('IsPlayer', {}).get('value'):
-                continue
-            uid_obj = entry.get('key', {}).get('PlayerUId', {})
-            player_uid = str(uid_obj.get('value', '')).replace('-', '') if isinstance(uid_obj, dict) else ''
-            if player_uid == uid_clean:
-                if 'GotStatusPointList' in sp_val:
-                    got_status_list = sp_val['GotStatusPointList']['value']['values']
-                    for status_item in got_status_list:
-                        if 'StatusName' in status_item and 'StatusPoint' in status_item:
-                            stat_name_jp = status_item['StatusName'].get('value', '') if isinstance(status_item.get('StatusName'), dict) else ''
-                            stat_point = status_item['StatusPoint'].get('value', 0) if isinstance(status_item.get('StatusPoint'), dict) else 0
-                            current_stats[stat_name_jp] = stat_point
-                if 'UnusedStatusPoint' in sp_val:
-                    unused_stat_points = sp_val['UnusedStatusPoint'].get('value', 0) if isinstance(sp_val.get('UnusedStatusPoint'), dict) else 0
-                break
-        stat_names = {}
-        stat_name_map = {'最大HP': 'player.stats.max_hp', '最大SP': 'player.stats.max_sp', '攻撃力': 'player.stats.attack_power', '所持重量': 'player.stats.carry_weight', '捕獲率': 'player.stats.capture_rate', '作業速度': 'player.stats.work_speed'}
-        for stat_jp in current_stats.keys():
-            if stat_jp in stat_name_map:
-                stat_names[stat_jp] = stat_name_map[stat_jp]
-        stat_points_label = t('player.stats.points') if t else 'Stat Points:'
-        from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QSpinBox, QPushButton, QDialogButtonBox
-        dialog = QDialog(self)
-        dialog.setWindowTitle(t('player.edit_stats.title') if t else 'Edit Player Stats')
-        dialog.setModal(True)
-        layout = QVBoxLayout(dialog)
-        stat_widgets = {}
-        points_row = QHBoxLayout()
-        points_label = QLabel(f'{stat_points_label}')
-        points_spinbox = QSpinBox()
-        points_spinbox.setRange(0, 9999)
-        points_spinbox.setValue(unused_stat_points)
-        stat_widgets['_unused_stat_points'] = points_spinbox
-        points_row.addWidget(points_label)
-        points_row.addWidget(points_spinbox)
-        layout.addLayout(points_row)
-        for stat_jp, stat_en in stat_names.items():
-            row = QHBoxLayout()
-            translated_stat = t(stat_en) if t else stat_jp
-            label = QLabel(f'{translated_stat}:')
-            spinbox = QSpinBox()
-            spinbox.setRange(0, 999)
-            spinbox.setValue(current_stats.get(stat_jp, 0))
-            stat_widgets[stat_jp] = spinbox
-            row.addWidget(label)
-            row.addWidget(spinbox)
-            layout.addLayout(row)
-        buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
-        buttons.accepted.connect(dialog.accept)
-        buttons.rejected.connect(dialog.reject)
-        layout.addWidget(buttons)
-        if dialog.exec() == QDialog.Accepted:
-            new_stats = {}
-            new_unused_stat_points = None
-            for stat_jp, spinbox in stat_widgets.items():
-                if stat_jp == '_unused_stat_points':
-                    new_unused_stat_points = spinbox.value()
-                else:
-                    new_stats[stat_jp] = spinbox.value()
-            from ..managers.player_manager import set_player_stats
-            if set_player_stats(uid, new_stats, new_unused_stat_points):
-                self._show_info(t('Done'), t('player.stats_updated') if t else 'Player stats updated successfully')
-            else:
-                self._show_warning(t('Error'), t('player.stats_failed'))
+
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_F5:
             if constants.current_save_path:

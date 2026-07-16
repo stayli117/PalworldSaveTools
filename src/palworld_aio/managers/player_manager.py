@@ -141,9 +141,6 @@ def set_player_tech_points(player_uid, new_tech_points):
         if 'TechnologyPoint' not in save_data:
             save_data['TechnologyPoint'] = {'id': None, 'value': 0, 'type': 'IntProperty'}
         save_data['TechnologyPoint']['value'] = new_tech_points
-        if 'bossTechnologyPoint' not in save_data:
-            save_data['bossTechnologyPoint'] = {'id': None, 'value': 0, 'type': 'IntProperty'}
-        save_data['bossTechnologyPoint']['value'] = new_tech_points
         gvasfile_to_sav(gvas, sav_file)
         return True
     except Exception as e:
@@ -185,26 +182,30 @@ def set_player_stats(player_uid, stat_changes, unused_stat_points=None):
         uid_obj = entry.get('key', {}).get('PlayerUId', {})
         uid = str(uid_obj.get('value', '')).replace('-', '') if isinstance(uid_obj, dict) else ''
         if uid == uid_clean:
-            if 'GotStatusPointList' in sp_val:
-                got_status_list = sp_val['GotStatusPointList']['value']['values']
-                for status_item in got_status_list:
-                    if 'StatusName' in status_item and 'StatusPoint' in status_item:
-                        if isinstance(status_item['StatusPoint'], dict):
-                            if 'value' in status_item['StatusPoint']:
-                                if isinstance(status_item['StatusName'], dict) and 'value' in status_item['StatusName']:
-                                    stat_name = status_item['StatusName']['value']
-                                    if stat_name in stat_changes:
-                                        status_item['StatusPoint']['value'] = stat_changes[stat_name]
-            if 'GotExStatusPointList' in sp_val:
-                got_ex_status_list = sp_val['GotExStatusPointList']['value']['values']
-                for status_item in got_ex_status_list:
-                    if 'StatusName' in status_item and 'StatusPoint' in status_item:
-                        if isinstance(status_item['StatusPoint'], dict):
-                            if 'value' in status_item['StatusPoint']:
-                                if isinstance(status_item['StatusName'], dict) and 'value' in status_item['StatusName']:
-                                    stat_name = status_item['StatusName']['value']
-                                    if stat_name in stat_changes:
-                                        status_item['StatusPoint']['value'] = stat_changes[stat_name]
+            got_list = sp_val.get('GotStatusPointList')
+            if isinstance(got_list, dict):
+                got_val = got_list.get('value')
+                if isinstance(got_val, dict):
+                    for status_item in got_val.get('values', []):
+                        if 'StatusName' in status_item and 'StatusPoint' in status_item:
+                            if isinstance(status_item['StatusPoint'], dict):
+                                if 'value' in status_item['StatusPoint']:
+                                    if isinstance(status_item['StatusName'], dict) and 'value' in status_item['StatusName']:
+                                        stat_name = status_item['StatusName']['value']
+                                        if stat_name in stat_changes:
+                                            status_item['StatusPoint']['value'] = stat_changes[stat_name]
+            ex_list = sp_val.get('GotExStatusPointList')
+            if isinstance(ex_list, dict):
+                ex_val = ex_list.get('value')
+                if isinstance(ex_val, dict):
+                    for status_item in ex_val.get('values', []):
+                        if 'StatusName' in status_item and 'StatusPoint' in status_item:
+                            if isinstance(status_item['StatusPoint'], dict):
+                                if 'value' in status_item['StatusPoint']:
+                                    if isinstance(status_item['StatusName'], dict) and 'value' in status_item['StatusName']:
+                                        stat_name = status_item['StatusName']['value']
+                                        if stat_name in stat_changes:
+                                            status_item['StatusPoint']['value'] = stat_changes[stat_name]
             if 'UnusedStatusPoint' in sp_val:
                 if isinstance(sp_val['UnusedStatusPoint'], dict) and 'value' in sp_val['UnusedStatusPoint']:
                     if unused_stat_points is not None:

@@ -520,6 +520,8 @@ class MainWindow(QMainWindow):
         page_index = {'tools': 0, 'base_inventory': 1, 'player_inventory': 2, 'pal_editor': 3, 'players': 4, 'guilds': 5, 'bases': 6, 'map': 7, 'exclusions': 8, 'json_editor': 9, 'docs': 10, 'breeding': 11}[button_id]
         if page_index not in self._tab_created:
             self._ensure_tab(page_index)
+            if constants.loaded_level_json:
+                self.refresh_all()
         self.stacked_widget.setCurrentIndex(page_index)
     def _load_user_settings(self):
         from boot_paths import CONFIG_DIR, USER_CONFIG_DIR

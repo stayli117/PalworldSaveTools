@@ -450,6 +450,89 @@ class PalIcon(QFrame):
 
 
 
+class TribeIcon(QFrame):
+
+    clicked = Signal()
+
+    def __init__(self, tribe='', icon_path='', name='', elements=None, parent=None):
+        super().__init__(parent)
+        self.tribe = tribe
+        self.icon_path = icon_path
+        self._name = name
+        self._elements = elements or {}
+        self.setFixedSize(64, 64)
+        self.setObjectName('tribeIcon')
+        self.setCursor(Qt.PointingHandCursor)
+        self._setup_ui()
+
+    def _setup_ui(self):
+        for child in self.findChildren(QLabel) + self.findChildren(QWidget):
+            if child.objectName() in ('slotBg',):
+                continue
+            try:
+                child.deleteLater()
+            except RuntimeError:
+                pass
+
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+
+        bg = QWidget(self)
+        bg.setObjectName('slotBg')
+        bg.setStyleSheet('QWidget#slotBg { background: transparent; }')
+        self.bg = bg
+
+        pix = _get_cached_pixmap(self.icon_path, 48)
+        icon_label = QLabel(self)
+        icon_label.setAlignment(Qt.AlignCenter)
+        icon_label.setFixedSize(48, 48)
+        icon_label.setStyleSheet('background: transparent; border: none;')
+        if pix:
+            icon_label.setPixmap(pix)
+        icon_label.move(8, 6)
+        icon_label.setAttribute(Qt.WA_TransparentForMouseEvents)
+        icon_label.show()
+
+        self._elem_badge = QLabel(self)
+        self._elem_badge.setFixedSize(12, 12)
+        self._elem_badge.move(50, 4)
+        self._elem_badge.setAttribute(Qt.WA_TransparentForMouseEvents)
+        if self._elements:
+            en = next(iter(self._elements))
+            ep = _get_element_pixmap(en, 'small', 12)
+            if ep:
+                self._elem_badge.setPixmap(ep)
+        self._elem_badge.show()
+
+        self.setToolTip(f'<b>{self._name}</b><br>ID: {self.tribe}')
+        self.setStyleSheet(
+            'QFrame#tribeIcon { background: rgba(255,255,255,0.04); '
+            'border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; }'
+            'QFrame#tribeIcon:hover { background: rgba(125,211,252,0.08); '
+            'border: 1px solid rgba(125,211,252,0.25); }'
+        )
+        self.bg.lower()
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.clicked.emit()
+        super().mousePressEvent(event)
+
+    def set_selected(self, selected):
+        if selected:
+            self.setStyleSheet(
+                'QFrame#tribeIcon { background: rgba(125,211,252,0.15); '
+                'border: 1px solid #7DD3FC; border-radius: 6px; }'
+            )
+        else:
+            self.setStyleSheet(
+                'QFrame#tribeIcon { background: rgba(255,255,255,0.04); '
+                'border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; }'
+                'QFrame#tribeIcon:hover { background: rgba(125,211,252,0.08); '
+                'border: 1px solid rgba(125,211,252,0.25); }'
+            )
+
+
 class PalCardWidget(QFrame):
 
     clicked = Signal()

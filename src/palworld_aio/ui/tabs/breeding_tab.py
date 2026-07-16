@@ -1,13 +1,13 @@
 import json
 import os
 import re
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QScrollArea, QFrame, QDialog, QListWidgetItem, QLineEdit
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QScrollArea, QFrame, QDialog, QLineEdit, QListWidgetItem
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QFont, QCursor, QPixmap, QIcon
 from palworld_aio import constants
 from resource_resolver import resource_path
 from i18n import t
-from palworld_aio.editor.pal_editor import PalFrame, PalCreateDialog, _get_pal_icon_path, _get_cached_pixmap
+from palworld_aio.editor.pal_editor import PalFrame, PalCreateDialog, _get_pal_icon_path, _get_cached_pixmap, _BOSS_PREFIXES
 try:
     import nerdfont as nf
     ARROW_RIGHT = nf.icons.get('nf-fa-arrow_right', '\u2192')
@@ -44,7 +44,6 @@ def _fmt(text, name):
 
 class _SelectPalDialog(PalCreateDialog):
     def __init__(self, parent=None):
-        from palworld_aio.editor.pal_editor import PalFrame
         PalFrame._load_maps()
         self._pal_info = {}
         self._unique_combo_children = set()
@@ -55,8 +54,6 @@ class _SelectPalDialog(PalCreateDialog):
         super().__init__(pal_editor=None, is_party=False, slot_index=0, parent=parent)
         self.selected_asset = None
         self.selected_name = None
-        self._breeding_ok_btn = None
-        self._breeding_cancel_btn = None
         self._convert_to_selector()
 
     def _convert_to_selector(self):
@@ -67,9 +64,8 @@ class _SelectPalDialog(PalCreateDialog):
                 btn.setText(t('breeding.select_btn') if t else 'Select')
                 btn.clicked.disconnect()
                 btn.clicked.connect(self._on_select)
-                self._breeding_ok_btn = btn
             elif 'Cancel' in txt or 'cancel' in txt:
-                self._breeding_cancel_btn = btn
+                pass
         if hasattr(self, '_show_standard_chk'):
             self._show_standard_chk.hide()
         if hasattr(self, '_show_predator_chk'):
@@ -78,20 +74,37 @@ class _SelectPalDialog(PalCreateDialog):
             self._show_boss_chk.hide()
         if hasattr(self, '_show_npc_chk'):
             self._show_npc_chk.hide()
+        if hasattr(self, '_nickname_label'):
+            self._nickname_label.hide()
+        if hasattr(self, 'nick_edit'):
+            self.nick_edit.hide()
         self._search_edit.textChanged.disconnect()
-        self._search_edit.textChanged.connect(self._on_search)
-
-    def _on_search(self):
-        self._filter_pal_list()
+        self._search_edit.textChanged.connect(self._filter_pal_list)
 
     def _filter_pal_list(self):
-        text = self._search_edit.text().lower() if hasattr(self, '_search_edit') else ''
+        search_text = self._search_edit.text().lower() if hasattr(self, '_search_edit') else ''
+        show_standard = self._show_standard_chk.isChecked() if hasattr(self, '_show_standard_chk') else True
+        show_predator = self._show_predator_chk.isChecked() if hasattr(self, '_show_predator_chk') else True
+        show_boss = self._show_boss_chk.isChecked() if hasattr(self, '_show_boss_chk') else True
+        show_npc = self._show_npc_chk.isChecked() if hasattr(self, '_show_npc_chk') else True
         self.pal_list.clear()
         for asset, info in sorted(self._pal_info.items(), key=lambda kv: (kv[1].get('name', kv[0]), kv[0])):
             if info.get('ignore_combi') and asset not in self._unique_combo_children:
                 continue
             name = info.get('name', asset)
-            if text and text not in name.lower() and text not in asset.lower():
+            if search_text and search_text not in name.lower() and search_text not in asset.lower():
+                continue
+            asset_lower = asset.lower()
+            is_predator = asset.upper().startswith('PREDATOR_')
+            is_boss = any(asset.upper().startswith(p) for p in _BOSS_PREFIXES) and not is_predator
+            is_npc = asset_lower in self._npc_assets
+            if is_predator and not show_predator:
+                continue
+            if is_boss and not show_boss:
+                continue
+            if is_npc and not show_npc:
+                continue
+            if (not is_predator and not is_boss and not is_npc) and not show_standard:
                 continue
             pal_icon_path = _get_pal_icon_path(asset)
             lower_basename = os.path.basename(pal_icon_path).lower()
@@ -99,12 +112,29 @@ class _SelectPalDialog(PalCreateDialog):
                 continue
             li = QListWidgetItem(name)
             li.setData(Qt.UserRole, asset)
-            try:
-                pix = _get_cached_pixmap(pal_icon_path, 48)
-                if pix:
-                    li.setIcon(QIcon(pix))
-            except Exception:
-                pass
+            pix = _get_cached_pixmap(pal_icon_path, 48)
+            if pix:
+                li.setIcon(QIcon(pix))
+            pdesc = self._pal_descs_cache.get(asset_lower, '')
+            passives = self._pal_passives_cache.get(asset_lower, [])
+            tip = f'<b>{name}</b><br>ID: {asset}'
+            if pdesc:
+                from palworld_aio.editor.pal_editor.pal_info_widget import PalInfoWidget
+                elem_colors = PalInfoWidget._ELEMENT_COLORS if hasattr(PalInfoWidget, '_ELEMENT_COLORS') else {}
+                from palworld_aio.editor.pal_editor.icons import _partner_desc_to_html, _resolve_partner_desc
+                resolved = _resolve_partner_desc(pdesc, passives, 0, self._pal_main_values_cache.get(asset_lower), self._pal_overwrite_effects_cache.get(asset_lower), passives, reference_passives=self._pal_reference_passives_cache.get(asset_lower, []))
+                html_desc = _partner_desc_to_html(resolved, elem_colors, tooltip=True)
+                tip += f'<br><br>{html_desc}'
+            li.setToolTip(tip)
+            li.setSizeHint(self.pal_list.gridSize())
+            if is_boss:
+                li.setData(Qt.UserRole + 1, True)
+            if is_predator:
+                li.setData(Qt.UserRole + 1, True)
+                li.setData(Qt.UserRole + 3, True)
+            elems = self._pal_elements_cache.get(asset_lower, {})
+            if elems:
+                li.setData(Qt.UserRole + 2, list(elems.keys())[:2])
             self.pal_list.addItem(li)
 
     def _on_select(self):

@@ -40,7 +40,7 @@ from .pal_ops import (
     build_pal_context_menu,
 )
 from .widgets import FramelessDialog, StrokedLabel
-from .card_widgets import PalIcon, PalCardWidget
+from .card_widgets import PalIcon, PalCardWidget, TribeIcon
 from .party_slot_widget import PartySlotWidget
 from .palbox_slot_widget import PalboxSlotWidget, _PalSlotDelegate
 from .pal_info_widget import PalInfoWidget
@@ -95,6 +95,7 @@ __all__ = [
     "PalboxSlotWidget",
     "PalCardWidget",
     "PalCreateDialog",
+    "TribeIcon",
     "PalEditorWidget",
     "PalFrame",
     "PalIcon",

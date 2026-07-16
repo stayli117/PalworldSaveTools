@@ -94,8 +94,6 @@ def _compute_all():
         except Exception:
             continue
     return sorted(names)
-__all__ = _compute_all()
-
 def backup_whole_directory(source_folder, backup_folder):
     import os, sys, shutil, datetime as dt
     from resource_resolver import get_data_base
@@ -128,3 +126,5 @@ def center_window(window):
         screen = QApplication.primaryScreen().availableGeometry()
         size = window.size()
         window.move((screen.width() - size.width()) // 2, (screen.height() - size.height()) // 2)
+
+__all__ = _compute_all()

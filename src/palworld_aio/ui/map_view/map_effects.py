@@ -85,6 +85,51 @@ class CalibrationEffect(QGraphicsObject):
         painter.setPen(QPen(QColor(255, 136, 0, 180), 1))
         painter.drawLine(-25, 0, 25, 0)
         painter.drawLine(0, -25, 0, 25)
+class CoordChangeEffect(QGraphicsObject):
+    def __init__(self, x, y):
+        super().__init__()
+        self.setPos(x, y)
+        self._phase = 0.0
+        self._timer = QTimer()
+        self._timer.timeout.connect(self._tick)
+        self._timer.start(30)
+        self._duration = 0
+    def _tick(self):
+        self._phase = (self._phase + 0.03) % 1.0
+        self._duration += 1
+        self.update()
+        if self._duration > 200:
+            self.stop()
+    def stop(self):
+        self._timer.stop()
+        if self.scene():
+            self.scene().removeItem(self)
+    def boundingRect(self):
+        return QRectF(-160, -160, 320, 320)
+    def paint(self, painter, option, widget=None):
+        painter.setRenderHint(QPainter.Antialiasing)
+        c = QColor(100, 200, 255)
+        r = 10 + self._phase * 100
+        a = int(220 * (1 - self._phase))
+        painter.setPen(QPen(QColor(c.red(), c.green(), c.blue(), a), 4))
+        painter.setBrush(Qt.NoBrush)
+        painter.drawEllipse(QPointF(0, 0), r, r)
+        r2 = 10 + (1 - self._phase) * 100
+        a2 = int(220 * self._phase)
+        painter.setPen(QPen(QColor(c.red(), c.green(), c.blue(), a2), 3))
+        painter.drawEllipse(QPointF(0, 0), r2, r2)
+        painter.setPen(QPen(QColor(255, 255, 255, a), 2))
+        painter.drawLine(-20, 0, 20, 0)
+        painter.drawLine(0, -20, 0, 20)
+        for i in range(4):
+            angle = math.radians(i * 90 + self._phase * 360)
+            dot_r = 12 + self._phase * 30
+            dx = math.cos(angle) * dot_r
+            dy = math.sin(angle) * dot_r
+            da = int(200 * (1 - abs(self._phase - 0.5) * 2))
+            painter.setBrush(QColor(100, 200, 255, da))
+            painter.setPen(Qt.NoPen)
+            painter.drawEllipse(QPointF(dx, dy), 4, 4)
 class ExportEffect(EffectItem):
     def paint(self, painter, option, widget=None):
         painter.setRenderHint(QPainter.Antialiasing)

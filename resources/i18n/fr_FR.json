@@ -1800,5 +1800,13 @@
     "player.stats.stamina": "Endurance",
     "player.stats.attack": "Attaque",
     "player.stats.weight": "Poids",
-    "inventory.max_all_stats": "Toutes les statistiques maximales"
+    "inventory.max_all_stats": "Toutes les statistiques maximales",
+    "base.move_coords": "Changer les coordonnées",
+    "base.move_coords.title": "Modifier les coordonnées de base",
+    "base.move_coords.warning": "AVERTISSEMENT : déplacer une base vers des coordonnées différentes peut avoir un impact négatif sur votre jeu.\n\nLa base peut :\n- Évaluer incorrectement (comportement étrange de l'IA)\n- Collision avec des rochers, des arbres, des structures ou un terrain\n- Vous avez des problèmes de fondation/coupage\n- Causer des problèmes de recherche de Pal\n\nCet outil ne peut pas détecter le terrain, les collisions ou la géométrie du monde.\nNe procédez que si vous comprenez ces risques.\n\nContinuer?",
+    "base.move_coords.prompt_x": "Entrez la nouvelle coordonnée X :",
+    "base.move_coords.prompt_y": "Entrez la nouvelle coordonnée Y :",
+    "base.move_coords.success": "Coordonnées de base mises à jour avec succès.",
+    "base.move_coords.failed": "Échec de la mise à jour des coordonnées de base.",
+    "map.info.select_coords": "Cliquez sur la carte pour définir de nouvelles coordonnées de base. Cliquez avec le bouton droit pour annuler."
 }

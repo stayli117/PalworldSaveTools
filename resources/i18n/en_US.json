@@ -2105,5 +2105,13 @@
     "player.stats.stamina": "Stamina",
     "player.stats.attack": "Attack",
     "player.stats.weight": "Weight",
-    "inventory.max_all_stats": "Max All Stats"
+    "inventory.max_all_stats": "Max All Stats",
+    "base.move_coords": "Change Coordinates",
+    "base.move_coords.title": "Change Base Coordinates",
+    "base.move_coords.warning": "WARNING: Moving a base to different coordinates can negatively impact your game.\n\nThe base may:\n- Evaluate incorrectly (weird AI behavior)\n- Collide with rocks, trees, structures, or terrain\n- Have foundation/clipping issues\n- Cause Pal pathfinding problems\n\nThis tool cannot detect terrain, collisions, or world geometry.\nProceed only if you understand these risks.\n\nContinue?",
+    "base.move_coords.prompt_x": "Enter new X coordinate:",
+    "base.move_coords.prompt_y": "Enter new Y coordinate:",
+    "base.move_coords.success": "Base coordinates updated successfully.",
+    "base.move_coords.failed": "Failed to update base coordinates.",
+    "map.info.select_coords": "Click on the map to set new base coordinates. Right-click to cancel."
 }

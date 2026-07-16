@@ -1818,5 +1818,13 @@
     "player.stats.stamina": "スタミナ",
     "player.stats.attack": "攻撃",
     "player.stats.weight": "重さ",
-    "inventory.max_all_stats": "すべてのステータスを最大化する"
+    "inventory.max_all_stats": "すべてのステータスを最大化する",
+    "base.move_coords": "座標の変更",
+    "base.move_coords.title": "ベース座標の変更",
+    "base.move_coords.warning": "警告: 拠点を別の座標に移動すると、ゲームに悪影響を及ぼす可能性があります。\n\nベースは次のことを行うことができます。\n- 誤った評価 (AI の奇妙な動作)\n- 岩、木、構造物、または地形との衝突\n- 基礎/クリッピングの問題がある\n- Pal の経路探索の問題を引き起こす\n\nこのツールは、地形、衝突、またはワールド ジオメトリを検出できません。\nこれらのリスクを理解した場合にのみ続行してください。\n\n続く？",
+    "base.move_coords.prompt_x": "新しい X 座標を入力してください:",
+    "base.move_coords.prompt_y": "新しい Y 座標を入力してください:",
+    "base.move_coords.success": "ベース座標が正常に更新されました。",
+    "base.move_coords.failed": "ベース座標の更新に失敗しました。",
+    "map.info.select_coords": "マップをクリックして新しい基準座標を設定します。キャンセルするには右クリックしてください。"
 }

@@ -1842,5 +1842,13 @@
     "player.stats.stamina": "Ausdauer",
     "player.stats.attack": "Angriff",
     "player.stats.weight": "Gewicht",
-    "inventory.max_all_stats": "Alle Statistiken maximieren"
+    "inventory.max_all_stats": "Alle Statistiken maximieren",
+    "base.move_coords": "Koordinaten ändern",
+    "base.move_coords.title": "Basiskoordinaten ändern",
+    "base.move_coords.warning": "WARNUNG: Das Verschieben einer Basis an andere Koordinaten kann sich negativ auf Ihr Spiel auswirken.\n\nDie Basis kann:\n- Falsch bewerten (seltsames KI-Verhalten)\n- Kollision mit Felsen, Bäumen, Strukturen oder Gelände\n- Probleme mit dem Fundament/Clipping haben\n- Verursacht Pal-Wegfindungsprobleme\n\nDieses Tool kann kein Gelände, keine Kollisionen oder keine Weltgeometrie erkennen.\nFahren Sie nur fort, wenn Sie diese Risiken verstehen.\n\nWeitermachen?",
+    "base.move_coords.prompt_x": "Neue X-Koordinate eingeben:",
+    "base.move_coords.prompt_y": "Neue Y-Koordinate eingeben:",
+    "base.move_coords.success": "Basiskoordinaten erfolgreich aktualisiert.",
+    "base.move_coords.failed": "Basiskoordinaten konnten nicht aktualisiert werden.",
+    "map.info.select_coords": "Klicken Sie auf die Karte, um neue Basiskoordinaten festzulegen. Klicken Sie mit der rechten Maustaste, um den Vorgang abzubrechen."
 }

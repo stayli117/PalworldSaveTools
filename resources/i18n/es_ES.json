@@ -1812,5 +1812,13 @@
     "player.stats.stamina": "Aguante",
     "player.stats.attack": "Ataque",
     "player.stats.weight": "Peso",
-    "inventory.max_all_stats": "Máximo de todas las estadísticas"
+    "inventory.max_all_stats": "Máximo de todas las estadísticas",
+    "base.move_coords": "Cambiar coordenadas",
+    "base.move_coords.title": "Cambiar coordenadas base",
+    "base.move_coords.warning": "ADVERTENCIA: Mover una base a diferentes coordenadas puede afectar negativamente tu juego.\n\nLa base podrá:\n- Evaluar incorrectamente (comportamiento extraño de la IA)\n- Chocar con rocas, árboles, estructuras o terreno.\n- Tiene problemas de base/recorte\n- Causar problemas de búsqueda de caminos de Pal\n\nEsta herramienta no puede detectar terreno, colisiones o geometría mundial.\nContinúe solo si comprende estos riesgos.\n\n¿Continuar?",
+    "base.move_coords.prompt_x": "Introduzca la nueva coordenada X:",
+    "base.move_coords.prompt_y": "Ingrese la nueva coordenada Y:",
+    "base.move_coords.success": "Las coordenadas de la base se actualizaron correctamente.",
+    "base.move_coords.failed": "No se pudieron actualizar las coordenadas de la base.",
+    "map.info.select_coords": "Haga clic en el mapa para establecer nuevas coordenadas base. Haga clic derecho para cancelar."
 }

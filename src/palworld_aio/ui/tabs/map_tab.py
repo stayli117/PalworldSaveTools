@@ -18,7 +18,7 @@ from palworld_aio.editor.dialogs import RadiusInputDialog, InputDialog, ZoneMana
 from palworld_aio.utils import sav_to_gvasfile
 from palworld_aio.managers.save_manager import save_manager
 from ..map_view.map_markers import BaseMarker, PlayerMarker
-from ..map_view.map_effects import DeleteEffect, ImportEffect, ExportEffect, CalibrationEffect
+from ..map_view.map_effects import DeleteEffect, ImportEffect, ExportEffect, CalibrationEffect, CoordChangeEffect
 from ..map_view.map_items import ExclusionZoneItem, PolygonExclusionZoneItem, BaseRadiusRing, ZonePreviewItem
 from ..map_view.map_view import MapGraphicsView
 _SORT_ROLE = Qt.UserRole + 1
@@ -47,6 +47,8 @@ class MapTab(QWidget):
         self._sidebar_widget = None
         self.selected_base_marker = None
         self.current_radius_ring = None
+        self._coord_picker_active = False
+        self._coord_picker_base = None
         self.all_radius_rings = []
         self.exclusion_zones = []
         self._zone_drawing_mode = False
@@ -1302,6 +1304,7 @@ class MapTab(QWidget):
             delete_action = menu.addAction(t('delete.base') if t else 'Delete Base')
             export_action = menu.addAction(t('button.export') if t else 'Export Base')
             radius_action = menu.addAction(t('base.radius.menu') if t else 'Adjust Radius')
+            move_coords_action = menu.addAction(t('base.move_coords') if t else 'Change Coordinates')
             menu.addSeparator()
             reassign_action = menu.addAction(t('base.reassign_guild') if t else 'Reassign to Guild')
             action = menu.exec(global_pos.toPoint())
@@ -1311,6 +1314,8 @@ class MapTab(QWidget):
                 self._export_base(data)
             elif action == radius_action:
                 self._adjust_base_radius(data)
+            elif action == move_coords_action:
+                self._move_base_coords(data)
             elif action == reassign_action:
                 self._reassign_base(data)
     def _on_empty_space_right_clicked(self, global_pos):
@@ -1436,6 +1441,7 @@ class MapTab(QWidget):
             delete_action = menu.addAction(t('delete.base') if t else 'Delete Base')
             export_action = menu.addAction(t('button.export') if t else 'Export Base')
             radius_action = menu.addAction(t('base.radius.menu') if t else 'Adjust Radius')
+            move_coords_action = menu.addAction(t('base.move_coords') if t else 'Change Coordinates')
             menu.addSeparator()
             reassign_action = menu.addAction(t('base.reassign_guild') if t else 'Reassign to Guild')
             action = menu.exec(tree.viewport().mapToGlobal(pos))
@@ -1445,6 +1451,8 @@ class MapTab(QWidget):
                 self._export_base(item_data)
             elif action == radius_action:
                 self._adjust_base_radius(item_data)
+            elif action == move_coords_action:
+                self._move_base_coords(item_data)
             elif action == reassign_action:
                 self._reassign_base(item_data)
         elif item_type == 'guild':
@@ -1673,6 +1681,69 @@ class MapTab(QWidget):
             show_critical(self, t('error.title') if t else 'Error', f'Failed to reassign base: {str(e)}')
         finally:
             QApplication.restoreOverrideCursor()
+    def _move_base_coords(self, base_data):
+        reply = show_question(self, t('base.move_coords.title') if t else 'Change Base Coordinates', t('base.move_coords.warning') if t else 'WARNING: Moving a base to different coordinates can negatively impact your game.\n\nThe base may:\n- Evaluate incorrectly (weird AI behavior)\n- Collide with rocks, trees, structures, or terrain\n- Have foundation/clipping issues\n- Cause Pal pathfinding problems\n\nThis tool cannot detect terrain, collisions, or world geometry.\nProceed only if you understand these risks.\n\nContinue?')
+        if not reply:
+            return
+        self._coord_picker_base = base_data
+        self._coord_picker_active = True
+        self.view.set_calibration_mode(True)
+        self.view.calibration_clicked.connect(self._on_coord_picker_click)
+        self.view.empty_space_right_clicked.connect(self._on_coord_picker_cancel)
+        self.view.setCursor(Qt.CrossCursor)
+        self.info_label.setText(t('map.info.select_coords') if t else 'Click on the map to set new base coordinates. Right-click to cancel.')
+        img_x, img_y = base_data['img_coords']
+        self.view.animate_to_coords(img_x, img_y, zoom_level=1.0)
+    def _on_coord_picker_click(self, scene_x, scene_y):
+        if not self._coord_picker_active or not self._coord_picker_base:
+            return
+        self._cleanup_coord_picker()
+        base_data = self._coord_picker_base
+        self._coord_picker_base = None
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        try:
+            width = float(self.map_width)
+            height = float(self.map_height)
+            wx = scene_x / width * 2000 - 1000
+            wy = 1000 - scene_y / height * 2000
+            save_x, save_y = palworld_coord.map_to_sav(wx, wy, new=True)
+            bid = str(base_data['base_id']).replace('-', '').lower()
+            wsd = constants.loaded_level_json['properties']['worldSaveData']['value']
+            base_list = wsd.get('BaseCampSaveData', {}).get('value', [])
+            base_entry = next((b for b in base_list if str(b['key']).replace('-', '').lower() == bid), None)
+            if not base_entry:
+                show_warning(self, t('error.title') if t else 'Error', t('base.export.not_found') if t else 'Base not found in save data')
+                return
+            trans = base_entry['value']['RawData']['value']['transform']['translation']
+            trans['x'] = save_x
+            trans['y'] = save_y
+            effect = CoordChangeEffect(scene_x, scene_y)
+            self.scene.addItem(effect)
+            self.refresh()
+            if self.parent_window:
+                self.parent_window.refresh_all()
+            show_information(self, t('success.title') if t else 'Success', t('base.move_coords.success') if t else 'Base coordinates updated successfully.')
+        except Exception as e:
+            show_critical(self, t('error.title') if t else 'Error', f'Failed to move base: {str(e)}')
+        finally:
+            QApplication.restoreOverrideCursor()
+    def _on_coord_picker_cancel(self, pos=None):
+        if self._coord_picker_active:
+            self._cleanup_coord_picker()
+            self._coord_picker_base = None
+            self.info_label.setText(t('map.info.select_base') if t else 'Click on a base marker or list item to view details')
+    def _cleanup_coord_picker(self):
+        self._coord_picker_active = False
+        self.view.set_calibration_mode(False)
+        try:
+            self.view.calibration_clicked.disconnect(self._on_coord_picker_click)
+        except:
+            pass
+        try:
+            self.view.empty_space_right_clicked.disconnect(self._on_coord_picker_cancel)
+        except:
+            pass
+        self.view.setCursor(Qt.ArrowCursor)
     def _rename_guild(self, guild_id):
         current_name = self.guilds_data.get(guild_id, {}).get('guild_name', '')
         new_name = InputDialog.get_text(t('guild.rename.title') if t else 'Rename Guild', t('guild.rename.prompt') if t else 'Enter new guild name:', self, initial_text=current_name)

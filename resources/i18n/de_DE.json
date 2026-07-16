@@ -1862,5 +1862,8 @@
     "edit_pals.export_pal": "Kumpel exportieren",
     "edit_pals.export_pal.success": "Exportiert nach {path}",
     "edit_pals.import_pal": "Pal importieren",
-    "edit_pals.import_pal.success": "{count} Kumpel(s) importiert"
+    "edit_pals.import_pal.success": "{count} Kumpel(s) importiert",
+    "edit_pals.show_npc": "NPC",
+    "edit_pals.search_placeholder": "Geben Sie ein, um Freunde zu filtern...",
+    "edit_pals.nickname_placeholder": "Optional"
 }

@@ -1840,5 +1840,8 @@
     "edit_pals.export_pal": "出口伙伴",
     "edit_pals.export_pal.success": "导出到{路径}",
     "edit_pals.import_pal": "进口伙伴",
-    "edit_pals.import_pal.success": "导入了 {count} 个好友"
+    "edit_pals.import_pal.success": "导入了 {count} 个好友",
+    "edit_pals.show_npc": "全国人大",
+    "edit_pals.search_placeholder": "输入以过滤好友...",
+    "edit_pals.nickname_placeholder": "选修的"
 }

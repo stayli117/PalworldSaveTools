@@ -688,9 +688,9 @@ class PalCreateDialog(QDialog):
         layout = QVBoxLayout(self)
         layout.setSpacing(8)
         filter_layout = QHBoxLayout()
-        filter_layout.addWidget(QLabel('Search:'))
+        filter_layout.addWidget(QLabel(t('common.search') if t else 'Search:'))
         self._search_edit = QLineEdit()
-        self._search_edit.setPlaceholderText('Type to filter pals...')
+        self._search_edit.setPlaceholderText(t('edit_pals.search_placeholder') if t else 'Type to filter pals...')
         filter_layout.addWidget(self._search_edit)
         self._show_standard_chk = ToggleCheckBtn(t('edit_pals.show_standard') if t else 'Standard')
         self._show_standard_chk.setChecked(True)
@@ -704,6 +704,10 @@ class PalCreateDialog(QDialog):
         self._show_boss_chk.setChecked(True)
         self._show_boss_chk.toggled.connect(self._filter_pal_list)
         filter_layout.addWidget(self._show_boss_chk)
+        self._show_npc_chk = ToggleCheckBtn(t('edit_pals.show_npc') if t else 'NPC')
+        self._show_npc_chk.setChecked(True)
+        self._show_npc_chk.toggled.connect(self._filter_pal_list)
+        filter_layout.addWidget(self._show_npc_chk)
         filter_layout.addStretch()
         layout.addLayout(filter_layout)
         self.pal_list = QListWidget()
@@ -788,9 +792,10 @@ class PalCreateDialog(QDialog):
         frame_w = self.frameGeometry().width() - self.geometry().width()
         self.setFixedWidth(m.left() + m.right() + frame_w + 16 + 24 + 10 * 80)
         nick_layout = QHBoxLayout()
-        nick_layout.addWidget(QLabel('Nickname:'))
+        self._nickname_label = QLabel(t('edit_pals.nickname') if t else 'Nickname:')
+        nick_layout.addWidget(self._nickname_label)
         self.nick_edit = QLineEdit()
-        self.nick_edit.setPlaceholderText('Optional')
+        self.nick_edit.setPlaceholderText(t('edit_pals.nickname_placeholder') if t else 'Optional')
         nick_layout.addWidget(self.nick_edit)
         nick_layout.addStretch()
         ok_btn = QPushButton(t('edit_pals.create'))
@@ -800,11 +805,19 @@ class PalCreateDialog(QDialog):
         cancel_btn.clicked.connect(self.reject)
         nick_layout.addWidget(cancel_btn)
         layout.addLayout(nick_layout)
+    def refresh_labels(self):
+        if hasattr(self, '_search_edit'):
+            self._search_edit.setPlaceholderText(t('edit_pals.search_placeholder') if t else 'Type to filter pals...')
+        if hasattr(self, '_nickname_label'):
+            self._nickname_label.setText(t('edit_pals.nickname') if t else 'Nickname:')
+        if hasattr(self, 'nick_edit'):
+            self.nick_edit.setPlaceholderText(t('edit_pals.nickname_placeholder') if t else 'Optional')
     def _filter_pal_list(self):
         search_text = self._search_edit.text().lower() if hasattr(self, '_search_edit') else ''
         show_standard = self._show_standard_chk.isChecked() if hasattr(self, '_show_standard_chk') else True
         show_predator = self._show_predator_chk.isChecked() if hasattr(self, '_show_predator_chk') else False
         show_boss = self._show_boss_chk.isChecked() if hasattr(self, '_show_boss_chk') else False
+        show_npc = self._show_npc_chk.isChecked() if hasattr(self, '_show_npc_chk') else True
         self.pal_list.clear()
         for asset, name in sorted(PalFrame._NAMEMAP.items(), key=lambda kv: (kv[1], kv[0])):
             asset_lower = asset.lower()
@@ -812,11 +825,14 @@ class PalCreateDialog(QDialog):
                 continue
             is_predator = asset.upper().startswith('PREDATOR_')
             is_boss = any((asset.upper().startswith(p) for p in _data._BOSS_PREFIXES)) and not is_predator
+            is_npc = asset_lower in self._npc_assets
             if is_predator and not show_predator:
                 continue
             if is_boss and not show_boss:
                 continue
-            if (not is_predator and not is_boss) and not show_standard:
+            if is_npc and not show_npc:
+                continue
+            if (not is_predator and not is_boss and not is_npc) and not show_standard:
                 continue
             li = QListWidgetItem(name)
             li.setData(Qt.UserRole, asset)

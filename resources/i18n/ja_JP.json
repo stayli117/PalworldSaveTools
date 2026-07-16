@@ -1838,5 +1838,8 @@
     "edit_pals.export_pal": "エクスポートパル",
     "edit_pals.export_pal.success": "{path} にエクスポートされました",
     "edit_pals.import_pal": "輸入パル",
-    "edit_pals.import_pal.success": "{count} 人の友達をインポートしました"
+    "edit_pals.import_pal.success": "{count} 人の友達をインポートしました",
+    "edit_pals.show_npc": "NPC",
+    "edit_pals.search_placeholder": "友達をフィルタリングするには入力してください...",
+    "edit_pals.nickname_placeholder": "オプション"
 }

@@ -2125,5 +2125,8 @@
     "edit_pals.export_pal": "Export Pal",
     "edit_pals.export_pal.success": "Exported to {path}",
     "edit_pals.import_pal": "Import Pal",
-    "edit_pals.import_pal.success": "Imported {count} pal(s)"
+    "edit_pals.import_pal.success": "Imported {count} pal(s)",
+    "edit_pals.show_npc": "NPC",
+    "edit_pals.search_placeholder": "Type to filter pals...",
+    "edit_pals.nickname_placeholder": "Optional"
 }

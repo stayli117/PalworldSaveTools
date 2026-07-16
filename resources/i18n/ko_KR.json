@@ -1837,5 +1837,8 @@
     "edit_pals.export_pal": "Pal 내보내기",
     "edit_pals.export_pal.success": "{경로}로 내보냈습니다.",
     "edit_pals.import_pal": "Import Pal",
-    "edit_pals.import_pal.success": "가져온 친구 {count}명"
+    "edit_pals.import_pal.success": "가져온 친구 {count}명",
+    "edit_pals.show_npc": "NPC",
+    "edit_pals.search_placeholder": "친구를 필터링하려면 입력하세요...",
+    "edit_pals.nickname_placeholder": "선택 과목"
 }

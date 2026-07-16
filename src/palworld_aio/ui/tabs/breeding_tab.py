@@ -46,6 +46,12 @@ class _SelectPalDialog(PalCreateDialog):
     def __init__(self, parent=None):
         from palworld_aio.editor.pal_editor import PalFrame
         PalFrame._load_maps()
+        self._pal_info = {}
+        self._unique_combo_children = set()
+        breeding_data = getattr(parent, '_breeding_data', None)
+        if breeding_data:
+            self._pal_info = breeding_data.get('pal_info', {})
+            self._unique_combo_children = {c.get('child') for c in breeding_data.get('unique_combos', [])}
         super().__init__(pal_editor=None, is_party=False, slot_index=0, parent=parent)
         self.selected_asset = None
         self.selected_name = None
@@ -64,6 +70,14 @@ class _SelectPalDialog(PalCreateDialog):
                 self._breeding_ok_btn = btn
             elif 'Cancel' in txt or 'cancel' in txt:
                 self._breeding_cancel_btn = btn
+        if hasattr(self, '_show_standard_chk'):
+            self._show_standard_chk.hide()
+        if hasattr(self, '_show_predator_chk'):
+            self._show_predator_chk.hide()
+        if hasattr(self, '_show_boss_chk'):
+            self._show_boss_chk.hide()
+        if hasattr(self, '_show_npc_chk'):
+            self._show_npc_chk.hide()
         self._search_edit.textChanged.disconnect()
         self._search_edit.textChanged.connect(self._on_search)
 
@@ -72,40 +86,12 @@ class _SelectPalDialog(PalCreateDialog):
 
     def _filter_pal_list(self):
         text = self._search_edit.text().lower() if hasattr(self, '_search_edit') else ''
-        show_standard = self._show_standard_chk.isChecked() if hasattr(self, '_show_standard_chk') else True
-        show_boss = self._show_boss_chk.isChecked() if hasattr(self, '_show_boss_chk') else False
         self.pal_list.clear()
-        for asset, name in sorted(PalFrame._NAMEMAP.items(), key=lambda kv: (kv[1], kv[0])):
-            asset_lower = asset.lower()
-            if any((asset_lower.startswith(p) for p in ('summon_', 'quest_', 'raid_', 'predator_', 'police_'))):
+        for asset, info in sorted(self._pal_info.items(), key=lambda kv: (kv[1].get('name', kv[0]), kv[0])):
+            if info.get('ignore_combi') and asset not in self._unique_combo_children:
                 continue
-            if 'worldtreedragon' in asset_lower or 'oilrig' in asset_lower or 'tower' in asset_lower:
-                continue
-            if '_bossrush' in asset_lower:
-                continue
-            if asset_lower.startswith('gym_') and not asset_lower.endswith('_otomo'):
-                continue
-            otomo_key = asset_lower + '_otomo'
-            if otomo_key in PalFrame._NAMEMAP:
-                continue
-            boss_otomo_key = 'boss_' + asset_lower + '_otomo'
-            if boss_otomo_key in PalFrame._NAMEMAP:
-                continue
-            base_id = asset_lower
-            for prefix in ('boss_', 'gym_'):
-                if base_id.startswith(prefix):
-                    base_id = base_id[len(prefix):]
-            base_id = re.sub(r'_\d+$', '', base_id)
-            base_id = re.sub(r'_avatar|_servant|_otomo', '', base_id)
-            zukan = PalFrame._PAL_ZUKAN.get(base_id, -99)
-            if zukan != -99 and zukan < 0:
-                continue
+            name = info.get('name', asset)
             if text and text not in name.lower() and text not in asset.lower():
-                continue
-            is_variant = any((asset.upper().startswith(p) for p in ('BOSS_', 'PREDATOR_', 'GYM_', 'RAID_', 'POLICE_', 'SUMMON_')))
-            if is_variant and not show_boss:
-                continue
-            if not is_variant and not show_standard:
                 continue
             li = QListWidgetItem(name)
             li.setData(Qt.UserRole, asset)

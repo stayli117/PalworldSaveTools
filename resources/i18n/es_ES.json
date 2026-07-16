@@ -1832,5 +1832,8 @@
     "edit_pals.export_pal": "Exportar amigo",
     "edit_pals.export_pal.success": "Exportado a {ruta}",
     "edit_pals.import_pal": "Importar amigo",
-    "edit_pals.import_pal.success": "{count} amigo(s) importado(s)"
+    "edit_pals.import_pal.success": "{count} amigo(s) importado(s)",
+    "edit_pals.show_npc": "PNJ",
+    "edit_pals.search_placeholder": "Escribe para filtrar amigos...",
+    "edit_pals.nickname_placeholder": "Opcional"
 }

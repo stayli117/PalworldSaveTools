@@ -13,12 +13,8 @@ except ImportError:
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 LANGUAGES = {'zh_CN': {'name': 'Simplified Chinese', 'code': 'zh-CN'}, 'de_DE': {'name': 'German', 'code': 'de'}, 'es_ES': {'name': 'Spanish', 'code': 'es'}, 'fr_FR': {'name': 'French', 'code': 'fr'}, 'ru_RU': {'name': 'Russian', 'code': 'ru'}, 'ja_JP': {'name': 'Japanese', 'code': 'ja'}, 'ko_KR': {'name': 'Korean', 'code': 'ko'}}
 NEW_TRANSLATIONS = {
-    'edit_pals.ctx.export_pal': 'Export Pal',
-    'edit_pals.ctx.import_pal': 'Import Pal',
-    'edit_pals.export_pal': 'Export Pal',
-    'edit_pals.export_pal.success': 'Exported to {path}',
-    'edit_pals.import_pal': 'Import Pal',
-    'edit_pals.import_pal.success': 'Imported {count} pal(s)',
+    'edit_pals.search_placeholder': 'Type to filter pals...',
+    'edit_pals.nickname_placeholder': 'Optional',
 }
 OLD_KEYS = []
 def _clean_uv_locks():

@@ -404,6 +404,28 @@ def update_pal_data():
     monster_param_common = load_export_json('Character/DT_PalMonsterParameter_Common.json')
     pal_name_l10n = load_l10n_table('DT_PalNameText_Common.json')
     name_prefix_l10n = load_l10n_table('DT_NamePrefixText_Common.json')
+    human_param = load_export_json('Character/DT_PalHumanParameter.json')
+    human_param_common = load_export_json('Character/DT_PalHumanParameter_Common.json')
+    human_rows = {}
+    for d in [human_param, human_param_common]:
+        human_rows.update(_collect_export_rows(d))
+    human_rows_ci = {k.lower(): v for k, v in human_rows.items()}
+    def _is_human_npc(pal_id: str) -> bool:
+        hrow = human_rows.get(pal_id) or human_rows_ci.get(pal_id.lower())
+        if not hrow:
+            base_id = re.sub(r'_v\d+$', '', pal_id)
+            if base_id != pal_id:
+                hrow = human_rows.get(base_id) or human_rows_ci.get(base_id.lower())
+        if not hrow:
+            base_id = re.sub('^(BOSS_|NPC_|PREDATOR_|GYM_|RAID_|SUMMON_|QUEST_|POLICE_)', '', pal_id, flags=re.IGNORECASE)
+            if base_id != pal_id:
+                hrow = human_rows.get(base_id) or human_rows_ci.get(base_id.lower())
+        if not hrow or not isinstance(hrow, dict):
+            return False
+        is_pal = hrow.get('IsPal', True)
+        if isinstance(is_pal, dict):
+            is_pal = is_pal.get('value', True)
+        return not is_pal
     icon_rows = {}
     for data in [export_data, export_data_common]:
         if data:
@@ -493,6 +515,10 @@ def update_pal_data():
     processed_ids = set()
     for pal_id, row_data in sorted(icon_rows.items()):
         pal_id_lower = pal_id.lower()
+        monster_row = monster_rows.get(pal_id) or _monster_rows_ci.get(pal_id_lower)
+        if _is_human_npc(pal_id) or not monster_row:
+            processed_ids.add(pal_id_lower)
+            continue
         processed_ids.add(pal_id_lower)
         icon_data = row_data.get('Icon', {})
         icon_path = icon_data.get('AssetPathName', '') if isinstance(icon_data, dict) else ''
@@ -501,7 +527,6 @@ def update_pal_data():
             copied_icon = find_and_copy_icon(icon_filename, 'pals', pal_icon_subdirs)
         else:
             copied_icon = None
-        monster_row = monster_rows.get(pal_id) or _monster_rows_ci.get(pal_id.lower())
         display_name = resolve_pal_name(pal_id, monster_row)
         final_icon = copied_icon or f'/icons/pals/{pal_id}_icon_normal.webp'
         if not copied_icon:
@@ -535,6 +560,9 @@ def update_pal_data():
     for pal_id in sorted(monster_rows.keys()):
         pal_id_lower = pal_id.lower()
         if pal_id_lower in processed_ids:
+            continue
+        if _is_human_npc(pal_id):
+            processed_ids.add(pal_id_lower)
             continue
         processed_ids.add(pal_id_lower)
         monster_row = monster_rows[pal_id_lower] if pal_id_lower in monster_rows else monster_rows.get(pal_id, {})
@@ -711,6 +739,12 @@ def update_npc_data():
         r = _collect_export_rows(d)
         human_rows.update(r)
     human_rows_ci = {k.lower(): v for k, v in human_rows.items()}
+    monster_param = load_export_json('Character/DT_PalMonsterParameter.json')
+    monster_param_common = load_export_json('Character/DT_PalMonsterParameter_Common.json')
+    monster_rows = {}
+    for d in [monster_param, monster_param_common]:
+        monster_rows.update(_collect_export_rows(d))
+    monster_rows_ci = {k.lower(): v for k, v in monster_rows.items()}
     npc_icon_subdirs = [EXPORT_TEXTURES_DIR / 'PalIcon' / 'NPC', EXPORT_TEXTURES_DIR / 'PalIcon' / 'Normal']
     boss_icon_data = load_export_json('Character/DT_PalBossNPCIcon.json')
     boss_rows = _collect_export_rows(boss_icon_data)
@@ -745,6 +779,13 @@ def update_npc_data():
             if not is_pal:
                 seen.add(npc_id_lower)
                 updated_npcs.append(_make_npc_entry(npc_id, row_data, human_rows, human_rows_ci, npc_name_l10n, npc_l10n_lower, npc_icon_subdirs))
+            continue
+        # No IsPal flag to consult (e.g. generic templates like "Human"). A real pal
+        # always has a DT_PalMonsterParameter row; without one, it can't be a fightable
+        # pal, so treat it as an NPC rather than dropping it or leaking it into pals.
+        if npc_id not in monster_rows and npc_id_lower not in monster_rows_ci:
+            seen.add(npc_id_lower)
+            updated_npcs.append(_make_npc_entry(npc_id, row_data, human_rows, human_rows_ci, npc_name_l10n, npc_l10n_lower, npc_icon_subdirs))
     result = {'npcs': updated_npcs}
     save_resource_json('npcdata.json', result)
     print(f'  Total NPCs: {len(updated_npcs)}')
@@ -2810,14 +2851,15 @@ def update_breeding_data():
             continue
         ignore_combi = bool(data.get('IgnoreCombi', False))
         rarity = int(_safe_get(data, 'Rarity', 0))
+        duplicate_priority = _safe_get(data, 'CombiDuplicatePriority', 0) or 0
         is_variant = '_' in tribe
         is_base = internal_id == tribe
         if tribe in seen_tribes:
             existing = seen_tribes[tribe]
             if is_base or (existing['rank'] > rank and not existing['is_base']):
-                seen_tribes[tribe] = {'tribe': tribe, 'internal_id': internal_id, 'rank': rank, 'rarity': rarity, 'index': idx, 'is_variant': is_variant, 'ignore_combi': ignore_combi, 'is_base': is_base}
+                seen_tribes[tribe] = {'tribe': tribe, 'internal_id': internal_id, 'rank': rank, 'rarity': rarity, 'duplicate_priority': duplicate_priority, 'index': idx, 'is_variant': is_variant, 'ignore_combi': ignore_combi, 'is_base': is_base}
         else:
-            seen_tribes[tribe] = {'tribe': tribe, 'internal_id': internal_id, 'rank': rank, 'rarity': rarity, 'index': idx, 'is_variant': is_variant, 'ignore_combi': ignore_combi, 'is_base': is_base}
+            seen_tribes[tribe] = {'tribe': tribe, 'internal_id': internal_id, 'rank': rank, 'rarity': rarity, 'duplicate_priority': duplicate_priority, 'index': idx, 'is_variant': is_variant, 'ignore_combi': ignore_combi, 'is_base': is_base}
     pals = list(seen_tribes.values())
     tribe_map = {p['tribe']: p for p in pals if p['tribe'].upper() in name_map}
     pals = [p for p in pals if p['tribe'].upper() in name_map]
@@ -2847,14 +2889,11 @@ def update_breeding_data():
             cand.append(sorted_ranks[idx])
         if idx > 0:
             cand.append(sorted_ranks[idx - 1])
-        best, best_diff = None, float('inf')
-        for r in cand:
-            p = rank_to_best[r]
-            diff = abs(r - cp)
-            if diff < best_diff or (diff == best_diff and p['rank'] > best['rank']):
-                best_diff = diff
-                best = p
-        return best
+        entries = [(abs(r - cp), rank_to_best[r]) for r in cand]
+        if not entries:
+            return None
+        entries.sort(key=lambda e: (e[0], -e[1]['duplicate_priority']))
+        return entries[0][1]
     pair_to_child = {}
     child_to_pairs = {}
     import bisect

@@ -1836,5 +1836,8 @@
     "edit_pals.export_pal": "Экспорт Пал",
     "edit_pals.export_pal.success": "Экспортировано в {path}",
     "edit_pals.import_pal": "Импорт Пал",
-    "edit_pals.import_pal.success": "Импортировано друзей: {count}"
+    "edit_pals.import_pal.success": "Импортировано друзей: {count}",
+    "edit_pals.show_npc": "НПС",
+    "edit_pals.search_placeholder": "Введите, чтобы отфильтровать друзей...",
+    "edit_pals.nickname_placeholder": "Необязательный"
 }

@@ -12,6 +12,7 @@ class PalFrame(QFrame):
     _cheat_mode = False
     _maps_loaded = False
     _NAMEMAP = {}
+    _PALMAP = {}
     _PASSMAP = {}
     _PASSRANK = {}
     _PASSFLAGS = {}
@@ -39,6 +40,7 @@ class PalFrame(QFrame):
         cls._SKILLMAP = dm.load_game_data_map('skills.json', 'skills')
         PALMAP = dm.load_game_data_map('characters.json', 'pals')
         NPCMAP = dm.load_game_data_map('characters.json', 'npcs')
+        cls._PALMAP = PALMAP
         cls._NAMEMAP = {**PALMAP, **NPCMAP}
         cls._PAL_ZUKAN = {}
         try:

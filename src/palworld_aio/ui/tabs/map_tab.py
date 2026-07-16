@@ -1706,7 +1706,7 @@ class MapTab(QWidget):
             height = float(self.map_height)
             wx = scene_x / width * 2000 - 1000
             wy = 1000 - scene_y / height * 2000
-            save_x, save_y = palworld_coord.map_to_sav(wx, wy, new=True)
+            new_save_x, new_save_y = palworld_coord.map_to_sav(wx, wy, new=True)
             bid = str(base_data['base_id']).replace('-', '').lower()
             wsd = constants.loaded_level_json['properties']['worldSaveData']['value']
             base_list = wsd.get('BaseCampSaveData', {}).get('value', [])
@@ -1714,11 +1714,52 @@ class MapTab(QWidget):
             if not base_entry:
                 show_warning(self, t('error.title') if t else 'Error', t('base.export.not_found') if t else 'Base not found in save data')
                 return
-            trans = base_entry['value']['RawData']['value']['transform']['translation']
-            trans['x'] = save_x
-            trans['y'] = save_y
+            old_trans = base_entry['value']['RawData']['value']['transform']['translation']
+            dx = new_save_x - old_trans['x']
+            dy = new_save_y - old_trans['y']
+            if dx == 0 and dy == 0:
+                show_information(self, t('info.title') if t else 'Info', 'New coordinates are the same as current.')
+                return
+            old_trans['x'] += dx
+            old_trans['y'] += dy
+            try:
+                wd_trans = base_entry['value']['WorkerDirector']['value']['RawData']['value']['spawn_transform']['translation']
+                wd_trans['x'] += dx
+                wd_trans['y'] += dy
+            except:
+                pass
+            map_objs = wsd.get('MapObjectSaveData', {}).get('value', {}).get('values', [])
+            for obj in map_objs:
+                try:
+                    mr = obj.get('Model', {}).get('value', {}).get('RawData', {}).get('value', {})
+                    if str(mr.get('base_camp_id_belong_to', '')).replace('-', '').lower() != bid:
+                        continue
+                    itc = mr.get('initital_transform_cache', {})
+                    if 'translation' in itc:
+                        itc['translation']['x'] += dx
+                        itc['translation']['y'] += dy
+                    if 'transform' in itc:
+                        itc['transform']['translation']['x'] += dx
+                        itc['transform']['translation']['y'] += dy
+                except:
+                    pass
+            work_root = wsd.get('WorkSaveData', {})
+            if isinstance(work_root, dict):
+                work_entries = work_root.get('value', {}).get('values', []) if isinstance(work_root.get('value'), dict) else []
+                for we in work_entries:
+                    try:
+                        wr = we.get('RawData', {}).get('value', {})
+                        if str(wr.get('base_camp_id_belong_to', '')).replace('-', '').lower() != bid:
+                            continue
+                        tr = wr.get('transform', {})
+                        if 'translation' in tr and tr['translation']:
+                            tr['translation']['x'] += dx
+                            tr['translation']['y'] += dy
+                    except:
+                        pass
             effect = CoordChangeEffect(scene_x, scene_y)
             self.scene.addItem(effect)
+            constants.invalidate_container_lookup()
             self.refresh()
             if self.parent_window:
                 self.parent_window.refresh_all()

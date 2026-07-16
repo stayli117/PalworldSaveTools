@@ -31,6 +31,8 @@ NEW_TRANSLATIONS = {
     'base.move_coords.success': 'Base coordinates updated successfully.',
     'base.move_coords.failed': 'Failed to update base coordinates.',
     'map.info.select_coords': 'Click on the map to set new base coordinates. Right-click to cancel.',
+    'base.nudge': 'Nudge Base',
+    'base.nudge.success': 'Base nudged successfully.',
 }
 OLD_KEYS = []
 def _clean_uv_locks():

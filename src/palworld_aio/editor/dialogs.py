@@ -1180,4 +1180,48 @@ class ZoneManagementDialog(ThemedDialog):
         if dialog.exec() == QDialog.Accepted:
             return dialog.result_action
         return None
+class NudgeInputDialog(ThemedDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle(t('base.nudge') if t else 'Nudge Base')
+        self.setModal(True)
+        self.setMinimumWidth(400)
+        if os.path.exists(constants.ICON_PATH):
+            self.setWindowIcon(QIcon(constants.ICON_PATH))
+        self.result_value = None
+        layout = QVBoxLayout(self)
+        layout.setSpacing(12)
+        label = QLabel((t('base.nudge.prompt') if t else 'Enter offset values for each axis.\nPositive = right/up/raise, Negative = left/down/lower.'))
+        label.setWordWrap(True)
+        layout.addWidget(label)
+        form = QFormLayout()
+        form.setSpacing(8)
+        self.x_spin = QSpinBox()
+        self.x_spin.setRange(-100000, 100000)
+        self.x_spin.setValue(0)
+        self.x_spin.setSingleStep(500)
+        form.addRow('X offset:', self.x_spin)
+        self.y_spin = QSpinBox()
+        self.y_spin.setRange(-100000, 100000)
+        self.y_spin.setValue(0)
+        self.y_spin.setSingleStep(500)
+        form.addRow('Y offset:', self.y_spin)
+        self.z_spin = QSpinBox()
+        self.z_spin.setRange(-100000, 100000)
+        self.z_spin.setValue(0)
+        self.z_spin.setSingleStep(500)
+        form.addRow('Z offset:', self.z_spin)
+        layout.addLayout(form)
+        btn_layout = QHBoxLayout()
+        ok_btn = QPushButton((t('button.ok') if t else 'OK'))
+        ok_btn.clicked.connect(self.accept)
+        cancel_btn = QPushButton((t('button.cancel') if t else 'Cancel'))
+        cancel_btn.clicked.connect(self.reject)
+        btn_layout.addStretch()
+        btn_layout.addWidget(ok_btn)
+        btn_layout.addWidget(cancel_btn)
+        layout.addLayout(btn_layout)
+    def accept(self):
+        self.result_value = (self.x_spin.value(), self.y_spin.value(), self.z_spin.value())
+        super().accept()
 from .edit_pals import EditPalsDialog, PalFrame

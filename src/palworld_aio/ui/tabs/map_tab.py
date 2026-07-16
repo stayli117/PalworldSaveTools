@@ -1305,6 +1305,7 @@ class MapTab(QWidget):
             export_action = menu.addAction(t('button.export') if t else 'Export Base')
             radius_action = menu.addAction(t('base.radius.menu') if t else 'Adjust Radius')
             move_coords_action = menu.addAction(t('base.move_coords') if t else 'Change Coordinates')
+            nudge_action = menu.addAction(t('base.nudge') if t else 'Nudge Base')
             menu.addSeparator()
             reassign_action = menu.addAction(t('base.reassign_guild') if t else 'Reassign to Guild')
             action = menu.exec(global_pos.toPoint())
@@ -1316,6 +1317,8 @@ class MapTab(QWidget):
                 self._adjust_base_radius(data)
             elif action == move_coords_action:
                 self._move_base_coords(data)
+            elif action == nudge_action:
+                self._nudge_base(data)
             elif action == reassign_action:
                 self._reassign_base(data)
     def _on_empty_space_right_clicked(self, global_pos):
@@ -1442,6 +1445,7 @@ class MapTab(QWidget):
             export_action = menu.addAction(t('button.export') if t else 'Export Base')
             radius_action = menu.addAction(t('base.radius.menu') if t else 'Adjust Radius')
             move_coords_action = menu.addAction(t('base.move_coords') if t else 'Change Coordinates')
+            nudge_action = menu.addAction(t('base.nudge') if t else 'Nudge Base')
             menu.addSeparator()
             reassign_action = menu.addAction(t('base.reassign_guild') if t else 'Reassign to Guild')
             action = menu.exec(tree.viewport().mapToGlobal(pos))
@@ -1453,6 +1457,8 @@ class MapTab(QWidget):
                 self._adjust_base_radius(item_data)
             elif action == move_coords_action:
                 self._move_base_coords(item_data)
+            elif action == nudge_action:
+                self._nudge_base(item_data)
             elif action == reassign_action:
                 self._reassign_base(item_data)
         elif item_type == 'guild':
@@ -1785,6 +1791,76 @@ class MapTab(QWidget):
         except:
             pass
         self.view.setCursor(Qt.ArrowCursor)
+    def _nudge_base(self, base_data):
+        from palworld_aio.editor.dialogs import NudgeInputDialog
+        dialog = NudgeInputDialog(self)
+        if dialog.exec() != QDialog.Accepted:
+            return
+        dx, dy, dz = dialog.result_value
+        if dx == 0 and dy == 0 and dz == 0:
+            return
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        try:
+            bid = str(base_data['base_id']).replace('-', '').lower()
+            wsd = constants.loaded_level_json['properties']['worldSaveData']['value']
+            base_list = wsd.get('BaseCampSaveData', {}).get('value', [])
+            base_entry = next((b for b in base_list if str(b['key']).replace('-', '').lower() == bid), None)
+            if not base_entry:
+                show_warning(self, t('error.title') if t else 'Error', t('base.export.not_found') if t else 'Base not found')
+                return
+            base_entry['value']['RawData']['value']['transform']['translation']['x'] += dx
+            base_entry['value']['RawData']['value']['transform']['translation']['y'] += dy
+            base_entry['value']['RawData']['value']['transform']['translation']['z'] += dz
+            try:
+                wd_trans = base_entry['value']['WorkerDirector']['value']['RawData']['value']['spawn_transform']['translation']
+                wd_trans['x'] += dx
+                wd_trans['y'] += dy
+                wd_trans['z'] += dz
+            except:
+                pass
+            map_objs = wsd.get('MapObjectSaveData', {}).get('value', {}).get('values', [])
+            for obj in map_objs:
+                try:
+                    mr = obj.get('Model', {}).get('value', {}).get('RawData', {}).get('value', {})
+                    if str(mr.get('base_camp_id_belong_to', '')).replace('-', '').lower() != bid:
+                        continue
+                    itc = mr.get('initital_transform_cache', {})
+                    if 'translation' in itc:
+                        itc['translation']['x'] += dx
+                        itc['translation']['y'] += dy
+                        itc['translation']['z'] += dz
+                    if 'transform' in itc:
+                        t2 = itc['transform'].get('translation', {})
+                        if t2:
+                            t2['x'] += dx
+                            t2['y'] += dy
+                            t2['z'] += dz
+                except:
+                    pass
+            work_root = wsd.get('WorkSaveData', {})
+            if isinstance(work_root, dict):
+                work_entries = work_root.get('value', {}).get('values', []) if isinstance(work_root.get('value'), dict) else []
+                for we in work_entries:
+                    try:
+                        wr = we.get('RawData', {}).get('value', {})
+                        if str(wr.get('base_camp_id_belong_to', '')).replace('-', '').lower() != bid:
+                            continue
+                        tr = wr.get('transform', {})
+                        if 'translation' in tr and tr['translation']:
+                            tr['translation']['x'] += dx
+                            tr['translation']['y'] += dy
+                            tr['translation']['z'] += dz
+                    except:
+                        pass
+            constants.invalidate_container_lookup()
+            self.refresh()
+            if self.parent_window:
+                self.parent_window.refresh_all()
+            show_information(self, t('success.title') if t else 'Success', t('base.nudge.success') if t else 'Base nudged successfully.')
+        except Exception as e:
+            show_critical(self, t('error.title') if t else 'Error', f'Failed to nudge base: {str(e)}')
+        finally:
+            QApplication.restoreOverrideCursor()
     def _rename_guild(self, guild_id):
         current_name = self.guilds_data.get(guild_id, {}).get('guild_name', '')
         new_name = InputDialog.get_text(t('guild.rename.title') if t else 'Rename Guild', t('guild.rename.prompt') if t else 'Enter new guild name:', self, initial_text=current_name)

@@ -1826,5 +1826,7 @@
     "base.move_coords.prompt_y": "新しい Y 座標を入力してください:",
     "base.move_coords.success": "ベース座標が正常に更新されました。",
     "base.move_coords.failed": "ベース座標の更新に失敗しました。",
-    "map.info.select_coords": "マップをクリックして新しい基準座標を設定します。キャンセルするには右クリックしてください。"
+    "map.info.select_coords": "マップをクリックして新しい基準座標を設定します。キャンセルするには右クリックしてください。",
+    "base.nudge": "ナッジベース",
+    "base.nudge.success": "ベースナッジに成功しました。"
 }

@@ -1825,5 +1825,7 @@
     "base.move_coords.prompt_y": "새 Y 좌표 입력:",
     "base.move_coords.success": "기본 좌표가 성공적으로 업데이트되었습니다.",
     "base.move_coords.failed": "기본 좌표를 업데이트하지 못했습니다.",
-    "map.info.select_coords": "새로운 기본 좌표를 설정하려면 지도를 클릭하세요. 취소하려면 마우스 오른쪽 버튼을 클릭하세요."
+    "map.info.select_coords": "새로운 기본 좌표를 설정하려면 지도를 클릭하세요. 취소하려면 마우스 오른쪽 버튼을 클릭하세요.",
+    "base.nudge": "넛지 베이스",
+    "base.nudge.success": "베이스를 성공적으로 넛지했습니다."
 }

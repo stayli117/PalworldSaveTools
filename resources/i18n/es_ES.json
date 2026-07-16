@@ -1820,5 +1820,7 @@
     "base.move_coords.prompt_y": "Ingrese la nueva coordenada Y:",
     "base.move_coords.success": "Las coordenadas de la base se actualizaron correctamente.",
     "base.move_coords.failed": "No se pudieron actualizar las coordenadas de la base.",
-    "map.info.select_coords": "Haga clic en el mapa para establecer nuevas coordenadas base. Haga clic derecho para cancelar."
+    "map.info.select_coords": "Haga clic en el mapa para establecer nuevas coordenadas base. Haga clic derecho para cancelar.",
+    "base.nudge": "Empujar base",
+    "base.nudge.success": "La base empujó con éxito."
 }

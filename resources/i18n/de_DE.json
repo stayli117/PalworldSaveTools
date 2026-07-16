@@ -1850,5 +1850,7 @@
     "base.move_coords.prompt_y": "Neue Y-Koordinate eingeben:",
     "base.move_coords.success": "Basiskoordinaten erfolgreich aktualisiert.",
     "base.move_coords.failed": "Basiskoordinaten konnten nicht aktualisiert werden.",
-    "map.info.select_coords": "Klicken Sie auf die Karte, um neue Basiskoordinaten festzulegen. Klicken Sie mit der rechten Maustaste, um den Vorgang abzubrechen."
+    "map.info.select_coords": "Klicken Sie auf die Karte, um neue Basiskoordinaten festzulegen. Klicken Sie mit der rechten Maustaste, um den Vorgang abzubrechen.",
+    "base.nudge": "Nudge-Basis",
+    "base.nudge.success": "Die Basis wurde erfolgreich angestupst."
 }

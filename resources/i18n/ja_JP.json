@@ -1832,5 +1832,11 @@
     "base.nudge.prompt": "各軸のオフセット値を入力します。\n正 = 右/上/上昇、負 = 左/下/下。",
     "base.nudge.offset_x": "Xオフセット",
     "base.nudge.offset_y": "Yオフセット",
-    "base.nudge.offset_z": "Zオフセット"
+    "base.nudge.offset_z": "Zオフセット",
+    "edit_pals.ctx.export_pal": "エクスポートパル",
+    "edit_pals.ctx.import_pal": "輸入パル",
+    "edit_pals.export_pal": "エクスポートパル",
+    "edit_pals.export_pal.success": "{path} にエクスポートされました",
+    "edit_pals.import_pal": "輸入パル",
+    "edit_pals.import_pal.success": "{count} 人の友達をインポートしました"
 }

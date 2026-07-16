@@ -1,3 +1,4 @@
+import os
 import uuid
 from i18n import t
 from palworld_aio import constants
@@ -262,6 +263,8 @@ def build_pal_context_menu(parent, raw):
     popup = ScrollableContextMenu(parent)
     popup.add_item('learned', t('edit_pals.ctx.learnt_skills'))
     popup.add_sep()
+    popup.add_item('export_pal', t('edit_pals.ctx.export_pal'))
+    popup.add_sep()
     popup.add_item('clone', t('edit_pals.ctx.clone'))
     popup.add_sep()
     popup.add_item('bulk_sync_pal', t('edit_pals.ctx.bulk_sync_pal'))
@@ -271,6 +274,23 @@ def build_pal_context_menu(parent, raw):
     popup.add_sep()
     popup.add_item('delete', t('edit_pals.delete'))
     return popup
+
+PAL_EXPORT_VERSION = 1
+
+def _export_pal_raw(raw):
+    from palworld_aio.managers.backup_manager import compress_to_pst3
+    data = {
+        '_version': PAL_EXPORT_VERSION,
+        '_character_id': extract_value(raw, 'CharacterID', ''),
+        'raw': raw,
+    }
+    return compress_to_pst3(data)
+
+def _import_pal_raw(file_path):
+    from palworld_aio.managers.backup_manager import decompress_pst3
+    with open(file_path, 'rb') as f:
+        data = decompress_pst3(f.read())
+    return data.get('raw', data) if isinstance(data, dict) else data
 
 def _get_raw_from_item(pal_item):
     if not pal_item:

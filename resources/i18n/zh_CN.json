@@ -1834,5 +1834,11 @@
     "base.nudge.prompt": "输入每个轴的偏移值。\n正值 = 右/上/升高，负值 = 左/下/下。",
     "base.nudge.offset_x": "X 偏移",
     "base.nudge.offset_y": "Y 轴偏移",
-    "base.nudge.offset_z": "Z 轴偏移"
+    "base.nudge.offset_z": "Z 轴偏移",
+    "edit_pals.ctx.export_pal": "出口伙伴",
+    "edit_pals.ctx.import_pal": "进口伙伴",
+    "edit_pals.export_pal": "出口伙伴",
+    "edit_pals.export_pal.success": "导出到{路径}",
+    "edit_pals.import_pal": "进口伙伴",
+    "edit_pals.import_pal.success": "导入了 {count} 个好友"
 }

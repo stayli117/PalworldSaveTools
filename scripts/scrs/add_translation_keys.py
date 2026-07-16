@@ -13,30 +13,12 @@ except ImportError:
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 LANGUAGES = {'zh_CN': {'name': 'Simplified Chinese', 'code': 'zh-CN'}, 'de_DE': {'name': 'German', 'code': 'de'}, 'es_ES': {'name': 'Spanish', 'code': 'es'}, 'fr_FR': {'name': 'French', 'code': 'fr'}, 'ru_RU': {'name': 'Russian', 'code': 'ru'}, 'ja_JP': {'name': 'Japanese', 'code': 'ja'}, 'ko_KR': {'name': 'Korean', 'code': 'ko'}}
 NEW_TRANSLATIONS = {
-    'base.move_coords': 'Change Coordinates',
-    'base.move_coords.title': 'Change Base Coordinates',
-    'base.move_coords.warning': (
-        'WARNING: Moving a base to different coordinates can negatively impact your game.\n\n'
-        'The base may:\n'
-        '- Evaluate incorrectly (weird AI behavior)\n'
-        '- Collide with rocks, trees, structures, or terrain\n'
-        '- Have foundation/clipping issues\n'
-        '- Cause Pal pathfinding problems\n\n'
-        'This tool cannot detect terrain, collisions, or world geometry.\n'
-        'Proceed only if you understand these risks.\n\n'
-        'Continue?'
-    ),
-    'base.move_coords.prompt_x': 'Enter new X coordinate:',
-    'base.move_coords.prompt_y': 'Enter new Y coordinate:',
-    'base.move_coords.success': 'Base coordinates updated successfully.',
-    'base.move_coords.failed': 'Failed to update base coordinates.',
-    'map.info.select_coords': 'Click on the map to set new base coordinates. Right-click to cancel.',
-    'base.nudge': 'Nudge Base',
-    'base.nudge.success': 'Base nudged successfully.',
-    'base.nudge.prompt': 'Enter offset values for each axis.\nPositive = right/up/raise, Negative = left/down/lower.',
-    'base.nudge.offset_x': 'X offset',
-    'base.nudge.offset_y': 'Y offset',
-    'base.nudge.offset_z': 'Z offset',
+    'edit_pals.ctx.export_pal': 'Export Pal',
+    'edit_pals.ctx.import_pal': 'Import Pal',
+    'edit_pals.export_pal': 'Export Pal',
+    'edit_pals.export_pal.success': 'Exported to {path}',
+    'edit_pals.import_pal': 'Import Pal',
+    'edit_pals.import_pal.success': 'Imported {count} pal(s)',
 }
 OLD_KEYS = []
 def _clean_uv_locks():

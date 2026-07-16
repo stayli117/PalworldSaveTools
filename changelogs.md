@@ -4,6 +4,8 @@
 - **Stats editor revamped** — hero stats (Health, Stamina, Attack, Work Speed, Weight) now show correct in-game computed values, capped at 50 points, with a "Max All Stats" button. Relic abilities integrated into the same tab. Defense stat now editable
 - **Weight formula fix** — carry weight now calculates correctly using the game's real formula
 - **Base move on map** — right-click a base marker, pick "Change Coordinates", then click any spot on the map to teleport the base. Warning dialog explains collision/terrain/AI risks
+- **Base nudge** — nudge a base by exact X/Y/Z offsets to fix ground clipping or floating without needing to re-place it
+- **Export/Import Pals** — right-click any pal to export as `.pstpal` (compressed) or `.json`. Import into empty slots in party, palbox, DPS, or base worker slots. Works across saves and players
 - **Player context menu cleanup** — removed Edit Player Stats and Edit Tech Points (now handled in the Stats tab)
 - **New translations** — player stat labels added to all 8 languages
 - Bumped version to 2.1.0

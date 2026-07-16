@@ -1814,5 +1814,11 @@
     "base.nudge.prompt": "Entrez les valeurs de décalage pour chaque axe.\nPositif = droite/haut/augmenter, Négatif = gauche/bas/inférieur.",
     "base.nudge.offset_x": "Décalage X",
     "base.nudge.offset_y": "Décalage Y",
-    "base.nudge.offset_z": "Décalage Z"
+    "base.nudge.offset_z": "Décalage Z",
+    "edit_pals.ctx.export_pal": "Exportateur Pal",
+    "edit_pals.ctx.import_pal": "Importer Pal",
+    "edit_pals.export_pal": "Exportateur Pal",
+    "edit_pals.export_pal.success": "Exporté vers {path}",
+    "edit_pals.import_pal": "Importer Pal",
+    "edit_pals.import_pal.success": "{count} copain(s) importé(s)"
 }

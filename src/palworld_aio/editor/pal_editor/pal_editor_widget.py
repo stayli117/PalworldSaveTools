@@ -4,7 +4,7 @@ import json
 import threading
 import uuid
 from functools import partial
-from PySide6.QtWidgets import QApplication, QCheckBox, QDialog, QGridLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QScrollArea, QScrollBar, QSizePolicy, QToolTip, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QApplication, QCheckBox, QDialog, QFileDialog, QGridLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QScrollArea, QScrollBar, QSizePolicy, QToolTip, QVBoxLayout, QWidget
 from PySide6.QtCore import Qt, QEvent, QSize, QTimer
 from PySide6.QtGui import QIcon, QKeySequence, QShortcut
 from i18n import t
@@ -18,8 +18,10 @@ from . import data as _data
 from .data import _PAL_STYLESHEET, _ensure_friendship_thresholds
 from .legacy_frame import PalFrame
 from .pal_ops import (
+    _export_pal_raw,
     _generate_pal_save_param,
     _get_raw_from_item,
+    _import_pal_raw,
     _learn_all_skills_raw,
     _register_pal_instance_to_guild,
     _set_fav_raw,
@@ -460,6 +462,14 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
                     self._clone_dps_pal(slot_index)
                 else:
                     self._clone_pal(sender)
+        elif action == 'export_pal':
+            if raw:
+                self._export_pal(sender)
+        elif action == 'import_pal':
+            if is_dps:
+                self._import_pal_to_dps_slot(slot_index)
+            else:
+                self._import_pal_to_slot(slot_index, is_party)
         elif action == 'bulk_rename':
             self._bulk_rename_pal(sender)
         elif action == 'bulk_heal':
@@ -740,6 +750,157 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
         self._update_dashboard_stats()
         self._increment_pal_count()
         show_information(self, 'Clone Pal', 'Pal cloned successfully.')
+    def _export_pal(self, sender):
+        if not hasattr(sender, 'pal_data') or sender.pal_data is None:
+            return
+        raw = sender._get_raw()
+        if not raw:
+            return
+        cid = extract_value(raw, 'CharacterID', 'None')
+        nick = extract_value(raw, 'NickName', '') or 'pal'
+        safe_name = ''.join(c if c.isalnum() or c in ' _-' else '_' for c in nick)[:32]
+        default_name = f'{safe_name}_{cid}.pstpal' if safe_name else f'{cid}.pstpal'
+        file_path, selected_filter = QFileDialog.getSaveFileName(self, t('edit_pals.export_pal'), default_name, 'PSTPAL Pal Files (*.pstpal);;JSON Files (*.json)')
+        if not file_path:
+            return
+        is_pstpal = 'pstpal' in selected_filter if selected_filter else file_path.endswith('.pstpal')
+        if is_pstpal:
+            if not file_path.endswith('.pstpal'):
+                file_path += '.pstpal'
+            compressed = _export_pal_raw(raw)
+            with open(file_path, 'wb') as f:
+                f.write(compressed)
+        else:
+            if not file_path.endswith('.json'):
+                file_path += '.json'
+            import json
+            export_data = {k: v for k, v in raw.items() if not k.startswith('_')}
+            from palworld_aio.managers.backup_manager import BackupEncoder
+            with open(file_path, 'w', encoding='utf-8') as f:
+                json.dump(export_data, f, cls=BackupEncoder, indent=2)
+        show_information(self, t('edit_pals.export_pal'), t('edit_pals.export_pal.success', path=os.path.basename(file_path)))
+    def _import_pal_to_slot(self, slot_index, is_party):
+        file_paths, _ = QFileDialog.getOpenFileNames(self, t('edit_pals.import_pal'), '', 'Pal Files (*.pstpal *.json)')
+        if not file_paths:
+            return
+        for file_path in file_paths:
+            try:
+                if file_path.endswith('.pstpal'):
+                    imported_raw = _import_pal_raw(file_path)
+                else:
+                    from palsav import json_tools
+                    imported_raw = json_tools.load(file_path)
+            except Exception as e:
+                show_warning(self, t('edit_pals.import_pal'), f"Failed to load {os.path.basename(file_path)}: {e}")
+                continue
+            cid = extract_value(imported_raw, 'CharacterID', 'None')
+            if cid == 'None' or not cid:
+                show_warning(self, t('edit_pals.import_pal'), f"Invalid pal file: {os.path.basename(file_path)}")
+                continue
+            nick = extract_value(imported_raw, 'NickName', '') or ''
+            abs_index = slot_index if is_party else (self.current_box_index - 1) * 30 + slot_index
+            if is_party:
+                if slot_index in self.party_pals:
+                    show_warning(self, t('edit_pals.import_pal'), t('edit_pals.slot_occupied', slot=slot_index))
+                    continue
+                container_id = self.party_container
+            else:
+                if abs_index in self.palbox_pal_dict:
+                    show_warning(self, t('edit_pals.import_pal'), t('edit_pals.slot_occupied', slot=slot_index))
+                    continue
+                container_id = self.palbox_container
+            if not container_id:
+                show_warning(self, t('edit_pals.import_pal'), 'No container ID')
+                return
+            owner_uid = self.player_uid
+            group_id = None
+            wsd = constants.loaded_level_json['properties']['worldSaveData']['value']
+            if 'GroupSaveDataMap' in wsd:
+                owner_norm = owner_uid.replace('-', '').lower() if owner_uid else ''
+                for g in wsd['GroupSaveDataMap']['value']:
+                    try:
+                        for p in g['value']['RawData']['value'].get('players', []):
+                            if str(p.get('player_uid', '')).replace('-', '').lower() == owner_norm:
+                                group_id = g['value']['RawData']['value'].get('group_id')
+                                break
+                    except Exception:
+                        pass
+                    if group_id:
+                        break
+            new_pal = _generate_pal_save_param(cid, nick, owner_uid, container_id, abs_index, group_id)
+            instance_id = new_pal['key']['InstanceId']['value']
+            new_raw = _get_raw_from_item(new_pal)
+            if new_raw is None:
+                continue
+            for field in imported_raw:
+                if field in ('SlotId', 'OwnerPlayerUId', 'CharacterID'):
+                    continue
+                new_raw[field] = copy.deepcopy(imported_raw[field])
+            cmap = constants.loaded_level_json['properties']['worldSaveData']['value']['CharacterSaveParameterMap']['value']
+            cmap.append(new_pal)
+            char_containers = safe_nested_get(wsd, ['CharacterContainerSaveData', 'value'], [])
+            for cont in char_containers:
+                if safe_nested_get(cont, ['key', 'ID', 'value']) == container_id:
+                    slots = safe_nested_get(cont, ['value', 'Slots', 'value', 'values'], [])
+                    slots.append({'SlotIndex': {'id': None, 'type': 'IntProperty', 'value': abs_index}, 'RawData': {'array_type': 'ByteProperty', 'id': None, 'value': {'player_uid': '00000000-0000-0000-0000-000000000000', 'instance_id': instance_id, 'permission_tribe_id': 0}, 'custom_type': '.worldSaveData.CharacterContainerSaveData.Value.Slots.Slots.RawData', 'type': 'ArrayProperty'}})
+                    break
+            if group_id:
+                _register_pal_instance_to_guild(instance_id, group_id)
+            if is_party:
+                self.party_pals[abs_index] = new_pal
+            else:
+                self.palbox_pal_dict[abs_index] = new_pal
+        self._update_party_slots()
+        self._update_palbox_page()
+        self._clear_party_highlight()
+        self._clear_palbox_highlight()
+        self.selected_pal_slot = None
+        self.pal_info.set_clicked_pal(None)
+        self._update_dashboard_stats()
+        self._increment_pal_count()
+        show_information(self, t('edit_pals.import_pal'), t('edit_pals.import_pal.success', count=len(file_paths)))
+    def _import_pal_to_dps_slot(self, slot_index):
+        abs_idx = (self.current_box_index - 1) * 30 + slot_index
+        if abs_idx in self.dps_pals:
+            show_warning(self, t('edit_pals.import_pal'), t('edit_pals.slot_occupied', slot=slot_index))
+            return
+        file_paths, _ = QFileDialog.getOpenFileNames(self, t('edit_pals.import_pal'), '', 'Pal Files (*.pstpal *.json)')
+        if not file_paths:
+            return
+        for file_path in file_paths:
+            try:
+                if file_path.endswith('.pstpal'):
+                    imported_raw = _import_pal_raw(file_path)
+                else:
+                    from palsav import json_tools
+                    imported_raw = json_tools.load(file_path)
+            except Exception as e:
+                show_warning(self, t('edit_pals.import_pal'), f"Failed to load {os.path.basename(file_path)}: {e}")
+                continue
+            cid = extract_value(imported_raw, 'CharacterID', 'None')
+            if cid == 'None' or not cid or not self.dps_gvas:
+                show_warning(self, t('edit_pals.import_pal'), f"Invalid pal file: {os.path.basename(file_path)}")
+                continue
+            arr = self.dps_gvas.properties.get('SaveParameterArray', {}).get('value', {}).get('values', [])
+            if abs_idx >= len(arr) or not isinstance(arr[abs_idx], dict):
+                continue
+            sp = arr[abs_idx].get('SaveParameter', {}).get('value', {})
+            sp.clear()
+            sp.update(copy.deepcopy(imported_raw))
+            inst = arr[abs_idx].get('InstanceId', {}).get('value', {})
+            inst['PlayerUId'] = {'struct_type': 'Guid', 'struct_id': '00000000-0000-0000-0000-000000000000', 'id': None, 'value': str(self.player_uid) if self.player_uid else '00000000-0000-0000-0000-000000000000', 'type': 'StructProperty'}
+            inst['InstanceId'] = {'struct_type': 'Guid', 'struct_id': '00000000-0000-0000-0000-000000000000', 'id': None, 'value': str(uuid.uuid4()), 'type': 'StructProperty'}
+            inst['DebugName'] = {'id': None, 'type': 'StrProperty', 'value': ''}
+            from palworld_aio.managers.func_manager import _restore_one_pal
+            _restore_one_pal(sp)
+            wrapper = {'data': sp}
+            self.dps_pals[abs_idx] = wrapper
+            self.palbox_slots[slot_index].pal_data = wrapper
+            self.palbox_slots[slot_index].update_display()
+            self._mark_dps_modified()
+        self._update_palbox_page()
+        self._update_box_label()
+        show_information(self, t('edit_pals.import_pal'), t('edit_pals.import_pal.success', count=len(file_paths)))
     def _restore_all_pals(self):
         reply = show_question(self, t('edit_pals.ctx.bulk_heal'), t('edit_pals.restore_all_confirm'))
         if not reply:

@@ -27,7 +27,7 @@ from palworld_aio.utils import format_duration_short, calculate_max_hp
 from i18n import t
 from palworld_aio.inventory.inventory_manager import ItemData
 from palworld_aio.ui.chrome.styles import MENU_STYLE, DIALOG_STYLE as _DIALOG_STYLE, INPUT_DIALOG_STYLE, PICKER_SEARCH_STYLE, wrap_tooltip_text, CONTENT_PANEL_STYLE, slot_full, slot_selected
-from palworld_aio.editor.edit_pals import _clean_desc_for_tooltip, build_pal_context_menu, _get_cached_pixmap, _get_pal_icon_path, safe_nested_get, extract_value, resolve_name, get_pal_base_data, _resolve_partner_desc, _partner_desc_to_html, StrokedLabel, _get_element_pixmap, PalFrame, _strip_prefix_label, PalInfoWidget, _get_boss_alpha_pixmap, _get_boss_shiny_pixmap, _get_awake_pixmap, _get_ui_icon_pixmap, _generate_pal_save_param, _toggle_boss_raw, _toggle_lucky_raw, _toggle_awake_raw, _toggle_dna_raw, _set_fav_raw, _learn_all_skills_raw, _show_learned_moves_dialog, _register_pal_instance_to_guild, _set_work_suitability, _ensure_friendship_thresholds, _get_raw_from_item
+from palworld_aio.editor.edit_pals import _clean_desc_for_tooltip, build_pal_context_menu, _get_cached_pixmap, _get_pal_icon_path, safe_nested_get, extract_value, resolve_name, get_pal_base_data, _resolve_partner_desc, _partner_desc_to_html, StrokedLabel, _get_element_pixmap, PalFrame, _strip_prefix_label, PalInfoWidget, _get_boss_alpha_pixmap, _get_boss_shiny_pixmap, _get_awake_pixmap, _get_ui_icon_pixmap, _export_pal_raw, _generate_pal_save_param, _import_pal_raw, _toggle_boss_raw, _toggle_lucky_raw, _toggle_awake_raw, _toggle_dna_raw, _set_fav_raw, _learn_all_skills_raw, _show_learned_moves_dialog, _register_pal_instance_to_guild, _set_work_suitability, _ensure_friendship_thresholds, _get_raw_from_item
 from palworld_aio.inventory.base_inventory_manager import get_base_worker_pals
 class RarityBorderDelegate(QStyledItemDelegate):
     def paint(self, painter, option, index):
@@ -1485,6 +1485,10 @@ class _BasePalIcon(QFrame):
                 self.rightClicked.emit(self.slot_index, 'bulk_sync_pal')
             elif key == 'bulk_sync_all':
                 self.rightClicked.emit(self.slot_index, 'bulk_sync_all')
+            elif key == 'export_pal':
+                self.rightClicked.emit(self.slot_index, 'export_pal')
+            elif key == 'import_pal':
+                self.rightClicked.emit(self.slot_index, 'import_pal')
             elif key == 'clone':
                 self.rightClicked.emit(self.slot_index, 'clone')
             elif key == 'bulk_rename':
@@ -1497,9 +1501,12 @@ class _BasePalIcon(QFrame):
             from palworld_aio.widgets.scrollable_context_menu import ScrollableContextMenu
             popup = ScrollableContextMenu(self)
             popup.add_item('add_new', t('edit_pals.add_new_pal'))
+            popup.add_item('import_pal', t('edit_pals.ctx.import_pal'))
             key = popup.exec_(event.globalPos())
             if key == 'add_new':
                 self.rightClicked.emit(self.slot_index, 'add_new')
+            elif key == 'import_pal':
+                self.rightClicked.emit(self.slot_index, 'import_pal')
     def _get_raw(self):
         if not self.pal_data:
             return None
@@ -2004,6 +2011,88 @@ class BasePalsContentWidget(QFrame):
             self._rebuild()
             self._trigger_save()
             self._refresh_dashboard()
+    def _import_base_pal(self):
+        file_paths, _ = QFileDialog.getOpenFileNames(self, t('edit_pals.import_pal'), '', 'Pal Files (*.pstpal *.json)')
+        if not file_paths:
+            return
+        for file_path in file_paths:
+            try:
+                if file_path.endswith('.pstpal'):
+                    imported_raw = _import_pal_raw(file_path)
+                else:
+                    from palsav import json_tools
+                    imported_raw = json_tools.load(file_path)
+            except Exception as e:
+                show_warning(self, t('edit_pals.import_pal'), f"Failed to load {os.path.basename(file_path)}: {e}")
+                continue
+            cid = extract_value(imported_raw, 'CharacterID', 'None')
+            if cid == 'None' or not cid:
+                show_warning(self, t('edit_pals.import_pal'), f"Invalid pal file: {os.path.basename(file_path)}")
+                continue
+            nick = extract_value(imported_raw, 'NickName', '') or ''
+            if self._current_base_id:
+                from palworld_aio.inventory.base_inventory_manager import get_base_worker_container_id
+                container_id = get_base_worker_container_id(self._current_base_id)
+            else:
+                container_id = '00000000-0000-0000-0000-000000000000'
+            import uuid
+            instance_id = str(uuid.uuid4()).upper()
+            slot_idx = next((i for i, p in enumerate(self._pals) if p is None), len(self._pals))
+            entry = _generate_pal_save_param(cid, nick, '00000000-0000-0000-0000-000000000000', container_id, slot_idx)
+            instance_id = entry.get('key', {}).get('InstanceId', {}).get('value', instance_id)
+            new_raw = _get_raw_from_item(entry)
+            if new_raw:
+                for field in imported_raw:
+                    if field in ('SlotId', 'OwnerPlayerUId', 'CharacterID'):
+                        continue
+                    new_raw[field] = copy.deepcopy(imported_raw[field])
+            guild_id = None
+            parent_w = self.parent()
+            while parent_w:
+                if hasattr(parent_w, '_current_guild_id'):
+                    guild_id = parent_w._current_guild_id
+                    break
+                parent_w = parent_w.parent()
+            if constants.loaded_level_json:
+                try:
+                    wsd = constants.loaded_level_json['properties']['worldSaveData']['value']
+                    cmap = wsd.get('CharacterSaveParameterMap', {}).get('value', [])
+                    cmap.append(entry)
+                    if container_id and container_id != '00000000-0000-0000-0000-000000000000':
+                        char_containers = wsd.get('CharacterContainerSaveData', {}).get('value', [])
+                        for cont in char_containers:
+                            if str(cont.get('key', {}).get('ID', {}).get('value', '')).replace('-', '').lower() == container_id.replace('-', '').lower():
+                                slots = cont.get('value', {}).get('Slots', {}).get('value', {}).get('values', [])
+                                slots.append({'SlotIndex': {'id': None, 'type': 'IntProperty', 'value': slot_idx}, 'RawData': {'array_type': 'ByteProperty', 'id': None, 'value': {'player_uid': '00000000-0000-0000-0000-000000000000', 'instance_id': instance_id, 'permission_tribe_id': 0}, 'custom_type': '.worldSaveData.CharacterContainerSaveData.Value.Slots.Slots.RawData', 'type': 'ArrayProperty'}})
+                                current_slot_num = cont.get('value', {}).get('SlotNum', {}).get('value', 0)
+                                if len(slots) > current_slot_num:
+                                    cont['value']['SlotNum']['value'] = len(slots)
+                                break
+                    if guild_id:
+                        _register_pal_instance_to_guild(instance_id, guild_id)
+                    new_pal = {'slot_index': slot_idx, 'instance_id': instance_id, 'character_entry': entry}
+                    if slot_idx < len(self._pals):
+                        self._pals[slot_idx] = new_pal
+                    else:
+                        self._pals.append(new_pal)
+                    owner_raw = safe_nested_get(entry, ['value', 'RawData', 'value', 'object', 'SaveParameter', 'value', 'OwnerPlayerUId', 'value'])
+                    if owner_raw:
+                        key = str(owner_raw).replace('-', '').lower()
+                        constants.PLAYER_PAL_COUNTS[key] = constants.PLAYER_PAL_COUNTS.get(key, 0) + 1
+                except Exception as e:
+                    show_warning(self, t('edit_pals.import_pal'), f"Failed to import: {e}")
+                    continue
+        self._rebuild()
+        if self._selected_idx >= 0:
+            prev = self.grid.itemAt(self._selected_idx)
+            if prev and prev.widget():
+                prev.widget().set_selected(False)
+        self._selected_idx = -1
+        self.pal_info.set_clicked_pal(None)
+        self.pal_info._clear_display()
+        self._trigger_save()
+        self._refresh_dashboard()
+        show_information(self, t('edit_pals.import_pal'), t('edit_pals.import_pal.success', count=len(file_paths)))
     def _trigger_save(self):
         parent = self.parent()
         while parent:
@@ -2061,6 +2150,9 @@ class BasePalsContentWidget(QFrame):
         if not pal:
             if action == 'add_new':
                 self._add_new_pal()
+                return
+            elif action == 'import_pal':
+                self._import_base_pal()
                 return
             return
         raw = safe_nested_get(pal['character_entry'], ['value', 'RawData', 'value', 'object', 'SaveParameter', 'value'])
@@ -2373,6 +2465,32 @@ class BasePalsContentWidget(QFrame):
             if dlg.exec() == QDialog.Accepted:
                 for icon in self._icons:
                     icon.update_display()
+        elif action == 'export_pal':
+            from PySide6.QtWidgets import QFileDialog
+            import json
+            cid = extract_value(raw, 'CharacterID', 'None')
+            nick = extract_value(raw, 'NickName', '') or 'pal'
+            safe_name = ''.join(c if c.isalnum() or c in ' _-' else '_' for c in nick)[:32]
+            default_name = f'{safe_name}_{cid}.pstpal' if safe_name else f'{cid}.pstpal'
+            file_path, selected_filter = QFileDialog.getSaveFileName(self, t('edit_pals.export_pal'), default_name, 'PSTPAL Pal Files (*.pstpal);;JSON Files (*.json)')
+            if not file_path:
+                return
+            is_pstpal = 'pstpal' in selected_filter if selected_filter else file_path.endswith('.pstpal')
+            if is_pstpal:
+                if not file_path.endswith('.pstpal'):
+                    file_path += '.pstpal'
+                compressed = _export_pal_raw(raw)
+                with open(file_path, 'wb') as f:
+                    f.write(compressed)
+            else:
+                if not file_path.endswith('.json'):
+                    file_path += '.json'
+                export_data = {k: v for k, v in raw.items() if not k.startswith('_')}
+                from palworld_aio.managers.backup_manager import BackupEncoder
+                with open(file_path, 'w', encoding='utf-8') as f:
+                    json.dump(export_data, f, cls=BackupEncoder, indent=2)
+            show_information(self, t('edit_pals.export_pal'), t('edit_pals.export_pal.success', path=os.path.basename(file_path)))
+            return
         elif action == 'delete':
             reply = show_question(self, t('edit_pals.confirm_delete'), 'Delete this pal?')
             if not reply:

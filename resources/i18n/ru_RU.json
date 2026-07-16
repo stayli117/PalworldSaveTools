@@ -1830,5 +1830,11 @@
     "base.nudge.prompt": "Введите значения смещения для каждой оси.\nПоложительное = вправо/вверх/поднятие, Отрицательное = влево/вниз/ниже.",
     "base.nudge.offset_x": "Смещение по оси X",
     "base.nudge.offset_y": "Смещение по оси Y",
-    "base.nudge.offset_z": "Смещение по оси Z"
+    "base.nudge.offset_z": "Смещение по оси Z",
+    "edit_pals.ctx.export_pal": "Экспорт Пал",
+    "edit_pals.ctx.import_pal": "Импорт Пал",
+    "edit_pals.export_pal": "Экспорт Пал",
+    "edit_pals.export_pal.success": "Экспортировано в {path}",
+    "edit_pals.import_pal": "Импорт Пал",
+    "edit_pals.import_pal.success": "Импортировано друзей: {count}"
 }

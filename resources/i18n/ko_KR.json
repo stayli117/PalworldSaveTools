@@ -1831,5 +1831,11 @@
     "base.nudge.prompt": "각 축의 오프셋 값을 입력합니다.\n양수 = 오른쪽/위쪽/올림, 음수 = 왼쪽/아래쪽/아래쪽.",
     "base.nudge.offset_x": "X 오프셋",
     "base.nudge.offset_y": "Y 오프셋",
-    "base.nudge.offset_z": "Z 오프셋"
+    "base.nudge.offset_z": "Z 오프셋",
+    "edit_pals.ctx.export_pal": "Pal 내보내기",
+    "edit_pals.ctx.import_pal": "Import Pal",
+    "edit_pals.export_pal": "Pal 내보내기",
+    "edit_pals.export_pal.success": "{경로}로 내보냈습니다.",
+    "edit_pals.import_pal": "Import Pal",
+    "edit_pals.import_pal.success": "가져온 친구 {count}명"
 }

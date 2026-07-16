@@ -2119,5 +2119,11 @@
     "base.nudge.prompt": "Enter offset values for each axis.\nPositive = right/up/raise, Negative = left/down/lower.",
     "base.nudge.offset_x": "X offset",
     "base.nudge.offset_y": "Y offset",
-    "base.nudge.offset_z": "Z offset"
+    "base.nudge.offset_z": "Z offset",
+    "edit_pals.ctx.export_pal": "Export Pal",
+    "edit_pals.ctx.import_pal": "Import Pal",
+    "edit_pals.export_pal": "Export Pal",
+    "edit_pals.export_pal.success": "Exported to {path}",
+    "edit_pals.import_pal": "Import Pal",
+    "edit_pals.import_pal.success": "Imported {count} pal(s)"
 }

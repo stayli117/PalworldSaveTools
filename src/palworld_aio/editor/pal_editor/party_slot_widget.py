@@ -195,6 +195,14 @@ class PartySlotWidget(QFrame):
 
                 self.rightClicked.emit(self.slot_index, 'bulk_sync_all')
 
+            elif key == 'export_pal':
+
+                self.rightClicked.emit(self.slot_index, 'export_pal')
+
+            elif key == 'import_pal':
+
+                self.rightClicked.emit(self.slot_index, 'import_pal')
+
             elif key == 'clone':
 
                 self.rightClicked.emit(self.slot_index, 'clone')
@@ -216,9 +224,12 @@ class PartySlotWidget(QFrame):
             from palworld_aio.widgets.scrollable_context_menu import ScrollableContextMenu
             popup = ScrollableContextMenu(self)
             popup.add_item('add_new', t('edit_pals.add_new_pal'))
+            popup.add_item('import_pal', t('edit_pals.ctx.import_pal'))
             key = popup.exec_(event.globalPos())
             if key == 'add_new':
                 self.rightClicked.emit(self.slot_index, 'add_new')
+            elif key == 'import_pal':
+                self.rightClicked.emit(self.slot_index, 'import_pal')
 
     def _get_raw(self):
 

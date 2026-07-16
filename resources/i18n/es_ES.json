@@ -1826,5 +1826,11 @@
     "base.nudge.prompt": "Introduzca valores de compensación para cada eje.\nPositivo = derecha/arriba/levantar, Negativo = izquierda/abajo/abajo.",
     "base.nudge.offset_x": "desplazamiento X",
     "base.nudge.offset_y": "Desplazamiento Y",
-    "base.nudge.offset_z": "Desplazamiento Z"
+    "base.nudge.offset_z": "Desplazamiento Z",
+    "edit_pals.ctx.export_pal": "Exportar amigo",
+    "edit_pals.ctx.import_pal": "Importar amigo",
+    "edit_pals.export_pal": "Exportar amigo",
+    "edit_pals.export_pal.success": "Exportado a {ruta}",
+    "edit_pals.import_pal": "Importar amigo",
+    "edit_pals.import_pal.success": "{count} amigo(s) importado(s)"
 }

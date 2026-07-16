@@ -1856,5 +1856,11 @@
     "base.nudge.prompt": "Geben Sie Versatzwerte für jede Achse ein.\nPositiv = rechts/oben/heben, negativ = links/unten/senken.",
     "base.nudge.offset_x": "X-Versatz",
     "base.nudge.offset_y": "Y-Versatz",
-    "base.nudge.offset_z": "Z-Versatz"
+    "base.nudge.offset_z": "Z-Versatz",
+    "edit_pals.ctx.export_pal": "Kumpel exportieren",
+    "edit_pals.ctx.import_pal": "Pal importieren",
+    "edit_pals.export_pal": "Kumpel exportieren",
+    "edit_pals.export_pal.success": "Exportiert nach {path}",
+    "edit_pals.import_pal": "Pal importieren",
+    "edit_pals.import_pal.success": "{count} Kumpel(s) importiert"
 }

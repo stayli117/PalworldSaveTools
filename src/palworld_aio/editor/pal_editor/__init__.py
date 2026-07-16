@@ -23,8 +23,10 @@ from .icons import (
     _strip_prefix_label,
 )
 from .pal_ops import (
+    _export_pal_raw,
     _generate_pal_save_param,
     _get_raw_from_item,
+    _import_pal_raw,
     _learn_all_skills_raw,
     _max_stats_raw,
     _register_pal_instance_to_guild,
@@ -56,6 +58,7 @@ __all__ = [
     "_ensure_friendship_thresholds",
     "_ensure_passive_data",
     "_ensure_skill_data",
+    "_export_pal_raw",
     "_generate_pal_save_param",
     "_get_awake_pixmap",
     "_get_boss_alpha_pixmap",
@@ -65,6 +68,7 @@ __all__ = [
     "_get_pal_icon_path",
     "_get_raw_from_item",
     "_get_ui_icon_pixmap",
+    "_import_pal_raw",
     "_learn_all_skills_raw",
     "_max_stats_raw",
     "_PalSlotDelegate",

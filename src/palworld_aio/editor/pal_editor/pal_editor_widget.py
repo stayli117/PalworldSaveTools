@@ -488,6 +488,17 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
                 del raw[k]
         raw['CharacterID'] = {'id': None, 'type': 'NameProperty', 'value': 'None'}
         raw['Level'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 1}}
+        if self.dps_gvas:
+            arr = self.dps_gvas.properties.get('SaveParameterArray', {}).get('value', {}).get('values', [])
+            if abs_idx < len(arr) and isinstance(arr[abs_idx], dict):
+                inst = arr[abs_idx].get('InstanceId')
+                if isinstance(inst, dict):
+                    empty_guid = '00000000-0000-0000-0000-000000000000'
+                    inst_val = inst.get('value', {})
+                    if isinstance(inst_val, dict):
+                        inst_val['PlayerUId'] = {'struct_type': 'Guid', 'struct_id': empty_guid, 'id': None, 'value': empty_guid, 'type': 'StructProperty'}
+                        inst_val['InstanceId'] = {'struct_type': 'Guid', 'struct_id': empty_guid, 'id': None, 'value': empty_guid, 'type': 'StructProperty'}
+                        inst_val['DebugName'] = {'id': None, 'type': 'StrProperty', 'value': ''}
         del self.dps_pals[abs_idx]
         self.palbox_slots[slot_index].pal_data = None
         self.palbox_slots[slot_index].update_display()

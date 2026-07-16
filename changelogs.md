@@ -5,6 +5,7 @@
 - **Breeding picker cleanup** — candidates sourced directly from `breedingdata.json` pal_info instead of merged npc list. Manual prefix/otomo/zukan-index dedup heuristics removed (superseded by game data)
 - **Convert SteamID dialog** — starts empty instead of auto-fetching; no stale data shown before user action
 - **Flamethrower gear fix** — items with empty descriptions now show correctly in pickers (no longer hidden)
+- **DPS delete fix** — deleting a pal from DPS storage no longer causes infinite loading in-game. Slot data is fully cleared so the game correctly treats it as empty
 - Bumped version to 2.1.1
 
 #2.1.0

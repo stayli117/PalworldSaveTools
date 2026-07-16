@@ -1023,9 +1023,6 @@ class ItemPickerDialog(QDialog):
             if type_a != 'EPalItemTypeA::Essential':
                 if item['asset'].startswith('PalEgg_'):
                     continue
-            desc = item.get('description', '').strip()
-            if not desc or desc.lower() in ('', 'en text', 'en_text', 'none', '-', '---'):
-                continue
             if 'en_text' in item.get('name', '').lower():
                 continue
             list_item = QListWidgetItem(item.get('name', 'Unknown'))
@@ -1493,7 +1490,7 @@ class PlayerInventoryTab(QWidget):
             all_items = ItemData.get_all_items()
             unlock_assets = set(FOOD_POUCH_ITEMS + ACCESSORY_UNLOCK_ITEMS + WEAPON_UNLOCK_ITEMS)
             boss_map = self.inventory._build_boss_key_map()
-            key_candidates = [i for i in all_items if i.get('type_a') == 'EPalItemTypeA::Essential' and (i['asset'] not in unlock_assets) and (i.get('sort_id', 0) != 9999) and (i.get('description', '').strip() not in ('', '-')) and (i.get('name', '') != i.get('asset', '')) and ('en_text' not in i.get('name', '').lower()) and (not i['asset'].startswith('BossDefeatReward_') or i['asset'] in boss_map)]
+            key_candidates = [i for i in all_items if i.get('type_a') == 'EPalItemTypeA::Essential' and (i['asset'] not in unlock_assets) and (i.get('sort_id', 0) != 9999) and (i.get('name', '') != i.get('asset', '')) and ('en_text' not in i.get('name', '').lower()) and (not i['asset'].startswith('BossDefeatReward_') or i['asset'] in boss_map)]
             key_container = self.inventory.get_container('key')
             if not key_container:
                 return

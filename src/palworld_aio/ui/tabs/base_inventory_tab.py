@@ -181,9 +181,6 @@ class GuildItemPickerDialog(QDialog):
                 continue
             name = item.get('name', 'Unknown')
             asset = item.get('asset', '')
-            item_desc = item.get('description', '')
-            if not item_desc or item_desc.strip().lower() in ('', 'en text', 'en_text', 'none', '-', '---'):
-                continue
             list_item = QListWidgetItem(name)
             list_item.setData(Qt.UserRole, asset)
             list_item.setData(Qt.UserRole + 1, name)
@@ -488,8 +485,6 @@ class GuildStructurePickerDialog(QDialog):
             asset = s.get('asset', '')
             desc = s.get('description', '')
             if name == '---' or not asset or name == 'en Text':
-                continue
-            if not desc or desc.lower() in ('en text', 'en_text', 'none', '-', '---'):
                 continue
             list_item = QListWidgetItem(name)
             list_item.setData(Qt.UserRole, asset)

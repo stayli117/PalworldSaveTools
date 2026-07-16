@@ -108,14 +108,12 @@ class PlayerTechnologyActionDialog(QDialog):
         for tech in technologies:
             name = tech.get('name', 'Unknown')
             asset = tech.get('asset', '')
-            desc = tech.get('description', '')
-            if not desc or desc.lower() in ('en text', 'en_text', 'none', '-', '---'):
-                continue
             item = QListWidgetItem(name)
             item.setData(Qt.UserRole, asset)
             tip = f'<b>{name}</b><br>({asset})'
-            if desc:
-                cleaned = _clean_desc_for_tooltip(desc)
+            tech_desc = tech.get('description', '')
+            if tech_desc:
+                cleaned = _clean_desc_for_tooltip(tech_desc)
                 tip += f'<br><br>{wrap_tooltip_text(cleaned)}'
             item.setToolTip(tip)
             icon = self._get_tech_icon(tech)

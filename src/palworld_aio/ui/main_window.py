@@ -826,7 +826,7 @@ class MainWindow(QMainWindow):
             boss_map = json.load(open(boss_map_path, encoding='utf-8')).get('boss_defeat_flag_map', {})
         except:
             boss_map = {}
-        candidates = [i for i in all_items if i.get('type_a') == 'EPalItemTypeA::Essential' and (i['asset'] not in unlock_assets) and (i.get('sort_id', 0) != 9999) and (i.get('description', '').strip() not in ('', '-')) and (i.get('name', '') != i.get('asset', '')) and ('en_text' not in i.get('name', '').lower()) and (not i['asset'].startswith('BossDefeatReward_') or i['asset'] in boss_map)]
+        candidates = [i for i in all_items if i.get('type_a') == 'EPalItemTypeA::Essential' and (i['asset'] not in unlock_assets) and (i.get('sort_id', 0) != 9999) and (i.get('name', '') != i.get('asset', '')) and ('en_text' not in i.get('name', '').lower()) and (not i['asset'].startswith('BossDefeatReward_') or i['asset'] in boss_map)]
         per_player_missing = {}
         for uid in player_uids:
             try:

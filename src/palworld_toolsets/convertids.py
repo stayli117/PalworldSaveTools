@@ -3,13 +3,6 @@ from loading_manager import show_warning, show_critical
 from palworld_aio.ui.chrome.styles import ThemeManager
 import nerdfont as nf
 from palworld_aio import constants
-from common import get_preferred_save_path
-def get_steam_id_from_local():
-    local_app_data_path = get_preferred_save_path()
-    if os.path.exists(local_app_data_path):
-        subdirs = [d for d in os.listdir(local_app_data_path) if os.path.isdir(os.path.join(local_app_data_path, d))]
-        return subdirs[0] if subdirs else None
-    return None
 def convert_steam_id():
     def do_convert(steam_input=None):
         steam_input = steam_entry.text().strip() if steam_input is None else steam_input
@@ -27,7 +20,6 @@ def convert_steam_id():
             result_label.setText(t('steamid.result', pal=str(palworld_uid).upper(), nosteam=nosteam_uid.upper()))
         except ValueError:
             show_critical(dialog, t('Error'), t('steamid.err.invalid'))
-    steam_id_from_local = get_steam_id_from_local()
     dialog = QDialog()
     dialog.setWindowTitle(t('steamid.title'))
     try:
@@ -91,12 +83,6 @@ def convert_steam_id():
         copy_button.setText(f"{nf.icons['nf-md-checkbox_marked_circle']}")
         QTimer.singleShot(2000, lambda: copy_button.setText(f"{nf.icons['nf-cod-copy']}"))
     copy_button.clicked.connect(copy_result)
-    if steam_id_from_local:
-        try:
-            steam_entry.setText(steam_id_from_local)
-            do_convert(steam_id_from_local)
-        except Exception as e:
-            print(t('steamid.err.autoconvert'), e)
     dialog.adjustSize()
     center_window(dialog)
     dialog.setModal(True)

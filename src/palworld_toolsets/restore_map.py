@@ -1,7 +1,7 @@
 from import_libs import *
 from palsav.core import decompress_sav_to_gvas, compress_gvas_to_sav
 
-from loading_manager import show_critical, run_with_loading
+from loading_manager import show_critical
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QFrame, QApplication
 from PySide6.QtGui import QIcon, QFont
 from PySide6.QtCore import Qt, QTimer
@@ -9,8 +9,8 @@ from palworld_aio.ui.chrome.styles import ThemeManager
 from palworld_aio import constants
 from resource_resolver import get_data_base
 import os, time, shutil
-from common import get_preferred_save_path
-savegames_path = get_preferred_save_path()
+from common import get_steam_save_path
+savegames_path = get_steam_save_path()
 restore_map_path = os.path.join(get_data_base(), 'Backups', 'Restore Map')
 os.makedirs(restore_map_path, exist_ok=True)
 def backup_local_data(subfolder_path):
@@ -47,18 +47,25 @@ def clear_fog_in_local_data(path):
     save_sav(ng, path, custom_properties=SKP_PALWORLD_CUSTOM_PROPERTIES)
 def clear_fog_in_all_subfolders():
     updated_count = 0
-    for folder in os.listdir(savegames_path):
-        folder_path = os.path.join(savegames_path, folder)
-        if os.path.isdir(folder_path):
-            subfolders = [subfolder for subfolder in os.listdir(folder_path) if os.path.isdir(os.path.join(folder_path, subfolder))]
-            for subfolder in subfolders:
-                subfolder_path = os.path.join(folder_path, subfolder)
-                target_path = os.path.join(subfolder_path, 'LocalData.sav')
-                if os.path.exists(target_path):
-                    backup_local_data(subfolder_path)
-                    print(t('Clearing fog in: {path}', path=subfolder_path))
-                    clear_fog_in_local_data(target_path)
-                    updated_count += 1
+    target = os.path.join(savegames_path, 'LocalData.sav')
+    if os.path.exists(target):
+        backup_local_data(savegames_path)
+        print(t('Clearing fog in: {path}', path=savegames_path))
+        clear_fog_in_local_data(target)
+        updated_count += 1
+    else:
+        for folder in os.listdir(savegames_path):
+            folder_path = os.path.join(savegames_path, folder)
+            if os.path.isdir(folder_path):
+                subfolders = [subfolder for subfolder in os.listdir(folder_path) if os.path.isdir(os.path.join(folder_path, subfolder))]
+                for subfolder in subfolders:
+                    subfolder_path = os.path.join(folder_path, subfolder)
+                    target_path = os.path.join(subfolder_path, 'LocalData.sav')
+                    if os.path.exists(target_path):
+                        backup_local_data(subfolder_path)
+                        print(t('Clearing fog in: {path}', path=subfolder_path))
+                        clear_fog_in_local_data(target_path)
+                        updated_count += 1
     if constants.loaded_level_json and constants.current_save_path:
         local_path = os.path.join(constants.current_save_path, 'LocalData.sav')
         if os.path.exists(local_path):
@@ -183,13 +190,13 @@ def restore_map():
             if not ok or not new_name.strip():
                 _sh.rmtree(tmp, ignore_errors=True)
                 return
-            run_with_loading(
-                callback=lambda _: self._xgp_clear_done(),
-                func=self._xgp_clear_work,
-                tmp=tmp, cpath=cpath, level_path=level_path, new_name=new_name,
-                save_id=save_id,
-                parent=self,
-            )
+            try:
+                self._xgp_clear_work(tmp=tmp, cpath=cpath, level_path=level_path, new_name=new_name, save_id=save_id)
+            except Exception as e:
+                _sh.rmtree(tmp, ignore_errors=True)
+                show_critical(self, t('Error'), str(e))
+                return
+            self._xgp_clear_done()
         def _xgp_clear_work(self, tmp, cpath, level_path, new_name, save_id):
             from palworld_xgp_import.gamepass_manager import save_xgp_changes
             from palworld_aio.utils import sav_to_gvas_wrapper, wrapper_to_sav
@@ -234,11 +241,11 @@ def restore_map():
             self.no_button.setEnabled(False)
             QTimer.singleShot(2000, self.accept)
         def on_yes(self):
-            run_with_loading(
-                callback=lambda _: self._on_clear_done(),
-                func=clear_fog_in_all_subfolders,
-                parent=self,
-            )
+            self.yes_button.setEnabled(False)
+            self.no_button.setEnabled(False)
+            QApplication.processEvents()
+            clear_fog_in_all_subfolders()
+            self._on_clear_done()
         def _on_clear_done(self):
             self.result_label.setText(t('Fog cleared successfully!'))
             self.yes_button.setEnabled(False)

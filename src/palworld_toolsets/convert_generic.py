@@ -1,8 +1,7 @@
-import sys, os, gc, threading, time
+import sys, os, gc, time
 from import_libs import *
-from loading_manager import run_with_loading, show_information
+from loading_manager import show_information
 from palworld_aio.ui.chrome.styles import ThemeManager
-from PySide6.QtCore import QEventLoop
 from PySide6.QtWidgets import QApplication, QFileDialog
 from palsav.commands.convert import main as convert_main
 def convert_sav_to_json(input_file, output_file):
@@ -35,17 +34,11 @@ def convert_generic(ext):
         return False
     root, _ = os.path.splitext(input_file)
     output_path = root + ('.sav' if ext == 'sav' else '.json')
-    loop = QEventLoop()
     if ext == 'sav':
-        def task():
-            convert_json_to_sav(input_file, output_path)
-            gc.collect()
+        convert_json_to_sav(input_file, output_path)
     else:
-        def task():
-            convert_sav_to_json(input_file, output_path)
-            gc.collect()
-    run_with_loading(lambda _: loop.quit(), task)
-    loop.exec()
+        convert_sav_to_json(input_file, output_path)
+    gc.collect()
     time.sleep(0.5)
     print(f'Converted {input_file} to {output_path}')
     parent = QApplication.activeWindow()

@@ -521,7 +521,7 @@ class MainWindow(QMainWindow):
         if page_index not in self._tab_created:
             self._ensure_tab(page_index)
             if constants.loaded_level_json:
-                self.refresh_all()
+                self._refresh_tab(page_index)
         self.stacked_widget.setCurrentIndex(page_index)
     def _load_user_settings(self):
         from boot_paths import CONFIG_DIR, USER_CONFIG_DIR
@@ -608,8 +608,6 @@ class MainWindow(QMainWindow):
             self.refresh_all()
             self.results_widget.refresh_stats_before()
             self.status_bar.showMessage(t('status.loaded') if t else 'Save loaded successfully', 5000)
-            if hasattr(self, 'base_inventory_tab'):
-                self.base_inventory_tab.refresh()
         else:
             self.status_bar.showMessage(t('status.load_failed') if t else 'Failed to load save', 5000)
             msg_box = self._create_message_box(QMessageBox.Critical)
@@ -624,6 +622,33 @@ class MainWindow(QMainWindow):
         msg_box.setText(t('Changes saved successfully.'))
         msg_box.addButton(t('button.ok'), QMessageBox.AcceptRole)
         msg_box.exec()
+    _TAB_REFRESH = {
+        0: None,
+        1: '_refresh_base_inventory',
+        2: '_refresh_inventory',
+        3: '_refresh_pal_editor',
+        4: '_refresh_players',
+        5: '_refresh_guilds',
+        6: '_refresh_bases',
+        7: '_refresh_map',
+        8: '_refresh_exclusions',
+        9: '_refresh_json_editor',
+        10: None,
+        11: '_refresh_breeding',
+    }
+    def _refresh_tab(self, page_index):
+        method = self._TAB_REFRESH.get(page_index)
+        if method:
+            getattr(self, method)()
+    def _refresh_pal_editor(self):
+        if hasattr(self, 'pal_editor_tab'):
+            self.pal_editor_tab.refresh()
+    def _refresh_json_editor(self):
+        if hasattr(self, 'json_editor_tab'):
+            self.json_editor_tab.refresh()
+    def _refresh_breeding(self):
+        if hasattr(self, 'breeding_tab'):
+            self.breeding_tab.refresh()
     def refresh_all(self):
         if self._is_refreshing:
             return
@@ -636,14 +661,11 @@ class MainWindow(QMainWindow):
             self._refresh_exclusions()
             self._refresh_inventory()
             self._refresh_base_inventory()
-            if hasattr(self, 'pal_editor_tab'):
-                self.pal_editor_tab.refresh()
+            self._refresh_pal_editor()
             if hasattr(self, 'tools_tab'):
                 self.tools_tab.refresh()
-            if hasattr(self, 'json_editor_tab'):
-                self.json_editor_tab.refresh()
-            if hasattr(self, 'breeding_tab'):
-                self.breeding_tab.refresh()
+            self._refresh_json_editor()
+            self._refresh_breeding()
         finally:
             self._is_refreshing = False
     def _refresh_inventory(self):

@@ -46,6 +46,9 @@ def clear_fog_in_local_data(path):
     from palsav.io import save_sav
     save_sav(ng, path, custom_properties=SKP_PALWORLD_CUSTOM_PROPERTIES)
 def clear_fog_in_all_subfolders():
+    if sys.platform == 'linux':
+        print('Restore Map is not supported on Linux.')
+        return
     updated_count = 0
     target = os.path.join(savegames_path, 'LocalData.sav')
     if os.path.exists(target):

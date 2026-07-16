@@ -12,6 +12,7 @@
 - **Restore Map fix** — tool now reads the real Steam/macOS save path (`%LOCALAPPDATA%/Pal/Saved/SaveGames`) instead of the config `last_save_path`, so it finds your actual save folders again. Also handles flat save directories (LocalData.sav in root) in addition to the nested Steam structure
 - **Convert Save files fix** — no longer hangs or silently fails; work runs directly instead of through a daemon thread that never starts inside `QEventLoop.exec()`
 - **Tab switching performance** — navigating to a lazy-loaded tab no longer refreshes every single tab; only the target tab repopulates. Removed a redundant double-refresh of the base inventory tab on save load
+- **macOS trackpad phantom scroll fix** — right-clicking (two-finger tap) on empty grid space in pal editor or base inventory no longer kicks you back pages. Zero-delta scroll events from macOS gesture synthesis now pass through instead of triggering page navigation
 - Bumped version to 2.1.2
 
 #2.1.0

@@ -1282,7 +1282,10 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
             slot.set_selected(False)
     def eventFilter(self, obj, event):
         if obj == self.grid_scroll.viewport() and event.type() == QEvent.Type.Wheel:
-            if event.angleDelta().y() < 0:
+            delta = event.angleDelta().y()
+            if delta == 0:
+                return True
+            if delta < 0:
                 self._next_box()
             else:
                 self._prev_box()

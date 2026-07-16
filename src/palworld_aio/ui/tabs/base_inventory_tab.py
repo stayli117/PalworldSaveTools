@@ -1900,7 +1900,10 @@ class BasePalsContentWidget(QFrame):
         self._update_page()
     def eventFilter(self, obj, event):
         if event.type() == QEvent.Type.Wheel and self._total_pages > 1:
-            if event.angleDelta().y() < 0:
+            delta = event.angleDelta().y()
+            if delta == 0:
+                return True
+            if delta < 0:
                 self._next_page()
             else:
                 self._prev_page()

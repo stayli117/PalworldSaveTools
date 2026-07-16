@@ -1827,5 +1827,9 @@
     "base.move_coords.failed": "기본 좌표를 업데이트하지 못했습니다.",
     "map.info.select_coords": "새로운 기본 좌표를 설정하려면 지도를 클릭하세요. 취소하려면 마우스 오른쪽 버튼을 클릭하세요.",
     "base.nudge": "넛지 베이스",
-    "base.nudge.success": "베이스를 성공적으로 넛지했습니다."
+    "base.nudge.success": "베이스를 성공적으로 넛지했습니다.",
+    "base.nudge.prompt": "각 축의 오프셋 값을 입력합니다.\n양수 = 오른쪽/위쪽/올림, 음수 = 왼쪽/아래쪽/아래쪽.",
+    "base.nudge.offset_x": "X 오프셋",
+    "base.nudge.offset_y": "Y 오프셋",
+    "base.nudge.offset_z": "Z 오프셋"
 }

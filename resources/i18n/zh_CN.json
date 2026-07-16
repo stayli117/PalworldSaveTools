@@ -1830,5 +1830,9 @@
     "base.move_coords.failed": "无法更新基础坐标。",
     "map.info.select_coords": "单击地图以设置新的基础坐标。右键单击取消。",
     "base.nudge": "轻推底座",
-    "base.nudge.success": "基地成功推动。"
+    "base.nudge.success": "基地成功推动。",
+    "base.nudge.prompt": "输入每个轴的偏移值。\n正值 = 右/上/升高，负值 = 左/下/下。",
+    "base.nudge.offset_x": "X 偏移",
+    "base.nudge.offset_y": "Y 轴偏移",
+    "base.nudge.offset_z": "Z 轴偏移"
 }

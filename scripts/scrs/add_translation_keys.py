@@ -33,6 +33,10 @@ NEW_TRANSLATIONS = {
     'map.info.select_coords': 'Click on the map to set new base coordinates. Right-click to cancel.',
     'base.nudge': 'Nudge Base',
     'base.nudge.success': 'Base nudged successfully.',
+    'base.nudge.prompt': 'Enter offset values for each axis.\nPositive = right/up/raise, Negative = left/down/lower.',
+    'base.nudge.offset_x': 'X offset',
+    'base.nudge.offset_y': 'Y offset',
+    'base.nudge.offset_z': 'Z offset',
 }
 OLD_KEYS = []
 def _clean_uv_locks():

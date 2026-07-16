@@ -1828,5 +1828,9 @@
     "base.move_coords.failed": "ベース座標の更新に失敗しました。",
     "map.info.select_coords": "マップをクリックして新しい基準座標を設定します。キャンセルするには右クリックしてください。",
     "base.nudge": "ナッジベース",
-    "base.nudge.success": "ベースナッジに成功しました。"
+    "base.nudge.success": "ベースナッジに成功しました。",
+    "base.nudge.prompt": "各軸のオフセット値を入力します。\n正 = 右/上/上昇、負 = 左/下/下。",
+    "base.nudge.offset_x": "Xオフセット",
+    "base.nudge.offset_y": "Yオフセット",
+    "base.nudge.offset_z": "Zオフセット"
 }

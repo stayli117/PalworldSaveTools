@@ -1810,5 +1810,9 @@
     "base.move_coords.failed": "Échec de la mise à jour des coordonnées de base.",
     "map.info.select_coords": "Cliquez sur la carte pour définir de nouvelles coordonnées de base. Cliquez avec le bouton droit pour annuler.",
     "base.nudge": "Base de déplacement",
-    "base.nudge.success": "La base a poussé avec succès."
+    "base.nudge.success": "La base a poussé avec succès.",
+    "base.nudge.prompt": "Entrez les valeurs de décalage pour chaque axe.\nPositif = droite/haut/augmenter, Négatif = gauche/bas/inférieur.",
+    "base.nudge.offset_x": "Décalage X",
+    "base.nudge.offset_y": "Décalage Y",
+    "base.nudge.offset_z": "Décalage Z"
 }

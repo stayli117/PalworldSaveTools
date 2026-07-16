@@ -1852,5 +1852,9 @@
     "base.move_coords.failed": "Basiskoordinaten konnten nicht aktualisiert werden.",
     "map.info.select_coords": "Klicken Sie auf die Karte, um neue Basiskoordinaten festzulegen. Klicken Sie mit der rechten Maustaste, um den Vorgang abzubrechen.",
     "base.nudge": "Nudge-Basis",
-    "base.nudge.success": "Die Basis wurde erfolgreich angestupst."
+    "base.nudge.success": "Die Basis wurde erfolgreich angestupst.",
+    "base.nudge.prompt": "Geben Sie Versatzwerte für jede Achse ein.\nPositiv = rechts/oben/heben, negativ = links/unten/senken.",
+    "base.nudge.offset_x": "X-Versatz",
+    "base.nudge.offset_y": "Y-Versatz",
+    "base.nudge.offset_z": "Z-Versatz"
 }

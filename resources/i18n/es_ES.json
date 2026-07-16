@@ -1822,5 +1822,9 @@
     "base.move_coords.failed": "No se pudieron actualizar las coordenadas de la base.",
     "map.info.select_coords": "Haga clic en el mapa para establecer nuevas coordenadas base. Haga clic derecho para cancelar.",
     "base.nudge": "Empujar base",
-    "base.nudge.success": "La base empujó con éxito."
+    "base.nudge.success": "La base empujó con éxito.",
+    "base.nudge.prompt": "Introduzca valores de compensación para cada eje.\nPositivo = derecha/arriba/levantar, Negativo = izquierda/abajo/abajo.",
+    "base.nudge.offset_x": "desplazamiento X",
+    "base.nudge.offset_y": "Desplazamiento Y",
+    "base.nudge.offset_z": "Desplazamiento Z"
 }

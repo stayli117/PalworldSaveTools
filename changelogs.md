@@ -4,6 +4,7 @@
 - **Backup now includes WorldOption.sav and LocalData.sav** — the automatic backup on save load and CLI tool execution also backs up `WorldOption.sav` and `LocalData.sav` alongside `Level.sav`, `LevelMeta.sav`, and the `Players/` folder. Backup directories inside `Players/` are skipped.
 - **Game version tooltip** — the game version label in the header now shows a tooltip with the current Palworld version, localized into all 8 languages.
 - **Stream support in palsav json_tools** — `dump()` and `load()` now accept binary streams (`BytesIO`, open files) in addition to file paths. By msansen.
+- **Load from Backup** — new menu option under File that lists all auto-backups with timestamps, world name, and player count. Only valid backups (Level.sav + Players folder) are shown.
 - Bumped version to 2.1.3
 
 #2.1.2

@@ -162,7 +162,18 @@ class PalEditorTab(QWidget):
         if prev_uid:
             for p in self._player_list:
                 if p['uid'] == prev_uid:
-                    self.select_player(prev_uid, prev_name or p['name'], p['display'])
+                    self.current_player_uid = prev_uid
+                    self.current_player_name = prev_name or p['name']
+                    self.player_select_btn.setText(p['display'])
+                    def do_refresh():
+                        self.pal_editor_widget.player_uid = prev_uid
+                        self.pal_editor_widget.player_name = prev_name or p['name']
+                        self.pal_editor_widget.set_player(prev_uid, prev_name or p['name'])
+                        self.pal_editor_widget.apply_player_ui()
+                        self.placeholder_label.hide()
+                        self.pal_editor_widget.show()
+                    from PySide6.QtCore import QTimer
+                    QTimer.singleShot(0, do_refresh)
                     break
     def _load_players(self):
         self._player_list = []

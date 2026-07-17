@@ -646,13 +646,13 @@ class MainWindow(QMainWindow):
         if method:
             getattr(self, method)()
     def _refresh_pal_editor(self):
-        if hasattr(self, 'pal_editor_tab'):
+        if 'pal_editor_tab' in self.__dict__:
             self.pal_editor_tab.refresh()
     def _refresh_json_editor(self):
-        if hasattr(self, 'json_editor_tab'):
+        if 'json_editor_tab' in self.__dict__:
             self.json_editor_tab.refresh()
     def _refresh_breeding(self):
-        if hasattr(self, 'breeding_tab'):
+        if 'breeding_tab' in self.__dict__:
             self.breeding_tab.refresh()
     def refresh_all(self):
         if self._is_refreshing:
@@ -667,14 +667,14 @@ class MainWindow(QMainWindow):
             self._refresh_inventory()
             self._refresh_base_inventory()
             self._refresh_pal_editor()
-            if hasattr(self, 'tools_tab'):
+            if 'tools_tab' in self.__dict__:
                 self.tools_tab.refresh()
             self._refresh_json_editor()
             self._refresh_breeding()
         finally:
             self._is_refreshing = False
     def _refresh_inventory(self):
-        if hasattr(self, 'inventory_tab'):
+        if 'inventory_tab' in self.__dict__:
             self.inventory_tab.refresh()
     def _refresh_stats(self):
         stats = save_manager.get_current_stats()
@@ -705,7 +705,7 @@ class MainWindow(QMainWindow):
             sort_keys = {3: int(glevel) if str(glevel).isdigit() else 0}
             self.bases_panel.add_item([b['id'], b['guild_id'], b['guild_name'], glevel], sort_keys=sort_keys)
     def _refresh_map(self):
-        if hasattr(self, 'map_tab'):
+        if 'map_tab' in self.__dict__:
             self.map_tab.refresh()
     def _refresh_exclusions(self):
         self.excl_players_panel.clear()
@@ -718,7 +718,7 @@ class MainWindow(QMainWindow):
         for bid in constants.exclusions.get('bases', []):
             self.excl_bases_panel.add_item([bid])
     def _refresh_base_inventory(self):
-        if hasattr(self, 'base_inventory_tab'):
+        if 'base_inventory_tab' in self.__dict__:
             self.base_inventory_tab.refresh()
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
@@ -1489,8 +1489,8 @@ class MainWindow(QMainWindow):
             return max_all_pals(self)
         def on_finished(count):
             PalFrame._cheat_mode = False
-            self.refresh_all()
             self._show_info(t('func_manager.max_all_pals.title') if t else 'Max All Pals', t('func_manager.max_all_pals.success', count=count) if t else f'Maxed {count} pals.')
+            QTimer.singleShot(0, self.refresh_all)
         run_with_loading(on_finished, task)
     def _fix_illegal_pals(self):
         if not constants.loaded_level_json:
@@ -1630,7 +1630,7 @@ class MainWindow(QMainWindow):
         if not constants.loaded_level_json:
             self._show_warning(t('Error') if t else 'Error', t('error.no_save_loaded') if t else 'No save file loaded.')
             return
-        if not hasattr(self, 'map_tab'):
+        if 'map_tab' not in self.__dict__:
             return
         for i in range(self.stacked_widget.count()):
             if self.stacked_widget.widget(i) == self.map_tab:
@@ -1683,19 +1683,19 @@ class MainWindow(QMainWindow):
             self.sidebar.refresh_labels()
             if hasattr(self.header_widget, '_menu_popup') and self.header_widget._menu_popup:
                 self.header_widget._menu_popup.refresh_labels()
-            if hasattr(self, 'map_tab') and self.map_tab:
+            if 'map_tab' in self.__dict__:
                 self.map_tab.refresh_labels()
-            if hasattr(self, 'inventory_tab') and self.inventory_tab:
+            if 'inventory_tab' in self.__dict__:
                 self.inventory_tab.refresh_labels()
-            if hasattr(self, 'base_inventory_tab') and self.base_inventory_tab:
+            if 'base_inventory_tab' in self.__dict__:
                 self.base_inventory_tab.refresh_labels()
-            if hasattr(self, 'docs_tab') and self.docs_tab:
+            if 'docs_tab' in self.__dict__:
                 self.docs_tab.refresh_labels()
-            if hasattr(self, 'breeding_tab') and self.breeding_tab:
+            if 'breeding_tab' in self.__dict__:
                 self.breeding_tab.refresh_labels()
-            if hasattr(self, 'json_editor_tab') and self.json_editor_tab:
+            if 'json_editor_tab' in self.__dict__:
                 self.json_editor_tab.refresh_labels()
-            if hasattr(self, 'pal_editor_tab') and self.pal_editor_tab:
+            if 'pal_editor_tab' in self.__dict__:
                 self.pal_editor_tab.refresh_labels()
             if hasattr(self, 'bulk_label'):
                 self.bulk_label.setText(t('player.bulk_actions') if t else 'Bulk Actions:')
@@ -2038,7 +2038,7 @@ class MainWindow(QMainWindow):
     def _edit_player_inventory(self, uid, name):
         self.sidebar.set_active('player_inventory')
         self.stacked_widget.setCurrentIndex(2)
-        if hasattr(self, 'inventory_tab'):
+        if 'inventory_tab' in self.__dict__:
             self.inventory_tab.load_player(uid, name)
     def _unlock_all_technologies_for_player(self, uid):
         if unlock_all_technologies_for_player(uid, self):

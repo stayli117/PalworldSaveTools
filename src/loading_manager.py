@@ -1,434 +1,163 @@
-import sys, os, time, random, subprocess, threading, json, traceback
+import sys, os, json, time, random, subprocess, threading, traceback
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QFrame, QLabel, QPushButton, QTextEdit, QGraphicsOpacityEffect, QMessageBox, QProgressBar, QDialog
-from PySide6.QtCore import Qt, QTimer, QThread, Signal, QPropertyAnimation, QPoint, QSize
-from PySide6.QtGui import QPixmap, QFont, QCursor
+from PySide6.QtCore import Qt, QTimer, QPropertyAnimation
+from PySide6.QtGui import QPixmap, QCursor, QFont
 from i18n import t, init_language
 from resource_resolver import get_base_dir, get_resources_dir, resource_path
-_result_data = {'status': 'idle', 'data': None}
 _queued_next = None
-def get_base_directory():
-    return get_base_dir()
-def get_src_directory():
-    return os.path.join(get_base_dir(), 'src')
-def get_resources_directory():
-    return get_resources_dir()
 def get_path(filename):
     return os.path.normpath(resource_path(get_base_dir(), filename))
-def _spawn_process(args):
-    try:
-        exe = sys.executable
-        if getattr(sys, 'frozen', False):
-            cmd = [exe] + args
-            cwd = os.path.dirname(exe)
-            base_dir = cwd
-        else:
-            script_path = os.path.abspath(__file__)
-            cmd = [exe, script_path] + args
-            cwd = os.path.dirname(script_path)
-            base_dir = os.path.dirname(cwd)
-        env = os.environ.copy()
-        env['PYTHONUNBUFFERED'] = '1'
-        if 'VIRTUAL_ENV' in os.environ:
-            env['VIRTUAL_ENV'] = os.environ['VIRTUAL_ENV']
-            venv_scripts = os.path.join(os.environ['VIRTUAL_ENV'], 'Scripts' if os.name == 'nt' else 'bin')
-            if venv_scripts not in env['PATH']:
-                env['PATH'] = venv_scripts + os.pathsep + env['PATH']
-        for subdir in ('resources', 'src'):
-            d = os.path.join(base_dir, subdir)
-            if os.path.isdir(d) and d not in env.get('PYTHONPATH', ''):
-                if 'PYTHONPATH' in env:
-                    env['PYTHONPATH'] = d + os.pathsep + env['PYTHONPATH']
-                else:
-                    env['PYTHONPATH'] = d
-        proc = subprocess.Popen(cmd, creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, stdin=subprocess.PIPE, text=False, env=env, cwd=cwd)
-        return proc
-    except Exception as e:
-        print(f'Failed to spawn loader process: {e}')
-        print(f'Exception type: {type(e).__name__}')
-        import traceback
-        traceback.print_exc()
-        return None
-if '--spawn-loader' in sys.argv:
-    class STDINListener(QThread):
-        message_received = Signal(dict)
-        def run(self):
-            while True:
-                line = sys.stdin.readline()
-                if not line:
-                    break
-                try:
-                    data = json.loads(line)
-                    self.message_received.emit(data)
-                except Exception:
-                    pass
-    class OverlayController(QDialog):
-        def __init__(self, start_time, phrases, parent_geom=None):
-            super().__init__()
-            self.phrases = phrases
-            self.parent_geom = parent_geom
-            self._target_pos = None
-            self.setWindowFlags(Qt.Window | Qt.FramelessWindowHint | Qt.Tool | Qt.WindowStaysOnTopHint)
-            self.setAttribute(Qt.WA_TranslucentBackground)
-            self.setMinimumSize(850, 500)
-            self._drag_pos = QPoint()
-            self.main_layout = QVBoxLayout(self)
-            self.container = QFrame()
-            self.container.setObjectName('mainContainer')
-            self.main_layout.addWidget(self.container)
-            self.inner = QVBoxLayout(self.container)
-            self.inner.setContentsMargins(30, 10, 30, 30)
-            self.is_dark = self._load_theme_pref()
-            self._load_theme()
-            self.setup_loader_ui(start_time)
-            self.listener = STDINListener()
-            self.listener.message_received.connect(self.handle_message)
-            self.listener.start()
-            self.center_on_cursor_screen()
-        def center_on_cursor_screen(self):
-            win_width, win_height = (850, 500)
-            if self.parent_geom:
-                px, py, pw, ph = self.parent_geom
-                center_x = px + pw // 2 - win_width // 2
-                center_y = py + ph // 2 - win_height // 2
-                self._target_pos = (center_x, center_y)
-                self.setGeometry(center_x, center_y, win_width, win_height)
-            else:
-                cursor_pos = QCursor.pos()
-                screen = QApplication.screenAt(cursor_pos)
-                if screen is None:
-                    screen = QApplication.primaryScreen()
-                screen_geometry = screen.availableGeometry()
-                center_x = screen_geometry.x() + (screen_geometry.width() - win_width) // 2
-                center_y = screen_geometry.y() + (screen_geometry.height() - win_height) // 2
-                self._target_pos = (center_x, center_y)
-                self.setGeometry(center_x, center_y, win_width, win_height)
-        def showEvent(self, event):
-            super().showEvent(event)
-            if not event.spontaneous():
-                if self._target_pos:
-                    self.move(*self._target_pos)
-                self.activateWindow()
-                self.raise_()
-        def mousePressEvent(self, event):
-            if event.button() == Qt.LeftButton:
-                if sys.platform == 'linux':
-                    self.windowHandle().startSystemMove()
-                else:
-                    self._drag_pos = event.globalPosition().toPoint() - self.frameGeometry().topLeft()
-                event.accept()
-        def mouseMoveEvent(self, event):
-            if sys.platform != 'linux' and event.buttons() == Qt.LeftButton:
-                self.move(event.globalPosition().toPoint() - self._drag_pos)
-                event.accept()
-        def _load_theme_pref(self):
-            return True
-        def _load_theme(self):
-            try:
-                from palworld_aio.ui.chrome.styles import ThemeManager
-                ThemeManager.apply_to_widget(self)
-            except Exception:
-                self.setStyleSheet('\nQDialog { background: rgba(12,14,18,0.97); color: #e2e8f0; }\n#mainContainer { background: rgba(18,20,24,0.95); border-radius: 16px; border: 1px solid rgba(125,211,252,0.12); }\n')
-        def clear_layout(self):
-            while self.inner.count():
-                child = self.inner.takeAt(0)
-                if child.widget():
-                    child.widget().deleteLater()
-                elif child.layout():
-                    self._clear_sub_layout(child.layout())
-        def _clear_sub_layout(self, layout):
-            while layout.count():
-                child = layout.takeAt(0)
-                if child.widget():
-                    child.widget().deleteLater()
-                elif child.layout():
-                    self._clear_sub_layout(child.layout())
-        def setup_loader_ui(self, start_time):
-            self.start_ts = start_time
-            self.setMinimumSize(850, 500)
-            self.resize(850, 500)
-            self.inner.addStretch(1)
-            icon = QLabel()
-            icon.setAlignment(Qt.AlignCenter)
-            p = get_path('Xenolord.webp')
-            if os.path.exists(p):
-                pix = QPixmap(p)
-                icon.setPixmap(pix.scaled(120, 120, Qt.KeepAspectRatio, Qt.SmoothTransformation))
-            icon.setStyleSheet('border: none; background: transparent;')
-            self.inner.addWidget(icon)
-            self.inner.addSpacing(16)
-            self.progress_bar = QProgressBar()
-            self.progress_bar.setRange(0, 0)
-            self.progress_bar.setFixedHeight(4)
-            self.progress_bar.setObjectName('loadingProgress')
-            self.progress_bar.setStyleSheet('QProgressBar { background: rgba(255,255,255,0.06); border: none; border-radius: 2px; }QProgressBar::chunk { background: qlineargradient(x1:0,y1:0,x2:1,y2:0,stop:0 #38bdf8,stop:1 #7c3aed); border-radius: 2px; }')
-            pb_layout = QHBoxLayout()
-            pb_layout.addStretch()
-            pb_layout.addWidget(self.progress_bar)
-            pb_layout.addStretch()
-            self.inner.addLayout(pb_layout)
-            self.inner.addSpacing(20)
-            self.label = QLabel(random.choice(self.phrases))
-            self.label.setAlignment(Qt.AlignCenter)
-            self.label.setWordWrap(True)
-            self.label.setObjectName('loadingLabel')
-            self.label.setStyleSheet('color: #e2e8f0; font-size: 18px; font-weight: 600; border: none; background: transparent;')
-            self.opacity_effect = QGraphicsOpacityEffect(self.label)
-            self.label.setGraphicsEffect(self.opacity_effect)
-            self.inner.addWidget(self.label)
-            self.inner.addStretch(1)
-            self.timer_label = QLabel('00:00')
-            self.timer_label.setAlignment(Qt.AlignCenter)
-            self.timer_label.setStyleSheet('color: rgba(148,163,184,0.4); font-size: 11px; border: none; background: transparent;')
-            self.inner.addWidget(self.timer_label)
-            self.close_btn = QPushButton(t('loading.cancel'))
-            self.close_btn.setFixedHeight(28)
-            self.close_btn.clicked.connect(self.safe_exit)
-            self.close_btn.setStyleSheet('QPushButton { background: rgba(255,255,255,0.04); color: rgba(148,163,184,0.6); border: 1px solid rgba(255,255,255,0.06); border-radius: 6px; font-size: 11px; }QPushButton:hover { background: rgba(255,255,255,0.08); color: #e2e8f0; }')
-            close_layout = QHBoxLayout()
-            close_layout.addStretch()
-            close_layout.addWidget(self.close_btn)
-            close_layout.addStretch()
-            self.inner.addLayout(close_layout)
-            self.inner.addSpacing(4)
-            self.tick_timer = QTimer(self)
-            self.tick_timer.timeout.connect(self.update_loader)
-            self.tick_timer.start(250)
-            self.phrase_timer = QTimer(self)
-            self.phrase_timer.timeout.connect(self.cycle_phrase)
-            self.phrase_timer.start(3000)
-        def cycle_phrase(self):
-            self.anim = QPropertyAnimation(self.opacity_effect, b'opacity')
-            self.anim.setDuration(400)
-            self.anim.setStartValue(1.0)
-            self.anim.setEndValue(0.0)
-            self.anim.finished.connect(self._change_and_fade_in)
-            self.anim.start()
-        def _change_and_fade_in(self):
-            self.label.setText(random.choice(self.phrases))
-            self.anim = QPropertyAnimation(self.opacity_effect, b'opacity')
-            self.anim.setDuration(400)
-            self.anim.setStartValue(0.0)
-            self.anim.setEndValue(1.0)
-            self.anim.start()
-        def update_loader(self):
-            elapsed = time.time() - self.start_ts
-            self.timer_label.setText(f'{int(elapsed // 60):02d}:{int(elapsed % 60):02d}')
-        def handle_message(self, data):
-            cmd = data.get('cmd')
-            if cmd == 'error':
-                self.switch_to_error(data)
-            elif cmd == 'success':
-                self.switch_to_success(data)
-            elif cmd == 'exit':
-                self.safe_exit()
-        def switch_to_success(self, data):
-            if hasattr(self, 'tick_timer'):
-                self.tick_timer.stop()
-            if hasattr(self, 'phrase_timer'):
-                self.phrase_timer.stop()
-            if hasattr(self, 'close_btn'):
-                self.close_btn.hide()
-            self.label.setText(data.get('message', t('loading.success')))
-            self.label.setStyleSheet('color: #22c55e; font-size: 18px; font-weight: 700; border: none; background: transparent;')
-            if hasattr(self, 'opacity_effect'):
-                self.label.setGraphicsEffect(None)
-            self.progress_bar.setRange(0, 100)
-            self.progress_bar.setValue(100)
-            self.progress_bar.setStyleSheet('QProgressBar { background: rgba(255,255,255,0.06); border: none; border-radius: 2px; }QProgressBar::chunk { background: #22c55e; border-radius: 2px; }')
-            QTimer.singleShot(1000, self.safe_exit)
-        def safe_exit(self):
-            QApplication.quit()
-            os._exit(0)
-        def copy_to_clipboard(self, text, btn):
-            try:
-                subprocess.run(['clip.exe'], input=text.encode('utf-16'), check=True)
-                old_txt = btn.text()
-                btn.setText('COPIED!')
-                QTimer.singleShot(2000, lambda: btn.setText(old_txt))
-            except:
-                try:
-                    clipboard = QApplication.clipboard()
-                    clipboard.setText(text)
-                    old_txt = btn.text()
-                    btn.setText('COPIED!')
-                    QTimer.singleShot(2000, lambda: btn.setText(old_txt))
-                except:
-                    pass
-        def switch_to_error(self, data):
-            from palworld_aio import constants
-            if hasattr(self, 'tick_timer'):
-                self.tick_timer.stop()
-            if hasattr(self, 'phrase_timer'):
-                self.phrase_timer.stop()
-            self.clear_layout()
-            self.repaint()
-            glass_bg = 'rgba(18,20,24,0.95)'
-            glass_border = 'rgba(255,59,48,0.3)'
-            txt_color = '#dfeefc'
-            accent_color = '#FF3B30'
-            btn_bg = 'rgba(125,211,252,0.08)'
-            btn_border = 'rgba(125,211,252,0.15)'
-            btn_hover_bg = 'rgba(125,211,252,0.15)'
-            self.container.setStyleSheet(f'#mainContainer {{ background: {glass_bg}; border-radius: 10px; border: 2px solid {glass_border}; }}')
-            head = QHBoxLayout()
-            img_p = get_path('lamball_error.webp')
-            def mk_ico():
-                l = QLabel()
-                l.setStyleSheet('border:none;background:transparent;')
-                if os.path.exists(img_p):
-                    pix = QPixmap(img_p)
-                    l.setPixmap(pix.scaled(70, 70, Qt.KeepAspectRatio, Qt.SmoothTransformation))
-                return l
-            t_lbl = QLabel(data.get('title', 'ERROR'))
-            t_lbl.setStyleSheet(f"color:{accent_color};font-weight:900;font-size:24px;border:none;background:transparent;font-family:'Segoe UI';")
-            head.addStretch()
-            head.addWidget(mk_ico())
-            head.addSpacing(15)
-            head.addWidget(t_lbl)
-            head.addSpacing(15)
-            head.addWidget(mk_ico())
-            head.addStretch()
-            self.inner.addLayout(head)
-            txt_edit = QTextEdit()
-            txt_edit.setReadOnly(True)
-            txt_edit.setPlainText(data.get('text', ''))
-            txt_edit.setStyleSheet(f"background: {glass_bg}; color: {txt_color}; font-family: 'Consolas'; font-size: 13px; padding: 15px; border: 1px solid {glass_border}; border-radius: 6px;")
-            self.inner.addWidget(txt_edit)
-            btns = QHBoxLayout()
-            btn_style = f"QPushButton {{ background: {btn_bg}; color: {accent_color}; border: 1px solid {btn_border}; border-radius: 8px; padding: 10px 16px; font-weight: bold; min-width: 120px; font-size: 13px; font-family: '{constants.FONT_FAMILY}'; }} QPushButton:hover {{ background: {btn_hover_bg}; border-color: {glass_border}; }}"
-            c_btn = QPushButton(data.get('copy', 'COPY'))
-            c_btn.setStyleSheet(btn_style)
-            c_btn.clicked.connect(lambda: self.copy_to_clipboard(data.get('text', ''), c_btn))
-            cl_btn = QPushButton(data.get('close', 'CLOSE'))
-            cl_btn.setStyleSheet(btn_style)
-            cl_btn.clicked.connect(self.safe_exit)
-            btns.addStretch()
-            btns.addWidget(c_btn)
-            btns.addSpacing(20)
-            btns.addWidget(cl_btn)
-            btns.addStretch()
-            self.inner.addLayout(btns)
+def is_loading_active():
+    return False
+if '--spawn-loader-simple' in sys.argv:
     app = QApplication(sys.argv)
     init_language()
-    idx = sys.argv.index('--spawn-loader')
-    start_ts = float(sys.argv[idx + 1])
-    phrases = json.loads(sys.argv[idx + 2])
-    parent_geom = None
-    if idx + 3 < len(sys.argv) and sys.argv[idx + 3] == '--parent-geom' and (idx + 7 < len(sys.argv)):
-        try:
-            parent_geom = (int(sys.argv[idx + 4]), int(sys.argv[idx + 5]), int(sys.argv[idx + 6]), int(sys.argv[idx + 7]))
-        except (ValueError, IndexError):
-            pass
-    win = OverlayController(start_ts, phrases, parent_geom)
+    idx = sys.argv.index('--spawn-loader-simple')
+    phrases = json.loads(sys.argv[idx + 1])
+    px, py, pw, ph = int(sys.argv[idx + 2]), int(sys.argv[idx + 3]), int(sys.argv[idx + 4]), int(sys.argv[idx + 5])
+    win = QWidget(None, Qt.Window | Qt.FramelessWindowHint | Qt.Tool | Qt.WindowStaysOnTopHint)
+    win.setAttribute(Qt.WA_TranslucentBackground)
+    win.setFixedSize(850, 500)
+    win.move(px + (pw - 850)//2, py + (ph - 500)//2)
+    layout = QVBoxLayout(win)
+    layout.setContentsMargins(0, 0, 0, 0)
+    c = QFrame()
+    c.setObjectName('loader')
+    c.setStyleSheet('#loader { background: rgba(18,20,24,0.96); border-radius: 16px; border: 1px solid rgba(125,211,252,0.12); }')
+    cl = QVBoxLayout(c)
+    cl.setContentsMargins(30, 20, 30, 20)
+    cl.setSpacing(8)
+    icon = QLabel()
+    icon.setAlignment(Qt.AlignCenter)
+    p = resource_path(get_base_dir(), 'Xenolord.webp')
+    if not os.path.exists(p):
+        p = resource_path(get_base_dir(), 'logo.png')
+    if os.path.exists(p):
+        icon.setPixmap(QPixmap(p).scaled(100, 100, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+    icon.setStyleSheet('border:none;background:transparent;')
+    cl.addWidget(icon)
+    cl.addSpacing(4)
+    bar = QProgressBar()
+    bar.setRange(0, 0)
+    bar.setFixedHeight(4)
+    bar.setStyleSheet('QProgressBar { background: rgba(255,255,255,0.06); border: none; border-radius: 2px; } QProgressBar::chunk { background: qlineargradient(x1:0,y1:0,x2:1,y2:0,stop:0 #38bdf8,stop:1 #7c3aed); border-radius: 2px; }')
+    bl = QHBoxLayout()
+    bl.addStretch()
+    bl.addWidget(bar)
+    bl.addStretch()
+    cl.addLayout(bl)
+    lbl = QLabel(random.choice(phrases))
+    lbl.setAlignment(Qt.AlignCenter)
+    lbl.setWordWrap(True)
+    lbl.setStyleSheet('color:#e2e8f0;font-size:15px;font-weight:600;border:none;background:transparent;')
+    oe = QGraphicsOpacityEffect(lbl)
+    lbl.setGraphicsEffect(oe)
+    cl.addWidget(lbl)
+    tm = QLabel('00:00')
+    tm.setAlignment(Qt.AlignCenter)
+    tm.setStyleSheet('color:rgba(148,163,184,0.4);font-size:11px;border:none;background:transparent;')
+    cl.addWidget(tm)
+    layout.addWidget(c)
+    start_ts = time.time()
+    def cycle():
+        a = QPropertyAnimation(oe, b'opacity')
+        a.setDuration(300)
+        a.setStartValue(1.0)
+        a.setEndValue(0.0)
+        def change():
+            lbl.setText(random.choice(phrases))
+            a2 = QPropertyAnimation(oe, b'opacity')
+            a2.setDuration(300)
+            a2.setStartValue(0.0)
+            a2.setEndValue(1.0)
+            a2.start()
+        a.finished.connect(change)
+        a.start()
+    pt = QTimer(win)
+    pt.timeout.connect(cycle)
+    pt.setInterval(3000)
+    pt.start()
+    def tick():
+        e = time.time() - start_ts
+        tm.setText(f'{int(e//60):02d}:{int(e%60):02d}')
+    tt = QTimer(win)
+    tt.timeout.connect(tick)
+    tt.setInterval(250)
+    tt.start()
     win.show()
     sys.exit(app.exec())
-def is_loading_active():
-    return _result_data.get('status') == 'running'
 
 def run_with_loading(callback, func, *args, parent=None, **kwargs):
-    global _result_data, _queued_next
-    if _result_data.get('status') == 'running':
-        _queued_next = (callback, func, args, kwargs, parent)
-        return
     on_error = kwargs.pop('on_error', None)
-    _result_data.update({'status': 'running', 'data': None})
-    start_ts = time.time()
-    try:
-        phrases = [t(f'loading.phrase.{i}') for i in range(1, 21)]
-    except:
-        phrases = ['LOADING...']
+    result = {'data': None, 'done': False}
     if parent is None:
         for widget in QApplication.topLevelWidgets():
             if widget.isVisible() and widget.isWindow() and widget.windowTitle() and (not isinstance(widget, QDialog)):
                 parent = widget
                 break
-    loader_args = ['--spawn-loader', str(start_ts), json.dumps(phrases)]
+    loader_proc = None
     if parent:
-        geom = parent.geometry()
-        if geom.width() > 0 and geom.height() > 0:
-            loader_args.extend(['--parent-geom', str(geom.x()), str(geom.y()), str(geom.width()), str(geom.height())])
-    loader_proc = _spawn_process(loader_args)
-    if loader_proc is None:
-        def task():
-            try:
-                _result_data['data'] = func(*args, **kwargs)
-            except:
-                _result_data['data'] = traceback.format_exc()
-            _result_data['status'] = 'finished'
-        threading.Thread(target=task, daemon=True).start()
-        def monitor():
-            if _result_data['status'] != 'finished':
-                QTimer.singleShot(100, monitor)
-                return
-            res = _result_data['data']
-            _result_data['status'] = 'idle'
-            if isinstance(res, str) and 'Traceback' in res:
-                if on_error:
-                    on_error(res)
-                else:
-                    try:
-                        trans = {'title': t('error.overlay.title'), 'close': t('error.overlay.close'), 'copy': t('error.overlay.copy')}
-                    except:
-                        trans = {'title': 'AN ERROR OCCURRED', 'close': 'CLOSE', 'copy': 'COPY'}
-                    dialog = ErrorDialog(res, parent=parent)
-                    dialog.exec()
-            elif callback:
-                callback(res)
-            _dequeue_next()
-        QTimer.singleShot(100, monitor)
-        return
-    def cleanup():
-        if loader_proc and loader_proc.poll() is None:
-            try:
-                loader_proc.stdin.write(b'{"cmd":"exit"}\n')
-                loader_proc.stdin.flush()
-                loader_proc.wait(timeout=0.5)
-            except:
-                try:
-                    loader_proc.kill()
-                except:
-                    pass
+        try:
+            phrases = [t(f'loading.phrase.{i}') for i in range(1, 21)]
+        except:
+            phrases = ['LOADING...']
+        try:
+            exe = sys.executable
+            if getattr(sys, 'frozen', False):
+                cmd = [exe, '--spawn-loader-simple']
+                cwd = os.path.dirname(exe)
+                base_dir = cwd
+            else:
+                script_path = os.path.abspath(__file__)
+                cmd = [exe, script_path, '--spawn-loader-simple']
+                cwd = os.path.dirname(script_path)
+                base_dir = os.path.dirname(cwd)
+            env = os.environ.copy()
+            env['PYTHONUNBUFFERED'] = '1'
+            if 'VIRTUAL_ENV' in os.environ:
+                env['VIRTUAL_ENV'] = os.environ['VIRTUAL_ENV']
+                venv_scripts = os.path.join(os.environ['VIRTUAL_ENV'], 'Scripts' if os.name == 'nt' else 'bin')
+                if venv_scripts not in env['PATH']:
+                    env['PATH'] = venv_scripts + os.pathsep + env['PATH']
+            for subdir in ('resources', 'src'):
+                d = os.path.join(base_dir, subdir)
+                if os.path.isdir(d) and d not in env.get('PYTHONPATH', ''):
+                    if 'PYTHONPATH' in env:
+                        env['PYTHONPATH'] = d + os.pathsep + env['PYTHONPATH']
+                    else:
+                        env['PYTHONPATH'] = d
+            geom = parent.geometry()
+            cmd += [json.dumps(phrases), str(geom.x()), str(geom.y()), str(geom.width()), str(geom.height())]
+            loader_proc = subprocess.Popen(cmd, creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=env, cwd=cwd)
+        except Exception:
+            pass
     def task():
         try:
-            _result_data['data'] = func(*args, **kwargs)
-        except:
-            _result_data['data'] = traceback.format_exc()
-        _result_data['status'] = 'finished'
+            result['data'] = func(*args, **kwargs)
+        except Exception:
+            result['data'] = traceback.format_exc()
+        result['done'] = True
     threading.Thread(target=task, daemon=True).start()
-    def monitor():
-        if _result_data['status'] != 'finished':
-            QTimer.singleShot(100, monitor)
+    def poll():
+        if not result['done']:
+            QTimer.singleShot(100, poll)
             return
-        res = _result_data['data']
-        _result_data['status'] = 'idle'
+        if loader_proc and loader_proc.poll() is None:
+            try:
+                loader_proc.kill()
+            except:
+                pass
+        res = result['data']
         if isinstance(res, str) and 'Traceback' in res:
             if on_error:
                 on_error(res)
-                cleanup()
-            elif loader_proc and loader_proc.poll() is None:
-                try:
-                    trans = {'title': t('error.overlay.title'), 'close': t('error.overlay.close'), 'copy': t('error.overlay.copy')}
-                except:
-                    trans = {'title': 'AN ERROR OCCURRED', 'close': 'CLOSE', 'copy': 'COPY'}
-                try:
-                    loader_proc.stdin.write((json.dumps({'cmd': 'error', 'text': res, **trans}) + '\n').encode())
-                    loader_proc.stdin.flush()
-                except:
-                    cleanup()
             else:
-                dialog = ErrorDialog(res, parent=parent)
-                dialog.exec()
-        else:
-            if loader_proc and loader_proc.poll() is None:
-                try:
-                    loader_proc.stdin.write((json.dumps({'cmd': 'success', 'message': t('loading.success')}) + '\n').encode())
-                    loader_proc.stdin.flush()
-                except:
-                    cleanup()
-            else:
-                cleanup()
-            QTimer.singleShot(1000, lambda: (cleanup(), callback(res) if callback else None, _dequeue_next()))
-    QTimer.singleShot(100, monitor)
+                ErrorDialog(res, parent=parent).exec()
+        elif callback:
+            QTimer.singleShot(0, lambda: (callback(res), _dequeue_next()))
+            return
+        _dequeue_next()
+    QTimer.singleShot(100, poll)
 def _dequeue_next():
     global _queued_next
     if not _queued_next:
@@ -548,6 +277,7 @@ class ErrorDialog(QDialog):
         os._exit(0)
     def copy_to_clipboard(self, text, btn):
         try:
+            import subprocess
             subprocess.run(['clip.exe'], input=text.encode('utf-16'), check=True)
             old_txt = btn.text()
             btn.setText('COPIED!')

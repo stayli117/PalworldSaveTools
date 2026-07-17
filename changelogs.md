@@ -1,11 +1,14 @@
 #2.1.3
-- **Lazy tab crash fix** — menu operations (Move Player to Guild, Delete Empty Guilds, Delete Inactive Bases, Delete Duplicate Players, delete/import bases) no longer crash with `AttributeError` when the Base Inventory tab hasn't been visited. Cache invalidation on uninitialized tabs is skipped; tab reads fresh data when first opened.
-- **Pal editor toggle tooltips** — the Gender, Predator, Boss, Lucky, Awakened, Cheat, Max, DNA, and Favorite toggle buttons in the info panel now show themed tooltips on hover, with full i18n support across all 8 languages.
-- **Backup now includes WorldOption.sav and LocalData.sav** — the automatic backup on save load and CLI tool execution also backs up `WorldOption.sav` and `LocalData.sav` alongside `Level.sav`, `LevelMeta.sav`, and the `Players/` folder. Backup directories inside `Players/` are skipped.
-- **Game version tooltip** — the game version label in the header now shows a tooltip with the current Palworld version, localized into all 8 languages.
-- **Stream support in palsav json_tools** — `dump()` and `load()` now accept binary streams (`BytesIO`, open files) in addition to file paths. By msansen.
-- **Load from Backup** — new menu option under File that lists all auto-backups with timestamps, world name, and player count. Only valid backups (Level.sav + Players folder) are shown.
-- **Cheat mode Rank cap** — condenser stars (Rank) are now capped at 5 even in cheat mode, as higher values cause in-game bugs. Cheat mode still uncaps IVs, souls, and level.
+- **Loading screen overhaul** — the loading screen can no longer hang or get stuck. Completely rewrote the animation system — it now runs in its own background process, so even if a save operation takes long, the loading window stays smooth and responsive.
+- **Loading screens added to more tools** — Convert Save Files, Restore Map (both Steam and GamePass), and the Player Inventory Max All Stats button now show a loading screen during heavy work instead of freezing up.
+- **Nested loading conflict fixed** — using menu functions like Max All Pals while the Pal Editor is open no longer spawns multiple overlapping loading screens that break the UI.
+- **Lazy tab crash fix** — menu operations no longer crash when you haven't visited certain tabs yet. The app skips cache updates on tabs that haven't been opened, and those tabs load fresh data when you first visit them.
+- **Pal editor toggle tooltips** — all toggle buttons in the info panel (Gender, Predator, Boss, Lucky, and more) now show helpful tooltips on hover, translated into all supported languages.
+- **Backup now includes more save files** — automatic backups also save WorldOption.sav and LocalData.sav, not just Level.sav and players. Backup folders inside your save are automatically skipped.
+- **Game version tooltip** — hovering over the game version label in the header shows the current Palworld version, in all languages.
+- **Stream support in palsav json_tools** — save files can now be read and written directly from memory streams, not just file paths. By msansen.
+- **Load from Backup** — new File menu option that lists all your auto-backups with timestamp, world name, and player count, so you can easily restore any previous save state.
+- **Cheat mode condensed stars capped** — the condenser rank (stars) is now limited to 5 even in cheat mode, since higher values cause glitches in-game. Cheat mode still unlocks other caps like IVs, souls, and level.
 - Bumped version to 2.1.3
 
 #2.1.2

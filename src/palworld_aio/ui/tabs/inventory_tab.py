@@ -621,7 +621,11 @@ class StatsPanelWidget(QFrame):
         self.atp_spin.setValue(9999999)
         for w in self._ability_widgets:
             w['spinner'].setValue(w['cumulative_max'])
-        self.stats_changed.emit()
+        p = self.parentWidget()
+        while p and not hasattr(p, '_save_stats_to_raw_data'):
+            p = p.parentWidget()
+        if p:
+            run_with_loading(lambda _: None, p._save_stats_to_raw_data)
 
     def _apply_style(self):
         self.setStyleSheet(STATS_PANEL_STYLE)

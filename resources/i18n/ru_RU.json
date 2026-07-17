@@ -1878,5 +1878,10 @@
     "edit_pals.tooltip.max_stats": "Максимум всех характеристик для этого приятеля",
     "edit_pals.tooltip.dna": "Переключить ДНК/импортированный флаг",
     "edit_pals.tooltip.favorite": "Переключить уровень избранного/блокировки",
-    "game_version.tooltip": "Palworld v{version}"
+    "game_version.tooltip": "Палмир v{version}",
+    "common.ok": "ХОРОШО",
+    "common.cancel": "Отмена",
+    "menu.file.load_backup": "Загрузить из резервной копии...",
+    "backup.no_backups": "Резервные копии не найдены.",
+    "backup.invalid": "В выбранной резервной копии отсутствуют необходимые файлы."
 }

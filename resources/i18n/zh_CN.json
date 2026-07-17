@@ -1882,5 +1882,10 @@
     "edit_pals.tooltip.max_stats": "最大化该朋友的所有统计数据",
     "edit_pals.tooltip.dna": "切换 DNA/导入标记",
     "edit_pals.tooltip.favorite": "切换收藏夹/锁定级别",
-    "game_version.tooltip": "Palworld v{version}"
+    "game_version.tooltip": "友世界 v{version}",
+    "common.ok": "好的",
+    "common.cancel": "取消",
+    "menu.file.load_backup": "从备份加载...",
+    "backup.no_backups": "未找到备份。",
+    "backup.invalid": "所选备份缺少所需文件。"
 }

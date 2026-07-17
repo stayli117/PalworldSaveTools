@@ -1862,5 +1862,10 @@
     "edit_pals.tooltip.max_stats": "Max toutes les statistiques pour ce copain",
     "edit_pals.tooltip.dna": "Basculer le drapeau ADN/importé",
     "edit_pals.tooltip.favorite": "Basculer le niveau favori/verrouillage",
-    "game_version.tooltip": "Palworld v{version}"
+    "game_version.tooltip": "Palworld v{version}",
+    "common.ok": "D'ACCORD",
+    "common.cancel": "Annuler",
+    "menu.file.load_backup": "Charger à partir de la sauvegarde...",
+    "backup.no_backups": "Aucune sauvegarde trouvée.",
+    "backup.invalid": "La sauvegarde sélectionnée ne contient pas les fichiers requis."
 }

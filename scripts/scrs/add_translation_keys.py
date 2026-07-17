@@ -14,6 +14,11 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 LANGUAGES = {'zh_CN': {'name': 'Simplified Chinese', 'code': 'zh-CN'}, 'de_DE': {'name': 'German', 'code': 'de'}, 'es_ES': {'name': 'Spanish', 'code': 'es'}, 'fr_FR': {'name': 'French', 'code': 'fr'}, 'ru_RU': {'name': 'Russian', 'code': 'ru'}, 'ja_JP': {'name': 'Japanese', 'code': 'ja'}, 'ko_KR': {'name': 'Korean', 'code': 'ko'}}
 NEW_TRANSLATIONS = {
     'game_version.tooltip': 'Palworld v{version}',
+    'common.ok': 'OK',
+    'common.cancel': 'Cancel',
+    'menu.file.load_backup': 'Load from Backup...',
+    'backup.no_backups': 'No backups found.',
+    'backup.invalid': 'Selected backup is missing required files.',
 }
 OLD_KEYS = []
 def _clean_uv_locks():

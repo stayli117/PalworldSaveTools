@@ -1874,5 +1874,10 @@
     "edit_pals.tooltip.max_stats": "Max todas las estadísticas de este amigo",
     "edit_pals.tooltip.dna": "Alternar ADN/bandera importada",
     "edit_pals.tooltip.favorite": "Alternar nivel de favorito/bloqueo",
-    "game_version.tooltip": "Palworld v{version}"
+    "game_version.tooltip": "Mundo pal v{version}",
+    "common.ok": "DE ACUERDO",
+    "common.cancel": "Cancelar",
+    "menu.file.load_backup": "Cargar desde copia de seguridad...",
+    "backup.no_backups": "No se encontraron copias de seguridad.",
+    "backup.invalid": "A la copia de seguridad seleccionada le faltan los archivos necesarios."
 }

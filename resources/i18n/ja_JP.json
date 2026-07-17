@@ -1880,5 +1880,10 @@
     "edit_pals.tooltip.max_stats": "この仲間のすべてのステータスを最大化する",
     "edit_pals.tooltip.dna": "DNA/インポートフラグを切り替えます",
     "edit_pals.tooltip.favorite": "お気に入り/ロックレベルの切り替え",
-    "game_version.tooltip": "Palworld v{version}"
+    "game_version.tooltip": "パルワールド v{version}",
+    "common.ok": "わかりました",
+    "common.cancel": "キャンセル",
+    "menu.file.load_backup": "バックアップからロード...",
+    "backup.no_backups": "バックアップが見つかりませんでした。",
+    "backup.invalid": "選択したバックアップに必要なファイルがありません。"
 }

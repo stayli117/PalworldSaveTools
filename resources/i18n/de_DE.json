@@ -1904,5 +1904,10 @@
     "edit_pals.tooltip.max_stats": "Maximieren Sie alle Statistiken für diesen Kumpel",
     "edit_pals.tooltip.dna": "DNA/importierte Flagge umschalten",
     "edit_pals.tooltip.favorite": "Favorit/Sperrstufe umschalten",
-    "game_version.tooltip": "Palworld v{version}"
+    "game_version.tooltip": "Palworld v{version}",
+    "common.ok": "OK",
+    "common.cancel": "Stornieren",
+    "menu.file.load_backup": "Aus Backup laden...",
+    "backup.no_backups": "Keine Backups gefunden.",
+    "backup.invalid": "Im ausgewählten Backup fehlen erforderliche Dateien."
 }

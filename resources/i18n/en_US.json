@@ -2167,5 +2167,10 @@
     "edit_pals.tooltip.max_stats": "Max all stats for this pal",
     "edit_pals.tooltip.dna": "Toggle DNA/imported flag",
     "edit_pals.tooltip.favorite": "Toggle favorite/lock level",
-    "game_version.tooltip": "Palworld v{version}"
+    "game_version.tooltip": "Palworld v{version}",
+    "common.ok": "OK",
+    "common.cancel": "Cancel",
+    "menu.file.load_backup": "Load from Backup...",
+    "backup.no_backups": "No backups found.",
+    "backup.invalid": "Selected backup is missing required files."
 }

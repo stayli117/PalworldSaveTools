@@ -1879,5 +1879,10 @@
     "edit_pals.tooltip.max_stats": "이 친구의 모든 통계를 최대화하세요",
     "edit_pals.tooltip.dna": "DNA/가져온 플래그 전환",
     "edit_pals.tooltip.favorite": "즐겨찾기/잠금 수준 전환",
-    "game_version.tooltip": "Palworld v{version}"
+    "game_version.tooltip": "팔월드 v{version}",
+    "common.ok": "좋아요",
+    "common.cancel": "취소",
+    "menu.file.load_backup": "백업에서 로드...",
+    "backup.no_backups": "백업을 찾을 수 없습니다.",
+    "backup.invalid": "선택한 백업에 필수 파일이 없습니다."
 }

@@ -353,10 +353,24 @@ class BulkSyncPalDialog(FramelessDialog):
             pr = _get_raw_from_item(pi)
             nick = extract_value(pr, 'NickName', '') if pr else ''
             lv = extract_value(pr, 'Level', 1) if pr else 1
+            cid = extract_value(pr, 'CharacterID', '') if pr else ''
             display = f'Lv.{lv} {nick}' if nick else f'Lv.{lv} {pal_name}'
+            row = QWidget()
+            row.setStyleSheet('background: transparent; border: none;')
+            rl = QHBoxLayout(row)
+            rl.setContentsMargins(0, 0, 0, 0)
+            rl.setSpacing(4)
+            icon_path = _icons._get_pal_icon_path(cid) if cid else ''
+            pix = _icons._get_cached_pixmap(icon_path, 20) if icon_path else None
+            icon_lbl = QLabel()
+            icon_lbl.setFixedSize(20, 20)
+            if pix:
+                icon_lbl.setPixmap(pix)
+            rl.addWidget(icon_lbl)
             cb = ToggleCheckBtn(display)
             cb.setChecked(True)
-            pal_list_layout.addWidget(cb)
+            rl.addWidget(cb, 1)
+            pal_list_layout.addWidget(row)
             self._checkboxes.append(cb)
         pal_list_layout.addStretch()
         pal_scroll.setWidget(pal_list_inner)
@@ -611,9 +625,23 @@ class BulkSyncAllDialog(FramelessDialog):
             lv = extract_value(pr, 'Level', 1) if pr else 1
             pname = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP) or cid)
             display = f'Lv.{lv} {nick}' if nick else f'Lv.{lv} {pname}'
+            row = QWidget()
+            row.setStyleSheet('background: transparent; border: none;')
+            rl = QHBoxLayout(row)
+            rl.setContentsMargins(0, 0, 0, 0)
+            rl.setSpacing(4)
+            if cid:
+                icon_path = _icons._get_pal_icon_path(cid)
+                pix = _icons._get_cached_pixmap(icon_path, 20) if icon_path else None
+                icon_lbl = QLabel()
+                icon_lbl.setFixedSize(20, 20)
+                if pix:
+                    icon_lbl.setPixmap(pix)
+                rl.addWidget(icon_lbl)
             cb = ToggleCheckBtn(display)
             cb.setChecked(True)
-            clayout.addWidget(cb)
+            rl.addWidget(cb, 1)
+            clayout.addWidget(row)
             self._checkboxes.append(cb)
         clayout.addStretch()
     def _set_all_checked(self, checked):
@@ -1325,27 +1353,24 @@ class BulkSpeciesDialog(FramelessDialog):
             container_id = None
             is_dps_slot = False
             new_index = None
-            used = set()
-            max_idx = 0
-            if self._from_party and len(pe.party_pals) < 5:
-                container_id = pe.party_container
+            if self._from_party:
                 used = set(pe.party_pals.keys())
-                max_idx = 5
-            elif self._from_palbox:
-                container_id = pe.palbox_container
-                used = set(pe.palbox_pal_dict.keys())
-                max_idx = 32 * 30
-            elif self._from_dps and pe.dps_gvas:
-                is_dps_slot = True
-            if not is_dps_slot:
-                if not container_id:
-                    continue
-                new_index = None
-                for i in range(max_idx):
+                for i in range(5):
                     if i not in used:
+                        container_id = pe.party_container
                         new_index = i
                         break
-                if new_index is None:
+            if container_id is None and self._from_palbox:
+                used = set(pe.palbox_pal_dict.keys())
+                for i in range(32 * 30):
+                    if i not in used:
+                        container_id = pe.palbox_container
+                        new_index = i
+                        break
+            if container_id is None and self._from_dps and pe.dps_gvas:
+                is_dps_slot = True
+            if not is_dps_slot:
+                if not container_id or new_index is None:
                     continue
                 nick = f'{safe_nick}_clone'
                 new_pal = _generate_pal_save_param(cid_upper, nick, owner_uid, container_id, new_index, group_id)
@@ -1370,7 +1395,6 @@ class BulkSpeciesDialog(FramelessDialog):
                     pe.party_pals[new_index] = new_pal
                 else:
                     pe.palbox_pal_dict[new_index] = new_pal
-                used.add(new_index)
                 pals_done += 1
             else:
                 eu = '00000000-0000-0000-0000-000000000000'

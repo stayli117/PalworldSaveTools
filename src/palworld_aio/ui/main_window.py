@@ -1182,31 +1182,44 @@ class MainWindow(QMainWindow):
         from PySide6.QtWidgets import QDialog, QVBoxLayout, QListWidget, QPushButton, QHBoxLayout
         from resource_resolver import get_data_base
         from loading_manager import show_warning
+        from palsav import sav_to_gvasfile
         backup_dir = os.path.abspath(os.path.join(get_data_base(), 'Backups', 'AllinOneTools'))
         if not os.path.isdir(backup_dir):
             show_warning(self, t('error.title'), t('backup.no_backups'))
             return
-        backups = sorted([d for d in os.listdir(backup_dir) if d.startswith('PalworldSave_backup_')], reverse=True)
-        if not backups:
+        items = []
+        for name in sorted(os.listdir(backup_dir), reverse=True):
+            if not name.startswith('PalworldSave_backup_'):
+                continue
+            folder = os.path.join(backup_dir, name)
+            if not os.path.isfile(os.path.join(folder, 'Level.sav')) or not os.path.isdir(os.path.join(folder, 'Players')):
+                continue
+            ts = name.replace('PalworldSave_backup_', '').replace('_', ' ', 1)
+            world = 'Unknown World'
+            meta_path = os.path.join(folder, 'LevelMeta.sav')
+            if os.path.isfile(meta_path):
+                try:
+                    mg = sav_to_gvasfile(meta_path)
+                    world = mg.properties.get('SaveData', {}).get('value', {}).get('WorldName', {}).get('value', 'Unknown World')
+                except Exception:
+                    pass
+            player_count = len([f for f in os.listdir(os.path.join(folder, 'Players')) if f.endswith('.sav')])
+            items.append((name, ts, world, player_count))
+        if not items:
             show_warning(self, t('error.title'), t('backup.no_backups'))
             return
         dlg = QDialog(self)
         dlg.setWindowTitle(t('menu.file.load_backup'))
-        dlg.setMinimumWidth(520)
+        dlg.setMinimumWidth(600)
         layout = QVBoxLayout(dlg)
         lst = QListWidget()
         lst.setSpacing(2)
         item_height = 24
         max_visible = 8
-        lst.setMinimumHeight(item_height * min(len(backups), max_visible) + 10)
+        lst.setMinimumHeight(item_height * min(len(items), max_visible) + 10)
         lst.setMaximumHeight(item_height * max_visible + 10)
-        for name in backups:
-            ts = name.replace('PalworldSave_backup_', '').replace('_', ' ', 1)
-            folder = os.path.join(backup_dir, name)
-            has_level = os.path.isfile(os.path.join(folder, 'Level.sav'))
-            has_players = os.path.isdir(os.path.join(folder, 'Players'))
-            status = '✓' if has_level and has_players else '✗'
-            lst.addItem(f'{ts}  {status}  {name}')
+        for name, ts, world, pcount in items:
+            lst.addItem(f'{ts} — {world} ({pcount} players)')
         layout.addWidget(lst)
         btn_row = QHBoxLayout()
         ok_btn = QPushButton(t('common.ok'))
@@ -1222,12 +1235,10 @@ class MainWindow(QMainWindow):
         layout.addLayout(btn_row)
         if dlg.exec() != QDialog.Accepted or not lst.currentItem():
             return
-        sel = lst.currentItem().text().split('  ')[-1].strip()
-        backup_path = os.path.join(backup_dir, sel)
+        idx = lst.currentRow()
+        name = items[idx][0]
+        backup_path = os.path.join(backup_dir, name)
         level_path = os.path.join(backup_path, 'Level.sav')
-        if not os.path.isfile(level_path):
-            show_warning(self, t('error.title'), t('backup.invalid'))
-            return
         save_manager.load_save(level_path, parent=self)
     def _restart_program(self):
         import sys

@@ -1881,5 +1881,6 @@
     "edit_pals.tooltip.cheat": "切换作弊模式 — 删除所有上限（等级 255、IV 255、灵魂 255）",
     "edit_pals.tooltip.max_stats": "最大化该朋友的所有统计数据",
     "edit_pals.tooltip.dna": "切换 DNA/导入标记",
-    "edit_pals.tooltip.favorite": "切换收藏夹/锁定级别"
+    "edit_pals.tooltip.favorite": "切换收藏夹/锁定级别",
+    "game_version.tooltip": "友世界 v{版本}"
 }

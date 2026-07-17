@@ -67,6 +67,7 @@ class HeaderWidget(QWidget):
         self.game_version_label = NerdLabel(f"{nf.icons['nf-fa-save']} {game_version}")
         self.game_version_label.setObjectName('gameVersionChip')
         self.game_version_label.setFont(QFont(constants.FONT_FAMILY_NERD, 11))
+        self.game_version_label.setToolTip(t('game_version.tooltip', version=game_version) if t else f'Palworld v{game_version}')
         layout.addWidget(self.game_version_label, alignment=Qt.AlignVCenter)
         btn_style = 'padding: 0px; margin: 0px; text-align: center;'
         self.info_btn = NerdBtn(nf.icons['nf-md-information'])
@@ -233,6 +234,9 @@ class HeaderWidget(QWidget):
             self.toolbox_btn.setToolTip(t('tab_guide.tooltip') if t else 'Tab Usage Guide — Click to view detailed usage instructions for every tab')
         if hasattr(self, 'save_btn'):
             self.save_btn.setToolTip(t('menu.file.save_changes') if t else 'Save Changes')
+        if hasattr(self, 'game_version_label'):
+            tools_version, game_version = get_versions()
+            self.game_version_label.setToolTip(t('game_version.tooltip', version=game_version) if t else f'Palworld v{game_version}')
         if hasattr(self, 'app_version_label'):
             self.app_version_label.setText(f"{nf.icons['nf-cod-github']} {display_version}")
             self.app_version_label.setToolTip(t('github.tooltip') if t else 'Click to open GitHub repository')

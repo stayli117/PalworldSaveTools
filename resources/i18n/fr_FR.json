@@ -1861,5 +1861,6 @@
     "edit_pals.tooltip.cheat": "Basculer le mode de triche – supprime toutes les majuscules (niveau 255, IV 255, âmes 255)",
     "edit_pals.tooltip.max_stats": "Max toutes les statistiques pour ce copain",
     "edit_pals.tooltip.dna": "Basculer le drapeau ADN/importé",
-    "edit_pals.tooltip.favorite": "Basculer le niveau favori/verrouillage"
+    "edit_pals.tooltip.favorite": "Basculer le niveau favori/verrouillage",
+    "game_version.tooltip": "Palworld v{version}"
 }

@@ -1873,5 +1873,6 @@
     "edit_pals.tooltip.cheat": "Alternar modo de trampa: elimina todas las mayúsculas (nivel 255, IVs 255, almas 255)",
     "edit_pals.tooltip.max_stats": "Max todas las estadísticas de este amigo",
     "edit_pals.tooltip.dna": "Alternar ADN/bandera importada",
-    "edit_pals.tooltip.favorite": "Alternar nivel de favorito/bloqueo"
+    "edit_pals.tooltip.favorite": "Alternar nivel de favorito/bloqueo",
+    "game_version.tooltip": "Palworld v{versión}"
 }

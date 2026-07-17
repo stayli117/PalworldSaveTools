@@ -1878,5 +1878,6 @@
     "edit_pals.tooltip.cheat": "치트 모드 전환 — 모든 상한선을 제거합니다(레벨 255, IV 255, 영혼 255).",
     "edit_pals.tooltip.max_stats": "이 친구의 모든 통계를 최대화하세요",
     "edit_pals.tooltip.dna": "DNA/가져온 플래그 전환",
-    "edit_pals.tooltip.favorite": "즐겨찾기/잠금 수준 전환"
+    "edit_pals.tooltip.favorite": "즐겨찾기/잠금 수준 전환",
+    "game_version.tooltip": "Palworld v{버전}"
 }

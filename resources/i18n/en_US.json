@@ -2166,5 +2166,6 @@
     "edit_pals.tooltip.cheat": "Toggle cheat mode — removes all caps (level 255, IVs 255, souls 255)",
     "edit_pals.tooltip.max_stats": "Max all stats for this pal",
     "edit_pals.tooltip.dna": "Toggle DNA/imported flag",
-    "edit_pals.tooltip.favorite": "Toggle favorite/lock level"
+    "edit_pals.tooltip.favorite": "Toggle favorite/lock level",
+    "game_version.tooltip": "Palworld v{version}"
 }

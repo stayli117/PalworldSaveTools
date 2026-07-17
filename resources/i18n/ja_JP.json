@@ -1879,5 +1879,6 @@
     "edit_pals.tooltip.cheat": "チートモードの切り替え — すべてのキャップを削除します (レベル 255、IV 255、ソウル 255)",
     "edit_pals.tooltip.max_stats": "この仲間のすべてのステータスを最大化する",
     "edit_pals.tooltip.dna": "DNA/インポートフラグを切り替えます",
-    "edit_pals.tooltip.favorite": "お気に入り/ロックレベルの切り替え"
+    "edit_pals.tooltip.favorite": "お気に入り/ロックレベルの切り替え",
+    "game_version.tooltip": "Palworld v{バージョン}"
 }

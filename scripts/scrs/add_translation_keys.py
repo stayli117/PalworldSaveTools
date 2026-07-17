@@ -13,15 +13,7 @@ except ImportError:
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 LANGUAGES = {'zh_CN': {'name': 'Simplified Chinese', 'code': 'zh-CN'}, 'de_DE': {'name': 'German', 'code': 'de'}, 'es_ES': {'name': 'Spanish', 'code': 'es'}, 'fr_FR': {'name': 'French', 'code': 'fr'}, 'ru_RU': {'name': 'Russian', 'code': 'ru'}, 'ja_JP': {'name': 'Japanese', 'code': 'ja'}, 'ko_KR': {'name': 'Korean', 'code': 'ko'}}
 NEW_TRANSLATIONS = {
-    'edit_pals.tooltip.gender': 'Toggle gender',
-    'edit_pals.tooltip.predator': 'Toggle predator variant',
-    'edit_pals.tooltip.boss': 'Toggle boss/alpha variant',
-    'edit_pals.tooltip.lucky': 'Toggle lucky/shiny',
-    'edit_pals.tooltip.awakened': 'Toggle awakened',
-    'edit_pals.tooltip.cheat': 'Toggle cheat mode — removes all caps (level 255, IVs 255, souls 255)',
-    'edit_pals.tooltip.max_stats': 'Max all stats for this pal',
-    'edit_pals.tooltip.dna': 'Toggle DNA/imported flag',
-    'edit_pals.tooltip.favorite': 'Toggle favorite/lock level',
+    'game_version.tooltip': 'Palworld v{version}',
 }
 OLD_KEYS = []
 def _clean_uv_locks():

@@ -1903,5 +1903,6 @@
     "edit_pals.tooltip.cheat": "Cheat-Modus umschalten – alle Obergrenzen werden entfernt (Level 255, IVs 255, Seelen 255)",
     "edit_pals.tooltip.max_stats": "Maximieren Sie alle Statistiken für diesen Kumpel",
     "edit_pals.tooltip.dna": "DNA/importierte Flagge umschalten",
-    "edit_pals.tooltip.favorite": "Favorit/Sperrstufe umschalten"
+    "edit_pals.tooltip.favorite": "Favorit/Sperrstufe umschalten",
+    "game_version.tooltip": "Palworld v{Version}"
 }

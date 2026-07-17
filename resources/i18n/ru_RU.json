@@ -1877,5 +1877,6 @@
     "edit_pals.tooltip.cheat": "Переключить режим читов — убирает все ограничения (уровень 255, IV 255, души 255)",
     "edit_pals.tooltip.max_stats": "Максимум всех характеристик для этого приятеля",
     "edit_pals.tooltip.dna": "Переключить ДНК/импортированный флаг",
-    "edit_pals.tooltip.favorite": "Переключить уровень избранного/блокировки"
+    "edit_pals.tooltip.favorite": "Переключить уровень избранного/блокировки",
+    "game_version.tooltip": "Palworld v{версия}"
 }

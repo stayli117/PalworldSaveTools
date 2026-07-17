@@ -451,13 +451,11 @@ def import_base_json(loaded_level_json, exported_data, target_guild_id, offset=(
                 for mod in mm:
                     raw_mod = mod.get('value', {}).get('RawData', {}).get('value', {})
                     if 'work_ids' in raw_mod and isinstance(raw_mod['work_ids'], list):
-                        for wid in raw_mod['work_ids']:
-                            if _s(wid) not in work_id_map:
-                                has_invalid = True
+                        raw_mod['work_ids'] = [wid for wid in raw_mod['work_ids'] if _s(wid) in work_id_map]
                     if 'target_work_id' in raw_mod:
                         twid = _s(raw_mod['target_work_id'])
                         if twid and twid not in work_id_map:
-                            has_invalid = True
+                            raw_mod['target_work_id'] = '00000000-0000-0000-0000-000000000000'
                     if 'target_container_id' in raw_mod:
                         cid = _s(raw_mod['target_container_id'])
                         if cid and cid not in exported_item_container_ids and (cid not in exported_char_container_ids):

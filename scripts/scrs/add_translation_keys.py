@@ -19,6 +19,9 @@ NEW_TRANSLATIONS = {
     'menu.file.load_backup': 'Load from Backup',
     'backup.no_backups': 'No backups found.',
     'backup.invalid': 'Selected backup is missing required files.',
+    'edit_pals.max_all_confirm_cheat': 'Max all stats (IVs: 255, souls: 255, rank: 5, level: 255) for all pals in party & all palbox pages?',
+    'base_inventory.max_all_confirm_cheat': 'Max all stats (IVs: 255, souls: 255, rank: 5, level: 255) for all working pals in this base?',
+    'func_manager.max_all_pals.confirm_cheat': 'This will max all stats (level 255, IVs 255, souls 255, rank 5) for ALL pals in the save. Continue?',
 }
 OLD_KEYS = []
 def _clean_uv_locks():

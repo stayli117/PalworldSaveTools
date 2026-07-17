@@ -1,6 +1,6 @@
 import sys, os, gc, time
 from import_libs import *
-from loading_manager import show_information
+from loading_manager import show_information, run_with_loading
 from palworld_aio.ui.chrome.styles import ThemeManager
 from PySide6.QtWidgets import QApplication, QFileDialog
 from palsav.commands.convert import main as convert_main
@@ -34,15 +34,18 @@ def convert_generic(ext):
         return False
     root, _ = os.path.splitext(input_file)
     output_path = root + ('.sav' if ext == 'sav' else '.json')
-    if ext == 'sav':
-        convert_json_to_sav(input_file, output_path)
-    else:
-        convert_sav_to_json(input_file, output_path)
-    gc.collect()
-    time.sleep(0.5)
-    print(f'Converted {input_file} to {output_path}')
     parent = QApplication.activeWindow()
-    show_information(parent, t('tool.convert.done'), t('tool.convert.level_done', source=input_file, target=output_path))
+    def task():
+        if ext == 'sav':
+            convert_json_to_sav(input_file, output_path)
+        else:
+            convert_sav_to_json(input_file, output_path)
+        gc.collect()
+        time.sleep(0.5)
+    def on_done(_):
+        print(f'Converted {input_file} to {output_path}')
+        show_information(parent, t('tool.convert.done'), t('tool.convert.level_done', source=input_file, target=output_path))
+    run_with_loading(on_done, task, parent=parent)
     return True
 def main():
     if len(sys.argv) != 2 or sys.argv[1] not in ['sav', 'json']:

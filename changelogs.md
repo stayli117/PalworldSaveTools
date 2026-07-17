@@ -1,6 +1,8 @@
 #2.1.3
 - **Move Player to Guild fix** — no longer crashes with `AttributeError` when the Base Inventory tab hasn't been visited yet. Cache invalidation on the uninitialized tab is skipped; the tab reads fresh data when first opened.
 - **Pal editor toggle tooltips** — the Gender, Predator, Boss, Lucky, Awakened, Cheat, Max, DNA, and Favorite toggle buttons in the info panel now show themed tooltips on hover, with full i18n support across all 8 languages.
+- **Backup now includes WorldOption.sav and LocalData.sav** — the automatic backup on save load and CLI tool execution also backs up `WorldOption.sav` and `LocalData.sav` alongside `Level.sav`, `LevelMeta.sav`, and the `Players/` folder. Backup directories inside `Players/` are skipped.
+- **Game version tooltip** — the game version label in the header now shows a tooltip with the current Palworld version, localized into all 8 languages.
 - Bumped version to 2.1.3
 
 #2.1.2

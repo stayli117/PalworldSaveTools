@@ -107,19 +107,20 @@ def backup_whole_directory(source_folder, backup_folder):
         backup_folder = os.path.abspath(backup_folder)
     if not os.path.exists(backup_folder):
         os.makedirs(backup_folder)
-    print('Now backing up Level.sav,LevelMeta.sav and Players folder...')
+    print('Now backing up save files and Players folder...')
     timestamp = get_timestamp()
     backup_path = os.path.join(backup_folder, f'PalworldSave_backup_{timestamp}')
     os.makedirs(backup_path, exist_ok=True)
-    level_src = os.path.join(source_folder, 'Level.sav')
-    levelmeta_src = os.path.join(source_folder, 'LevelMeta.sav')
+    for name in ('Level.sav', 'LevelMeta.sav', 'WorldOption.sav', 'LocalData.sav'):
+        src = os.path.join(source_folder, name)
+        if os.path.exists(src):
+            shutil.copy2(src, os.path.join(backup_path, name))
     players_src = os.path.join(source_folder, 'Players')
-    if os.path.exists(level_src):
-        shutil.copy2(level_src, os.path.join(backup_path, 'Level.sav'))
-    if os.path.exists(levelmeta_src):
-        shutil.copy2(levelmeta_src, os.path.join(backup_path, 'LevelMeta.sav'))
     if os.path.exists(players_src):
-        shutil.copytree(players_src, os.path.join(backup_path, 'Players'))
+        def _ignore_backup(dir, contents):
+            return [c for c in contents if c.lower() in ('backups', 'backup', '_backups', '_backup')]
+        shutil.copytree(players_src, os.path.join(backup_path, 'Players'),
+                        ignore=_ignore_backup)
     print(f'Backup created at: {backup_path}')
 def center_window(window):
     if hasattr(window, 'move'):

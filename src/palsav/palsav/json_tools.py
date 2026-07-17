@@ -2,7 +2,8 @@ import base64
 import json
 import math
 import uuid
-from typing import Any
+from os import PathLike
+from typing import Any, BinaryIO
 from palsav.archive import UUID
 _BYTE_TAG = '~b'
 def _tag_bytes(obj: bytes) -> dict[str, str]:
@@ -46,7 +47,13 @@ try:
         if isinstance(obj, tuple):
             return tuple((_sanitize_nonfinite(v) for v in obj))
         return obj
-    def dump(data: Any, path: str, minify: bool = False, allow_nan: bool = True, **kwargs: Any) -> None:
+    def dump(
+        data: Any,
+        destination: str | PathLike | BinaryIO,
+        minify: bool = False,
+        allow_nan: bool = True,
+        **kwargs: Any
+    ) -> None:
         if not allow_nan:
             data = _sanitize_nonfinite(data)
         option = orjson.OPT_NON_STR_KEYS
@@ -55,11 +62,19 @@ try:
         if allow_nan:
             option |= orjson.OPT_SERIALIZE_NUMPY
         buf = orjson.dumps(data, default=_orjson_default, option=option)
-        with open(path, 'wb') as f:
-            f.write(buf)
-    def load(path: str) -> Any:
-        with open(path, 'rb') as f:
-            data = orjson.loads(f.read())
+        if isinstance(destination, (str, bytes, PathLike)):
+            with open(destination, "wb") as stream:
+                stream.write(buf)
+        else:
+            destination.write(buf)
+    def load(source: str | PathLike | BinaryIO) -> Any:
+        if isinstance(source, (str, bytes, PathLike)):
+            with open(source, "rb") as stream:
+                buf = stream.read()
+        else:
+            buf = source.read()
+
+        data = orjson.loads(buf)
         return _decode_byte_tags(data)
 except ImportError:
     def dump(data: Any, path: str, minify: bool = False, allow_nan: bool = True, **kwargs: Any) -> None:

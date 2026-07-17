@@ -13,6 +13,7 @@
 - **Convert Save files fix** — no longer hangs or silently fails; work runs directly instead of through a daemon thread that never starts inside `QEventLoop.exec()`
 - **Tab switching performance** — navigating to a lazy-loaded tab no longer refreshes every single tab; only the target tab repopulates. Removed a redundant double-refresh of the base inventory tab on save load
 - **macOS trackpad phantom scroll fix** — right-clicking (two-finger tap) on empty grid space in pal editor or base inventory no longer kicks you back pages. Zero-delta scroll events from macOS gesture synthesis now pass through instead of triggering page navigation
+- **Linux save path support** — `get_steam_save_path()` now resolves Proton save location (`~/.local/share/Steam/.../SaveGames`). Restore Map works on all 3 platforms
 - Bumped version to 2.1.2
 
 #2.1.0

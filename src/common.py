@@ -58,6 +58,11 @@ def get_steam_save_path() -> str:
             '~/Library/Containers/com.pocketpair.palworld.mac/Data/'
             'Library/Application Support/Epic/Pal/Saved/SaveGames'
         )
+    elif sys.platform == 'linux':
+        return os.path.expanduser(
+            '~/.local/share/Steam/steamapps/compatdata/1623730/pfx/'
+            'drive_c/users/steamuser/AppData/Local/Pal/Saved/SaveGames'
+        )
     return ''
 
 

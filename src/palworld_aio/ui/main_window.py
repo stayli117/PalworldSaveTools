@@ -1630,6 +1630,8 @@ class MainWindow(QMainWindow):
         if not constants.loaded_level_json:
             self._show_warning(t('Error') if t else 'Error', t('error.no_save_loaded') if t else 'No save file loaded.')
             return
+        if not hasattr(self, 'map_tab'):
+            return
         for i in range(self.stacked_widget.count()):
             if self.stacked_widget.widget(i) == self.map_tab:
                 self.sidebar.set_active('map')

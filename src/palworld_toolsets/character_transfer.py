@@ -12,6 +12,7 @@ from palworld_aio.inventory.inventory_manager import PlayerInventory
 from palworld_aio.editor.edit_pals import _generate_pal_save_param, get_pal_base_data, _ensure_friendship_thresholds
 from palworld_aio.utils import calculate_max_hp, safe_nested_get
 from palworld_aio import constants
+from palworld_aio.managers.func_manager import repair_items
 from palobject import SKP_PALWORLD_CUSTOM_PROPERTIES
 from palsav.archive import UUID as PalUUID
 from palsav.io import load_sav
@@ -1359,6 +1360,14 @@ def _copy_dps_file(src_uid, tgt_uid, targ_save_data, src_dir, tgt_dir):
     except Exception as e:
         print(f'[DPS] Error processing {src_dps}: {e}')
 def finalize_save_task():
+    _old_level = getattr(constants, 'loaded_level_json', None)
+    _old_path = getattr(constants, 'current_save_path', None)
+    constants.loaded_level_json = {'properties': target_gvas_file.properties}
+    constants.current_save_path = os.path.dirname(t_level_sav_path)
+    result = repair_items()
+    constants.loaded_level_json = _old_level
+    constants.current_save_path = _old_path
+    print(f'[CharacterTransfer] repair_items result: {result}')
     errors = []
     if modified_targets_data or modified_target_players:
         try:

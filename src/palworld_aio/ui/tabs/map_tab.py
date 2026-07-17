@@ -11,7 +11,7 @@ import palworld_coord
 from palworld_aio import constants
 from palworld_aio.managers.data_manager import delete_base_camp, get_tick
 from palworld_aio.managers.base_manager import export_base_json, import_base_json, update_base_area_range, clone_base_complete
-from palworld_aio.managers.backup_manager import export_base_backup, load_base_file
+from palworld_aio.managers.backup_manager import export_base_backup, load_base_file, compress_to_pst3
 from palworld_aio.managers.guild_manager import rename_guild
 from palworld_aio.widgets import BaseHoverOverlay, PlayerHoverOverlay
 from palworld_aio.editor.dialogs import RadiusInputDialog, InputDialog, ZoneManagementDialog
@@ -1529,19 +1529,20 @@ class MapTab(QWidget):
         fp = file_path
         def task():
             nonlocal fp
+            data = export_base_json(constants.loaded_level_json, bid)
+            if not data:
+                return (False, t('base.export.not_found') if t else 'Base data not found')
             if is_pstbase:
                 if not fp.endswith('.pstbase'):
                     fp += '.pstbase'
-                level_sav = os.path.join(constants.current_save_path, 'Level.sav')
-                if not os.path.exists(level_sav):
-                    return (False, 'Level.sav not found')
-                export_base_backup(level_sav, bid, fp, compressed=True)
+                data['_base_id'] = bid
+                data['_version'] = 1
+                compressed = compress_to_pst3(data)
+                with open(fp, 'wb') as f:
+                    f.write(compressed)
             else:
                 if not fp.endswith('.json'):
                     fp += '.json'
-                data = export_base_json(constants.loaded_level_json, bid)
-                if not data:
-                    return (False, t('base.export.not_found') if t else 'Base data not found')
                 json_tools.dump(data, fp, cls=json_tools.CustomEncoder, indent=2)
             return (True, None)
         def on_finished(result):
@@ -2019,7 +2020,6 @@ class MapTab(QWidget):
         export_dir = QFileDialog.getExistingDirectory(self, f'Select Export Directory for "{guild_name}"')
         if not export_dir:
             return
-        level_sav = os.path.join(constants.current_save_path, 'Level.sav')
         def task():
             successful_exports = 0
             failed_exports = 0
@@ -2028,22 +2028,21 @@ class MapTab(QWidget):
             for base_data in guild_bases:
                 bid = str(base_data['base_id'])
                 try:
+                    data = export_base_json(constants.loaded_level_json, bid)
+                    if not data:
+                        failed_exports += 1
+                        failed_bases.append(f'Base {bid}(no data)')
+                        continue
                     safe_gname = ''.join((c for c in guild_name if c.isalnum() or c in (' ', '-', '_'))).rstrip()
                     ext = '.pstbase' if compressed else '.json'
                     filename = f'base_{bid}_{safe_gname}{ext}'
                     file_path = os.path.join(export_dir, filename)
                     if compressed:
-                        if not os.path.exists(level_sav):
-                            failed_exports += 1
-                            failed_bases.append(f'Base {bid}(Level.sav not found)')
-                            continue
-                        export_base_backup(level_sav, bid, file_path, compressed=True)
+                        data['_base_id'] = bid
+                        data['_version'] = 1
+                        with open(file_path, 'wb') as f:
+                            f.write(compress_to_pst3(data))
                     else:
-                        data = export_base_json(constants.loaded_level_json, bid)
-                        if not data:
-                            failed_exports += 1
-                            failed_bases.append(f'Base {bid}(no data)')
-                            continue
                         json_tools.dump(data, file_path, cls=json_tools.CustomEncoder, indent=2)
                     successful_exports += 1
                     exported_coords.append(base_data['img_coords'])

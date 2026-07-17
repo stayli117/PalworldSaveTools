@@ -25,7 +25,7 @@ from palworld_aio.managers.data_manager import get_guilds, get_guild_members, ge
 from palworld_aio.managers.func_manager import delete_empty_guilds, delete_inactive_players, delete_inactive_bases, delete_duplicated_players, delete_unreferenced_data, delete_non_base_map_objects, delete_invalid_structure_map_objects, delete_all_skins, unlock_all_private_chests, remove_invalid_items_from_save, remove_invalid_pals_from_save, remove_invalid_passives_from_save, fix_missions, reset_anti_air_turrets, reset_dungeons, reset_oilrig, reset_invader, reset_supply, unlock_viewing_cage_for_player, fix_all_negative_timestamps, reset_selected_player_timestamp, detect_and_trim_overfilled_inventories, unlock_all_technologies_for_player, unlock_all_lab_research_for_guild, modify_container_slots, fix_unassigned_pals, restore_all_pals, max_all_pals, fix_illegal_pals_in_save, repair_structures, repair_items, edit_game_days, scan_illegal_pals_by_owner
 from palworld_aio.managers.guild_manager import move_player_to_guild, rebuild_all_guilds, make_member_leader, rename_guild, set_guild_level
 from palworld_aio.managers.base_manager import export_base_json, import_base_json, clone_base_complete, update_base_area_range
-from palworld_aio.managers.backup_manager import export_base_backup, load_base_file
+from palworld_aio.managers.backup_manager import export_base_backup, load_base_file, compress_to_pst3
 from palworld_aio.managers.player_manager import rename_player
 from palworld_aio.map.map_generator import generate_world_map
 from palworld_aio.editor.dialogs import InputDialog, DaysInputDialog, LevelInputDialog, RadiusInputDialog, PalDefenderDialog, GameDaysInputDialog
@@ -1759,34 +1759,31 @@ class MainWindow(QMainWindow):
         export_dir = QFileDialog.getExistingDirectory(self, 'Select Export Directory')
         if not export_dir:
             return
-        export_type = show_question(self, 'Export Format', 'Export as compressed .pstbase files?\n\nYes = .pstbase (smaller, requires reload to export)\nNo = .json')
+        export_type = show_question(self, 'Export Format', 'Export as compressed .pstbase files?\n\nYes = .pstbase (smaller)\nNo = .json')
         compressed = export_type if export_type is not None else False
-        level_sav = os.path.join(constants.current_save_path, 'Level.sav')
         def task():
             successful_exports = 0
             failed_exports = 0
             failed_bases = []
             for base in bases:
                 bid = base['id']
-                gid = base['guild_id']
                 gname = base['guild_name']
                 try:
+                    data = export_base_json(constants.loaded_level_json, bid)
+                    if not data:
+                        failed_exports += 1
+                        failed_bases.append(f'Base {bid}(no data)')
+                        continue
                     safe_gname = ''.join((c for c in gname if c.isalnum() or c in (' ', '-', '_'))).rstrip()
                     ext = '.pstbase' if compressed else '.json'
                     filename = f'base_{bid}_{safe_gname}{ext}'
                     file_path = os.path.join(export_dir, filename)
                     if compressed:
-                        if not os.path.exists(level_sav):
-                            failed_exports += 1
-                            failed_bases.append(f'Base {bid}(Level.sav not found)')
-                            continue
-                        export_base_backup(level_sav, bid, file_path, compressed=True)
+                        data['_base_id'] = bid
+                        data['_version'] = 1
+                        with open(file_path, 'wb') as f:
+                            f.write(compress_to_pst3(data))
                     else:
-                        data = export_base_json(constants.loaded_level_json, bid)
-                        if not data:
-                            failed_exports += 1
-                            failed_bases.append(f'Base {bid}(no data)')
-                            continue
                         json_tools.dump(data, file_path, cls=json_tools.CustomEncoder, indent=2)
                     successful_exports += 1
                 except Exception as e:
@@ -1821,7 +1818,6 @@ class MainWindow(QMainWindow):
         export_dir = QFileDialog.getExistingDirectory(self, f'Select Export Directory for "{guild_name}"')
         if not export_dir:
             return
-        level_sav = os.path.join(constants.current_save_path, 'Level.sav')
         def task():
             successful_exports = 0
             failed_exports = 0
@@ -1830,22 +1826,21 @@ class MainWindow(QMainWindow):
                 bid = base['id']
                 gname = base['guild_name']
                 try:
+                    data = export_base_json(constants.loaded_level_json, bid)
+                    if not data:
+                        failed_exports += 1
+                        failed_bases.append(f'Base {bid}(no data)')
+                        continue
                     safe_gname = ''.join((c for c in gname if c.isalnum() or c in (' ', '-', '_'))).rstrip()
                     ext = '.pstbase' if compressed else '.json'
                     filename = f'base_{bid}_{safe_gname}{ext}'
                     file_path = os.path.join(export_dir, filename)
                     if compressed:
-                        if not os.path.exists(level_sav):
-                            failed_exports += 1
-                            failed_bases.append(f'Base {bid}(Level.sav not found)')
-                            continue
-                        export_base_backup(level_sav, bid, file_path, compressed=True)
+                        data['_base_id'] = bid
+                        data['_version'] = 1
+                        with open(file_path, 'wb') as f:
+                            f.write(compress_to_pst3(data))
                     else:
-                        data = export_base_json(constants.loaded_level_json, bid)
-                        if not data:
-                            failed_exports += 1
-                            failed_bases.append(f'Base {bid}(no data)')
-                            continue
                         json_tools.dump(data, file_path, cls=json_tools.CustomEncoder, indent=2)
                     successful_exports += 1
                 except Exception as e:
@@ -1872,19 +1867,19 @@ class MainWindow(QMainWindow):
             return
         is_pstbase = 'pstbase' in selected_filter if selected_filter else file_path.endswith('.pstbase')
         def task():
+            data = export_base_json(constants.loaded_level_json, bid)
+            if not data:
+                return (False, t('base.export.not_found') if t else f'Could not find base data for ID: {bid}')
             if is_pstbase:
                 if not file_path.endswith('.pstbase'):
                     file_path += '.pstbase'
-                level_sav = os.path.join(constants.current_save_path, 'Level.sav')
-                if not os.path.exists(level_sav):
-                    return (False, 'Level.sav not found')
-                export_base_backup(level_sav, bid, file_path, compressed=True)
+                data['_base_id'] = bid
+                data['_version'] = 1
+                with open(file_path, 'wb') as f:
+                    f.write(compress_to_pst3(data))
             else:
                 if not file_path.endswith('.json'):
                     file_path += '.json'
-                data = export_base_json(constants.loaded_level_json, bid)
-                if not data:
-                    return (False, t('base.export.not_found') if t else f'Could not find base data for ID: {bid}')
                 json_tools.dump(data, file_path, cls=json_tools.CustomEncoder, indent=2)
             return (True, None)
         def on_finished(result):

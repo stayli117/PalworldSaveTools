@@ -1,3 +1,8 @@
+#2.1.5
+- **Language switching fixed** — changing the UI language directly from English to Chinese no longer requires an intermediate language first. The menu now correctly updates all labels and tooltips immediately on the first try.
+- **Tooltips now update on language switch** — the Max All Souls and Max All IVs icons in the pal editor now show translated tooltips when changing the UI language on the fly.
+- Bumped version to 2.1.5
+
 #2.1.4
 - **Guild member roles** — right-click a guild member to set their role: Guild Master, Submaster, Member, or Guest. Promoting to Guild Master reassigns admin to the target and demotes the old leader to Submaster. Role column visible in the guild members list.
 - **Export base crash fixed** — exporting a single base from the guild tree list no longer crashes with `UnboundLocalError: cannot access local variable 'file_path'`. The `task()` closure now correctly captures the outer `file_path` via `nonlocal`.

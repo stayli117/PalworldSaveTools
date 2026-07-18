@@ -842,3 +842,7 @@ class PalInfoHandlerMixin:
             self.info_dna_btn.setToolTip(t('edit_pals.tooltip.dna'))
         if hasattr(self, 'info_fav_btn'):
             self.info_fav_btn.setToolTip(t('edit_pals.tooltip.favorite'))
+        if hasattr(self, 'iv_icon'):
+            self.iv_icon.setToolTip(t('edit_pals.max_all_ivs'))
+        if hasattr(self, 'soul_row_icon'):
+            self.soul_row_icon.setToolTip(t('edit_pals.max_all_souls'))

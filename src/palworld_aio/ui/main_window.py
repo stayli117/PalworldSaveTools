@@ -1685,8 +1685,8 @@ class MainWindow(QMainWindow):
         if old_lang != code:
             self.user_settings['language'] = code
             self._save_user_settings()
-            load_resources(code)
             set_language(code)
+            load_resources()
             if self.status_stream.detach_window:
                 self.status_stream.detach_window.refresh_title()
             self.setWindowTitle(t('deletion.title') if t else 'All-in-One Tools')

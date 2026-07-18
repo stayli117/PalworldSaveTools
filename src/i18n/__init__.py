@@ -42,8 +42,6 @@ def set_language(lang: str) -> None:
     global _LANG
     if lang not in _SUPPORTED_LANGS:
         return
-    if lang == _LANG:
-        return
     _ensure_lang(lang)
     _LANG = lang
     try:

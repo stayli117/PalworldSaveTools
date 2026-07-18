@@ -1569,10 +1569,10 @@ class PlayerInventoryTab(QWidget):
                     std_container.expand_capacity(new_max)
                     std_container.container_data['value']['SlotNum']['value'] = new_max
                 for item_id in missing_unlocks:
-                    self.inventory.add_item('key', item_id, 1)
+                    std_container.add_item(item_id, 1)
                 for item in to_add:
-                    self.inventory.add_item('key', item['asset'], 1)
-                self._update_raw_save_data('key', key_container)
+                    std_container.add_item(item['asset'], 1)
+                self.inventory.save()
                 return total
             def on_finished(count):
                 self._refresh_display()
@@ -1759,22 +1759,26 @@ class PlayerInventoryTab(QWidget):
                 if not m:
                     return
                 kind, num_str = m.group(1), int(m.group(2))
+                key_container = self.inventory.get_container('key')
+                if not key_container:
+                    return
+                key_std = key_container._standardized_container
                 if kind == 'food':
                     unlocked = self.inventory.get_unlocked_food_slots()
                     while num_str > unlocked and unlocked < len(FOOD_POUCH_ITEMS):
-                        self.inventory.add_key_item(FOOD_POUCH_ITEMS[unlocked])
+                        key_std.add_item(FOOD_POUCH_ITEMS[unlocked], 1)
                         unlocked += 1
                 elif kind == 'accessory':
                     base = 2
                     unlocked = self.inventory.get_unlocked_accessory_slots()
                     while num_str > unlocked and unlocked - base < len(ACCESSORY_UNLOCK_ITEMS):
-                        self.inventory.add_key_item(ACCESSORY_UNLOCK_ITEMS[unlocked - base])
+                        key_std.add_item(ACCESSORY_UNLOCK_ITEMS[unlocked - base], 1)
                         unlocked += 1
                 elif kind == 'weapon':
                     base = 4
                     unlocked = self.inventory.get_unlocked_weapon_slots()
                     while num_str > unlocked and unlocked - base < len(WEAPON_UNLOCK_ITEMS):
-                        self.inventory.add_key_item(WEAPON_UNLOCK_ITEMS[unlocked - base])
+                        key_std.add_item(WEAPON_UNLOCK_ITEMS[unlocked - base], 1)
                         unlocked += 1
             for slot_name, equip_item in equipment.items():
                 if slot_name not in binding_map:
@@ -1786,8 +1790,8 @@ class PlayerInventoryTab(QWidget):
                 if not container:
                     continue
                 container.update_slots([s for s in container.slots if s.get('slot_index') != slot_idx])
-                self.inventory.add_item(binding['container'], equip_item['id'], equip_item.get('qty', 1), slot_index=slot_idx)
-                self._update_raw_save_data(binding['container'], container)
+                container._standardized_container.add_item(equip_item['id'], equip_item.get('qty', 1), slot_index=slot_idx)
+            self.inventory.save()
             self._refresh_display()
         dlg = InventoryLoadoutDialog(self, _get_equipment, _apply_equipment, title=t('inventory.equip_loadouts_title', default='Equipment Loadouts'), loadouts_path=_EQ_LOADOUTS_PATH, key_prefix='inventory.equip')
         dlg.exec()

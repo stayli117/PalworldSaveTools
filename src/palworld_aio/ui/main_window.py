@@ -933,8 +933,8 @@ class MainWindow(QMainWindow):
                             new_max = slots_needed + 50
                             std_container.expand_capacity(new_max)
                             std_container.container_data['value']['SlotNum']['value'] = new_max
-                    for item_id in missing:
-                        inv.add_item('key', item_id, 1)
+                        for item_id in missing:
+                            std_container.add_item(item_id, 1)
                     for ctype, inventory_container in inv.containers.items():
                         cid = str(inventory_container.container_id)
                         if cid in container_lookup:

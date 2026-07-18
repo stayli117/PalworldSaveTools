@@ -1380,8 +1380,12 @@ def add_item_to_players(item_id, quantity=1, container_type='key', player_uids=N
             inv = PlayerInventory(uid)
             if not inv.load():
                 continue
+            container = inv.get_container(container_type)
+            if not container:
+                continue
+            std = container._standardized_container
             for _ in range(quantity):
-                if inv.add_item(container_type, item_id, 1):
+                if std.add_item(item_id, 1):
                     added += 1
             if added > 0:
                 wsd = constants.loaded_level_json['properties']['worldSaveData']['value']

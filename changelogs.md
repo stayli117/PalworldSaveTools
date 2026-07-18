@@ -7,6 +7,7 @@
 - **Language names in menu always show native names** — Portuguese, Chinese, Russian, and all other languages in the menu > Languages list now display in their native form (e.g. "Português") regardless of the current app language.
 - **Unlock All Fast Travel** — renamed from "Unlock All Map + Fast Travel". Now only unlocks fast travel points without revealing map areas or unlocking the world map.
 - **Loading overlay close button** — the loading screen now has a ✕ close button in the top-right corner. Clicking it dismisses the overlay while background work continues.
+- **Add All Key Items performance fix** — massive speedup on big saves. Each item was triggering a full scan of every container in the save file; now all items are added in memory and saved once. Same fix applied to Bulk Add Items and Equipment Loadouts.
 - Bumped version to 2.1.5
 
 #2.1.4

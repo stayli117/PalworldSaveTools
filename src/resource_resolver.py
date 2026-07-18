@@ -5,9 +5,25 @@ import sys
 def _compute_binary_root() -> str:
     if hasattr(sys, '_PST_BINARY_ROOT'):
         return sys._PST_BINARY_ROOT
-    if getattr(sys, 'frozen', False):
-        return os.path.dirname(os.path.abspath(__file__))
-    return os.path.dirname(os.path.abspath(sys.argv[0]))
+    _found_root = None
+    if os.path.isfile(sys.executable):
+        _exe_dir = os.path.dirname(os.path.realpath(sys.executable))
+        if os.path.isdir(os.path.join(_exe_dir, 'resources')):
+            _found_root = _exe_dir
+        else:
+            _parent = os.path.dirname(_exe_dir)
+            if os.path.isdir(os.path.join(_parent, 'resources')):
+                _found_root = _parent
+    if _found_root is None:
+        _probe = os.path.dirname(os.path.abspath(__file__))
+        for _ in range(5):
+            if os.path.isdir(os.path.join(_probe, 'resources')):
+                _found_root = _probe
+                break
+            _probe = os.path.dirname(_probe)
+        if _found_root is None:
+            _found_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    return _found_root
 
 
 sys._PST_BINARY_ROOT = _compute_binary_root()

@@ -27,7 +27,7 @@ _CATEGORY_CONFIG = {
     'pals': {
         'sort_fields': [
             ('name', 'docs.wiki.sort.name', lambda d: (d.get('name') or '').lower()),
-            ('paldeck', 'docs.wiki.sort.index', lambda d: _resolve_zukan(d) or 9999),
+            ('paldeck', 'docs.wiki.sort.index', lambda d: _pal_paldeck_sort_key(d)),
         ],
         'filter_groups': [
             {'id': 'element', 'label_key': 'docs.wiki.filter.element', 'field': 'elements', 'type': 'dict_keys', 'is_element': True},
@@ -266,6 +266,13 @@ def _normalize_elem(name):
 
 _zukan_map = None
 _zukan_prefixes = ('boss_', 'megaboss_', 'predator_', 'gym_', 'raid_', 'police_')
+
+def _pal_paldeck_sort_key(item):
+    idx = _resolve_zukan(item)
+    name = (item.get('name') or '').lower()
+    if not idx or idx <= 0:
+        return (1, 0, name)
+    return (0, idx, name)
 
 def _resolve_zukan(item):
     global _zukan_map
@@ -1187,7 +1194,7 @@ class WikiCategoryPage(QWidget):
         self._all_data = []
         self._loaded = False
         self._config = _CATEGORY_CONFIG.get(category_id, {})
-        self._sort_by = None
+        self._sort_by = 'paldeck' if category_id == 'pals' else None
         self._sort_reverse = False
         self._sort_fields = {}
         self._sort_labels = {}
@@ -1351,6 +1358,7 @@ class WikiCategoryPage(QWidget):
                 gw = self._build_filter_group_widget(fg)
                 if gw:
                     self._filter_layout.addWidget(gw)
+        self._update_sort_buttons()
         self._apply_sort_filter()
 
     def _apply_sort_filter(self):
@@ -1459,11 +1467,8 @@ class WikiCategoryPage(QWidget):
         if self._sort_by != field_id:
             self._sort_by = field_id
             self._sort_reverse = False
-        elif not self._sort_reverse:
-            self._sort_reverse = True
         else:
-            self._sort_by = None
-            self._sort_reverse = False
+            self._sort_reverse = not self._sort_reverse
         self._update_sort_buttons()
         self._apply_sort_filter()
 

@@ -1383,7 +1383,7 @@ def finalize_save_task():
     src_players = os.path.join(os.path.dirname(level_sav_path), 'Players')
     tgt_players = os.path.join(os.path.dirname(t_level_sav_path), 'Players')
     from concurrent.futures import ThreadPoolExecutor, as_completed
-    with ThreadPoolExecutor(max_workers=os.cpu_count() or 4) as executor:
+    with ThreadPoolExecutor(max_workers=min(os.cpu_count() or 4, 8)) as executor:
         fut_to_uid = {}
         for target_uid, (json_data, gvas_obj, src_uid) in modified_targets_data.items():
             def _save_one(uid, gvas, src, jdata):

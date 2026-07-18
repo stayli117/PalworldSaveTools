@@ -9,7 +9,7 @@
 - **Loading overlay close button** — the loading screen now has a ✕ close button in the top-right corner. Clicking it dismisses the overlay while background work continues.
 - **Add All Key Items performance fix** — massive speedup on big saves. Each item was triggering a full scan of every container in the save file; now all items are added in memory and saved once. Same fix applied to Bulk Add Items and Equipment Loadouts.
 - **Stats tab now refreshes all tabs on change** — changing stats (level +/-, max all stats, stat point edits) now triggers a full UI refresh so all tabs show up-to-date data immediately. Max All Stats previously bypassed the refresh signal; now it uses the same path as manual edits.
-- **Character Transfer performance fixes** — Transfer All no longer calls save() per inventory item (same O(n) fix as Add All Key Items). Dynamic container GUID remapping changed from triple-nested scan to O(1) lookup, massively speeding up bulk transfers on large saves.
+- **Character Transfer performance fixes** — Transfer All no longer calls save() per inventory item (same O(n) fix as Add All Key Items). Dynamic container GUID remapping changed from triple-nested scan to O(1) lookup. Save Changes now writes player files in parallel using all CPU cores, drastically reducing save time after bulk transfers.
 - Bumped version to 2.1.5
 
 #2.1.4

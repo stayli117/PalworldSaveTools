@@ -1382,14 +1382,23 @@ def finalize_save_task():
             errors.append(f'Level.sav: {e}')
     src_players = os.path.join(os.path.dirname(level_sav_path), 'Players')
     tgt_players = os.path.join(os.path.dirname(t_level_sav_path), 'Players')
-    for target_uid, (json_data, gvas_obj, src_uid) in modified_targets_data.items():
-        try:
-            tgt_dir = os.path.join(os.path.dirname(t_level_sav_path), 'Players')
-            os.makedirs(tgt_dir, exist_ok=True)
-            _write_sav(gvas_obj, os.path.join(tgt_dir, f'{target_uid.upper()}.sav'))
-            _copy_dps_file(src_uid, target_uid, json_data, src_players, tgt_players)
-        except Exception as e:
-            errors.append(f'Player {target_uid}: {e}')
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    with ThreadPoolExecutor(max_workers=os.cpu_count() or 4) as executor:
+        fut_to_uid = {}
+        for target_uid, (json_data, gvas_obj, src_uid) in modified_targets_data.items():
+            def _save_one(uid, gvas, src, jdata):
+                tgt_dir = os.path.join(os.path.dirname(t_level_sav_path), 'Players')
+                os.makedirs(tgt_dir, exist_ok=True)
+                _write_sav(gvas, os.path.join(tgt_dir, f'{uid.upper()}.sav'))
+                _copy_dps_file(src, uid, jdata, src_players, tgt_players)
+                return uid
+            fut = executor.submit(_save_one, target_uid, gvas_obj, src_uid, json_data)
+            fut_to_uid[fut] = target_uid
+        for fut in as_completed(fut_to_uid):
+            try:
+                fut.result()
+            except Exception as e:
+                errors.append(f'Player {fut_to_uid[fut]}: {e}')
     if errors:
         print(f"[ERROR] Save errors: {'; '.join(errors)}")
         return False

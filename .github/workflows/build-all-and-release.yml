@@ -105,6 +105,16 @@ jobs:
           path: dist/${{ steps.env.outputs.app_name }}-*.exe
           if-no-files-found: error
 
+  build-windows-standalone:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
+      - name: Bootstrap environment
+        id: env
+        uses: ./.github/actions/setup-build-env
       - name: Add 7-Zip to PATH
         shell: pwsh
         run: |
@@ -206,7 +216,7 @@ jobs:
           if-no-files-found: error
 
   create-release:
-    needs: [prepare-source, build-windows, build-linux, build-mac]
+    needs: [prepare-source, build-windows, build-windows-standalone, build-linux, build-mac]
     if: ${{ github.event.inputs.skip_github_release != 'true' }}
     runs-on: ubuntu-latest
     outputs:

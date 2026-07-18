@@ -626,17 +626,7 @@ class StatsPanelWidget(QFrame):
         self.atp_spin.setValue(9999999)
         for w in self._ability_widgets:
             w['spinner'].setValue(w['cumulative_max'])
-        p = self.parentWidget()
-        while p and not hasattr(p, '_save_stats_to_raw_data'):
-            p = p.parentWidget()
-        if p:
-            uid = p.current_player_uid
-            lvl = self._current_level
-            exp = self._current_exp
-            stats = dict(self._stat_values)
-            def task():
-                p._save_stats_to_raw_data_inner(uid, lvl, exp, stats)
-            run_with_loading(lambda _: None, task)
+        self.stats_changed.emit()
 
     def _on_tp_changed(self, val):
         if not self._player_uid:
@@ -1381,6 +1371,8 @@ class PlayerInventoryTab(QWidget):
             return
         self._save_stats_to_raw_data()
         self._update_player_dropdown_level()
+        if hasattr(self.parent_window, 'refresh_all'):
+            self.parent_window.refresh_all()
     def refresh_players(self):
         self._player_list = []
         self.current_player_uid = None

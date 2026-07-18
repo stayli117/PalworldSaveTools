@@ -966,11 +966,8 @@ class MainWindow(QMainWindow):
             from palworld_aio.utils import gvasfile_to_sav, sav_to_gvasfile
             from boot_paths import ROOT_DIR
             ft_path = resource_path(str(ROOT_DIR), 'game_data', 'fast_travel_points.json')
-            areas_path = resource_path(str(ROOT_DIR), 'game_data', 'world_map_areas.json')
             ft_data = json.load(open(ft_path, 'r'))
-            area_ids = json.load(open(areas_path, 'r'))
             ft_guids = sorted(ft_data.keys())
-            all_area_keys = sorted(set(area_ids if isinstance(area_ids, list) else area_ids.get('areas', [])))
             players_affected = 0
             for uid in player_uids:
                 try:
@@ -998,10 +995,6 @@ class MainWindow(QMainWindow):
                     record_data = save_data.setdefault('RecordData', {'value': {}, 'type': 'StructProperty'})['value']
                     ft_flag = record_data.setdefault('FastTravelPointUnlockFlag', {'key_type': 'NameProperty', 'value_type': 'BoolProperty', 'key_struct_type': None, 'value_struct_type': None, 'id': None, 'value': [], 'type': 'MapProperty'})
                     ft_flag['value'] = [{'key': g, 'value': True} for g in ft_guids]
-                    area_flag = record_data.setdefault('FindAreaFlagMap', {'key_type': 'NameProperty', 'value_type': 'BoolProperty', 'key_struct_type': None, 'value_struct_type': None, 'id': None, 'value': [], 'type': 'MapProperty'})
-                    area_flag['value'] = [{'key': k, 'value': True} for k in all_area_keys]
-                    wm_flag = record_data.setdefault('UnlockedWorldMapFlags', {'key_type': 'NameProperty', 'value_type': 'BoolProperty', 'key_struct_type': None, 'value_struct_type': None, 'id': None, 'value': [], 'type': 'MapProperty'})
-                    wm_flag['value'] = [{'key': 'MainMap', 'value': True}, {'key': 'Tree', 'value': True}]
                     gvasfile_to_sav(gvas, os.path.join(constants.current_save_path, 'Players', f"{str(uid).replace('-', '').upper()}.sav"))
                     players_affected += 1
                 except Exception as e:
@@ -1009,7 +1002,7 @@ class MainWindow(QMainWindow):
                     continue
             return players_affected
         def on_finished(players_affected):
-            self._show_info(t('player_item.add_complete') if t else 'Unlock Complete', t('inventory.unlock_all_map_bulk_success.msg', count=players_affected, default=f'Unlocked map + fast travel for {players_affected} player(s).'))
+            self._show_info(t('player_item.add_complete') if t else 'Unlock Complete', t('inventory.unlock_all_map_bulk_success.msg', count=players_affected, default=f'Unlocked fast travel for {players_affected} player(s).'))
         run_with_loading(on_finished, task)
     def _on_player_pal_action(self, item_id, action, player_uids):
         def task():

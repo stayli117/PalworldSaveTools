@@ -32,6 +32,10 @@ NEW_TRANSLATIONS = {
     'guild.role.guest': 'Guest',
     'guild.menu.set_role': 'Set Role',
     'guild.role_updated': 'Role updated',
+    'inventory.unlock_all_map': 'Unlock All Fast Travel',
+    'inventory.unlock_all_map_confirm.title': 'Unlock All Fast Travel',
+    'inventory.unlock_all_map_confirm.msg': 'Unlock all fast travel points for {count} player(s)?',
+    'inventory.unlock_all_map_bulk_success.msg': 'Unlocked fast travel for {count} player(s).',
 }
 OLD_KEYS = [
     'guild.role.none',

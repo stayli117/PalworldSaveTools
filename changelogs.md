@@ -1,9 +1,12 @@
 #2.1.5
+- **Wiki tab sort improvements** — the pals category in the built-in wiki now defaults to sorting by Paldeck number. Unknown/unlisted pals sort to the bottom instead of showing at index 0. Sort toggle behavior changed: clicking an active sort button now reverses direction instead of clearing the sort, matching typical list behavior.
 - **Player level shows 1 instead of ?** — players who never leveled up now display as level 1 everywhere instead of a confusing `?` in hover overlays, map markers, guild lists, and export data.
 - **PalDefender coordinates fixed** — `killnearestbase` commands were using wrong coordinates, making them destroy the wrong bases. Now correctly targets the bases you selected.
 - **Language switching fixed** — changing language now switches to the correct language on the first try, with all labels and tooltips updating immediately.
 - **Tooltips now update on language switch** — the Max All Souls and Max All IVs icons in the pal editor now show translated tooltips when changing the UI language on the fly.
 - **Language names in menu always show native names** — Portuguese, Chinese, Russian, and all other languages in the menu > Languages list now display in their native form (e.g. "Português") regardless of the current app language.
+- **Unlock All Fast Travel** — renamed from "Unlock All Map + Fast Travel". Now only unlocks fast travel points without revealing map areas or unlocking the world map.
+- **Loading overlay close button** — the loading screen now has a ✕ close button in the top-right corner. Clicking it dismisses the overlay while background work continues.
 - Bumped version to 2.1.5
 
 #2.1.4

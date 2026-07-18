@@ -18,7 +18,7 @@ from palworld_aio.editor.dialogs import RadiusInputDialog, InputDialog, ZoneMana
 from palworld_aio.utils import sav_to_gvasfile
 from palworld_aio.managers.save_manager import save_manager
 from ..map_view.map_markers import BaseMarker, PlayerMarker
-from ..map_view.map_effects import DeleteEffect, ImportEffect, ExportEffect, CalibrationEffect, CoordChangeEffect
+from ..map_view.map_effects import ImportEffect, CalibrationEffect
 from ..map_view.map_items import ExclusionZoneItem, PolygonExclusionZoneItem, BaseRadiusRing, ZonePreviewItem
 from ..map_view.map_view import MapGraphicsView
 _SORT_ROLE = Qt.UserRole + 1
@@ -1310,6 +1310,9 @@ class MapTab(QWidget):
             menu.addSeparator()
             reassign_action = menu.addAction(t('base.reassign_guild') if t else 'Reassign to Guild')
             action = menu.exec(global_pos.toPoint())
+            if not action:
+                return
+            self._navigate_to_base(data)
             if action == delete_action:
                 self._delete_base(data)
             elif action == export_action:
@@ -1443,19 +1446,24 @@ class MapTab(QWidget):
         menu = QMenu(self)
         menu.setStyleSheet('\n            QMenu {\n                background-color: rgba(18,20,24,0.95);\n                border: 1px solid rgba(125,211,252,0.3);\n                border-radius: 4px;\n                color: #e2e8f0;\n                padding: 4px;\n            }\n            QMenu::item {\n                padding: 6px 12px;\n                border-radius: 3px;\n            }\n            QMenu::item:selected {\n                background-color: rgba(59,142,208,0.3);\n            }\n        ')
         if item_type == 'base':
-            self._zoom_to_base(item_data)
             delete_action = menu.addAction(t('delete.base') if t else 'Delete Base')
             export_action = menu.addAction(t('button.export') if t else 'Export Base')
+            clone_action = menu.addAction(t('clone.base') if t else 'Clone Base')
             radius_action = menu.addAction(t('base.radius.menu') if t else 'Adjust Radius')
             move_coords_action = menu.addAction(t('base.move_coords') if t else 'Change Coordinates')
             nudge_action = menu.addAction(t('base.nudge') if t else 'Nudge Base')
             menu.addSeparator()
             reassign_action = menu.addAction(t('base.reassign_guild') if t else 'Reassign to Guild')
             action = menu.exec(tree.viewport().mapToGlobal(pos))
+            if not action:
+                return
+            self._navigate_to_base(item_data)
             if action == delete_action:
                 self._delete_base(item_data)
             elif action == export_action:
                 self._export_base(item_data)
+            elif action == clone_action:
+                self._clone_base(item_data)
             elif action == radius_action:
                 self._adjust_base_radius(item_data)
             elif action == move_coords_action:
@@ -1510,7 +1518,7 @@ class MapTab(QWidget):
             return True
         def on_finished(success):
             img_x, img_y = base_data['img_coords']
-            self._play_effect(DeleteEffect, img_x, img_y)
+            self._play_effect(ImportEffect, img_x, img_y)
             self.refresh()
             if self.parent_window:
                 self.parent_window.refresh_all()
@@ -1549,7 +1557,7 @@ class MapTab(QWidget):
             success, error = result
             if success:
                 img_x, img_y = base_data['img_coords']
-                self._play_effect(ExportEffect, img_x, img_y)
+                self._play_effect(ImportEffect, img_x, img_y)
                 show_information(self, t('success.title') if t else 'Success', t('base.export.success') if t else 'Base exported successfully')
             else:
                 show_critical(self, t('error.title') if t else 'Error', error or 'Failed to export base')
@@ -1567,6 +1575,8 @@ class MapTab(QWidget):
                 self.refresh()
                 if self.parent_window:
                     self.parent_window.refresh_all()
+                img_x, img_y = base_data['img_coords']
+                self._play_effect(ImportEffect, img_x, img_y)
                 show_information(self, t('success.title') if t else 'Success', t('clone_base.msg') if t else 'Base cloned successfully')
             else:
                 show_warning(self, t('error.title') if t else 'Error', 'Failed to clone base')
@@ -1615,8 +1625,10 @@ class MapTab(QWidget):
                         marker.setSelected(True)
                         marker.start_glow()
                         break
+            img_x, img_y = base_data['img_coords']
+            self._play_effect(ImportEffect, img_x, img_y)
             new_percent = int(round(new_radius / 35.0))
-            show_information(self, t('success.title') if t else 'Success', t('base.radius.updated', radius=f'{new_percent}% ({int(new_radius)})') if t else f'Base radius updated to {new_percent}% ({int(new_radius)})\n\n⚠ Load this save in-game for structures to be reassigned.')
+            show_information(self, t('success.title') if t else 'Success', t('base.radius.updated', radius=f'{new_percent}% ({int(new_radius)})') if t else f'Base radius updated to {new_percent}% ({int(new_radius)})\n\n\u26a0 Load this save in-game for structures to be reassigned.')
         run_with_loading(on_finished, task)
     def _reassign_base(self, base_data):
         from palworld_aio.editor.dialogs import ScrollableGuildSelectionDialog
@@ -1705,6 +1717,8 @@ class MapTab(QWidget):
                 self._hide_all_radius_rings()
                 if hasattr(self, 'toggle_base_radius_rings') and self.toggle_base_radius_rings.isChecked():
                     self._show_all_radius_rings()
+                img_x, img_y = base_data['img_coords']
+                self._play_effect(ImportEffect, img_x, img_y)
                 target_name = self.guilds_data.get(target_guild_id, {}).get('guild_name', target_guild_id)
                 show_information(self, t('success.title') if t else 'Success', t('base.reassign.success', name=target_name) if t else f'Base reassigned to guild "{target_name}"')
         def on_error(err):
@@ -1794,8 +1808,8 @@ class MapTab(QWidget):
                     show_information(self, t('info.title') if t else 'Info', 'New coordinates are the same as current.')
                 return
             scene_x, scene_y = payload
-            effect = CoordChangeEffect(scene_x, scene_y)
-            self.scene.addItem(effect)
+            self._play_effect(ImportEffect, scene_x, scene_y)
+            self.view.animate_to_coords(scene_x, scene_y, zoom_level=self.config['zoom']['double_click_target'])
             self.refresh()
             if self.parent_window:
                 self.parent_window.refresh_all()
@@ -1883,6 +1897,8 @@ class MapTab(QWidget):
             if not success:
                 show_warning(self, t('error.title') if t else 'Error', t('base.export.not_found') if t else 'Base not found')
                 return
+            img_x, img_y = base_data['img_coords']
+            self._play_effect(ImportEffect, img_x, img_y)
             self.refresh()
             if self.parent_window:
                 self.parent_window.refresh_all()
@@ -2060,7 +2076,7 @@ class MapTab(QWidget):
             else:
                 show_warning(self, t('error.title'), f'Failed to export any bases for guild "{guild_name}".\n' + '\n'.join(failed_bases))
             for img_x, img_y in exported_coords:
-                self._play_effect(ExportEffect, img_x, img_y)
+                self._play_effect(ImportEffect, img_x, img_y)
         run_with_loading(on_finished, task)
     def _delete_player(self, player_data):
         from ...managers.data_manager import load_exclusions, delete_player

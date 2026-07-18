@@ -9,6 +9,7 @@
 - **Stream support in palsav json_tools** — save files can now be read and written directly from memory streams, not just file paths. By msansen.
 - **Load from Backup** — new File menu option that lists all your auto-backups with timestamp, world name, and player count, so you can easily restore any previous save state.
 - **Cheat mode condensed stars capped** — the condenser rank (stars) is now limited to 5 even in cheat mode, since higher values cause glitches in-game. Cheat mode still unlocks other caps like IVs, souls, and level.
+- **Map viewer base actions enhanced** — every base operation (delete, export, clone, radius, reassign, move, nudge) now zooms to the base with a glow effect before executing, and plays a pulsing sparkle animation on completion. Clone Base is now also available from the tree list right-click menu.
 - Bumped version to 2.1.3
 
 #2.1.2

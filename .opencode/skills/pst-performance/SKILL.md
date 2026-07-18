@@ -116,3 +116,29 @@ Player .sav writes (Oodle compression) are CPU-heavy and file-independent. Use T
 | `loading_manager.py` | `run_with_loading()` — used for async UI tasks |
 | `character_transfer.py:612` | `migrate_inventory_via_player_inventory` — has the loop-save pattern |
 | `character_transfer.py:1040` | `gather_and_update_dynamic_containers` — build reverse lookup dicts |
+
+## DPS file performance — known bottleneck
+
+DPS files (`*_dps.sav`) use the same GVAS SaveParameterArray as the main save, but lack the CharacterSaveParameterMap skip optimization. For a 294KB compressed / 77MB decompressed file with 9600 entries:
+
+| Phase | Time | % of total |
+|-------|------|-----------|
+| Decompress (Oodle) | 21ms | 0.5% |
+| GvasFile.read (SKP) | 2812ms | 60% |
+| Iterate CIDs | 9ms | 0.2% |
+| GvasFile.write (SKP) | 1744ms | 37% |
+| Compress (Oodle) | 96ms | 2% |
+| **Total** | **4683ms** | |
+
+The ~2.8s read + ~1.7s write is from 9600× `properties_until_end()` calls inside `archive.py:array_property()` → `struct_value()` → `properties_until_end()`. Each entry has ~30 properties; each property requires 2 fstring reads (name + type) + 1 u64 read (size) + type-specific decode.
+
+**The shared struct header** (array_property at archive.py:337-353) means elements share one `prop_name`/`prop_type`/`type_name`/`guid` for ALL entries, then a `struct_value()` call per entry. Individual element boundaries are delimited by `'None'` terminators, not by precomputed sizes, making per-element raw byte extraction without full parsing impossible at the archive layer.
+
+**What already works:** SKP_PALWORLD_CUSTOM_PROPERTIES skips `SaveParameter.SaveParameter.RawData` for each entry (opaque bytes instead of sub-property tree). This saves ~800ms on read but the outer property headers still parse.
+
+**What would require GVAS parser changes:** Adding struct-level skip support to `archive.py:struct_value()` — checking `custom_properties` before calling `properties_until_end()`. This would require either (a) precomputed element sizes via terminator scanning, or (b) a batch read-ahead that counts 'None' boundaries. Both are invasive changes to the core archive reader.
+
+**Pragmatic workaround for bulk DPS operations:**
+- `pal_editor_global_ops.py` loads every DPS file serially in a for loop. Wrap in ThreadPoolExecutor for parallel file processing.
+- Limit DPS operations to current player's file when possible (avoid scanning all players' DPS files).
+

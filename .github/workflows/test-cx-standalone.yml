@@ -59,18 +59,41 @@ jobs:
           path: PST_standalone_v*.7z
           if-no-files-found: warn
 
+      - name: Extract changelog entry
+        run: |
+          awk '/^#[0-9]/{if (found) exit; if ($0 == "#${{ steps.env.outputs.version }}") found=1; next} found' \
+            changelogs.md > /tmp/changelog_entry.md 2>/dev/null || true
+          if [ ! -s /tmp/changelog_entry.md ]; then
+            echo "No changelog entry for v${{ steps.env.outputs.version }} yet." > /tmp/changelog_entry.md
+          fi
+          echo "=== Changelog entry ==="
+          cat /tmp/changelog_entry.md
+
+      - name: Render release notes from template
+        env:
+          APP_NAME: ${{ steps.env.outputs.app_name }}
+          VERSION: ${{ steps.env.outputs.version }}
+          GAME_VERSION: ${{ steps.env.outputs.game_version }}
+          REPO_URL: https://github.com/${{ github.repository }}
+          RELEASE_URL: https://github.com/${{ github.repository }}/releases/tag/cx-test-${{ steps.env.outputs.version }}
+          DISCORD_URL: https://discord.gg/sYcZwcT4cT
+          NEXUS_URL: ${{ vars.NEXUS_MOD_URL || 'https://www.nexusmods.com/palworld/mods/3190' }}
+        run: |
+          envsubst < .github/templates/release_notes.md > /tmp/notes_partial.md
+          sed -i '/__CHANGELOG_ENTRY__/{
+            r /tmp/changelog_entry.md
+            d
+          }' /tmp/notes_partial.md
+          mv /tmp/notes_partial.md release_notes.md
+          echo "=== Rendered release notes ==="
+          cat release_notes.md
+
       - name: Create draft testing release
         uses: softprops/action-gh-release@v3
         with:
           tag_name: cx-test-${{ steps.env.outputs.version }}
           name: "cx_Freeze Test Build v${{ steps.env.outputs.version }}"
-          body: |
-            ## cx_Freeze Standalone Test Build v${{ steps.env.outputs.version }}
-
-            **Platform:** Windows
-            **Build type:** cx_Freeze standalone (PST_standalone/)
-
-            This is a **test build** for verification purposes only.
+          body_path: release_notes.md
           draft: true
           prerelease: true
           files: PST_standalone_v*.7z

@@ -1884,5 +1884,7 @@
     "common.cancel": "취소",
     "menu.file.load_backup": "백업에서 로드",
     "backup.no_backups": "백업을 찾을 수 없습니다.",
-    "backup.invalid": "선택한 백업에 필수 파일이 없습니다."
+    "backup.invalid": "선택한 백업에 필수 파일이 없습니다.",
+    "lang.pt_BR": "포르투갈어",
+    "port.test": "포트 테스트"
 }

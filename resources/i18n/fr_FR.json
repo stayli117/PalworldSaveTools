@@ -1867,5 +1867,7 @@
     "common.cancel": "Annuler",
     "menu.file.load_backup": "Charger à partir de la sauvegarde",
     "backup.no_backups": "Aucune sauvegarde trouvée.",
-    "backup.invalid": "La sauvegarde sélectionnée ne contient pas les fichiers requis."
+    "backup.invalid": "La sauvegarde sélectionnée ne contient pas les fichiers requis.",
+    "lang.pt_BR": "Portugais",
+    "port.test": "test des ports"
 }

@@ -11,7 +11,7 @@ _BUNDLED_CFG: str = os.path.join(base_dir, 'src', 'data', 'configs', 'config.jso
 _RESOURCES_BASE: str = get_resources_dir()
 if _RESOURCES_BASE not in sys.path:
     sys.path.insert(0, _RESOURCES_BASE)
-_SUPPORTED_LANGS = ['en_US', 'zh_CN', 'ru_RU', 'fr_FR', 'es_ES', 'de_DE', 'ja_JP', 'ko_KR']
+_SUPPORTED_LANGS = ['en_US', 'zh_CN', 'ru_RU', 'fr_FR', 'es_ES', 'de_DE', 'ja_JP', 'ko_KR', 'pt_BR']
 _cfg_path = _CFG if os.path.exists(_CFG) else _BUNDLED_CFG
 try:
     _LANG: str = json_tools.load(_cfg_path).get('lang', 'en_US') if os.path.exists(_cfg_path) else 'en_US'

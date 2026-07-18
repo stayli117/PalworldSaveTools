@@ -19,7 +19,7 @@ def _compute_user_config_dir():
     return _os.path.join(_os.path.dirname(_os.path.dirname(_os.path.dirname(__file__))), 'src', 'data', 'configs')
 _BASE: str = _os.path.dirname(__file__)
 _CFG: str = _os.path.join(_compute_user_config_dir(), 'config.json')
-_SUPPORTED_LANGS = ['en_US', 'zh_CN', 'ru_RU', 'fr_FR', 'es_ES', 'de_DE', 'ja_JP', 'ko_KR']
+_SUPPORTED_LANGS = ['en_US', 'zh_CN', 'ru_RU', 'fr_FR', 'es_ES', 'de_DE', 'ja_JP', 'ko_KR', 'pt_BR']
 def _load_json(path: str) -> Dict[str, Any]:
     try:
         with open(path, 'r', encoding='utf-8') as f:

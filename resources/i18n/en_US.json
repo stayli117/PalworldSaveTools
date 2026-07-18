@@ -2172,5 +2172,6 @@
     "common.cancel": "Cancel",
     "menu.file.load_backup": "Load from Backup",
     "backup.no_backups": "No backups found.",
-    "backup.invalid": "Selected backup is missing required files."
+    "backup.invalid": "Selected backup is missing required files.",
+    "lang.pt_BR": "Português"
 }

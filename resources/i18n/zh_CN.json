@@ -1887,5 +1887,7 @@
     "common.cancel": "取消",
     "menu.file.load_backup": "从备份加载",
     "backup.no_backups": "未找到备份。",
-    "backup.invalid": "所选备份缺少所需文件。"
+    "backup.invalid": "所选备份缺少所需文件。",
+    "lang.pt_BR": "葡萄牙语",
+    "port.test": "端口测试"
 }

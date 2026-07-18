@@ -1909,5 +1909,7 @@
     "common.cancel": "Stornieren",
     "menu.file.load_backup": "Aus Backup laden",
     "backup.no_backups": "Keine Backups gefunden.",
-    "backup.invalid": "Im ausgewählten Backup fehlen erforderliche Dateien."
+    "backup.invalid": "Im ausgewählten Backup fehlen erforderliche Dateien.",
+    "lang.pt_BR": "Portugiesisch",
+    "port.test": "Porttests"
 }

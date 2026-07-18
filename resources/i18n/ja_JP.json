@@ -1885,5 +1885,7 @@
     "common.cancel": "キャンセル",
     "menu.file.load_backup": "バックアップからロード",
     "backup.no_backups": "バックアップが見つかりませんでした。",
-    "backup.invalid": "選択したバックアップに必要なファイルがありません。"
+    "backup.invalid": "選択したバックアップに必要なファイルがありません。",
+    "lang.pt_BR": "ポルトガル語",
+    "port.test": "ポートテスト"
 }

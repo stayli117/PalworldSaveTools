@@ -64,7 +64,7 @@ def get_player_info(player_uid):
                 last = p.get('player_info', {}).get('last_online_real_time')
                 from ..utils import format_duration_short
                 lastseen = 'Unknown' if last is None else format_duration_short((tick - last) / 10000000.0)
-                level = constants.player_levels.get(uid, '?')
+                level = constants.player_levels.get(uid, 1)
                 pals = constants.PLAYER_PAL_COUNTS.get(uid, 0)
                 return {'uid': player_uid, 'name': name, 'level': level, 'pals': pals, 'lastseen': lastseen, 'guild_id': gid, 'guild_name': gname}
     return None

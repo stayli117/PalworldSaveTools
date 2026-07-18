@@ -301,7 +301,7 @@ class SaveManager(QObject):
         if not constants.loaded_level_json:
             return
         char_map = constants.loaded_level_json['properties']['worldSaveData']['value'].get('CharacterSaveParameterMap', {}).get('value', [])
-        uid_level_map = defaultdict(lambda: '?')
+        uid_level_map = defaultdict(lambda: 1)
         uid_entry_map = {}
         for entry in char_map:
             try:
@@ -314,7 +314,7 @@ class SaveManager(QObject):
                 key = entry.get('key', {})
                 uid_obj = key.get('PlayerUId', {})
                 uid = str(uid_obj.get('value', '') if isinstance(uid_obj, dict) else uid_obj)
-                level = extract_value(sp_val, 'Level', '?')
+                level = extract_value(sp_val, 'Level', 1)
                 if uid:
                     clean = uid.replace('-', '')
                     uid_level_map[clean] = level
@@ -636,7 +636,7 @@ class SaveManager(QObject):
                 with ThreadPoolExecutor() as executor:
                     results = list(executor.map(lambda p: self._top_process_player(p, playerdir, log_folder), players))
                 for uid, pname, uniques, caught, encounters in results:
-                    level = constants.player_levels.get(str(uid).replace('-', ''), '?')
+                    level = constants.player_levels.get(str(uid).replace('-', ''), 1)
                     owned = owned_counts.get(str(uid).replace('-', '').lower(), 0)
                     last = next((p.get('player_info', {}).get('last_online_real_time') for p in players if p.get('player_uid') == uid), None)
                     lastseen = 'Unknown' if last is None else format_duration_short((tick - int(last)) / 10000000.0)
@@ -969,7 +969,7 @@ class SaveManager(QObject):
                 last = p.get('player_info', {}).get('last_online_real_time')
                 elapsed = None if last is None else (tick - last) / 10000000.0
                 lastseen = 'Unknown' if last is None else format_duration_short(elapsed)
-                level = constants.player_levels.get(uid.replace('-', ''), '?') if uid else '?'
+                level = constants.player_levels.get(uid.replace('-', ''), 1) if uid else 1
                 out.append((uid, name, gid, lastseen, level, elapsed))
         return out
     def get_guild_name_by_id(self, target_gid):
@@ -1043,7 +1043,7 @@ class SaveManager(QObject):
                     last = p.get('player_info', {}).get('last_online_real_time')
                     last_seen = 'Unknown' if last is None else format_duration_short((tick - int(last)) / 10000000.0)
                     level = constants.player_levels.get(uid.replace('-', ''), None)
-                    if level == '?' or level == 'Unknown':
+                    if level is None or level == 'Unknown':
                         level = None
                     pals_count = owned_counts.get(str(uid).replace('-', '').lower(), 0)
                     formatted_uid = uid

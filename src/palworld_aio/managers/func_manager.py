@@ -98,7 +98,7 @@ def build_player_levels():
     if not constants.loaded_level_json:
         return
     char_map = constants.loaded_level_json['properties']['worldSaveData']['value'].get('CharacterSaveParameterMap', {}).get('value', [])
-    uid_level_map = defaultdict(lambda: '?')
+    uid_level_map = defaultdict(lambda: 1)
     for entry in char_map:
         try:
             sp = entry['value']['RawData']['value']['object']['SaveParameter']
@@ -110,7 +110,7 @@ def build_player_levels():
             key = entry.get('key', {})
             uid_obj = key.get('PlayerUId', {})
             uid = str(uid_obj.get('value', '') if isinstance(uid_obj, dict) else uid_obj)
-            level = extract_value(sp_val, 'Level', '?')
+            level = extract_value(sp_val, 'Level', 1)
             if uid:
                 uid_level_map[uid.replace('-', '')] = level
         except:
@@ -2396,9 +2396,9 @@ def scan_illegal_pals_by_owner():
                 players_by_uid[uid] = {
                     'name': p.get('player_info', {}).get('player_name', 'Unknown'),
                     'guild_name': group['value']['RawData']['value'].get('guild_name', 'Unknown'),
-                    'level': constants.player_levels.get(uid, '?'),
+                    'level': constants.player_levels.get(uid, 1),
                 }
-    result = defaultdict(lambda: {'illegals': [], 'pal_count': 0, 'player_name': 'Unknown', 'guild_name': 'Unknown', 'level': '?'})
+    result = defaultdict(lambda: {'illegals': [], 'pal_count': 0, 'player_name': 'Unknown', 'guild_name': 'Unknown', 'level': 1})
     for entry in cmap:
         try:
             is_illegal, illegal_markers = check_is_illegal_pal(entry)
@@ -2446,7 +2446,7 @@ def scan_illegal_pals_by_owner():
                 pinfo = players_by_uid.get(uid_str, {})
                 result[uid_str]['player_name'] = pinfo.get('name', owner_nicknames.get(uid_str, 'Unknown'))
                 result[uid_str]['guild_name'] = pinfo.get('guild_name', 'Unknown')
-                result[uid_str]['level'] = pinfo.get('level', '?')
+                result[uid_str]['level'] = pinfo.get('level', 1)
         except:
             continue
     if os.path.exists(players_dir):
@@ -2459,7 +2459,7 @@ def scan_illegal_pals_by_owner():
                 pinfo = players_by_uid.get(uid_str, {})
                 result[uid_str]['player_name'] = pinfo.get('name', owner_nicknames.get(uid_str, 'Unknown'))
                 result[uid_str]['guild_name'] = pinfo.get('guild_name', 'Unknown')
-                result[uid_str]['level'] = pinfo.get('level', '?')
+                result[uid_str]['level'] = pinfo.get('level', 1)
     return dict(result)
 def fix_illegal_pals_in_save(parent=None, selected_uids=None):
     if not constants.current_save_path or not constants.loaded_level_json:

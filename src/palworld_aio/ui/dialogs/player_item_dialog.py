@@ -275,7 +275,7 @@ class PlayerItemActionDialog(QDialog):
         for player in self.players_data:
             uid = player.get('uid', '')
             name = player.get('name', 'Unknown')
-            level = player.get('level', '?')
+            level = player.get('level', 1)
             guild_name = player.get('guild_name', 'Unknown')
             item_count = self.player_item_counts.get(uid, 0)
             display_text = f'{name} (Lv.{level}) - {guild_name}'
@@ -445,7 +445,7 @@ class PlayerItemActionDialog(QDialog):
             uid = player.get('uid', '')
             if not uid:
                 continue
-            text = f"{player.get('name', 'Unknown')} (Lv.{player.get('level', '?')}) - {player.get('guild_name', 'Unknown')}"
+            text = f"{player.get('name', 'Unknown')} (Lv.{player.get('level', 1)}) - {player.get('guild_name', 'Unknown')}"
             checkbox = ToggleCheckBtn(text)
             checkbox.setProperty('uid', uid)
             checkbox.setChecked(True)
@@ -564,7 +564,7 @@ class PlayerItemActionDialog(QDialog):
             uid = player.get('uid', '')
             if not uid:
                 continue
-            text = f"{player.get('name', 'Unknown')} (Lv.{player.get('level', '?')}) - {uid}"
+            text = f"{player.get('name', 'Unknown')} (Lv.{player.get('level', 1)}) - {uid}"
             checkbox = ToggleCheckBtn(text)
             checkbox.setProperty('uid', uid)
             checkbox.setChecked(True)

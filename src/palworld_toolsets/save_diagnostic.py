@@ -123,7 +123,7 @@ def check_orphaned_players(wsd: dict) -> list:
                 continue
             clean = uid.replace('-', '').lower()
             nick = sp_val.get('NickName', {}).get('value', '(no nickname)')
-            level = sp_val.get('Level', {}).get('value', {}).get('value', '?')
+            level = sp_val.get('Level', {}).get('value', {}).get('value', 1)
 
             in_guild = clean in guild_player_uids
             is_admin = clean in admin_player_uids

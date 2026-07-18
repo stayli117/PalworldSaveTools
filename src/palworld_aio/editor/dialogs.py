@@ -759,7 +759,7 @@ class PalDefenderDialog(ThemedDialog):
                 key = entry.get('key', {})
                 uid_obj = key.get('PlayerUId', {})
                 uid = str(uid_obj.get('value', '') if isinstance(uid_obj, dict) else uid_obj)
-                level = extract_value(sp_val, 'Level', '?')
+                level = extract_value(sp_val, 'Level', 1)
                 if uid:
                     player_levels[uid.replace('-', '').lower()] = level
             except:
@@ -810,8 +810,8 @@ class PalDefenderDialog(ThemedDialog):
             if max_level is not None:
                 for p in players:
                     uid = str(p.get('player_uid', '')).replace('-', '').lower()
-                    level = player_levels.get(uid, '?')
-                    if level == '?' or (isinstance(level, int) and level > max_level):
+                    level = player_levels.get(uid, 1)
+                    if isinstance(level, int) and level > max_level:
                         matches_max_level = False
                         break
             if not matches_max_level:
@@ -822,7 +822,7 @@ class PalDefenderDialog(ThemedDialog):
                 days = float('inf') if last_online is None else (tick - last_online) / 10000000.0 / 86400
                 inactive_str = format_duration_short((tick - last_online) / 10000000.0) if last_online is not None else 'Never'
                 name = p.get('player_info', {}).get('player_name', 'Unknown')
-                level = player_levels.get(uid, '?')
+                level = player_levels.get(uid, 1)
                 player_infos.append({'uid': uid, 'name': name, 'days': days, 'inactive_str': inactive_str, 'level': level, 'pals': player_pal_counts.get(uid, 0)})
             guild_entries.append({'id': gid_raw, 'name': guild_name, 'players': player_infos})
         base_list = wsd.get('BaseCampSaveData', {}).get('value', [])
@@ -862,7 +862,7 @@ class PalDefenderDialog(ThemedDialog):
     def _add_guild_tree_item(self, ge):
         from ..utils import format_duration_short
         min_days = min((p['days'] for p in ge['players']), default=float('inf'))
-        max_lv = max((p['level'] for p in ge['players'] if isinstance(p['level'], int)), default='?')
+        max_lv = max((p['level'] for p in ge['players'] if isinstance(p['level'], int)), default=1)
         has_bases = len(ge['bases']) > 0
         inactive_col = 'Never'
         if min_days != float('inf'):

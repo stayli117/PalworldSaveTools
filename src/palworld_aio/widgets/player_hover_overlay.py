@@ -61,7 +61,7 @@ class PlayerHoverOverlay(QWidget):
         self._hide_timer.stop()
         player_name = player_data.get('player_name', 'Unknown')
         player_uid = player_data.get('player_uid', '')
-        player_level = player_data.get('level', '?')
+        player_level = player_data.get('level', 1)
         last_seen = player_data.get('last_seen', 'Unknown')
         pal_count = player_data.get('pal_count', 0)
         guild_name = player_data.get('guild_name', '')

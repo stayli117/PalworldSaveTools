@@ -2078,7 +2078,7 @@ class MainWindow(QMainWindow):
     def _level_up_player(self, uid):
         from ..managers.player_manager import adjust_player_level, get_level_from_exp
         current_level = constants.player_levels.get(str(uid).replace('-', ''), 1)
-        if current_level == 1 or current_level == '?':
+        if current_level == 1:
             self._show_warning(t('Error') if t else 'Error', t('player.level.set_no_level_data') if t else 'Cannot level up player - player is at level 1 or unknown')
             return
         if adjust_player_level(uid, current_level + 1):
@@ -2089,7 +2089,7 @@ class MainWindow(QMainWindow):
     def _level_down_player(self, uid):
         from ..managers.player_manager import adjust_player_level, get_level_from_exp
         current_level = constants.player_levels.get(str(uid).replace('-', ''), 1)
-        if current_level == 1 or current_level == '?':
+        if current_level == 1:
             self._show_warning(t('Error') if t else 'Error', t('player.level.set_no_level_data') if t else 'Cannot level down player - player is at level 1 or unknown')
             return
         if current_level - 1 < 2:
@@ -2102,9 +2102,8 @@ class MainWindow(QMainWindow):
             self._show_warning(t('Error') if t else 'Error', 'Failed to level down player (already min level?)')
     def _set_player_level(self, uid):
         from ..managers.player_manager import adjust_player_level, get_level_from_exp
-        current_level_raw = constants.player_levels.get(str(uid).replace('-', ''), 1)
-        current_level = 1 if current_level_raw == '?' else current_level_raw
-        if current_level == 1 or current_level_raw == '?':
+        current_level = constants.player_levels.get(str(uid).replace('-', ''), 1)
+        if current_level == 1:
             self._show_warning(t('Error') if t else 'Error', t('player.level.set_no_level_data') if t else 'Cannot set player level - player is at level 1 or unknown')
             return
         new_level = LevelInputDialog.get_level(t('player.set_level.title') if t else 'Set Player Level', t('player.set_level.prompt', current_level=current_level) if t else f'Current level: {current_level}\nEnter new level (2-80):', current_level, self)

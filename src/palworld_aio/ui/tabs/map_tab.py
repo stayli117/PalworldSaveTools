@@ -1166,7 +1166,7 @@ class MapTab(QWidget):
                 break
     def _update_player_info(self, player_data):
         player_name = player_data.get('player_name', 'Unknown')
-        level = player_data.get('level', '?')
+        level = player_data.get('level', 1)
         last_seen = player_data.get('last_seen', 'Unknown')
         pal_count = player_data.get('pal_count', 0)
         guild_name = player_data.get('guild_name', '')

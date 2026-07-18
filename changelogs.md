@@ -1,4 +1,5 @@
 #2.1.5
+- **Player level shows 1 instead of ?** — players who never leveled up now display as level 1 everywhere instead of a confusing `?` in hover overlays, map markers, guild lists, and export data.
 - **Language switching fixed** — changing language now switches to the correct language on the first try, with all labels and tooltips updating immediately.
 - **Tooltips now update on language switch** — the Max All Souls and Max All IVs icons in the pal editor now show translated tooltips when changing the UI language on the fly.
 - **Language names in menu always show native names** — Portuguese, Chinese, Russian, and all other languages in the menu > Languages list now display in their native form (e.g. "Português") regardless of the current app language.

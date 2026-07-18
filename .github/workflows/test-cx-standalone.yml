@@ -60,6 +60,7 @@ jobs:
           if-no-files-found: warn
 
       - name: Extract changelog entry
+        shell: bash
         run: |
           awk '/^#[0-9]/{if (found) exit; if ($0 == "#${{ steps.env.outputs.version }}") found=1; next} found' \
             changelogs.md > /tmp/changelog_entry.md 2>/dev/null || true
@@ -70,6 +71,7 @@ jobs:
           cat /tmp/changelog_entry.md
 
       - name: Render release notes from template
+        shell: bash
         env:
           APP_NAME: ${{ steps.env.outputs.app_name }}
           VERSION: ${{ steps.env.outputs.version }}

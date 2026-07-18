@@ -202,7 +202,7 @@ class CharacterTransferWindow(QWidget):
     def closeEvent(self, event):
         global level_json, host_json, targ_lvl, targ_json
         global target_gvas_file, targ_json_gvas, player_list_cache
-        global modified_target_players, modified_targets_data, _session_transferred_dynamics, _session_id_map
+        global modified_target_players, modified_targets_data
         level_json = None
         host_json = None
         targ_lvl = None
@@ -211,8 +211,6 @@ class CharacterTransferWindow(QWidget):
         targ_json_gvas = None
         modified_target_players = set()
         modified_targets_data = {}
-        _session_transferred_dynamics.clear()
-        _session_id_map.clear()
         event.accept()
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Escape:
@@ -765,8 +763,6 @@ def migrate_pal_via_api(pal_data, target_uid, targ_lvl, target_player_json, targ
     return True
 modified_target_players = set()
 modified_targets_data = {}
-_session_transferred_dynamics = set()
-_session_id_map = {}
 def transfer_all_characters():
     def worker():
         import time
@@ -825,7 +821,6 @@ def transfer_all_characters():
             modified_target_players.add(selected_target_player)
             modified_targets_data[selected_target_player] = (fast_deepcopy(targ_json), targ_json_gvas, selected_source_player)
             print(f'[{i + 1}/{total_players}]{player_uuid} | Char: {t_char:.3f}s | Inv: {t_inv:.3f}s | Pals: {t_pals:.3f}s | Total: {time.perf_counter() - player_start:.3f}s')
-        gather_and_update_dynamic_containers()
         print(f'Bulk transfer completed in {time.perf_counter() - total_start:.2f}s.')
     def on_bulk_finished():
         load_players(targ_lvl, is_source=False)
@@ -941,7 +936,6 @@ def main(skip_msgbox=False, skip_gui=False):
                 print('[FAIL]Pals')
                 return False
             print('[SUCCESS]Pals')
-        gather_and_update_dynamic_containers()
         if _TRANSFER_STEPS['timestamps']:
             sync_player_timestamps(targ_uid, targ_lvl)
         modified_target_players.add(selected_target_player)
@@ -965,52 +959,7 @@ def main(skip_msgbox=False, skip_gui=False):
             show_information(None, t('Transfer Successful'), t("Transfer successful in memory! Hit 'Save Changes' to save."))
     run_with_loading(on_finished, task)
     return True
-def _normalize_lid(lid):
-    if hasattr(lid, 'raw_bytes'):
-        s = str(lid).lower()
-        return '' if s.replace('-', '') == '00000000000000000000000000000000' else s
-    if isinstance(lid, bytes):
-        if lid == b'\x00' * 16:
-            return ''
-        from uuid import UUID
-        try:
-            return str(UUID(bytes=lid)).lower()
-        except:
-            return lid.hex().lower()
-    if isinstance(lid, str):
-        stripped = lid.replace('-', '').lower()
-        return '' if stripped == '00000000000000000000000000000000' else lid.lower()
-    from uuid import UUID as UUIDType
-    if isinstance(lid, UUIDType):
-        return '' if lid.hex == '00000000000000000000000000000000' else str(lid).lower()
-    return ''
-def _bump_guid_str(s, used):
-    v = str(s).lower()
-    t = str.maketrans('0123456789abcdef', '123456789abcdef0')
-    bumped = v.translate(t)
-    for _ in range(1000):
-        if bumped not in used:
-            used.add(bumped)
-            return bumped
-        bumped = bumped.translate(t)
-    raise RuntimeError(f'GUID exhaustion after 1000 attempts for {s}')
-def _collect_dynamic_ids_from_container(container):
-    ids = set()
-    for slot in container.get('value', {}).get('Slots', {}).get('value', {}).get('values', []):
-        try:
-            item = slot.get('RawData', {}).get('value', {}).get('item', {})
-            if not isinstance(item, dict):
-                continue
-            dyn_id = item.get('dynamic_id', {})
-            if not isinstance(dyn_id, dict) or not dyn_id:
-                continue
-            lid = dyn_id.get('local_id_in_created_world', '')
-            norm = _normalize_lid(lid)
-            if norm:
-                ids.add(norm)
-        except:
-            continue
-    return ids
+
 def sync_player_timestamps(targ_uid, target_lvl):
     global target_world_tick
     try:
@@ -1039,74 +988,6 @@ def sync_player_timestamps(targ_uid, target_lvl):
         return True
     except:
         return False
-def gather_and_update_dynamic_containers():
-    global _session_transferred_dynamics, _session_id_map
-    src_items = level_json.get('DynamicItemSaveData', {}).get('value', {}).get('values', [])
-    tgt_items = targ_lvl.setdefault('DynamicItemSaveData', {}).setdefault('value', {}).setdefault('values', [])
-    tgt_in_use = set()
-    for container_type in ['ItemContainerSaveData', 'CharacterContainerSaveData']:
-        for c in targ_lvl.get(container_type, {}).get('value', []):
-            tgt_in_use |= _collect_dynamic_ids_from_container(c)
-    slot_by_dyn_id = {}
-    for container_type in ['ItemContainerSaveData', 'CharacterContainerSaveData']:
-        for c in targ_lvl.get(container_type, {}).get('value', []):
-            for slot in c.get('value', {}).get('Slots', {}).get('value', {}).get('values', []):
-                try:
-                    slot_item = slot.get('RawData', {}).get('value', {}).get('item', {})
-                    if not isinstance(slot_item, dict):
-                        continue
-                    s_dyn = slot_item.get('dynamic_id', {})
-                    if not isinstance(s_dyn, dict):
-                        continue
-                    s_lid = s_dyn.get('local_id_in_created_world', '')
-                    norm = _normalize_lid(s_lid)
-                    if norm:
-                        slot_by_dyn_id.setdefault(norm, []).append(s_dyn)
-                except:
-                    continue
-    tgt_by_id = {}
-    for item in tgt_items:
-        try:
-            lid = item.get('RawData', {}).get('value', {}).get('id', {}).get('local_id_in_created_world')
-            if lid:
-                norm = _normalize_lid(lid)
-                if norm:
-                    tgt_by_id[norm] = item
-        except:
-            continue
-    used_ids = set(tgt_by_id.keys())
-    id_map = dict(_session_id_map)
-    remap_count = 0
-    for item in src_items:
-        try:
-            lid = item.get('RawData', {}).get('value', {}).get('id', {}).get('local_id_in_created_world')
-            if not lid:
-                continue
-            norm = _normalize_lid(lid)
-            if not norm or norm in _session_transferred_dynamics:
-                continue
-            if norm in tgt_in_use or norm in used_ids:
-                if norm in id_map:
-                    bumped = id_map[norm]
-                else:
-                    bumped = _bump_guid_str(norm, used_ids)
-                    id_map[norm] = bumped
-                    _session_id_map[norm] = bumped
-                for s_dyn in slot_by_dyn_id.get(norm, []):
-                    s_dyn['local_id_in_created_world'] = PalUUID.from_str(bumped)
-                    remap_count += 1
-                item_copy = fast_deepcopy(item)
-                item_copy['RawData']['value']['id']['local_id_in_created_world'] = PalUUID.from_str(bumped)
-                tgt_by_id[bumped] = item_copy
-            else:
-                tgt_by_id[norm] = fast_deepcopy(item)
-            _session_transferred_dynamics.add(norm)
-        except:
-            continue
-    if remap_count:
-        print(f'[DYNAMICS] Remapped {remap_count} container slot references')
-    targ_lvl['DynamicItemSaveData']['value']['values'] = list(tgt_by_id.values())
-
 def _new_guid():
     return PalUUID(os.urandom(16))
 def _set_player_groupid(targ_json, group_id):
@@ -1469,9 +1350,6 @@ def source_level_file():
     if not os.path.isdir(players_dir):
         show_warning(None, t('error.title'), t('character_transfer.no_players_folder'))
         return
-    global _session_transferred_dynamics, _session_id_map
-    _session_transferred_dynamics.clear()
-    _session_id_map.clear()
     level_json = None
     def task():
         global source_world_tick
@@ -1499,7 +1377,7 @@ def source_level_file():
     run_with_loading(on_finished, task)
 def target_level_file():
     global t_level_sav_path, targ_lvl, target_gvas_file, selected_target_player
-    global modified_target_players, modified_targets_data, _session_transferred_dynamics, _session_id_map
+    global modified_target_players, modified_targets_data
     tmp = select_file()
     if not tmp:
         return
@@ -1510,8 +1388,6 @@ def target_level_file():
     if not os.path.isdir(players_dir):
         show_warning(None, t('error.title'), t('character_transfer.no_players_folder'))
         return
-    _session_transferred_dynamics.clear()
-    _session_id_map.clear()
     targ_lvl = None
     target_gvas_file = None
     modified_target_players = set()

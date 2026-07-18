@@ -26,6 +26,7 @@ LANGUAGES = {
     'ru_RU': {'dir': 'ru', 'code': 'ru', 'name': 'Russian'},
     'ja_JP': {'dir': 'ja', 'code': 'ja', 'name': 'Japanese'},
     'ko_KR': {'dir': 'ko', 'code': 'ko', 'name': 'Korean'},
+    'pt_BR': {'dir': 'pt_BR', 'code': 'pt', 'name': 'Portuguese (Brazil)'},
 }
 
 HTML_TAG_PATTERN = re.compile(r'<[^>]+>')

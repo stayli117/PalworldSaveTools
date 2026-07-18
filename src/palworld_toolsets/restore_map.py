@@ -1,7 +1,7 @@
 from import_libs import *
 from palsav.core import decompress_sav_to_gvas, compress_gvas_to_sav
 
-from loading_manager import show_critical
+from loading_manager import show_critical, run_with_loading
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QFrame, QApplication
 from PySide6.QtGui import QIcon, QFont
 from PySide6.QtCore import Qt, QTimer
@@ -190,13 +190,11 @@ def restore_map():
             if not ok or not new_name.strip():
                 _sh.rmtree(tmp, ignore_errors=True)
                 return
-            try:
-                self._xgp_clear_work(tmp=tmp, cpath=cpath, level_path=level_path, new_name=new_name, save_id=save_id)
-            except Exception as e:
-                _sh.rmtree(tmp, ignore_errors=True)
-                show_critical(self, t('Error'), str(e))
-                return
-            self._xgp_clear_done()
+            run_with_loading(
+                lambda _: self._xgp_clear_done(),
+                self._xgp_clear_work, tmp=tmp, cpath=cpath,
+                level_path=level_path, new_name=new_name, save_id=save_id,
+                parent=self)
         def _xgp_clear_work(self, tmp, cpath, level_path, new_name, save_id):
             from palworld_xgp_import.gamepass_manager import save_xgp_changes
             from palworld_aio.utils import sav_to_gvas_wrapper, wrapper_to_sav
@@ -243,9 +241,7 @@ def restore_map():
         def on_yes(self):
             self.yes_button.setEnabled(False)
             self.no_button.setEnabled(False)
-            QApplication.processEvents()
-            clear_fog_in_all_subfolders()
-            self._on_clear_done()
+            run_with_loading(lambda _: self._on_clear_done(), clear_fog_in_all_subfolders, parent=self)
         def _on_clear_done(self):
             self.result_label.setText(t('Fog cleared successfully!'))
             self.yes_button.setEnabled(False)

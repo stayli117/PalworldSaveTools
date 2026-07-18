@@ -632,7 +632,9 @@ def migrate_inventory_via_player_inventory(target_uid, items, t_level_sav_path, 
                     if sn:
                         sn['value'] = max_needed
         for item in items:
-            inv.add_item(item['container_type'], item['item_id'], item['count'], item['slot_index'])
+            container = inv.get_container(item['container_type'])
+            if container:
+                container._standardized_container.add_item(item['item_id'], item['count'], item['slot_index'])
         inv.save()
         return True
     except Exception as e:
@@ -1045,6 +1047,23 @@ def gather_and_update_dynamic_containers():
     for container_type in ['ItemContainerSaveData', 'CharacterContainerSaveData']:
         for c in targ_lvl.get(container_type, {}).get('value', []):
             tgt_in_use |= _collect_dynamic_ids_from_container(c)
+    slot_by_dyn_id = {}
+    for container_type in ['ItemContainerSaveData', 'CharacterContainerSaveData']:
+        for c in targ_lvl.get(container_type, {}).get('value', []):
+            for slot in c.get('value', {}).get('Slots', {}).get('value', {}).get('values', []):
+                try:
+                    slot_item = slot.get('RawData', {}).get('value', {}).get('item', {})
+                    if not isinstance(slot_item, dict):
+                        continue
+                    s_dyn = slot_item.get('dynamic_id', {})
+                    if not isinstance(s_dyn, dict):
+                        continue
+                    s_lid = s_dyn.get('local_id_in_created_world', '')
+                    norm = _normalize_lid(s_lid)
+                    if norm:
+                        slot_by_dyn_id.setdefault(norm, []).append(s_dyn)
+                except:
+                    continue
     tgt_by_id = {}
     for item in tgt_items:
         try:
@@ -1073,22 +1092,9 @@ def gather_and_update_dynamic_containers():
                     bumped = _bump_guid_str(norm, used_ids)
                     id_map[norm] = bumped
                     _session_id_map[norm] = bumped
-                for container_type in ['ItemContainerSaveData', 'CharacterContainerSaveData']:
-                    for c in targ_lvl.get(container_type, {}).get('value', []):
-                        for slot in c.get('value', {}).get('Slots', {}).get('value', {}).get('values', []):
-                            try:
-                                slot_item = slot.get('RawData', {}).get('value', {}).get('item', {})
-                                if not isinstance(slot_item, dict):
-                                    continue
-                                s_dyn = slot_item.get('dynamic_id', {})
-                                if not isinstance(s_dyn, dict):
-                                    continue
-                                s_lid = s_dyn.get('local_id_in_created_world', '')
-                                if _normalize_lid(s_lid) == norm:
-                                    s_dyn['local_id_in_created_world'] = PalUUID.from_str(bumped)
-                                    remap_count += 1
-                            except:
-                                continue
+                for s_dyn in slot_by_dyn_id.get(norm, []):
+                    s_dyn['local_id_in_created_world'] = PalUUID.from_str(bumped)
+                    remap_count += 1
                 item_copy = fast_deepcopy(item)
                 item_copy['RawData']['value']['id']['local_id_in_created_world'] = PalUUID.from_str(bumped)
                 tgt_by_id[bumped] = item_copy

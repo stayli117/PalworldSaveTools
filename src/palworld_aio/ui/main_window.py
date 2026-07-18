@@ -886,7 +886,16 @@ class MainWindow(QMainWindow):
             nonlocal effigy_accepted, effigy_qty
             from palworld_aio.utils import gvasfile_to_sav
             from palworld_aio.inventory.dynamic_item import sync_dynamic_items_with_registry
-            per_player_missing = {}
+            from palworld_aio.inventory.inventory_manager import ASSET_TO_RELIC_TYPE
+            wsd = constants.loaded_level_json['properties']['worldSaveData']['value']
+            item_containers = wsd.get('ItemContainerSaveData', {}).get('value', [])
+            container_lookup = {}
+            for c in item_containers:
+                cid = c.get('key', {}).get('ID', {}).get('value', '')
+                if cid:
+                    container_lookup[cid] = c
+            total_missing = 0
+            players_affected = 0
             for uid in player_uids:
                 try:
                     inv = PlayerInventory(uid)
@@ -908,44 +917,24 @@ class MainWindow(QMainWindow):
                     for item_id in WEAPON_UNLOCK_ITEMS:
                         if item_id not in existing:
                             missing.append(item_id)
-                    if missing:
-                        per_player_missing[uid] = missing
-                except:
-                    continue
-            if effigy_accepted:
-                for uid in player_uids:
-                    try:
-                        inv = PlayerInventory(uid)
-                        if inv.load():
-                            inv.set_all_effigy_counts(effigy_qty)
-                    except:
-                        pass
-            total_missing = sum((len(v) for v in per_player_missing.values()))
-            if not total_missing:
-                return (0, 0)
-            players_affected = 0
-            for uid, item_ids in per_player_missing.items():
-                try:
-                    inv = PlayerInventory(uid)
-                    if not inv.load():
+                    if effigy_accepted:
+                        for rtype in set(ASSET_TO_RELIC_TYPE.values()):
+                            inv.set_effigy_count(rtype, effigy_qty, _save=False)
+                    if not missing:
+                        if effigy_accepted:
+                            inv._save_player_sav()
+                            players_affected += 1
                         continue
                     key_container = inv.containers.get('key')
                     if key_container:
                         std_container = key_container._standardized_container
-                        slots_needed = len(key_container.slots) + len(item_ids)
+                        slots_needed = len(key_container.slots) + len(missing)
                         if slots_needed > std_container.max_slots:
                             new_max = slots_needed + 50
                             std_container.expand_capacity(new_max)
                             std_container.container_data['value']['SlotNum']['value'] = new_max
-                    for item_id in item_ids:
+                    for item_id in missing:
                         inv.add_item('key', item_id, 1)
-                    wsd = constants.loaded_level_json['properties']['worldSaveData']['value']
-                    item_containers = wsd.get('ItemContainerSaveData', {}).get('value', [])
-                    container_lookup = {}
-                    for c in item_containers:
-                        cid = c.get('key', {}).get('ID', {}).get('value', '')
-                        if cid:
-                            container_lookup[cid] = c
                     for ctype, inventory_container in inv.containers.items():
                         cid = str(inventory_container.container_id)
                         if cid in container_lookup:
@@ -953,9 +942,10 @@ class MainWindow(QMainWindow):
                             container_lookup[cid]['value']['Slots']['value']['values'] = raw_slots
                     sync_dynamic_items_with_registry(inv.containers)
                     gvasfile_to_sav(inv.player_gvas, os.path.join(constants.current_save_path, 'Players', f"{str(uid).replace('-', '').upper()}.sav"))
+                    total_missing += len(missing)
                     players_affected += 1
                 except Exception as e:
-                    print(f'Error adding key items to player {uid}: {e}')
+                    print(f'Error processing key items for player {uid}: {e}')
                     continue
             if players_affected > 0:
                 constants.invalidate_container_lookup()

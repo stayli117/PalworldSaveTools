@@ -8,7 +8,7 @@
 - **Unlock All Fast Travel** — renamed from "Unlock All Map + Fast Travel". Now only unlocks fast travel points without revealing map areas or unlocking the world map.
 - **Loading overlay close button** — the loading screen now has a ✕ close button in the top-right corner. Clicking it dismisses the overlay while background work continues.
 - **Add All Key Items performance fix** — massive speedup on big saves. Each item was triggering a full scan of every container in the save file; now all items are added in memory and saved once. Same fix applied to Bulk Add Items and Equipment Loadouts.
-- **Stats tab now refreshes all tabs on change** — changing stats (level +/-, max all stats, stat point edits) now triggers a full UI refresh so all tabs show up-to-date data immediately.
+- **Stats tab now refreshes all tabs on change** — changing stats (level +/-, max all stats, stat point edits) now triggers a full UI refresh so all tabs show up-to-date data immediately. Max All Stats previously bypassed the refresh signal; now it uses the same path as manual edits.
 - Bumped version to 2.1.5
 
 #2.1.4

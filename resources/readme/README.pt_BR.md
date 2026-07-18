@@ -40,7 +40,7 @@ Se você precisa gerenciar um servidor dedicado, migrar entre servidores coopera
 - **Edição profunda de Pal** — Controle total sobre estatísticas, IVs, almas, habilidades, passives, adequações de trabalho, classificação e sinalizadores de aparência.
 - **Ferramentas de nível de servidor** — Exclusão em massa, limpeza, conversão e transferência de caracteres criadas para administradores.
 - **Backups automáticos** — Cada operação de salvamento cria um backup antes de gravar.
-- **8 idiomas** — UI localizada, guias no aplicativo e documentação.
+- **9 idiomas** — UI localizada, guias no aplicativo e documentação.
 
 
 
@@ -93,7 +93,9 @@ Se você precisa gerenciar um servidor dedicado, migrar entre servidores coopera
 
 - Visualize e pesquise todos os jogadores por nome, nível, contagem de pal, UID, guilda e hora da última visualização.
 - Edite nomes de jogadores, níveis, estatísticas e pontos de tecnologia.
-- **Operações em massa** entre vários jogadores: gerenciamento de itens, gerenciamento de pal e desbloqueio de tecnologia.
+- **Aba Estatísticas** — Estatísticas do herói (Saúde, Vigor, Ataque, Defesa, Velocidade de Trabalho, Peso) com valores computados corretos no jogo; Habilidades de relíquia com alternadores e giradores.
+- **Max All Stats** — Limite instantaneamente todas as estatísticas ao máximo (50 pontos).
+- **Operações em massa** entre vários jogadores: gerenciamento de itens, gerenciamento pal e desbloqueio de tecnologia.
 - Excluir jogadores inativos por limite de tempo; remova duplicatas.
 
 ### Pal Editor
@@ -105,8 +107,13 @@ Uma interface de edição profunda para qualquer Pal de propriedade de qualquer 
 - **Habilidades** — Seletor de habilidades ativo; aprenda todos os movimentos; habilidades de sincronização em massa em Pals.
 - **Passive Traits** — Seletor passivo com dados completos do jogo.
 - **Adequação para o trabalho** — Defina níveis individuais de adequação para o trabalho (0–10).
-- **Bandeiras de Aparência** — Alternar Boss/Alpha, Lucky/Shiny, Awakened e Imported/DNA.
+- **Bandeiras de Aparência** — Alternar Boss/Alpha, Lucky/Shiny, Predator, Awakened e Imported/DNA.
 - **Classificação e bloqueio** — Defina a classificação e o nível de bloqueio favorito (0–3).
+- **Cheat Mode** — Alterne para expandir todas as letras maiúsculas: nível, IVs, almas, classificação do condensador para 255; desbloquear habilidades ativas/passivas ilimitadas com duplicatas permitidas.
+- **Exportar/Importar** — Clique com o botão direito em qualquer pal para exportar como `.pstpal` (compactado) ou `.json`. Importe para slots vazios em party, palbox, DPS ou trabalhadores de base. Funciona em salvamentos e jogadores.
+- **Max All Pals** — Maximize todas as estatísticas (IVs, almas, classificação, nível) para todos os pals no grupo, todas as páginas palbox ou todos os trabalhadores da base — respeita os limites do modo de trapaça.
+- **Consertar Illegal Pals** — Detecta e limita pals com estatísticas, habilidades ou características ilegais por jogador.
+- **Bulk Clone/Delete** — Diálogo de seleção de espécies com controles de quantidade e alternadores de origem (Party/Palbox/DPS) para operações em lote.
 - Adicione novo Pals ou exclua rapidamente com clique duplo.
 
 ### Gerenciamento de Guilda
@@ -122,9 +129,10 @@ Visualização em dois painéis: lista de guildas no topo, lista de membros abai
 - Veja todos os acampamentos base com associação de guilda.
 - **Exportar** projetos básicos para `.json`; **importar** (arquivo único ou múltiplo) para qualquer guilda.
 - **Clone** bases para outras guildas com posicionamento deslocado.
+- **Alterar Coordenadas** — Clique com o botão direito em um marcador de base no mapa, escolha "Alterar Coordenadas" e clique em qualquer local para teletransportar a base.
+- **Deslocamento de base** — Desloque uma base em deslocamentos X/Y/Z exatos para corrigir o corte ou a flutuação do solo.
 - **Ajustar o raio da base** (50%–1000%).
 - Excluir bases inativas e objetos do mapa não base.
-
 ### Visualizador de mapa
 
 Visualização interativa de todo o seu mundo.
@@ -263,7 +271,7 @@ O inicializador cria um `.venv`, instala dependências via `uv sync` e inicializ
 
 1. **Carregue seu arquivo salvo**
    - Clique em **Menu → Carregar Salvar** ou arraste e solte um arquivo `.sav` na janela.
-   - Navegue até a pasta salva do Palworld e selecione `Level.sav`.
+- Navegue até a pasta salva do Palworld e selecione `Level.sav`.
 
 2. **Explore seus dados**
    - Use as abas — **Mapa**, **Ferramentas**, **Jogadores**, **Guildas**, **Bases**, **Inventário de Jogadores**, **Inventário Base**, **Pal Editor**, **Exclusões** — para explorar seu salvamento.
@@ -344,7 +352,7 @@ O PST pode desbloquear o mapa completo (todos os pontos de viagem rápida) para 
 1. Use **Fix Host Save** para trocar o `0001.sav` do host antigo → seu salvamento regular (por exemplo, `123xxx.sav`). Isso move seu progresso para fora do slot do host.
 2. Use **Fix Host Save** para trocar o salvamento regular do novo host (por exemplo, `987xxx.sav`) → `0001.sav`. Isso move seu progresso para o slot de host.
 
-**Resultado:** O novo host agora ocupa `0001.sav` com caractere próprio e Pals; o host antigo se torna um cliente com seu progresso original intacto.
+**Resultado:** O novo host agora ocupa `0001.sav` com seu próprio personagem e Pals; o host antigo se torna um cliente com seu progresso original intacto.
 
 </details>
 
@@ -420,7 +428,6 @@ O formato do arquivo salvo está desatualizado. Carregue o jogo salvo (Solo, Co-
 2. Aguarde alguns minutos para que os identificadores de arquivo sejam liberados.
 3. Execute o conversor GamePass → Steam.
 4. Inicie o Palworld em GamePass para verificar.
-
 ### O binário Linux/macOS não inicia
 
 - **Linux:** `chmod +x PalworldSaveTools-*-linux` para marcá-lo como executável.
@@ -464,7 +471,7 @@ As saídas vão para `dist/`:
 
 ### cx_Freeze (Instalador do Windows)
 
-Para um pacote local do Windows `.7z`:
+Para um pacote `.7z` local do Windows:
 
 ```
 scripts\build_cx.cmd
@@ -500,7 +507,7 @@ uv run python build/build_interactively.py
 Contribuições são bem-vindas! Sinta-se à vontade para enviar uma solicitação pull.
 
 1. Bifurque o repositório.
-2. Crie sua ramificação de recursos (`git checkout -b feature/AmazingFeature`).
+2. Crie sua ramificação de recurso (`git checkout -b feature/AmazingFeature`).
 3. Confirme suas alterações (`git commit -m 'Add some AmazingFeature'`).
 4. Empurre para a ramificação (`git push origin feature/AmazingFeature`).
 5. Abra uma solicitação pull.
@@ -521,6 +528,7 @@ Contribuições são bem-vindas! Sinta-se à vontade para enviar uma solicitaç�
 <img src="https://readme-typing-svg.demolab.com?lines=Leia+isto+antes+de+quebrar+algo;Voc%C3%AA+foi+avisado;Fa%C3%A7a+backup+primeiro%21;Com+grande+poder...&center=true&width=520&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
+
 **Use esta ferramenta por sua conta e risco. Sempre faça backup dos seus arquivos salvos antes de fazer qualquer modificação.**
 
 Os desenvolvedores não são responsáveis por qualquer perda de dados salvos ou problemas que possam surgir com o uso desta ferramenta.
@@ -596,7 +604,7 @@ Este projeto não existiria sem as pessoas por trás dele.
 
 **[oMaN-Rod](https://github.com/oMaN-Rod)** — Fornecido o analisador de salvamento original do qual este projeto se bifurcou. Sem seu trabalho fundamental para quebrar o formato de salvamento do Palworld, nada disso existiria. O fork simplificou e simplificou seu analisador no que o PST é hoje.
 
-**[Okaetsu](https://github.com/Okaetsu)** — Modificações de insights que tornaram possível a importação/exportação de base. Sua compreensão de como o Palworld estrutura os dados básicos do lado do modding preencheu a lacuna entre o modding e a edição salva, tornando esse recurso uma realidade.
+**[Okaetsu](https://github.com/Okaetsu)** — Modificações de insights que tornaram possível a importação/exportação básica. Sua compreensão de como o Palworld estrutura os dados básicos do lado do modding preencheu a lacuna entre o modding e a edição salva, tornando esse recurso uma realidade.
 
 
 

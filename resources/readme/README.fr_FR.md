@@ -40,7 +40,7 @@ Que vous ayez besoin de gérer un serveur dédié, de migrer entre des serveurs 
 - **Édition approfondie de Pal** — Contrôle total sur les statistiques, IVs, les âmes, les compétences, passives, les aptitudes au travail, le rang et les drapeaux d'apparence.
 - **Outils de qualité serveur** — Suppression, nettoyage, conversion et transfert de caractères en masse conçus pour les administrateurs.
 - **Sauvegardes automatiques** — Chaque opération de sauvegarde crée une sauvegarde avant l'écriture.
-- **8 langues** — Interface utilisateur localisée, guides intégrés à l'application et documentation.
+- **9 langues** — Interface utilisateur localisée, guides intégrés à l'application et documentation.
 
 
 
@@ -90,6 +90,8 @@ Que vous ayez besoin de gérer un serveur dédié, de migrer entre des serveurs 
 
 - Affichez et recherchez tous les joueurs par nom, niveau, nombre pal, UID, guilde et heure de dernière visite.
 - Modifiez les noms des joueurs, les niveaux, les statistiques et les points technologiques.
+- **Onglet Statistiques** — Statistiques des héros (Santé, Endurance, Attaque, Défense, Vitesse de travail, Poids) avec les valeurs calculées correctes dans le jeu ; Capacités reliques avec bascules et spinners.
+- **Max All Stats** — Limitez instantanément toutes les statistiques au maximum (50 points).
 - **Opérations groupées** sur plusieurs joueurs : gestion des objets, gestion pal et déverrouillages technologiques.
 - Supprimer les joueurs inactifs par seuil de temps ; supprimer les doublons.
 
@@ -102,8 +104,13 @@ Une interface d'édition approfondie pour n'importe quel Pal appartenant à n'im
 - **Compétences** — Sélecteur de compétences actif ; apprendre tous les mouvements ; compétences de synchronisation en masse sur Pals.
 - **Traits passifs** — Sélecteur passif avec données de jeu complètes.
 - **Aptitude au travail** — Définissez les niveaux individuels d'aptitude au travail (0 à 10).
-- **Drapeaux d'apparence** — Basculez entre Boss/Alpha, Chanceux/Brillant, Éveillé et Importé/ADN.
+- **Drapeaux d'apparence** — Basculez entre Boss/Alpha, Chanceux/Brillant, Prédateur, Éveillé et Importé/ADN.
 - **Rank & Lock** — Définissez le classement et le niveau de verrouillage des favoris (0 à 3).
+- **Cheat Mode** — Basculez pour étendre toutes les majuscules : niveau, IVs, âmes, rang du condenseur à 255 ; débloquez des compétences actives/passives illimitées avec des doublons autorisés.
+- **Exporter/Importer** — Cliquez avec le bouton droit sur n'importe quel pal pour exporter au format `.pstpal` (compressé) ou `.json`. Importez dans des emplacements vides parmi les travailleurs du groupe, de la palbox, du DPS ou de la base. Fonctionne sur les sauvegardes et les joueurs.
+- **Max All Pals** — Maximisez toutes les statistiques (IVs, âmes, rang, niveau) pour tous les pals du groupe, toutes les pages palbox ou tous les travailleurs de la base — respecte les limites du mode de triche.
+- **Correction du Pals** illégal — Détectez et limitez le pals avec des statistiques, des compétences ou des traits illégaux par joueur.
+- **Bulk Clone/Delete** — Boîte de dialogue de sélection d'espèces avec contrôles de quantité et basculement de source (Party/Palbox/DPS) pour les opérations par lots.
 - Ajoutez un nouveau Pals ou supprimez-le rapidement avec un double-clic.
 
 ### Gestion de guilde
@@ -111,7 +118,7 @@ Une interface d'édition approfondie pour n'importe quel Pal appartenant à n'im
 Vue à deux panneaux : liste des guildes en haut, liste des membres en bas.
 
 - Renommez les guildes, changez de chef, définissez le niveau de guilde, le niveau de guilde maximum.
-- Débloquez toutes les recherches en laboratoire ; reconstruisez toutes les guildes.
+- Débloquez toutes les recherches de laboratoire ; reconstruisez toutes les guildes.
 - Déplacez les joueurs entre les guildes ; supprimer les guildes vides ou inactives.
 
 ### Outils du camp de base
@@ -119,9 +126,10 @@ Vue à deux panneaux : liste des guildes en haut, liste des membres en bas.
 - Voir tous les camps de base avec association de guilde.
 - **Exporter** les plans de base vers `.json` ; **importer** (un ou plusieurs fichiers) dans n'importe quelle guilde.
 - **Cloner** des bases vers d'autres guildes avec un positionnement décalé.
+- **Modifier les coordonnées** — Faites un clic droit sur un marqueur de base sur la carte, choisissez « Modifier les coordonnées », puis cliquez sur n'importe quel endroit pour téléporter la base.
+- **Base Nudge** — Déplacez une base par des décalages X/Y/Z exacts pour corriger l'écrêtage ou le flottement du sol.
 - **Ajuster le rayon de base** (50 % à 1 000 %).
 - Supprimer les bases inactives et les objets cartographiques non-base.
-
 ### Visionneuse de cartes
 
 Visualisation interactive de votre monde entier.
@@ -178,7 +186,7 @@ Accessible depuis l'onglet **Outils** sous forme de cartes cliquables :
 Accessibles via **Menu → Fonctions**, ces opérations de niveau serveur incluent :
 
 - **Suppression** — Supprimez les guildes vides, les bases/joueurs inactifs, les joueurs en double, les données non référencées.
-- **Nettoyage** — Supprimez les éléments invalides/modifiés, pals et passives invalides, les structures invalides ; correction du pals illégal (plafond au maximum légal) ; réinitialiser les tourelles anti-aériennes ; débloquer private chests ; réparer toutes les structures.
+- **Nettoyage** — Supprimez les éléments invalides/modifiés, les pals et passives invalides, les structures invalides ; correction du pals illégal (plafond au maximum légal) ; réinitialiser les tourelles anti-aériennes ; débloquer private chests ; réparer toutes les structures.
 - **Réinitialisations** — Réinitialisez les missions, les donjons, la plate-forme pétrolière, l'envahisseur, les baisses de ravitaillement.
 - **Horodatage** — Correction des horodatages négatifs ; réinitialiser les temps des joueurs.
 - **PalDefender** — Génère des commandes `killnearestbase`.
@@ -216,7 +224,7 @@ Des binaires prédéfinis sont disponibles pour les trois principales plates-for
 2. Extrayez (si archivé) et exécutez l'exécutable.
 3. C'est tout – aucun Python ni dépendance n'est nécessaire.
 
-> **Windows :** Si vous voyez « VCRUNTIME140.dll n'a pas été trouvé », installez le [Microsoft Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170).
+> **Windows :** Si vous voyez « VCRUNTIME140.dll n'a pas été trouvé », installez [Microsoft Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170).
 
 > **Linux :** Vous devrez peut-être marquer le fichier comme exécutable : `chmod +x PalworldSaveTools-*-linux`
 
@@ -260,7 +268,7 @@ Le lanceur crée un `.venv`, installe les dépendances via `uv sync` et démarre
 
 1. **Chargez votre sauvegarde**
    - Cliquez sur **Menu → Load Save** ou faites glisser et déposez un fichier `.sav` sur la fenêtre.
-   - Accédez à votre dossier de sauvegarde Palworld et sélectionnez `Level.sav`.
+- Accédez à votre dossier de sauvegarde Palworld et sélectionnez `Level.sav`.
 
 2. **Explorez vos données**
    - Utilisez les onglets — **Carte**, **Outils**, **Joueurs**, **Guildes**, **Bases**, **Inventaire des joueurs**, **Inventaire de base**, **Pal Editor**, **Exclusions** — pour explorer votre sauvegarde.
@@ -372,7 +380,7 @@ Transférez des personnages entre différents mondes ou serveurs tout en préser
 **Importation d'une base :**
 1. Faites un clic droit sur la guilde cible (dans l'onglet Bases, Visionneuse de carte ou Guildes).
 2. Sélectionnez **Importer une base** (fichier unique) ou **Importer des bases (multi-fichiers)**.
-3. Sélectionnez votre ou vos fichiers `.json` exportés.
+3. Sélectionnez vos fichiers `.json` exportés.
 
 **Clonage d'une base :**
 1. Cliquez avec le bouton droit sur une base → **Cloner la base**.
@@ -417,7 +425,6 @@ Le format du fichier de sauvegarde est obsolète. Chargez la sauvegarde dans le 
 2. Attendez quelques minutes que les descripteurs de fichiers soient libérés.
 3. Exécutez le convertisseur GamePass → Steam.
 4. Lancez Palworld sur GamePass pour vérifier.
-
 ### Le binaire Linux / macOS ne se lance pas
 
 - **Linux :** `chmod +x PalworldSaveTools-*-linux` pour le marquer comme exécutable.
@@ -455,7 +462,7 @@ uv run python build/nuitka/build_nuitka.py --onedir
 ```
 
 Les sorties vont à `dist/` :
--Windows → `dist/PalworldSaveTools-*.exe`
+-Fenêtres → `dist/PalworldSaveTools-*.exe`
 -Linux → `dist/PalworldSaveTools-*-linux`
 - macOS → `dist/PalworldSaveTools.app` → conditionné sous la forme `.dmg`
 
@@ -518,6 +525,7 @@ Les contributions sont les bienvenues ! N'hésitez pas à soumettre une Pull Req
 <img src="https://readme-typing-svg.demolab.com?lines=Lisez+ceci+avant+de+casser+quelque+chose;Vous+avez+%C3%A9t%C3%A9+pr%C3%A9venu;Sauvegardez+d%27abord%C2%A0%21;Avec+une+grande+puissance...&center=true&width=520&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
+
 **Utilisez cet outil à vos propres risques. Sauvegardez toujours vos fichiers de sauvegarde avant d'apporter des modifications.**
 
 Les développeurs ne sont pas responsables de toute perte de données de sauvegarde ou des problèmes pouvant résulter de l'utilisation de cet outil.

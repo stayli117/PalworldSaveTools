@@ -2,7 +2,7 @@
 
 ![PalworldSaveTools Logo](resources/assets/branding/PalworldSaveTools_Blue.png)
 
-<a href="https://readme-typing-svg.demolab.com?lines=Edit+Everything;Fast+%26+Cross-Platform;Manage+Players%2C+Pals%2C+Guilds+%26+Bases;Deep+Pal+Editing+%E2%80%94+IVs%2C+Skills%2C+Souls;Interactive+Map+Viewer;Save+Conversion+%26+Transfer;Character+Migration+%26+Host+Swap;Automatic+Backups;8+Languages;Fix+Corrupted+Saves;Transfer+Worlds;World+Map+Navigation&center=true&width=680&height=90&font=monospace&size=26&color=4A90E2&vCenter=true"><img src="https://readme-typing-svg.demolab.com?lines=Edit+Everything;Fast+%26+Cross-Platform;Manage+Players%2C+Pals%2C+Guilds+%26+Bases;Deep+Pal+Editing+%E2%80%94+IVs%2C+Skills%2C+Souls;Interactive+Map+Viewer;Save+Conversion+%26+Transfer;Character+Migration+%26+Host+Swap;Automatic+Backups;8+Languages;Fix+Corrupted+Saves;Transfer+Worlds;World+Map+Navigation&center=true&width=680&height=90&font=monospace&size=26&color=4A90E2&vCenter=true" alt="" /></a>
+<a href="https://readme-typing-svg.demolab.com?lines=Edit+Everything;Fast+%26+Cross-Platform;Manage+Players%2C+Pals%2C+Guilds+%26+Bases;Deep+Pal+Editing+%E2%80%94+IVs%2C+Skills%2C+Souls;Interactive+Map+Viewer;Save+Conversion+%26+Transfer;Character+Migration+%26+Host+Swap;Automatic+Backups;9+Languages;Fix+Corrupted+Saves;Transfer+Worlds;World+Map+Navigation&center=true&width=680&height=90&font=monospace&size=26&color=4A90E2&vCenter=true"><img src="https://readme-typing-svg.demolab.com?lines=Edit+Everything;Fast+%26+Cross-Platform;Manage+Players%2C+Pals%2C+Guilds+%26+Bases;Deep+Pal+Editing+%E2%80%94+IVs%2C+Skills%2C+Souls;Interactive+Map+Viewer;Save+Conversion+%26+Transfer;Character+Migration+%26+Host+Swap;Automatic+Backups;9+Languages;Fix+Corrupted+Saves;Transfer+Worlds;World+Map+Navigation&center=true&width=680&height=90&font=monospace&size=26&color=4A90E2&vCenter=true" alt="" /></a>
 
 **A complete solution for managing, editing, converting, and optimizing Palworld save files.**
 
@@ -41,7 +41,7 @@ Whether you need to manage a dedicated server, migrate between co-op and dedicat
 - **Deep Pal editing** — Full control over stats, IVs, souls, skills, passives, work suitabilities, rank, and appearance flags.
 - **Server-grade tooling** — Bulk deletion, cleanup, conversion, and character transfer built for administrators.
 - **Automatic backups** — Every save operation creates a backup before writing.
-- **8 languages** — Localized UI, in-app guides, and documentation.
+- **9 languages** — Localized UI, in-app guides, and documentation.
 
 
 
@@ -88,6 +88,8 @@ Whether you need to manage a dedicated server, migrate between co-op and dedicat
 
 - View and search all players by name, level, pal count, UID, guild, and last-seen time.
 - Edit player names, levels, stats, and technology points.
+- **Stats tab** — Hero stats (Health, Stamina, Attack, Defense, Work Speed, Weight) with correct in-game computed values; Relic abilities with toggles and spinners.
+- **Max All Stats** — Instantly cap all stats at max (50 points).
 - **Bulk operations** across multiple players: item management, pal management, and technology unlocks.
 - Delete inactive players by time threshold; remove duplicates.
 
@@ -100,8 +102,13 @@ A deep editing interface for any Pal owned by any player. Pals are organized by 
 - **Skills** — Active skill picker; learn all moves; bulk-sync skills across Pals.
 - **Passive Traits** — Passive picker with full game data.
 - **Work Suitability** — Set individual work-suitability levels (0–10).
-- **Appearance Flags** — Toggle Boss/Alpha, Lucky/Shiny, Awakened, and Imported/DNA.
+- **Appearance Flags** — Toggle Boss/Alpha, Lucky/Shiny, Predator, Awakened, and Imported/DNA.
 - **Rank & Lock** — Set rank and favorite lock level (0–3).
+- **Cheat Mode** — Toggle to expand all caps: level, IVs, souls, condenser rank to 255; unlock unlimited active/passive skills with duplicates allowed.
+- **Export/Import** — Right-click any pal to export as `.pstpal` (compressed) or `.json`. Import into empty slots across party, palbox, DPS, or base workers. Works across saves and players.
+- **Max All Pals** — Max all stats (IVs, souls, rank, level) for all pals in party, all palbox pages, or all base workers — respects cheat mode caps.
+- **Fix Illegal Pals** — Detect and cap pals with illegal stats, skills, or traits per player.
+- **Bulk Clone/Delete** — Species-picker dialog with quantity controls and source toggles (Party/Palbox/DPS) for batch operations.
 - Add new Pals or quick-delete with double-click.
 
 ### Guild Management
@@ -117,6 +124,8 @@ Two-panel view: guild list on top, member roster below.
 - View all base camps with guild association.
 - **Export** base blueprints to `.json`; **import** (single or multi-file) into any guild.
 - **Clone** bases to other guilds with offset positioning.
+- **Change Coordinates** — Right-click a base marker on the map, pick "Change Coordinates", then click any spot to teleport the base.
+- **Base Nudge** — Nudge a base by exact X/Y/Z offsets to fix ground clipping or floating.
 - **Adjust base radius** (50%–1000%).
 - Delete inactive bases and non-base map objects.
 

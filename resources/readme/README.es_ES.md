@@ -40,7 +40,7 @@ Ya sea que necesite administrar un servidor dedicado, migrar entre servidores co
 - **Edición profunda de Pal**: control total sobre estadísticas, IVs, almas, habilidades, passives, idoneidades laborales, rango y banderas de apariencia.
 - **Herramientas de nivel de servidor**: eliminación, limpieza, conversión y transferencia de caracteres en masa diseñadas para administradores.
 - **Copias de seguridad automáticas**: cada operación de guardado crea una copia de seguridad antes de escribir.
-- **8 idiomas**: interfaz de usuario localizada, guías en la aplicación y documentación.
+- **9 idiomas**: interfaz de usuario localizada, guías en la aplicación y documentación.
 
 
 
@@ -93,20 +93,27 @@ Ya sea que necesite administrar un servidor dedicado, migrar entre servidores co
 
 - Ver y buscar a todos los jugadores por nombre, nivel, recuento de pal, UID, gremio y hora de la última vez que fueron vistos.
 - Editar nombres de jugadores, niveles, estadísticas y puntos de tecnología.
+- **Pestaña Estadísticas**: estadísticas del héroe (salud, resistencia, ataque, defensa, velocidad de trabajo, peso) con valores correctos calculados en el juego; Habilidades de reliquia con palancas y giradores.
+- **Máximo de todas las estadísticas**: limita instantáneamente todas las estadísticas al máximo (50 puntos).
 - **Operaciones masivas** entre varios jugadores: gestión de elementos, gestión de pal y desbloqueo de tecnología.
 - Eliminar jugadores inactivos por umbral de tiempo; eliminar duplicados.
 
 ### Pal Editor
 
-Una interfaz de edición profunda para cualquier Pal propiedad de cualquier jugador. Pals están organizados por **Grupo** (equipo activo) y **Palbox** (almacenamiento).
+Una interfaz de edición profunda para cualquier Pal propiedad de cualquier reproductor. Pals están organizados por **Grupo** (equipo activo) y **Palbox** (almacenamiento).
 
 - **Estadísticas y IVs**: HP, ataque, defensa (IV 0–100), nivel (1–80), rango de confianza (0–10).
 - **Almas**: HP, ataque, defensa, velocidad de artesanía (0–20).
 - **Habilidades** — Selector de habilidades activo; aprender todos los movimientos; Habilidades de sincronización masiva en Pals.
 - **Rasgos pasivos**: selector pasivo con datos completos del juego.
 - **Idoneidad para el trabajo**: establezca niveles individuales de idoneidad para el trabajo (0 a 10).
-- **Banderas de apariencia**: alterna entre Jefe/Alfa, Afortunado/Brillante, Despertado e Importado/ADN.
+- **Banderas de apariencia**: alterna entre Jefe/Alfa, Afortunado/Brillante, Depredador, Despertado e Importado/ADN.
 - **Clasificación y bloqueo**: establece el rango y el nivel de bloqueo de favoritos (0–3).
+- **Modo de trampa**: alternar para expandir todo en mayúsculas: nivel, IVs, almas, rango del condensador a 255; Desbloquea habilidades activas/pasivas ilimitadas y se permiten duplicados.
+- **Exportar/Importar**: haga clic con el botón derecho en cualquier pal para exportarlo como `.pstpal` (comprimido) o `.json`. Importe a espacios vacíos entre los trabajadores del grupo, palbox, DPS o base. Funciona entre partidas guardadas y jugadores.
+- **Max All Pals**: maximiza todas las estadísticas (IVs, almas, rango, nivel) para todos los pals del grupo, todas las páginas de palbox o todos los trabajadores de la base; respeta los límites del modo trampa.
+- **Reparar Pals** ilegal: detecta y limita a pals con estadísticas, habilidades o rasgos ilegales por jugador.
+- **Clonar/Eliminar masivamente**: cuadro de diálogo de selección de especies con controles de cantidad y alternancia de fuentes (Party/Palbox/DPS) para operaciones por lotes.
 - Agregue un nuevo Pals o elimine rápidamente con doble clic.
 
 ### Gestión del gremio
@@ -122,9 +129,10 @@ Vista de dos paneles: lista de gremio en la parte superior, lista de miembros de
 - Ver todos los campamentos base con asociación de gremio.
 - **Exportar** planos base a `.json`; **importar** (archivo único o múltiple) a cualquier gremio.
 - **Clonar** bases para otros gremios con posicionamiento desplazado.
+- **Cambiar coordenadas**: haz clic con el botón derecho en un marcador de base en el mapa, selecciona "Cambiar coordenadas" y luego haz clic en cualquier lugar para teletransportar la base.
+- **Empujar base**: empuja una base mediante desplazamientos X/Y/Z exactos para corregir el recorte o la flotación del suelo.
 - **Ajustar el radio base** (50%–1000%).
 - Eliminar bases inactivas y objetos de mapa que no sean bases.
-
 ### Visor de mapas
 
 Visualización interactiva de todo tu mundo.
@@ -169,7 +177,7 @@ Accesible desde la pestaña **Herramientas** como tarjetas en las que se puede h
 |------|-------------|
 | **Convertir guardados** | Convertir entre formatos SAV y JSON |
 | **Convertir GamePass → Steam** | Convertir archivos guardados de Xbox/GamePass al formato Steam |
-| **Convertir SteamID** | Convierta ID Steam a UID Palworld |
+| **Convertir SteamID** | Convierta ID de Steam a UID de Palworld |
 | **Restaurar mapa** | Aplicar el progreso del mapa completamente desbloqueado a todos los mundos/servidores |
 | **Inyector de ranura** | Aumentar espacios de palbox por jugador |
 | **Modificar Guardar** | Abrir y modificar datos guardados sin procesar |
@@ -263,10 +271,10 @@ El iniciador crea un `.venv`, instala dependencias a través de `uv sync` e inic
 
 1. **Carga tu guardado**
    - Haga clic en **Menú → Cargar Guardar**, o arrastre y suelte un archivo `.sav` en la ventana.
-   - Navegue hasta su carpeta de guardado de Palworld y seleccione `Level.sav`.
+- Navegue hasta su carpeta de guardado de Palworld y seleccione `Level.sav`.
 
 2. **Explora tus datos**
-   - Usa las pestañas: **Mapa**, **Herramientas**, **Jugadores**, **Gremios**, **Bases**, **Inventario de jugadores**, **Inventario de base**, **Pal Editor**, **Exclusiones**, para explorar tu partida guardada.
+   - Usa las pestañas (**Mapa**, **Herramientas**, **Jugadores**, **Gremios**, **Bases**, **Inventario de jugadores**, **Inventario de base**, **Pal Editor**, **Exclusiones**) para explorar tu partida guardada.
    - La barra de estadísticas muestra recuentos en vivo; Los iconos de navegación rápida saltan a cada sección.
 
 3. **Hacer cambios**
@@ -420,7 +428,6 @@ El formato del archivo guardado está desactualizado. Cargue el guardado en el j
 2. Espere unos minutos hasta que se liberen los identificadores de archivos.
 3. Ejecute el convertidor GamePass → Steam.
 4. Inicie Palworld en GamePass para verificar.
-
 ### El binario de Linux/macOS no se inicia
 
 - **Linux:** `chmod +x PalworldSaveTools-*-linux` para marcarlo como ejecutable.
@@ -521,6 +528,7 @@ uv run python build/build_interactively.py
 <img src="https://readme-typing-svg.demolab.com?lines=Lee+esto+antes+de+romper+algo.;has+sido+advertido;%C2%A1Copia+de+seguridad+primero%21;Con+gran+poder...&center=true&width=520&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
+
 **Utilice esta herramienta bajo su propia responsabilidad. Siempre haga una copia de seguridad de sus archivos guardados antes de realizar modificaciones.**
 
 Los desarrolladores no son responsables de ninguna pérdida de datos guardados o problemas que puedan surgir al utilizar esta herramienta.
@@ -618,7 +626,7 @@ Este proyecto no existiría sin las personas que lo respaldan.
 Un enorme agradecimiento a:
 
 - **Palworld** desarrollado por Pocketpair, Inc. — para el juego que nos unió a todos.
-- **Los reporteros de errores**: cada problema presentado, cada caso límite encontrado, cada registro pegado en Discord. Usted hace que esta herramienta sea más sólida con cada informe.
+- **Los reporteros de errores**: cada problema presentado, cada caso extremo encontrado, cada registro pegado en Discord. Usted hace que esta herramienta sea más sólida con cada informe.
 - **La comunidad de modding de Palworld**: compañeros modders, desarrolladores de herramientas y expertos que comparten conocimientos, realizan ingeniería inversa en formatos e impulsan el ecosistema hacia adelante. Este proyecto se sustenta sobre los hombros de ese esfuerzo colectivo.
 - **Todos los contribuyentes y miembros de la comunidad**: ya sea que enviaron un PR, respondieron una pregunta en Discord o simplemente le contaron a un amigo sobre PST, gracias.
 

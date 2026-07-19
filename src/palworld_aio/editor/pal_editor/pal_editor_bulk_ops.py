@@ -5,6 +5,7 @@ from i18n import t
 from loading_manager import show_information, show_warning
 from palworld_aio.utils import extract_value, safe_nested_get, calculate_max_hp, resolve_name
 from . import data as _data
+from . import icons as _icons
 from .icons import _strip_prefix_label
 from .legacy_frame import PalFrame
 from .data import _ensure_friendship_thresholds
@@ -111,10 +112,24 @@ class BulkOperationMixin:
             pr = _get_raw_from_item(pi)
             nick = extract_value(pr, 'NickName', '') if pr else ''
             lv = extract_value(pr, 'Level', 1) if pr else 1
+            cid = extract_value(pr, 'CharacterID', '') if pr else ''
             display = f'Lv.{lv} {nick}' if nick else f'Lv.{lv} {pal_name}'
+            row = QWidget()
+            row.setStyleSheet('background: transparent; border: none;')
+            rl = QHBoxLayout(row)
+            rl.setContentsMargins(0, 0, 0, 0)
+            rl.setSpacing(4)
+            icon_path = _icons._get_pal_icon_path(cid) if cid else ''
+            pix = _icons._get_cached_pixmap(icon_path, 20) if icon_path else None
+            icon_lbl = QLabel()
+            icon_lbl.setFixedSize(20, 20)
+            if pix:
+                icon_lbl.setPixmap(pix)
+            rl.addWidget(icon_lbl)
             cb = ToggleCheckBtn(display)
             cb.setChecked(True)
-            chk_layout.addWidget(cb)
+            rl.addWidget(cb, 1)
+            chk_layout.addWidget(row)
             checkboxes.append((cb, pi))
         chk_layout.addStretch()
         scroll.setWidget(inner_w)
@@ -200,10 +215,24 @@ class BulkOperationMixin:
             pr = _get_raw_from_item(pi)
             nick = extract_value(pr, 'NickName', '') if pr else ''
             lv = extract_value(pr, 'Level', 1) if pr else 1
+            cid = extract_value(pr, 'CharacterID', '') if pr else ''
             display = f'Lv.{lv} {nick}' if nick else f'Lv.{lv} {pal_name}'
+            row = QWidget()
+            row.setStyleSheet('background: transparent; border: none;')
+            rl = QHBoxLayout(row)
+            rl.setContentsMargins(0, 0, 0, 0)
+            rl.setSpacing(4)
+            icon_path = _icons._get_pal_icon_path(cid) if cid else ''
+            pix = _icons._get_cached_pixmap(icon_path, 20) if icon_path else None
+            icon_lbl = QLabel()
+            icon_lbl.setFixedSize(20, 20)
+            if pix:
+                icon_lbl.setPixmap(pix)
+            rl.addWidget(icon_lbl)
             cb = ToggleCheckBtn(display)
             cb.setChecked(True)
-            chk_layout.addWidget(cb)
+            rl.addWidget(cb, 1)
+            chk_layout.addWidget(row)
             checkboxes.append((cb, pi))
         chk_layout.addStretch()
         scroll.setWidget(inner_w)

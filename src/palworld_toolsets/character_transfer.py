@@ -603,6 +603,8 @@ def scan_source_inventory(host_json, level_json):
                 static_id = item_data.get('static_id', '')
                 if not static_id:
                     continue
+                if static_id.startswith('PalEgg_'):
+                    continue
                 count = raw.get('count', 0)
                 slot_idx = raw.get('slot_index', 0)
                 items.append({'container_type': mapped, 'item_id': static_id, 'count': count, 'slot_index': slot_idx})
@@ -1064,17 +1066,16 @@ def gather_and_update_dynamic_containers():
                         slot_by_dyn_id.setdefault(norm, []).append(s_dyn)
                 except:
                     continue
-    tgt_by_id = {}
+    tgt_ids = set()
     for item in tgt_items:
         try:
             lid = item.get('RawData', {}).get('value', {}).get('id', {}).get('local_id_in_created_world')
             if lid:
                 norm = _normalize_lid(lid)
                 if norm:
-                    tgt_by_id[norm] = item
+                    tgt_ids.add(norm)
         except:
             continue
-    used_ids = set(tgt_by_id.keys())
     id_map = dict(_session_id_map)
     remap_count = 0
     for item in src_items:
@@ -1085,27 +1086,28 @@ def gather_and_update_dynamic_containers():
             norm = _normalize_lid(lid)
             if not norm or norm in _session_transferred_dynamics:
                 continue
-            if norm in tgt_in_use or norm in used_ids:
+            if norm in tgt_in_use or norm in tgt_ids:
                 if norm in id_map:
                     bumped = id_map[norm]
                 else:
-                    bumped = _bump_guid_str(norm, used_ids)
+                    bumped = _bump_guid_str(norm, tgt_ids)
                     id_map[norm] = bumped
                     _session_id_map[norm] = bumped
+                    tgt_ids.add(bumped)
                 for s_dyn in slot_by_dyn_id.get(norm, []):
                     s_dyn['local_id_in_created_world'] = PalUUID.from_str(bumped)
                     remap_count += 1
                 item_copy = fast_deepcopy(item)
                 item_copy['RawData']['value']['id']['local_id_in_created_world'] = PalUUID.from_str(bumped)
-                tgt_by_id[bumped] = item_copy
+                tgt_items.append(item_copy)
             else:
-                tgt_by_id[norm] = fast_deepcopy(item)
+                tgt_items.append(fast_deepcopy(item))
+                tgt_ids.add(norm)
             _session_transferred_dynamics.add(norm)
         except:
             continue
     if remap_count:
         print(f'[DYNAMICS] Remapped {remap_count} container slot references')
-    targ_lvl['DynamicItemSaveData']['value']['values'] = list(tgt_by_id.values())
 
 def _new_guid():
     return PalUUID(os.urandom(16))

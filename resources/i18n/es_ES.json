@@ -1904,5 +1904,6 @@
     "func_manager.fix_all_pals.confirm": "¿Reparar a todos los amigos (restaurar HP/FullStomach/Sanity, eliminar enfermedades, asignar personas sin dueño)?",
     "func_manager.fix_all_pals.success": "Se corrigieron {count} amigos.",
     "common.confirm": "Confirmar",
-    "deletion.illegal_players_fixed": "Se corrigieron {count} jugadores con estadísticas ilegales."
+    "deletion.illegal_players_fixed": "Se corrigieron {count} jugadores con estadísticas ilegales.",
+    "character_transfer.load_both_saves": "Cargue los guardados de origen y de destino antes de usar Transferir todo."
 }

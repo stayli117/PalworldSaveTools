@@ -1912,5 +1912,6 @@
     "func_manager.fix_all_pals.confirm": "修复所有好友（恢复 HP/FullStomach/Sanity、消除疾病、分配无主）？",
     "func_manager.fix_all_pals.success": "修复了 {count} 朋友。",
     "common.confirm": "确认",
-    "deletion.illegal_players_fixed": "修复了具有非法统计数据的 {count} 玩家。"
+    "deletion.illegal_players_fixed": "修复了具有非法统计数据的 {count} 玩家。",
+    "character_transfer.load_both_saves": "请在使用“全部传送”之前加载源存档和目标存档。"
 }

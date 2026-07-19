@@ -770,6 +770,9 @@ modified_targets_data = {}
 _session_transferred_dynamics = set()
 _session_id_map = {}
 def transfer_all_characters():
+    if not level_json or not targ_lvl:
+        show_warning(None, t('warning.title'), t('character_transfer.load_both_saves'))
+        return
     def worker():
         import time
         global selected_source_player, selected_target_player, host_guid, targ_uid, host_json, host_json_gvas, targ_json, targ_json_gvas

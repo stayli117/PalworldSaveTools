@@ -1908,5 +1908,6 @@
     "func_manager.fix_all_pals.confirm": "Исправить всех друзей (восстановить HP/FullStomach/Sanity, убрать болезнь, назначить бесхозных)?",
     "func_manager.fix_all_pals.success": "Исправлены друзья {count}.",
     "common.confirm": "Подтверждать",
-    "deletion.illegal_players_fixed": "Исправлены игроки {count} с недопустимой статистикой."
+    "deletion.illegal_players_fixed": "Исправлены игроки {count} с недопустимой статистикой.",
+    "character_transfer.load_both_saves": "Пожалуйста, загрузите исходные и целевые сохранения, прежде чем использовать Transfer All."
 }

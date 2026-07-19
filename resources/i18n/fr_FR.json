@@ -1892,5 +1892,6 @@
     "func_manager.fix_all_pals.confirm": "Réparer tous les amis (restaurer HP/FullStomach/Sanity, supprimer la maladie, attribuer des sans-propriétaires) ?",
     "func_manager.fix_all_pals.success": "Correction des copains {count}.",
     "common.confirm": "Confirmer",
-    "deletion.illegal_players_fixed": "Correction du ou des joueurs {count} avec des statistiques illégales."
+    "deletion.illegal_players_fixed": "Correction du ou des joueurs {count} avec des statistiques illégales.",
+    "character_transfer.load_both_saves": "Veuillez charger les sauvegardes source et cible avant d'utiliser Transférer tout."
 }

@@ -13,29 +13,9 @@ except ImportError:
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 LANGUAGES = {'zh_CN': {'name': 'Simplified Chinese', 'code': 'zh-CN'}, 'de_DE': {'name': 'German', 'code': 'de'}, 'es_ES': {'name': 'Spanish', 'code': 'es'}, 'fr_FR': {'name': 'French', 'code': 'fr'}, 'ru_RU': {'name': 'Russian', 'code': 'ru'}, 'ja_JP': {'name': 'Japanese', 'code': 'ja'}, 'ko_KR': {'name': 'Korean', 'code': 'ko'}, 'pt_BR': {'name': 'Portuguese (Brazil)', 'code': 'pt'}}
 NEW_TRANSLATIONS = {
-    'deletion.illegal_players_fixed': 'Fixed {count} player(s) with illegal stats.',
+    'character_transfer.load_both_saves': 'Please load both source and target saves before using Transfer All.',
 }
-OLD_KEYS = [
-    'loading.mode.overlay',
-    'loading.mode.hidden',
-    'loading.mode.header',
-    'deletion.menu.remove_invalid_items',
-    'deletion.menu.remove_invalid_structures',
-    'deletion.menu.remove_invalid_pals',
-    'deletion.menu.remove_invalid_passives',
-    'deletion.menu.repair_structures',
-    'deletion.menu.repair_items',
-    'deletion.menu.restore_all_pals',
-    'deletion.menu.trim_overfilled_inventories',
-    'guild.menu.rebuild_all_guilds',
-    'func_manager.restore_all_pals.title',
-    'func_manager.restore_all_pals.confirm',
-    'func_manager.restore_all_pals.success',
-    'func_manager.fix_unassigned_pals.title',
-    'func_manager.fix_unassigned_pals.confirm.title',
-    'func_manager.fix_unassigned_pals.confirm.msg',
-    'func_manager.fix_unassigned_pals.msg',
-]
+OLD_KEYS = []
 def _clean_uv_locks():
     for p in [Path.cwd() / 'uv.lock', PROJECT_ROOT / 'uv.lock']:
         if p.exists():

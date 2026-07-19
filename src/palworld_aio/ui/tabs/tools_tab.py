@@ -501,14 +501,13 @@ class ToolsTab(QWidget):
                 QApplication.setQuitOnLastWindowClosed(True)
             if isinstance(dialog, QDialog):
                 dialog.finished.connect(lambda r: _show())
-            else:
-                _orig_close = dialog.closeEvent
-                def _restore(event, orig=_orig_close):
-                    if callable(orig):
-                        orig(event)
-                    if event.isAccepted():
-                        _show()
-                dialog.closeEvent = _restore
+            _orig_close = dialog.closeEvent
+            def _restore(event, orig=_orig_close):
+                if callable(orig):
+                    orig(event)
+                if event.isAccepted():
+                    _show()
+            dialog.closeEvent = _restore
         dialog.show()
         self.fade_animation = QPropertyAnimation(dialog, b'windowOpacity')
         self.fade_animation.setDuration(400)

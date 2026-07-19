@@ -2197,5 +2197,6 @@
     "func_manager.fix_all_pals.success": "Corrigidos amigos {count}.",
     "common.confirm": "Confirmar",
     "deletion.illegal_players_fixed": "Corrigido(s) {count} jogador(es) com estatísticas ilegais.",
-    "character_transfer.load_both_saves": "Carregue os salvamentos de origem e de destino antes de usar Transferir tudo."
+    "character_transfer.load_both_saves": "Carregue os salvamentos de origem e de destino antes de usar Transferir tudo.",
+    "character_transfer.load_target_first": "Carregue um destino salvo antes de salvar as alterações."
 }

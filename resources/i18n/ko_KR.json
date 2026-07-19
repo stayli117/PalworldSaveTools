@@ -1910,5 +1910,6 @@
     "func_manager.fix_all_pals.success": "{count} 친구를 수정했습니다.",
     "common.confirm": "확인하다",
     "deletion.illegal_players_fixed": "잘못된 통계를 가진 {count} 플레이어를 수정했습니다.",
-    "character_transfer.load_both_saves": "모두 전송을 사용하기 전에 소스 및 대상 저장을 모두 로드하십시오."
+    "character_transfer.load_both_saves": "모두 전송을 사용하기 전에 소스 및 대상 저장을 모두 로드하십시오.",
+    "character_transfer.load_target_first": "변경 사항을 저장하기 전에 대상 저장을 로드하세요."
 }

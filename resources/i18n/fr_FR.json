@@ -1893,5 +1893,6 @@
     "func_manager.fix_all_pals.success": "Correction des copains {count}.",
     "common.confirm": "Confirmer",
     "deletion.illegal_players_fixed": "Correction du ou des joueurs {count} avec des statistiques illégales.",
-    "character_transfer.load_both_saves": "Veuillez charger les sauvegardes source et cible avant d'utiliser Transférer tout."
+    "character_transfer.load_both_saves": "Veuillez charger les sauvegardes source et cible avant d'utiliser Transférer tout.",
+    "character_transfer.load_target_first": "Veuillez charger une sauvegarde cible avant d'enregistrer les modifications."
 }

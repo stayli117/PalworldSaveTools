@@ -1597,6 +1597,9 @@ def finalize_save(window):
         if not _ok or not _name.strip():
             return
         _xgp_new_world_name = _name.strip()
+    if target_gvas_file is None:
+        show_warning(None, t('warning.title'), t('character_transfer.load_target_first'))
+        return
     try:
         def on_finished(success):
             if success:

@@ -1909,5 +1909,6 @@
     "func_manager.fix_all_pals.success": "Исправлены друзья {count}.",
     "common.confirm": "Подтверждать",
     "deletion.illegal_players_fixed": "Исправлены игроки {count} с недопустимой статистикой.",
-    "character_transfer.load_both_saves": "Пожалуйста, загрузите исходные и целевые сохранения, прежде чем использовать Transfer All."
+    "character_transfer.load_both_saves": "Пожалуйста, загрузите исходные и целевые сохранения, прежде чем использовать Transfer All.",
+    "character_transfer.load_target_first": "Пожалуйста, загрузите целевое сохранение перед сохранением изменений."
 }

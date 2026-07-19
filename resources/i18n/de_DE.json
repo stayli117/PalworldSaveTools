@@ -1935,5 +1935,6 @@
     "func_manager.fix_all_pals.success": "{count} Freunde behoben.",
     "common.confirm": "Bestätigen",
     "deletion.illegal_players_fixed": "{count} Spieler mit illegalen Statistiken behoben.",
-    "character_transfer.load_both_saves": "Bitte laden Sie sowohl Quell- als auch Zielspeicher, bevor Sie „Alle übertragen“ verwenden."
+    "character_transfer.load_both_saves": "Bitte laden Sie sowohl Quell- als auch Zielspeicher, bevor Sie „Alle übertragen“ verwenden.",
+    "character_transfer.load_target_first": "Bitte laden Sie einen Zielspeicher, bevor Sie Änderungen speichern."
 }

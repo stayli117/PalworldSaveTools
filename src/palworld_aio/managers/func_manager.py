@@ -1685,7 +1685,10 @@ def repair_items(parent=None):
                         if not isinstance(it_raw, dict):
                             continue
                         sid = it_raw.get('static_id', '')
-                        if not sid or get_item_type(sid) not in ('weapon', 'armor', 'egg'):
+                        if not sid:
+                            continue
+                        it_type = get_item_type(sid)
+                        if it_type not in ('weapon', 'armor', 'egg') and not sid.startswith('PalEgg_'):
                             continue
                         did = it_raw.get('dynamic_id', {})
                         if not isinstance(did, dict):
@@ -1701,13 +1704,17 @@ def repair_items(parent=None):
                         did['created_world_id'] = '00000000-0000-0000-0000-000000000000'
                         new_slot_entries.append((ns, sid, ls))
                         repaired_count += 1
-                        t = get_item_type(sid)
-                        if t == 'egg': egg_count += 1
-                        elif t == 'weapon': weapon_count += 1
-                        elif t == 'armor': armor_count += 1
+                        if sid.startswith('PalEgg_'): egg_count += 1
+                        else:
+                            t = get_item_type(sid)
+                            if t == 'weapon': weapon_count += 1
+                            elif t == 'armor': armor_count += 1
                     continue
                 static_id = item.get('static_id', '')
-                if not static_id or get_item_type(static_id) not in ('weapon', 'armor', 'egg'):
+                if not static_id:
+                    continue
+                it_type = get_item_type(static_id)
+                if it_type not in ('weapon', 'armor', 'egg') and not static_id.startswith('PalEgg_'):
                     continue
                 dynamic_id = item.get('dynamic_id', {})
                 if not isinstance(dynamic_id, dict):
@@ -1723,10 +1730,11 @@ def repair_items(parent=None):
                 dynamic_id['created_world_id'] = '00000000-0000-0000-0000-000000000000'
                 new_slot_entries.append((new_id_str, static_id, local_id_str))
                 repaired_count += 1
-                t = get_item_type(static_id)
-                if t == 'egg': egg_count += 1
-                elif t == 'weapon': weapon_count += 1
-                elif t == 'armor': armor_count += 1
+                if static_id.startswith('PalEgg_'): egg_count += 1
+                else:
+                    t = get_item_type(static_id)
+                    if t == 'weapon': weapon_count += 1
+                    elif t == 'armor': armor_count += 1
             except:
                 continue
     import sys
@@ -1744,8 +1752,8 @@ def repair_items(parent=None):
     egg_preserved = 0
     egg_blank = 0
     for new_id_str, static_id, old_id_str in new_slot_entries:
-        item_type = get_item_type(static_id)
-        if item_type == 'egg' and old_id_str and old_id_str in old_dyn_by_id:
+        is_egg = static_id.startswith('PalEgg_') or get_item_type(static_id) == 'egg'
+        if is_egg and old_id_str and old_id_str in old_dyn_by_id:
             import copy
             preserved = copy.deepcopy(old_dyn_by_id[old_id_str])
             old_char = preserved['RawData']['value'].get('character_id', '')
@@ -1758,7 +1766,7 @@ def repair_items(parent=None):
         else:
             new_entry = dynamic_item_manager.create_dynamic_item(static_id, None, uuid.UUID(new_id_str))
             dynamic_items.append(new_entry)
-            if item_type == 'egg':
+            if is_egg:
                 egg_blank += 1
                 logging.warning(f'[repair_items] BLANK egg {static_id} (old entry not found) old_id={old_id_str[:12] if old_id_str else "none"}')
     logging.warning(f'[repair_items] egg_preserved={egg_preserved} egg_blank_created={egg_blank}')

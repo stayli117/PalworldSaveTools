@@ -435,7 +435,21 @@ class ToolsTab(QWidget):
             traceback.print_exc()
             show_critical(self, t('Error') if t else 'Error', f'Failed to run tool: {e}')
             raise
+    def _reset_save_session(self):
+        if constants.loaded_level_json is None:
+            return
+        from palworld_aio.managers.save_manager import save_manager
+        save_manager._reset_state()
+        constants.invalidate_container_lookup()
+        self._save_status_label.setText(t('dashboard.no_save') if t else 'No Save Loaded')
+        self._save_status_label.setStyleSheet('font-size: 15px; font-weight: 700; color: #e2e8f0; border: none; background: transparent;')
+        self._save_path_label.setText(t('tools.no_save_loaded') if t else 'No save loaded')
+        if hasattr(self, '_stats_frame'):
+            self._stats_frame.setVisible(False)
+        for key in self._stat_cards:
+            self._stat_cards[key].setText('0')
     def _run_converting_tool(self, index):
+        self._reset_save_session()
         try:
             dialog = None
             if index == 0:
@@ -461,6 +475,7 @@ class ToolsTab(QWidget):
         except Exception as e:
             print(f'Error running converting tool {index}: {e}')
     def _run_management_tool(self, index):
+        self._reset_save_session()
         try:
             dialog = None
             if index == 0:

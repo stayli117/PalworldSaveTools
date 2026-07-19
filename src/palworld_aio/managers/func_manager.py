@@ -1729,7 +1729,9 @@ def repair_items(parent=None):
                 elif t == 'armor': armor_count += 1
             except:
                 continue
-    print(f'[repair_items] total={repaired_count} eggs={egg_count} weapons={weapon_count} armor={armor_count}')
+    import sys
+    sys.stdout.flush()
+    logging.warning(f'[repair_items] total={repaired_count} eggs={egg_count} weapons={weapon_count} armor={armor_count}')
     if repaired_count == 0:
         return {'repaired': 0}
     from palworld_aio.inventory.dynamic_item_manager import dynamic_item_manager
@@ -1752,14 +1754,14 @@ def repair_items(parent=None):
             preserved['RawData']['value']['id']['created_world_id'] = '00000000-0000-0000-0000-000000000000'
             dynamic_items.append(preserved)
             egg_preserved += 1
-            print(f'[repair_items] PRESERVED egg {static_id} char_id={old_char} has_object={bool(old_obj)} old_id={old_id_str[:12]}... new_id={new_id_str[:12]}...')
+            logging.warning(f'[repair_items] PRESERVED egg {static_id} char_id={old_char} has_object={bool(old_obj)} old_id={old_id_str[:12]}... new_id={new_id_str[:12]}...')
         else:
             new_entry = dynamic_item_manager.create_dynamic_item(static_id, None, uuid.UUID(new_id_str))
             dynamic_items.append(new_entry)
             if item_type == 'egg':
                 egg_blank += 1
-                print(f'[repair_items] BLANK egg {static_id} (old entry not found) old_id={old_id_str[:12] if old_id_str else "none"}')
-    print(f'[repair_items] egg_preserved={egg_preserved} egg_blank_created={egg_blank}')
+                logging.warning(f'[repair_items] BLANK egg {static_id} (old entry not found) old_id={old_id_str[:12] if old_id_str else "none"}')
+    logging.warning(f'[repair_items] egg_preserved={egg_preserved} egg_blank_created={egg_blank}')
     constants.invalidate_container_lookup()
     from palworld_aio.inventory.base_inventory_manager import BaseInventoryManager
     manager = BaseInventoryManager.get_instance()

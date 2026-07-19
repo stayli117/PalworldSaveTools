@@ -10,7 +10,7 @@ class FixIllegalPlayerDialog(QDialog):
     def __init__(self, scan_data, parent=None):
         super().__init__(parent)
         self.setWindowTitle(t('fix_illegal_player.title') if t else 'Fix Illegal Players')
-        self.setMinimumSize(500, 450)
+        self.setMinimumSize(700, 450)
         self.scan_data = scan_data
         self._setup_ui()
         self._populate_players()

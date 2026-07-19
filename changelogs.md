@@ -1,4 +1,5 @@
 #2.1.6
+- **Auto-reset save session on tool launch** — clicking any standalone tool (character transfer, slot injector, fix host save, modify save, convert, restore map, etc.) while a save is loaded now wipes the session clean. Prevents the common confusion where users expect the save loaded in main to carry into tools that prompt for their own save file.
 - **Main window hides during tool dialogs** — character transfer, slot injector, fix host save, and all other external tools now hide the main window while open. No more loading overlays attaching to the wrong window. The main window reappears automatically when the tool closes.
 - **Loading overlay now works inside tool dialogs** — save loading and other heavy operations inside tool dialogs show the loading overlay on the correct window instead of the (hidden) main window.
 - **App no longer quits when closing a tool dialog** — fixed a regression where closing the last visible window caused the entire application to exit.

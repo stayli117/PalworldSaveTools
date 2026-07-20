@@ -108,11 +108,5 @@ jobs:
           esac
 
       - name: Upload to Nexus Mods
-        uses: Nexus-Mods/upload-action@v1.0.0-beta.8
-        with:
-          api_key: ${{ secrets.NEXUSMODS_API_KEY }}
-          file_id: ${{ matrix.file_id }}
-          filename: ${{ steps.package.outputs.upload_file }}
-          version: ${{ steps.meta.outputs.version }}
-          display_name: ${{ steps.meta.outputs.tag }}_${{ matrix.variant }}
-          archive_existing_version: true
+        run: echo "Nexus Mods upload is disabled — see .github/workflows/nexus-upload.yml"
+        shell: bash

@@ -677,6 +677,8 @@
     "error.overlay.copy": "COPY TO CLIPBOARD",
     "error.overlay.title": "AN ERROR OCCURRED",
     "error.players_folder_missing": "Players folder missing",
+    "error.save_stale_msg": "Level.sav on disk has changed since it was loaded (it may have been re-saved by the game). Saving now will overwrite those changes with your in-memory edits.\n\nSave anyway?",
+    "error.save_stale_title": "Save File Changed",
     "error.title": "Error!",
     "error.tool": "Invalid choice or error running tool:",
     "exclusions.add_title": "Add to Exclusions",

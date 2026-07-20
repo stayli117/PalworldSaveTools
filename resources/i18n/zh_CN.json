@@ -1938,5 +1938,11 @@
     "pal_editor.bulk_delete_confirm": "删除 {n} 选定的好友？",
     "pal_editor.bulk_delete_success": "已删除 {n} 朋友",
     "pal_editor.bulk_max_success": "已满 {n} 朋友",
-    "pal_editor.bulk_heal_done": "治愈 {n} 朋友"
+    "pal_editor.bulk_heal_done": "治愈 {n} 朋友",
+    "inventory.multi_selected": "已选择 {n} 项",
+    "inventory.multi_delete_btn": "删除",
+    "inventory.multi_clear_btn": "清除数量",
+    "inventory.multi_deselect_btn": "取消选择",
+    "inventory.bulk_delete_title": "删除项目",
+    "inventory.bulk_delete_confirm": "删除 {n} 所选项目？"
 }

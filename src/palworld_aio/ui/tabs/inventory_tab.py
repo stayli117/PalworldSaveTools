@@ -5,7 +5,7 @@ from PySide6.QtCore import Qt, QSize, Signal, QPoint, QTimer, QThread
 from PySide6.QtGui import QPixmap, QIcon, QFont, QCursor, QColor, QPainter, QPen
 from PySide6.QtWidgets import QStyledItemDelegate
 from i18n import t
-from palworld_aio.ui.chrome.styles import DIALOG_STYLE as DARK_THEME_STYLE, STATS_PANEL_STYLE, MENU_STYLE, PICKER_BG_STYLE, PICKER_SEARCH_STYLE, PICKER_LIST_STYLE, wrap_tooltip_text, slot_full, slot_rarity, slot_selected, CONTENT_PANEL_STYLE, SLOT_EMPTY_STYLE, SLOT_HOVER_STYLE, INPUT_DIALOG_STYLE
+from palworld_aio.ui.chrome.styles import DIALOG_STYLE as DARK_THEME_STYLE, STATS_PANEL_STYLE, MENU_STYLE, PICKER_BG_STYLE, PICKER_SEARCH_STYLE, PICKER_LIST_STYLE, wrap_tooltip_text, slot_full, slot_rarity, slot_selected, slot_multi_selected, CONTENT_PANEL_STYLE, SLOT_EMPTY_STYLE, SLOT_HOVER_STYLE, INPUT_DIALOG_STYLE
 from palworld_aio.widgets.toggle_check import ToggleCheckBtn
 from palsav import json_tools
 from palworld_aio import constants as _constants
@@ -31,6 +31,8 @@ class ItemSlotWidget(QFrame):
         self.slot_index = slot_index
         self.container_type = container_type
         self.slot_data = None
+        self.multi_selected = False
+        self._click_modifiers = Qt.NoModifier
         self.setFixedSize(SLOT_SIZE, SLOT_SIZE)
         self.setFrameStyle(QFrame.Box | QFrame.Raised)
         self.setLineWidth(1)
@@ -81,8 +83,18 @@ class ItemSlotWidget(QFrame):
     def clear_item(self):
         self.slot_data = None
         self._apply_empty_style()
+    def set_selected_multi(self, selected):
+        self.multi_selected = selected
+        if not self.slot_data:
+            return
+        if selected:
+            self.setStyleSheet(slot_multi_selected('ItemSlotWidget'))
+        else:
+            rarity = self.slot_data.get('rarity', 0)
+            self._apply_rarity_style(rarity)
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
+            self._click_modifiers = event.modifiers()
             self.clicked.emit(self.slot_data)
         super().mousePressEvent(event)
     def mouseDoubleClickEvent(self, event):
@@ -797,6 +809,8 @@ class InventoryGridWidget(QWidget):
     item_double_clicked = Signal(dict)
     empty_slot_double_clicked = Signal(str, int)
     item_selected = Signal(dict)
+    multi_delete_requested = Signal(list)
+    multi_clear_qty_requested = Signal(list)
     add_all_effigies_requested = Signal()
     add_all_key_items_requested = Signal()
     clear_key_items_requested = Signal()
@@ -808,6 +822,8 @@ class InventoryGridWidget(QWidget):
         self.current_items = []
         self.max_visible_slots = 42
         self.header_layout = None
+        self._multi_selected = set()
+        self._multi_select_anchor = None
         self._setup_ui()
     def _setup_ui(self):
         main_layout = QVBoxLayout(self)
@@ -854,6 +870,38 @@ class InventoryGridWidget(QWidget):
         self.sort_btn.setCursor(Qt.PointingHandCursor)
         self.sort_btn.clicked.connect(self.sort_requested.emit)
         header.addWidget(self.sort_btn)
+        self.multi_toolbar = QFrame()
+        self.multi_toolbar.setObjectName('invMultiToolbar')
+        self.multi_toolbar.setStyleSheet('QFrame#invMultiToolbar { background: transparent; border: none; }')
+        self.multi_toolbar.setVisible(False)
+        mt_layout = QHBoxLayout(self.multi_toolbar)
+        mt_layout.setContentsMargins(0, 0, 0, 0)
+        mt_layout.setSpacing(4)
+        self.multi_count_label = QLabel()
+        self.multi_count_label.setStyleSheet('font-size: 11px; font-weight: 700; color: #38BDF8; background: transparent; border: none; padding: 0 4px;')
+        mt_layout.addWidget(self.multi_count_label)
+        del_btn = QPushButton(t('inventory.multi_delete_btn', default='Delete'))
+        del_btn.setObjectName('invMultiDeleteBtn')
+        del_btn.setFixedHeight(22)
+        del_btn.setCursor(Qt.PointingHandCursor)
+        del_btn.setStyleSheet('QPushButton { background: rgba(251,113,133,0.12); color: #FB7185; border: 1px solid rgba(251,113,133,0.25); border-radius: 4px; padding: 2px 8px; font-weight: 600; font-size: 10px; } QPushButton:hover { background: rgba(251,113,133,0.25); color: #FFFFFF; }')
+        del_btn.clicked.connect(self._on_multi_delete)
+        mt_layout.addWidget(del_btn)
+        clear_btn = QPushButton(t('inventory.multi_clear_btn', default='Clear Qty'))
+        clear_btn.setObjectName('invMultiClearBtn')
+        clear_btn.setFixedHeight(22)
+        clear_btn.setCursor(Qt.PointingHandCursor)
+        clear_btn.setStyleSheet('QPushButton { background: rgba(251,191,36,0.12); color: #FBBF24; border: 1px solid rgba(251,191,36,0.25); border-radius: 4px; padding: 2px 8px; font-weight: 600; font-size: 10px; } QPushButton:hover { background: rgba(251,191,36,0.25); color: #FFFFFF; }')
+        clear_btn.clicked.connect(self._on_multi_clear_qty)
+        mt_layout.addWidget(clear_btn)
+        deselect_btn = QPushButton(t('inventory.multi_deselect_btn', default='Deselect'))
+        deselect_btn.setObjectName('invMultiDeselectBtn')
+        deselect_btn.setFixedHeight(22)
+        deselect_btn.setCursor(Qt.PointingHandCursor)
+        deselect_btn.setStyleSheet('QPushButton { background: rgba(255,255,255,0.05); color: #9CA3AF; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 2px 8px; font-weight: 600; font-size: 10px; } QPushButton:hover { background: rgba(255,255,255,0.1); color: #FFFFFF; }')
+        deselect_btn.clicked.connect(self._clear_multi_selection)
+        mt_layout.addWidget(deselect_btn)
+        header.addWidget(self.multi_toolbar)
         main_layout.addLayout(header)
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
@@ -885,6 +933,7 @@ class InventoryGridWidget(QWidget):
         if max_slots is not None:
             self.set_max_slots(max_slots)
         self.current_items = items
+        self._clear_multi_selection()
         for slot in self.slots.values():
             slot.clear_item()
         for item in items:
@@ -892,7 +941,78 @@ class InventoryGridWidget(QWidget):
             if slot_index in self.slots:
                 self.slots[slot_index].set_item(item)
     def _on_slot_clicked(self, slot_data):
-        pass
+        sender = self.sender()
+        if not sender:
+            return
+        mods = getattr(sender, '_click_modifiers', Qt.NoModifier)
+        sender._click_modifiers = Qt.NoModifier
+        idx = sender.slot_index
+        has_item = slot_data is not None
+        if mods & Qt.ControlModifier and has_item:
+            if self._multi_select_anchor and self._multi_select_anchor != idx and idx not in self._multi_selected:
+                pass
+            self._toggle_multi_slot(idx)
+            self._multi_select_anchor = idx
+            return
+        if mods & Qt.ShiftModifier and has_item and self._multi_select_anchor is not None:
+            self._clear_multi_selection(update_toolbar=False)
+            lo, hi = min(self._multi_select_anchor, idx), max(self._multi_select_anchor, idx)
+            for i in range(lo, hi + 1):
+                if i in self.slots and self.slots[i].slot_data is not None:
+                    self._toggle_multi_slot(i, force_add=True)
+            self._multi_select_anchor = idx
+            self._update_multi_toolbar()
+            if has_item:
+                self.item_selected.emit(slot_data)
+            return
+        self._clear_multi_selection()
+        self._multi_select_anchor = idx
+        if has_item:
+            self.item_selected.emit(slot_data)
+    def _toggle_multi_slot(self, idx, force_add=False):
+        key = idx
+        if key in self._multi_selected:
+            if force_add:
+                return
+            self._multi_selected.discard(key)
+            if key in self.slots:
+                self.slots[key].set_selected_multi(False)
+        else:
+            self._multi_selected.add(key)
+            if key in self.slots:
+                self.slots[key].set_selected_multi(True)
+        self._update_multi_toolbar()
+    def _clear_multi_selection(self, update_toolbar=True):
+        for idx in list(self._multi_selected):
+            if idx in self.slots:
+                self.slots[idx].set_selected_multi(False)
+        self._multi_selected.clear()
+        self._multi_select_anchor = None
+        if update_toolbar:
+            self._update_multi_toolbar()
+    def _gather_multi_selected(self):
+        items = []
+        for idx in sorted(self._multi_selected):
+            if idx in self.slots and self.slots[idx].slot_data:
+                items.append(self.slots[idx].slot_data)
+        return items
+    def _update_multi_toolbar(self):
+        count = len(self._multi_selected)
+        if count >= 2:
+            self.multi_count_label.setText(t('inventory.multi_selected', n=count, default=f'{count} items selected'))
+            self.multi_toolbar.setVisible(True)
+            self.sort_btn.setVisible(False)
+        else:
+            self.multi_toolbar.setVisible(False)
+            self.sort_btn.setVisible(True)
+    def _on_multi_delete(self):
+        items = self._gather_multi_selected()
+        if items:
+            self.multi_delete_requested.emit(items)
+    def _on_multi_clear_qty(self):
+        items = self._gather_multi_selected()
+        if items:
+            self.multi_clear_qty_requested.emit(items)
     def _on_slot_double_clicked(self, slot_data):
         if slot_data:
             self.item_double_clicked.emit(slot_data)
@@ -924,6 +1044,15 @@ class InventoryGridWidget(QWidget):
         self.effigies_btn.setText(t('inventory.max_all_abilities', default='Max All Abilities'))
         self.key_items_btn.setText(t('inventory.add_all_key_items', default='Add All Key Items'))
         self.clear_key_btn.setText(t('inventory.clear_key_btn', default='Clear'))
+        if hasattr(self, 'multi_toolbar') and self.multi_toolbar:
+            for btn in self.multi_toolbar.findChildren(QPushButton):
+                obj = btn.objectName()
+                if obj == 'invMultiDeleteBtn':
+                    btn.setText(t('inventory.multi_delete_btn', default='Delete'))
+                elif obj == 'invMultiClearBtn':
+                    btn.setText(t('inventory.multi_clear_btn', default='Clear Qty'))
+                elif obj == 'invMultiDeselectBtn':
+                    btn.setText(t('inventory.multi_deselect_btn', default='Deselect'))
     def clear(self):
         self.load_items([])
     def get_selected_slot(self):
@@ -1179,6 +1308,8 @@ class PlayerInventoryTab(QWidget):
         self.inv_tabs.setObjectName('inventoryTabs')
         self.main_grid = InventoryGridWidget('main')
         self.main_grid.item_selected.connect(self._on_item_selected)
+        self.main_grid.multi_delete_requested.connect(self._on_bulk_delete_items)
+        self.main_grid.multi_clear_qty_requested.connect(self._on_bulk_clear_qty)
         self.main_grid.item_context_menu.connect(self._show_item_context_menu)
         self.main_grid.empty_slot_context_menu.connect(self._show_empty_slot_context_menu)
         self.main_grid.item_double_clicked.connect(self._delete_item_direct)
@@ -1206,6 +1337,8 @@ class PlayerInventoryTab(QWidget):
         self.inv_tabs.addTab(self.main_grid, t('inventory.main', default='Inventory'))
         self.key_grid = InventoryGridWidget('key_items')
         self.key_grid.item_selected.connect(self._on_item_selected)
+        self.key_grid.multi_delete_requested.connect(self._on_bulk_delete_items)
+        self.key_grid.multi_clear_qty_requested.connect(self._on_bulk_clear_qty)
         self.key_grid.item_context_menu.connect(self._show_item_context_menu)
         self.key_grid.empty_slot_context_menu.connect(self._show_empty_slot_context_menu)
         self.key_grid.item_double_clicked.connect(self._delete_item_direct)
@@ -1921,6 +2054,47 @@ class PlayerInventoryTab(QWidget):
         self.stats_panel.set_player(self.current_player_uid, self.current_player_name)
     def _on_item_selected(self, slot_data):
         self.selected_item = slot_data
+    def _on_bulk_delete_items(self, items):
+        if not self.inventory or not items:
+            return
+        reply = QMessageBox.question(self, t('inventory.bulk_delete_title', default='Delete Items'), t('inventory.bulk_delete_confirm', n=len(items), default=f'Delete {len(items)} selected items?'), QMessageBox.Yes | QMessageBox.No)
+        if reply != QMessageBox.Yes:
+            return
+        for slot_data in items:
+            container_type = slot_data.get('container_type', 'main')
+            slot_index = slot_data.get('slot_index', 0)
+            item_id = slot_data.get('item_id', '')
+            is_effigy = slot_data.get('is_effigy', False)
+            is_bounty = slot_data.get('is_bounty', False)
+            if is_effigy and item_id:
+                relic_type = slot_data.get('relic_type', '')
+                if relic_type:
+                    self.inventory.remove_effigy(relic_type)
+            elif is_bounty and item_id:
+                self.inventory.remove_bounty_item(item_id)
+            else:
+                self.inventory.remove_item(container_type, slot_index)
+        self.selected_item = None
+        self._refresh_display()
+    def _on_bulk_clear_qty(self, items):
+        if not self.inventory or not items:
+            return
+        for slot_data in items:
+            container_type = slot_data.get('container_type', 'main')
+            slot_index = slot_data.get('slot_index', 0)
+            item_id = slot_data.get('item_id', '')
+            is_effigy = slot_data.get('is_effigy', False)
+            is_bounty = slot_data.get('is_bounty', False)
+            if is_effigy and item_id:
+                relic_type = slot_data.get('relic_type', '')
+                if relic_type:
+                    self.inventory.set_effigy_count(relic_type, 0)
+            elif is_bounty and item_id:
+                self.inventory.remove_bounty_item(item_id)
+            else:
+                self.inventory.set_item_quantity(container_type, slot_index, 0)
+        self.selected_item = None
+        self._refresh_display()
     def _show_item_context_menu(self, slot_data, pos):
         if not slot_data:
             return

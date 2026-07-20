@@ -2222,5 +2222,11 @@
     "pal_editor.bulk_delete_confirm": "Excluir {n} amigos selecionados?",
     "pal_editor.bulk_delete_success": "Amigos {n} excluídos",
     "pal_editor.bulk_max_success": "Maxed {n} amigos",
-    "pal_editor.bulk_heal_done": "Amigos {n} curados"
+    "pal_editor.bulk_heal_done": "Amigos {n} curados",
+    "inventory.multi_selected": "{n} itens selecionados",
+    "inventory.multi_delete_btn": "Excluir",
+    "inventory.multi_clear_btn": "Limpar quantidade",
+    "inventory.multi_deselect_btn": "Desmarcar",
+    "inventory.bulk_delete_title": "Excluir itens",
+    "inventory.bulk_delete_confirm": "Excluir {n} itens selecionados?"
 }

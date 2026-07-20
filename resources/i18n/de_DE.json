@@ -1960,5 +1960,11 @@
     "pal_editor.bulk_delete_confirm": "{n} ausgewählte Freunde löschen?",
     "pal_editor.bulk_delete_success": "{n} Freunde gelöscht",
     "pal_editor.bulk_max_success": "Maximal {n} Freunde",
-    "pal_editor.bulk_heal_done": "{n} Freunde geheilt"
+    "pal_editor.bulk_heal_done": "{n} Freunde geheilt",
+    "inventory.multi_selected": "{n} Elemente ausgewählt",
+    "inventory.multi_delete_btn": "Löschen",
+    "inventory.multi_clear_btn": "Menge löschen",
+    "inventory.multi_deselect_btn": "Abwählen",
+    "inventory.bulk_delete_title": "Elemente löschen",
+    "inventory.bulk_delete_confirm": "{n} ausgewählte Elemente löschen?"
 }

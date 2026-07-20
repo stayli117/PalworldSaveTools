@@ -1936,5 +1936,11 @@
     "pal_editor.bulk_delete_confirm": "選択した {n} 人の友達を削除しますか?",
     "pal_editor.bulk_delete_success": "{n} 人の友達を削除しました",
     "pal_editor.bulk_max_success": "最大 {n} 人の友達",
-    "pal_editor.bulk_heal_done": "癒された{n}の仲間たち"
+    "pal_editor.bulk_heal_done": "癒された{n}の仲間たち",
+    "inventory.multi_selected": "{n} アイテムが選択されました",
+    "inventory.multi_delete_btn": "消去",
+    "inventory.multi_clear_btn": "クリア数量",
+    "inventory.multi_deselect_btn": "選択を解除します",
+    "inventory.bulk_delete_title": "アイテムの削除",
+    "inventory.bulk_delete_confirm": "{n} 選択したアイテムを削除しますか?"
 }

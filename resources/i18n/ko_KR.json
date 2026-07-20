@@ -1935,5 +1935,11 @@
     "pal_editor.bulk_delete_confirm": "선택한 친구 {n}을(를) 삭제하시겠습니까?",
     "pal_editor.bulk_delete_success": "{n} 친구를 삭제했습니다.",
     "pal_editor.bulk_max_success": "최대 {n}명의 친구",
-    "pal_editor.bulk_heal_done": "{n} 친구를 치유했습니다"
+    "pal_editor.bulk_heal_done": "{n} 친구를 치유했습니다",
+    "inventory.multi_selected": "{n} 항목이 선택됨",
+    "inventory.multi_delete_btn": "삭제",
+    "inventory.multi_clear_btn": "수량 지우기",
+    "inventory.multi_deselect_btn": "선택 취소",
+    "inventory.bulk_delete_title": "항목 삭제",
+    "inventory.bulk_delete_confirm": "{n} 선택한 항목을 삭제하시겠습니까?"
 }

@@ -1918,5 +1918,11 @@
     "pal_editor.bulk_delete_confirm": "Supprimer {n} amis sélectionnés ?",
     "pal_editor.bulk_delete_success": "Copains {n} supprimés",
     "pal_editor.bulk_max_success": "Maxed {n} copains",
-    "pal_editor.bulk_heal_done": "Copains {n} guéris"
+    "pal_editor.bulk_heal_done": "Copains {n} guéris",
+    "inventory.multi_selected": "{n} éléments sélectionnés",
+    "inventory.multi_delete_btn": "Supprimer",
+    "inventory.multi_clear_btn": "Quantité claire",
+    "inventory.multi_deselect_btn": "Désélectionner",
+    "inventory.bulk_delete_title": "Supprimer des éléments",
+    "inventory.bulk_delete_confirm": "Supprimer {n} éléments sélectionnés ?"
 }

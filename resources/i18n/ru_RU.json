@@ -1934,5 +1934,11 @@
     "pal_editor.bulk_delete_confirm": "Удалить {n} выбранных друзей?",
     "pal_editor.bulk_delete_success": "Удалены друзья {n}",
     "pal_editor.bulk_max_success": "Макс, друзья {n}",
-    "pal_editor.bulk_heal_done": "Исцелились друзья {n}"
+    "pal_editor.bulk_heal_done": "Исцелились друзья {n}",
+    "inventory.multi_selected": "Выбрано {n} элементов",
+    "inventory.multi_delete_btn": "Удалить",
+    "inventory.multi_clear_btn": "Очистить количество",
+    "inventory.multi_deselect_btn": "Отменить выбор",
+    "inventory.bulk_delete_title": "Удалить элементы",
+    "inventory.bulk_delete_confirm": "Удалить {n} выбранные элементы?"
 }

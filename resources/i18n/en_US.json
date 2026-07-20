@@ -2222,5 +2222,11 @@
     "pal_editor.bulk_delete_confirm": "Delete {n} selected pals?",
     "pal_editor.bulk_delete_success": "Deleted {n} pals",
     "pal_editor.bulk_max_success": "Maxed {n} pals",
-    "pal_editor.bulk_heal_done": "Healed {n} pals"
+    "pal_editor.bulk_heal_done": "Healed {n} pals",
+    "inventory.multi_selected": "{n} items selected",
+    "inventory.multi_delete_btn": "Delete",
+    "inventory.multi_clear_btn": "Clear Qty",
+    "inventory.multi_deselect_btn": "Deselect",
+    "inventory.bulk_delete_title": "Delete Items",
+    "inventory.bulk_delete_confirm": "Delete {n} selected items?"
 }

@@ -2202,5 +2202,7 @@
     "error.save_stale_title": "Salvar arquivo alterado",
     "error.save_stale_msg": "Level.sav no disco mudou desde que foi carregado (pode ter sido salvo novamente pelo jogo). Salvar agora substituirá essas alterações pelas edições na memória.\n\nSalvar mesmo assim?",
     "error.unsaved_title": "Alterações não salvas",
-    "error.unsaved_msg": "Você tem alterações não salvas. Salvar antes de sair?"
+    "error.unsaved_msg": "Você tem alterações não salvas. Salvar antes de sair?",
+    "button.dont_save": "Não salve",
+    "character_transfer.unsaved_warning": "Você tem transferências não salvas. Salvar antes de sair?"
 }

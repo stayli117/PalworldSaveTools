@@ -443,6 +443,7 @@ def choose_level_file(window, level_sav_entry, old_tree, new_tree):
         player_data_list, level_json = result
         window.level_json = level_json
         window.level_sav_path = path
+        window.level_sav_mtime = os.path.getmtime(path)
         level_sav_entry.setText(path)
         backup_whole_directory(os.path.dirname(path), 'Backups/Fix Host Save')
         old_tree.clear()
@@ -495,6 +496,17 @@ def fix_save_wrapper(window, level_sav_entry, old_tree, new_tree):
         if not ok or not new_name.strip():
             return
         xgp_new_name = new_name.strip()
+    if hasattr(window, 'level_sav_mtime') and window.level_sav_mtime is not None:
+        current_mtime = os.path.getmtime(os.path.join(folder_path, 'Level.sav'))
+        if current_mtime != window.level_sav_mtime:
+            msg = QMessageBox(window)
+            msg.setWindowTitle(t('error.save_stale_title', default='Save File Changed'))
+            msg.setText(t('error.save_stale_msg', default='Level.sav on disk has changed since it was loaded. Saving now will overwrite those changes.\n\nSave anyway?'))
+            msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+            msg.setIcon(QMessageBox.Warning)
+            msg.setDefaultButton(QMessageBox.No)
+            if msg.exec() != QMessageBox.Yes:
+                return
     # Single run_with_loading: fix + XGP save-back
     def combined_task():
         fmt = lambda g: '{}-{}-{}-{}-{}'.format(g[:8], g[8:12], g[12:16], g[16:20], g[20:]).lower()
@@ -588,6 +600,8 @@ def fix_save_wrapper(window, level_sav_entry, old_tree, new_tree):
         return True
     def on_combined_done(result):
         if result:
+            if hasattr(window, 'level_sav_mtime'):
+                window.level_sav_mtime = os.path.getmtime(os.path.join(folder_path, 'Level.sav'))
             for i, entry in enumerate(player_list_cache):
                 uid, name, guild, level, pals_count, last_seen, sort_key = entry
                 if uid == old_guid:
@@ -856,6 +870,7 @@ class FixHostSaveWindow(QWidget):
             player_data_list, level_json = result
             self.level_json = level_json
             self.level_sav_path = fpath
+            self.level_sav_mtime = os.path.getmtime(fpath)
             self.level_sav_entry.setText(fpath)
             backup_whole_directory(tmp, 'Backups/Fix Host Save')
             self.old_tree.clear()

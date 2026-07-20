@@ -2202,5 +2202,7 @@
     "character_transfer.load_both_saves": "Please load both source and target saves before using Transfer All.",
     "character_transfer.load_target_first": "Please load a target save before saving changes.",
     "error.unsaved_title": "Unsaved Changes",
-    "error.unsaved_msg": "You have unsaved changes. Save before exiting?"
+    "error.unsaved_msg": "You have unsaved changes. Save before exiting?",
+    "button.dont_save": "Don't Save",
+    "character_transfer.unsaved_warning": "You have unsaved transfers. Save before exiting?"
 }

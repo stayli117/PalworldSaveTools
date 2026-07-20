@@ -1916,5 +1916,7 @@
     "error.save_stale_title": "保存ファイルが変更されました",
     "error.save_stale_msg": "ディスク上の Level.sav はロードされてから変更されています (ゲームによって再保存された可能性があります)。今すぐ保存すると、それらの変更がメモリ内の編集内容で上書きされます。\n\nとにかく保存しますか？",
     "error.unsaved_title": "未保存の変更",
-    "error.unsaved_msg": "未保存の変更があります。終了する前に保存しますか?"
+    "error.unsaved_msg": "未保存の変更があります。終了する前に保存しますか?",
+    "button.dont_save": "保存しないでください",
+    "character_transfer.unsaved_warning": "保存されていない転送があります。終了する前に保存しますか?"
 }

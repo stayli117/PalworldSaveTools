@@ -1910,5 +1910,7 @@
     "error.save_stale_title": "Guardar archivo modificado",
     "error.save_stale_msg": "Level.sav en el disco ha cambiado desde que se cargó (es posible que el juego lo haya vuelto a guardar). Guardar ahora sobrescribirá esos cambios con sus ediciones en memoria.\n\n¿Ahorrar de todos modos?",
     "error.unsaved_title": "Cambios no guardados",
-    "error.unsaved_msg": "Tienes cambios sin guardar. ¿Guardar antes de salir?"
+    "error.unsaved_msg": "Tienes cambios sin guardar. ¿Guardar antes de salir?",
+    "button.dont_save": "No guardar",
+    "character_transfer.unsaved_warning": "Tienes transferencias no guardadas. ¿Guardar antes de salir?"
 }

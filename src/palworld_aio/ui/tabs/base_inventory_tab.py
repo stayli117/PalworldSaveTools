@@ -2131,6 +2131,7 @@ class BasePalsContentWidget(QFrame):
                 break
             parent = parent.parent()
     def _refresh_dashboard(self):
+        constants.dirty = True
         app = QApplication.instance()
         if app is None:
             return

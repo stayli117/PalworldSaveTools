@@ -368,6 +368,7 @@ class SlotNumUpdaterApp(QDialog):
             self.load_selected_save()
     def load_selected_save(self):
         fp = self.file_entry.text()
+        self.file_mtime = os.path.getmtime(fp)
         if not fp.endswith('Level.sav'):
             show_critical(self, t('error.title'), t('slot.invalid_file'))
             return
@@ -718,6 +719,14 @@ class SlotNumUpdaterApp(QDialog):
             show_information(self, t('info.title'), t('slotinjector.no_changes'))
             return
         filepath = self.file_entry.text()
+        if hasattr(self, 'file_mtime') and self.file_mtime is not None:
+            if os.path.getmtime(filepath) != self.file_mtime:
+                reply = QMessageBox.question(self,
+                    t('error.save_stale_title', default='Save File Changed'),
+                    t('error.save_stale_msg', default='Level.sav on disk has changed since it was loaded. Saving now will overwrite those changes.\n\nSave anyway?'),
+                    QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+                if reply != QMessageBox.Yes:
+                    return
         gvas_file = self.gvas_file
         xgp_path = getattr(self, '_xgp_temp_dir', None)
         new_name = None
@@ -753,6 +762,7 @@ class SlotNumUpdaterApp(QDialog):
             return True
         def on_finished(result):
             self.set_loading_state(False)
+            self.file_mtime = os.path.getmtime(filepath)
             show_information(self, t('success.title'), t('slotinjector.saved_success'))
             self.accept()
         def on_error(error_msg):

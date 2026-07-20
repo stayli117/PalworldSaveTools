@@ -1898,5 +1898,7 @@
     "error.save_stale_title": "Enregistrer le fichier modifié",
     "error.save_stale_msg": "Level.sav sur le disque a changé depuis son chargement (il a peut-être été réenregistré par le jeu). Enregistrer maintenant écrasera ces modifications par vos modifications en mémoire.\n\nEnregistrer quand même ?",
     "error.unsaved_title": "Modifications non enregistrées",
-    "error.unsaved_msg": "Vous avez des modifications non enregistrées. Enregistrer avant de quitter ?"
+    "error.unsaved_msg": "Vous avez des modifications non enregistrées. Enregistrer avant de quitter ?",
+    "button.dont_save": "Ne sauvegardez pas",
+    "character_transfer.unsaved_warning": "Vous avez des transferts non enregistrés. Enregistrer avant de quitter ?"
 }

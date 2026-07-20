@@ -768,6 +768,7 @@ class PalInfoHandlerMixin:
         self._set_level(lv_cap)
 
     def _refresh(self):
+        constants.dirty = True
         if self.last_clicked_data:
             self._update_display(self.last_clicked_data)
         parent = self.parent()

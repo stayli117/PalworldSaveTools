@@ -1915,5 +1915,7 @@
     "error.save_stale_title": "저장 파일이 변경됨",
     "error.save_stale_msg": "디스크의 Level.sav가 로드된 이후 변경되었습니다(게임에 의해 다시 저장되었을 수 있음). 지금 저장하면 해당 변경사항이 메모리 내 수정사항으로 덮어쓰여집니다.\n\n저장하시겠습니까?",
     "error.unsaved_title": "저장되지 않은 변경사항",
-    "error.unsaved_msg": "저장되지 않은 변경사항이 있습니다. 종료하기 전에 저장하시겠습니까?"
+    "error.unsaved_msg": "저장되지 않은 변경사항이 있습니다. 종료하기 전에 저장하시겠습니까?",
+    "button.dont_save": "저장하지 않음",
+    "character_transfer.unsaved_warning": "저장되지 않은 전송이 있습니다. 종료하기 전에 저장하시겠습니까?"
 }

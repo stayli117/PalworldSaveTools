@@ -1940,5 +1940,7 @@
     "error.save_stale_title": "Geänderte Datei speichern",
     "error.save_stale_msg": "Level.sav auf der Festplatte hat sich seit dem Laden geändert (es wurde möglicherweise vom Spiel erneut gespeichert). Wenn Sie jetzt speichern, werden diese Änderungen mit Ihren Änderungen im Speicher überschrieben.\n\nTrotzdem sparen?",
     "error.unsaved_title": "Nicht gespeicherte Änderungen",
-    "error.unsaved_msg": "Sie haben nicht gespeicherte Änderungen. Vor dem Beenden speichern?"
+    "error.unsaved_msg": "Sie haben nicht gespeicherte Änderungen. Vor dem Beenden speichern?",
+    "button.dont_save": "Nicht speichern",
+    "character_transfer.unsaved_warning": "Sie haben nicht gespeicherte Überweisungen. Vor dem Beenden speichern?"
 }

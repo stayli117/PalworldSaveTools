@@ -1204,6 +1204,7 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
     def _process_pending_changes(self):
         pass
     def _update_dashboard_stats(self):
+        constants.dirty = True
         app = QApplication.instance()
         if app is None:
             return

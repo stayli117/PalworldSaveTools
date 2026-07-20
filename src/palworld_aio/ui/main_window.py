@@ -1072,13 +1072,20 @@ class MainWindow(QMainWindow):
             msg = QMessageBox(self)
             msg.setWindowTitle(t('error.unsaved_title', default='Unsaved Changes'))
             msg.setText(t('error.unsaved_msg', default='You have unsaved changes. Save before exiting?'))
-            msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
+            save_btn = msg.addButton(t('button.save', default='Save'), QMessageBox.AcceptRole)
+            msg.addButton(t('button.dont_save', default="Don't Save"), QMessageBox.DestructiveRole)
+            cancel_btn = msg.addButton(t('button.cancel', default='Cancel'), QMessageBox.RejectRole)
             msg.setIcon(QMessageBox.Question)
-            msg.setDefaultButton(QMessageBox.Cancel)
-            ret = msg.exec()
-            if ret == QMessageBox.Yes:
+            msg.setDefaultButton(cancel_btn)
+            msg.exec()
+            if msg.clickedButton() == save_btn:
+                from PySide6.QtCore import QEventLoop
+                loop = QEventLoop()
+                save_manager.save_finished.connect(loop.quit)
                 save_manager.save_changes(parent=self)
-            elif ret == QMessageBox.Cancel:
+                loop.exec()
+                save_manager.save_finished.disconnect(loop.quit)
+            elif msg.clickedButton() == cancel_btn:
                 event.ignore()
                 return
         if self.status_stream and self.status_stream.detach_window:

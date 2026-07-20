@@ -153,6 +153,7 @@ def _build_pal_count_map(cspm_json):
             continue
     return result
 level_sav_path, t_level_sav_path = (None, None)
+t_level_mtime = None
 level_json, host_json, targ_lvl, targ_json = (None, None, None, None)
 target_gvas_file, targ_json_gvas = (None, None)
 selected_source_player, selected_target_player = (None, None)
@@ -200,6 +201,22 @@ class CharacterTransferWindow(QWidget):
         target_level_path_label = self.target_level_path_label
         current_selection_label = self.current_selection_label
     def closeEvent(self, event):
+        if modified_target_players:
+            from PySide6.QtWidgets import QMessageBox
+            msg = QMessageBox(self)
+            msg.setWindowTitle(t('error.unsaved_title', default='Unsaved Changes'))
+            msg.setText(t('character_transfer.unsaved_warning', default='You have unsaved transfers. Save before exiting?'))
+            save_btn = msg.addButton(t('button.save', default='Save'), QMessageBox.AcceptRole)
+            msg.addButton(t("button.dont_save", default="Don't Save"), QMessageBox.DestructiveRole)
+            cancel_btn = msg.addButton(t('button.cancel', default='Cancel'), QMessageBox.RejectRole)
+            msg.setIcon(QMessageBox.Question)
+            msg.setDefaultButton(cancel_btn)
+            msg.exec()
+            if msg.clickedButton() == save_btn:
+                self.finalize_save()
+            elif msg.clickedButton() == cancel_btn:
+                event.ignore()
+                return
         global level_json, host_json, targ_lvl, targ_json
         global target_gvas_file, targ_json_gvas, player_list_cache
         global modified_target_players, modified_targets_data, _session_transferred_dynamics, _session_id_map
@@ -492,6 +509,7 @@ class CharacterTransferWindow(QWidget):
                 return
             global level_sav_path, level_json, selected_source_player
             global t_level_sav_path, target_gvas_file, targ_lvl
+            global t_level_mtime
             global modified_target_players, modified_targets_data, selected_target_player
             path, gv, wsd = result
             if which == 'source':
@@ -504,6 +522,7 @@ class CharacterTransferWindow(QWidget):
                 t_level_sav_path = path
                 target_gvas_file = gv
                 targ_lvl = wsd
+                t_level_mtime = os.path.getmtime(path)
                 target_level_path_label.setText(path)
                 backup_whole_directory(tmp, 'Backups/Character Transfer')
                 selected_target_player = None
@@ -833,6 +852,7 @@ def transfer_all_characters():
         gather_and_update_dynamic_containers()
         print(f'Bulk transfer completed in {time.perf_counter() - total_start:.2f}s.')
     def on_bulk_finished():
+        constants.dirty = True
         load_players(targ_lvl, is_source=False)
         global selected_source_player, selected_target_player, host_guid, targ_uid, exported_map
         selected_source_player = None
@@ -955,6 +975,7 @@ def main(skip_msgbox=False, skip_gui=False):
     def on_finished(success):
         if not success:
             return
+        constants.dirty = True
         if not skip_gui:
             load_players(targ_lvl, is_source=False)
         selected_source_player = None
@@ -1533,6 +1554,7 @@ def target_level_file():
         return (tmp, gvas_file, wsd)
     def on_finished(result):
         global t_level_sav_path, targ_lvl, target_gvas_file, selected_target_player
+        global t_level_mtime
         if result is None:
             show_warning(None, t('Error!'), t('Invalid file,must be Level.sav!'))
             return
@@ -1540,6 +1562,7 @@ def target_level_file():
         t_level_sav_path = path
         target_gvas_file = gvas_file
         targ_lvl = wsd
+        t_level_mtime = os.path.getmtime(path)
         target_level_path_label.setText(path)
         backup_whole_directory(os.path.dirname(path), 'Backups/Character Transfer')
         selected_target_player = None
@@ -1600,9 +1623,21 @@ def finalize_save(window):
     if target_gvas_file is None:
         show_warning(None, t('warning.title'), t('character_transfer.load_target_first'))
         return
+    if t_level_mtime is not None and os.path.getmtime(t_level_sav_path) != t_level_mtime:
+        from PySide6.QtWidgets import QMessageBox
+        msg = QMessageBox(window)
+        msg.setWindowTitle(t('error.save_stale_title', default='Save File Changed'))
+        msg.setText(t('error.save_stale_msg', default='Level.sav on disk has changed since it was loaded. Saving now will overwrite those changes.\n\nSave anyway?'))
+        msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        msg.setIcon(QMessageBox.Warning)
+        msg.setDefaultButton(QMessageBox.No)
+        if msg.exec() != QMessageBox.Yes:
+            return
     try:
         def on_finished(success):
             if success:
+                global t_level_mtime
+                t_level_mtime = os.path.getmtime(t_level_sav_path)
                 show_information(None, t('Success'), t('Transfer complete and backup created!'))
                 print('Done saving all modified target players!')
         run_with_loading(on_finished, finalize_save_task)

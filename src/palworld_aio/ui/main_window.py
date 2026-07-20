@@ -14,7 +14,7 @@ from i18n import t, set_language, load_resources, get_native_lang_name
 from common import get_versions, get_current_version, get_display_version, is_standalone
 from import_libs import run_with_loading
 from loading_manager import show_question
-from .tabs.tools_tab import center_on_parent
+from .tabs.tools_tab import center_on_parent, DropOverlay
 GITHUB_LATEST_ZIP = 'https://github.com/deafdudecomputers/PalworldSaveTools/releases/latest'
 from palworld_aio import constants
 from palworld_aio.ui.chrome.styles import ThemeManager, MENU_STYLE, DIALOG_STYLE as DARK_THEME_STYLE
@@ -336,6 +336,10 @@ class MainWindow(QMainWindow):
         self.status_bar.setFixedHeight(0)
         self.status_bar.hide()
         self.setStatusBar(self.status_bar)
+        self.setAcceptDrops(True)
+        self._drop_overlay = DropOverlay(self)
+        self._drop_overlay.setVisible(False)
+        self._drop_overlay.setGeometry(self.rect())
     _TAB_SETUP = {
         0: '_setup_tools_tab',
         1: '_setup_base_inventory_tab',
@@ -610,6 +614,7 @@ class MainWindow(QMainWindow):
     def _on_load_finished(self, success):
         if success:
             self.refresh_all()
+            constants.dirty = False
             self.results_widget.refresh_stats_before()
             self.status_bar.showMessage(t('status.loaded') if t else 'Save loaded successfully', 5000)
         else:
@@ -659,6 +664,7 @@ class MainWindow(QMainWindow):
     def refresh_all(self):
         if self._is_refreshing:
             return
+        constants.dirty = True
         self._is_refreshing = True
         try:
             self._refresh_players()
@@ -1062,6 +1068,19 @@ class MainWindow(QMainWindow):
             self.results_widget.set_base(data[0])
             self.results_widget.set_guild(data[2])
     def closeEvent(self, event: QCloseEvent):
+        if constants.dirty and constants.current_save_path:
+            msg = QMessageBox(self)
+            msg.setWindowTitle(t('error.unsaved_title', default='Unsaved Changes'))
+            msg.setText(t('error.unsaved_msg', default='You have unsaved changes. Save before exiting?'))
+            msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
+            msg.setIcon(QMessageBox.Question)
+            msg.setDefaultButton(QMessageBox.Cancel)
+            ret = msg.exec()
+            if ret == QMessageBox.Yes:
+                save_manager.save_changes(parent=self)
+            elif ret == QMessageBox.Cancel:
+                event.ignore()
+                return
         if self.status_stream and self.status_stream.detach_window:
             try:
                 self.user_settings['console_window_geometry'] = self.status_stream.detach_window.save_geometry()
@@ -1074,6 +1093,44 @@ class MainWindow(QMainWindow):
             event.accept()
         else:
             event.accept()
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        if hasattr(self, '_drop_overlay'):
+            self._drop_overlay.setGeometry(self.rect())
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasUrls():
+            urls = event.mimeData().urls()
+            if urls:
+                file_path = urls[0].toLocalFile()
+                if file_path.lower().endswith('.sav'):
+                    self._drop_overlay.setVisible(True)
+                    self._drop_overlay.raise_()
+                    event.acceptProposedAction()
+                    return
+        super().dragEnterEvent(event)
+    def dragMoveEvent(self, event):
+        if event.mimeData().hasUrls():
+            urls = event.mimeData().urls()
+            if urls:
+                file_path = urls[0].toLocalFile()
+                if file_path.lower().endswith('.sav'):
+                    event.acceptProposedAction()
+                    return
+        super().dragMoveEvent(event)
+    def dragLeaveEvent(self, event):
+        self._drop_overlay.setVisible(False)
+        super().dragLeaveEvent(event)
+    def dropEvent(self, event):
+        self._drop_overlay.setVisible(False)
+        if event.mimeData().hasUrls():
+            urls = event.mimeData().urls()
+            if urls:
+                file_path = urls[0].toLocalFile()
+                if file_path.lower().endswith('.sav'):
+                    save_manager.load_save(path=file_path, parent=self)
+                    event.acceptProposedAction()
+                    return
+        super().dropEvent(event)
     def _show_player_context_menu(self, pos):
         item = self.players_panel.tree.itemAt(pos)
         if not item:

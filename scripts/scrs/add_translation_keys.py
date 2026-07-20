@@ -13,8 +13,8 @@ except ImportError:
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 LANGUAGES = {'zh_CN': {'name': 'Simplified Chinese', 'code': 'zh-CN'}, 'de_DE': {'name': 'German', 'code': 'de'}, 'es_ES': {'name': 'Spanish', 'code': 'es'}, 'fr_FR': {'name': 'French', 'code': 'fr'}, 'ru_RU': {'name': 'Russian', 'code': 'ru'}, 'ja_JP': {'name': 'Japanese', 'code': 'ja'}, 'ko_KR': {'name': 'Korean', 'code': 'ko'}, 'pt_BR': {'name': 'Portuguese (Brazil)', 'code': 'pt'}}
 NEW_TRANSLATIONS = {
-    'character_transfer.load_both_saves': 'Please load both source and target saves before using Transfer All.',
-    'character_transfer.load_target_first': 'Please load a target save before saving changes.',
+    'error.unsaved_title': 'Unsaved Changes',
+    'error.unsaved_msg': 'You have unsaved changes. Save before exiting?',
 }
 OLD_KEYS = []
 def _clean_uv_locks():

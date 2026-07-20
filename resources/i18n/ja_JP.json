@@ -1912,5 +1912,9 @@
     "common.confirm": "確認する",
     "deletion.illegal_players_fixed": "不正な統計情報を持つ {count} プレイヤーを修正しました。",
     "character_transfer.load_both_saves": "「すべて転送」を使用する前に、ソースとターゲットの両方のセーブデータをロードしてください。",
-    "character_transfer.load_target_first": "変更を保存する前に、ターゲットの保存をロードしてください。"
+    "character_transfer.load_target_first": "変更を保存する前に、ターゲットの保存をロードしてください。",
+    "error.save_stale_title": "保存ファイルが変更されました",
+    "error.save_stale_msg": "ディスク上の Level.sav はロードされてから変更されています (ゲームによって再保存された可能性があります)。今すぐ保存すると、それらの変更がメモリ内の編集内容で上書きされます。\n\nとにかく保存しますか？",
+    "error.unsaved_title": "未保存の変更",
+    "error.unsaved_msg": "未保存の変更があります。終了する前に保存しますか?"
 }

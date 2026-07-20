@@ -1906,5 +1906,9 @@
     "common.confirm": "Confirmar",
     "deletion.illegal_players_fixed": "Se corrigieron {count} jugadores con estadísticas ilegales.",
     "character_transfer.load_both_saves": "Cargue los guardados de origen y de destino antes de usar Transferir todo.",
-    "character_transfer.load_target_first": "Cargue un guardado de destino antes de guardar los cambios."
+    "character_transfer.load_target_first": "Cargue un guardado de destino antes de guardar los cambios.",
+    "error.save_stale_title": "Guardar archivo modificado",
+    "error.save_stale_msg": "Level.sav en el disco ha cambiado desde que se cargó (es posible que el juego lo haya vuelto a guardar). Guardar ahora sobrescribirá esos cambios con sus ediciones en memoria.\n\n¿Ahorrar de todos modos?",
+    "error.unsaved_title": "Cambios no guardados",
+    "error.unsaved_msg": "Tienes cambios sin guardar. ¿Guardar antes de salir?"
 }

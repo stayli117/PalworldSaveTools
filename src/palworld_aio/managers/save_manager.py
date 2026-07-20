@@ -300,6 +300,7 @@ class SaveManager(QObject):
                     self._save_xgp_container()
                 else:
                     constants.loaded_level_mtime = os.path.getmtime(level_sav_path)
+                constants.dirty = False
             except Exception:
                 import traceback
                 traceback.print_exc()

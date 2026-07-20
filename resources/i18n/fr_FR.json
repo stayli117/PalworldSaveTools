@@ -1894,5 +1894,9 @@
     "common.confirm": "Confirmer",
     "deletion.illegal_players_fixed": "Correction du ou des joueurs {count} avec des statistiques illégales.",
     "character_transfer.load_both_saves": "Veuillez charger les sauvegardes source et cible avant d'utiliser Transférer tout.",
-    "character_transfer.load_target_first": "Veuillez charger une sauvegarde cible avant d'enregistrer les modifications."
+    "character_transfer.load_target_first": "Veuillez charger une sauvegarde cible avant d'enregistrer les modifications.",
+    "error.save_stale_title": "Enregistrer le fichier modifié",
+    "error.save_stale_msg": "Level.sav sur le disque a changé depuis son chargement (il a peut-être été réenregistré par le jeu). Enregistrer maintenant écrasera ces modifications par vos modifications en mémoire.\n\nEnregistrer quand même ?",
+    "error.unsaved_title": "Modifications non enregistrées",
+    "error.unsaved_msg": "Vous avez des modifications non enregistrées. Enregistrer avant de quitter ?"
 }

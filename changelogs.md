@@ -1,3 +1,9 @@
+#2.1.7
+- **Unsaved changes warning on exit** — if you've edited the save and try to close the app, a dialog asks if you want to save first. Yes saves, No discards, Cancel stays in the app.
+- **Stale save detection** — if Level.sav was modified on disk (e.g. the game/server re-saved it) since you loaded it, a warning appears before overwriting those changes with your in-memory edits.
+- **Drop .sav anywhere on the window** — drag-and-drop a save file onto any tab (not just the Tools tab) to load it. A visual overlay confirms the drop zone.
+- Bumped version to 2.1.7
+
 #2.1.6
 - **Bulk Rename and Bulk Restore now show pal icons** — the pal selection lists in both dialogs display a 20x20 pal icon next to each entry, matching Bulk Sync, Bulk Clone, and Bulk Delete.
 - **Auto-reset save session on tool launch** — clicking any standalone tool (character transfer, slot injector, fix host save, modify save, convert, restore map, etc.) while a save is loaded now wipes the session clean. Prevents the common confusion where users expect the save loaded in main to carry into tools that prompt for their own save file.

@@ -1911,5 +1911,9 @@
     "common.confirm": "확인하다",
     "deletion.illegal_players_fixed": "잘못된 통계를 가진 {count} 플레이어를 수정했습니다.",
     "character_transfer.load_both_saves": "모두 전송을 사용하기 전에 소스 및 대상 저장을 모두 로드하십시오.",
-    "character_transfer.load_target_first": "변경 사항을 저장하기 전에 대상 저장을 로드하세요."
+    "character_transfer.load_target_first": "변경 사항을 저장하기 전에 대상 저장을 로드하세요.",
+    "error.save_stale_title": "저장 파일이 변경됨",
+    "error.save_stale_msg": "디스크의 Level.sav가 로드된 이후 변경되었습니다(게임에 의해 다시 저장되었을 수 있음). 지금 저장하면 해당 변경사항이 메모리 내 수정사항으로 덮어쓰여집니다.\n\n저장하시겠습니까?",
+    "error.unsaved_title": "저장되지 않은 변경사항",
+    "error.unsaved_msg": "저장되지 않은 변경사항이 있습니다. 종료하기 전에 저장하시겠습니까?"
 }

@@ -1916,5 +1916,7 @@
     "common.confirm": "确认",
     "deletion.illegal_players_fixed": "修复了具有非法统计数据的 {count} 玩家。",
     "character_transfer.load_both_saves": "请在使用“全部传送”之前加载源存档和目标存档。",
-    "character_transfer.load_target_first": "请在保存更改之前加载目标保存。"
+    "character_transfer.load_target_first": "请在保存更改之前加载目标保存。",
+    "error.unsaved_title": "未保存的更改",
+    "error.unsaved_msg": "您有未保存的更改。退出前保存吗？"
 }

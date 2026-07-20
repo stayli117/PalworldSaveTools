@@ -1936,5 +1936,9 @@
     "common.confirm": "Bestätigen",
     "deletion.illegal_players_fixed": "{count} Spieler mit illegalen Statistiken behoben.",
     "character_transfer.load_both_saves": "Bitte laden Sie sowohl Quell- als auch Zielspeicher, bevor Sie „Alle übertragen“ verwenden.",
-    "character_transfer.load_target_first": "Bitte laden Sie einen Zielspeicher, bevor Sie Änderungen speichern."
+    "character_transfer.load_target_first": "Bitte laden Sie einen Zielspeicher, bevor Sie Änderungen speichern.",
+    "error.save_stale_title": "Geänderte Datei speichern",
+    "error.save_stale_msg": "Level.sav auf der Festplatte hat sich seit dem Laden geändert (es wurde möglicherweise vom Spiel erneut gespeichert). Wenn Sie jetzt speichern, werden diese Änderungen mit Ihren Änderungen im Speicher überschrieben.\n\nTrotzdem sparen?",
+    "error.unsaved_title": "Nicht gespeicherte Änderungen",
+    "error.unsaved_msg": "Sie haben nicht gespeicherte Änderungen. Vor dem Beenden speichern?"
 }

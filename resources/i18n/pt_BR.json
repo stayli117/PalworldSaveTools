@@ -2198,5 +2198,9 @@
     "common.confirm": "Confirmar",
     "deletion.illegal_players_fixed": "Corrigido(s) {count} jogador(es) com estatísticas ilegais.",
     "character_transfer.load_both_saves": "Carregue os salvamentos de origem e de destino antes de usar Transferir tudo.",
-    "character_transfer.load_target_first": "Carregue um destino salvo antes de salvar as alterações."
+    "character_transfer.load_target_first": "Carregue um destino salvo antes de salvar as alterações.",
+    "error.save_stale_title": "Salvar arquivo alterado",
+    "error.save_stale_msg": "Level.sav no disco mudou desde que foi carregado (pode ter sido salvo novamente pelo jogo). Salvar agora substituirá essas alterações pelas edições na memória.\n\nSalvar mesmo assim?",
+    "error.unsaved_title": "Alterações não salvas",
+    "error.unsaved_msg": "Você tem alterações não salvas. Salvar antes de sair?"
 }

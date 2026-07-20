@@ -2200,5 +2200,7 @@
     "common.confirm": "Confirm",
     "deletion.illegal_players_fixed": "Fixed {count} player(s) with illegal stats.",
     "character_transfer.load_both_saves": "Please load both source and target saves before using Transfer All.",
-    "character_transfer.load_target_first": "Please load a target save before saving changes."
+    "character_transfer.load_target_first": "Please load a target save before saving changes.",
+    "error.unsaved_title": "Unsaved Changes",
+    "error.unsaved_msg": "You have unsaved changes. Save before exiting?"
 }

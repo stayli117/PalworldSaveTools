@@ -201,6 +201,9 @@ class CharacterTransferWindow(QWidget):
         target_level_path_label = self.target_level_path_label
         current_selection_label = self.current_selection_label
     def closeEvent(self, event):
+        global level_json, host_json, targ_lvl, targ_json
+        global target_gvas_file, targ_json_gvas, player_list_cache
+        global modified_target_players, modified_targets_data, _session_transferred_dynamics, _session_id_map
         if modified_target_players:
             from PySide6.QtWidgets import QMessageBox
             msg = QMessageBox(self)
@@ -213,13 +216,12 @@ class CharacterTransferWindow(QWidget):
             msg.setDefaultButton(cancel_btn)
             msg.exec()
             if msg.clickedButton() == save_btn:
-                self.finalize_save()
+                event.ignore()
+                self._save_and_close()
+                return
             elif msg.clickedButton() == cancel_btn:
                 event.ignore()
                 return
-        global level_json, host_json, targ_lvl, targ_json
-        global target_gvas_file, targ_json_gvas, player_list_cache
-        global modified_target_players, modified_targets_data, _session_transferred_dynamics, _session_id_map
         level_json = None
         host_json = None
         targ_lvl = None
@@ -231,6 +233,27 @@ class CharacterTransferWindow(QWidget):
         _session_transferred_dynamics.clear()
         _session_id_map.clear()
         event.accept()
+    def _save_and_close(self):
+        def _on_save_done(success):
+            global level_json, host_json, targ_lvl, targ_json
+            global target_gvas_file, targ_json_gvas, player_list_cache
+            global modified_target_players, modified_targets_data, _session_transferred_dynamics, _session_id_map
+            level_json = None
+            host_json = None
+            targ_lvl = None
+            targ_json = None
+            target_gvas_file = None
+            targ_json_gvas = None
+            modified_target_players = set()
+            modified_targets_data = {}
+            _session_transferred_dynamics.clear()
+            _session_id_map.clear()
+            self.close()
+        try:
+            finalize_save(self, _on_save_done)
+        except Exception as e:
+            print(f'GUI finalize_save error: {e}')
+            self.close()
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Escape:
             self.close()
@@ -578,10 +601,7 @@ class CharacterTransferWindow(QWidget):
     def show_message(self, title, message):
         show_information(None, title, message)
     def finalize_save(self):
-        try:
-            finalize_save(self)
-        except Exception as e:
-            print(f'GUI finalize_save error: {e}')
+        finalize_save(self, on_close_complete=None)
 def load_json_files():
     global host_json_gvas, targ_json_gvas, host_json, targ_json
     host_json_gvas = load_player_file(level_sav_path, selected_source_player)
@@ -1601,7 +1621,7 @@ def on_selection_of_target_player():
             return
         selected_target_player = guid
         current_selection_label.setText(f'Source: {selected_source_player},Target: {selected_target_player}')
-def finalize_save(window):
+def finalize_save(window, on_close_complete=None):
     global _xgp_new_world_name
     _xgp_new_world_name = None
     if _xgp_cpath:
@@ -1640,6 +1660,8 @@ def finalize_save(window):
                 t_level_mtime = os.path.getmtime(t_level_sav_path)
                 show_information(None, t('Success'), t('Transfer complete and backup created!'))
                 print('Done saving all modified target players!')
+            if on_close_complete:
+                on_close_complete(success)
         run_with_loading(on_finished, finalize_save_task)
     except Exception as e:
         print(f'Exception in finalize_save: {e}')

@@ -999,7 +999,7 @@ class InventoryGridWidget(QWidget):
     def _update_multi_toolbar(self):
         count = len(self._multi_selected)
         if count >= 2:
-            self.multi_count_label.setText(t('inventory.multi_selected', n=count, default=f'{count} items selected'))
+            self.multi_count_label.setText(t('inventory.multi_selected', n=count))
             self.multi_toolbar.setVisible(True)
             self.sort_btn.setVisible(False)
         else:
@@ -1053,6 +1053,7 @@ class InventoryGridWidget(QWidget):
                     btn.setText(t('inventory.multi_clear_btn', default='Clear Qty'))
                 elif obj == 'invMultiDeselectBtn':
                     btn.setText(t('inventory.multi_deselect_btn', default='Deselect'))
+        self._update_multi_toolbar()
     def clear(self):
         self.load_items([])
     def get_selected_slot(self):

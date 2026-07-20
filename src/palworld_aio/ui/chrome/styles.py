@@ -69,6 +69,7 @@ CONTENT_PANEL_STYLE = 'background: rgba(18,20,24,0.65); border: 1px solid rgba(1
 SLOT_EMPTY_STYLE = 'background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px;'
 SLOT_HOVER_STYLE = 'background: rgba(125,211,252,0.06); border: 1px solid rgba(125,211,252,0.2);'
 SLOT_SELECTED_STYLE = 'background: rgba(125,211,252,0.1); border: 2px solid #7DD3FC; border-radius: 8px;'
+SLOT_MULTI_SELECTED_STYLE = 'background: rgba(56,189,248,0.12); border: 2px solid #38BDF8; border-radius: 8px;'
 def slot_default(slot_class: str='') -> str:
     sel = f'{slot_class} {{ {SLOT_EMPTY_STYLE} }}' if slot_class else SLOT_EMPTY_STYLE
     return sel
@@ -80,6 +81,9 @@ def slot_rarity(slot_class: str, color: str) -> str:
 def slot_selected(slot_class: str='') -> str:
     s = slot_class or ''
     return f'{s} {{ {SLOT_SELECTED_STYLE} }}'
+def slot_multi_selected(slot_class: str='') -> str:
+    s = slot_class or ''
+    return f'{s} {{ {SLOT_MULTI_SELECTED_STYLE} }}'
 def wrap_tooltip_text(text: str, width: int=80) -> str:
     if not text:
         return text

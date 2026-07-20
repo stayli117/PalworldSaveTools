@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QMenu, QProgressBar, QSizePolicy, QVBoxLayout, QWidget
 from PySide6.QtCore import Qt, Signal
 from i18n import t
-from palworld_aio.ui.chrome.styles import slot_full, slot_selected
+from palworld_aio.ui.chrome.styles import slot_full, slot_selected, slot_multi_selected
 from palworld_aio.utils import calculate_max_hp, extract_value, resolve_name, safe_nested_get, _hp_breakdown, stat_breakdown_tooltip
 
 from .data import _ensure_friendship_thresholds, get_pal_base_data
@@ -44,6 +44,10 @@ class PartySlotWidget(QFrame):
         self.slot_index = slot_index
 
         self.selected = False
+
+        self.multi_selected = False
+
+        self._click_modifiers = Qt.NoModifier
 
         self.setObjectName('partySlot')
 
@@ -112,6 +116,8 @@ class PartySlotWidget(QFrame):
     def mousePressEvent(self, event):
 
         if event.button() == Qt.LeftButton:
+
+            self._click_modifiers = event.modifiers()
 
             self.clicked.emit()
 
@@ -708,6 +714,26 @@ class PartySlotWidget(QFrame):
         if selected:
 
             self.setStyleSheet(slot_selected('QFrame#partySlot'))
+
+        elif self.multi_selected:
+
+            self.setStyleSheet(slot_multi_selected('QFrame#partySlot'))
+
+        else:
+
+            self.setStyleSheet(slot_full('QFrame#partySlot'))
+
+    def set_selected_multi(self, selected):
+
+        self.multi_selected = selected
+
+        if self.selected:
+
+            return
+
+        if selected:
+
+            self.setStyleSheet(slot_multi_selected('QFrame#partySlot'))
 
         else:
 

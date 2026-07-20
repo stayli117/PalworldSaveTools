@@ -2,7 +2,7 @@ from PySide6.QtWidgets import QFrame, QLabel, QMenu, QSizePolicy, QStyledItemDel
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QColor, QPainter
 from i18n import t
-from palworld_aio.ui.chrome.styles import slot_full, slot_selected
+from palworld_aio.ui.chrome.styles import slot_full, slot_selected, slot_multi_selected
 from palworld_aio.utils import extract_value, resolve_name, safe_nested_get
 
 from .data import get_pal_base_data
@@ -43,6 +43,10 @@ class PalboxSlotWidget(QFrame):
         self.slot_index = slot_index
 
         self.selected = False
+
+        self.multi_selected = False
+
+        self._click_modifiers = Qt.NoModifier
 
         self.setObjectName('palboxSlot')
 
@@ -127,6 +131,8 @@ class PalboxSlotWidget(QFrame):
     def mousePressEvent(self, event):
 
         if event.button() == Qt.LeftButton:
+
+            self._click_modifiers = event.modifiers()
 
             self.clicked.emit()
 
@@ -568,6 +574,26 @@ class PalboxSlotWidget(QFrame):
         if selected:
 
             self.setStyleSheet(slot_selected('QFrame#palboxSlot'))
+
+        elif self.multi_selected:
+
+            self.setStyleSheet(slot_multi_selected('QFrame#palboxSlot'))
+
+        else:
+
+            self.setStyleSheet(slot_full('QFrame#palboxSlot'))
+
+    def set_selected_multi(self, selected):
+
+        self.multi_selected = selected
+
+        if self.selected:
+
+            return
+
+        if selected:
+
+            self.setStyleSheet(slot_multi_selected('QFrame#palboxSlot'))
 
         else:
 

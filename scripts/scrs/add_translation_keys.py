@@ -14,6 +14,24 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 LANGUAGES = {'zh_CN': {'name': 'Simplified Chinese', 'code': 'zh-CN'}, 'de_DE': {'name': 'German', 'code': 'de'}, 'es_ES': {'name': 'Spanish', 'code': 'es'}, 'fr_FR': {'name': 'French', 'code': 'fr'}, 'ru_RU': {'name': 'Russian', 'code': 'ru'}, 'ja_JP': {'name': 'Japanese', 'code': 'ja'}, 'ko_KR': {'name': 'Korean', 'code': 'ko'}, 'pt_BR': {'name': 'Portuguese (Brazil)', 'code': 'pt'}}
 NEW_TRANSLATIONS = {
     'character_transfer.unsaved_warning': 'You have unsaved transfers. Save before exiting?',
+    'pal_editor.multi_selected': '{n} pals selected',
+    'pal_editor.bulk_max_btn': 'Max',
+    'pal_editor.bulk_heal_btn': 'Heal',
+    'pal_editor.bulk_rename_btn': 'Rename',
+    'pal_editor.bulk_delete_btn': 'Delete',
+    'pal_editor.bulk_deselect_btn': 'Deselect',
+    'pal_editor.bulk_rename_title': 'Rename Pals',
+    'pal_editor.bulk_rename_label': 'Enter a nickname for all selected pals:',
+    'pal_editor.bulk_rename_placeholder': 'Nickname...',
+    'pal_editor.bulk_rename_cancel': 'Cancel',
+    'pal_editor.bulk_rename_apply': 'Apply',
+    'pal_editor.bulk_rename_no_name': 'Please enter a nickname.',
+    'pal_editor.bulk_rename_done': 'Renamed {n} pals to {name}',
+    'pal_editor.bulk_delete_title': 'Delete',
+    'pal_editor.bulk_delete_confirm': 'Delete {n} selected pals?',
+    'pal_editor.bulk_delete_success': 'Deleted {n} pals',
+    'pal_editor.bulk_max_success': 'Maxed {n} pals',
+    'pal_editor.bulk_heal_done': 'Healed {n} pals',
 }
 OLD_KEYS = []
 def _clean_uv_locks():

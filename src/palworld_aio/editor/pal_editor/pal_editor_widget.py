@@ -4,7 +4,7 @@ import json
 import threading
 import uuid
 from functools import partial
-from PySide6.QtWidgets import QApplication, QCheckBox, QDialog, QFileDialog, QGridLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QScrollArea, QScrollBar, QSizePolicy, QToolTip, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QApplication, QCheckBox, QDialog, QFileDialog, QFrame, QGridLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QScrollArea, QScrollBar, QSizePolicy, QToolTip, QVBoxLayout, QWidget
 from PySide6.QtCore import Qt, QEvent, QSize, QTimer
 from PySide6.QtGui import QIcon, QKeySequence, QShortcut
 from i18n import t
@@ -37,6 +37,10 @@ from .palbox_slot_widget import PalboxSlotWidget
 from .create_dialogs import BulkSyncPalDialog, PalCreateDialog, _show_learned_moves_dialog, BulkSpeciesDialog
 from .pal_editor_bulk_ops import BulkOperationMixin
 
+def _hex_to_rgb(hex_color):
+    h = hex_color.lstrip('#')
+    return f'{int(h[0:2], 16)},{int(h[2:4], 16)},{int(h[4:6], 16)}'
+
 class PalEditorWidget(QWidget, BulkOperationMixin):
     _process_lock = threading.Lock()
     def __init__(self, parent=None):
@@ -58,6 +62,8 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
         self.selected_pal_slot = None
         self._hovered_pal = None
         self._clicked_pal = None
+        self._multi_selected = set()
+        self._multi_select_anchor = None
         self._last_clicked_dps_pal = None
         self._palbox_mode = 'box'
         self.palbox_pal_dict = {}
@@ -122,6 +128,35 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
         self.mode_dps_btn.clicked.connect(lambda: self._set_palbox_mode('dps'))
         mode_bar.addWidget(self.mode_box_btn)
         mode_bar.addWidget(self.mode_dps_btn)
+        self.multi_toolbar = QFrame()
+        self.multi_toolbar.setObjectName('multiToolbar')
+        self.multi_toolbar.setStyleSheet('QFrame#multiToolbar { background: transparent; border: none; }')
+        self.multi_toolbar.setVisible(False)
+        mt_layout = QHBoxLayout(self.multi_toolbar)
+        mt_layout.setContentsMargins(0, 0, 0, 0)
+        mt_layout.setSpacing(4)
+        self.multi_count_label = QLabel()
+        self.multi_count_label.setStyleSheet('font-size: 11px; font-weight: 700; color: #38BDF8; background: transparent; border: none; padding: 0 4px;')
+        mt_layout.addWidget(self.multi_count_label)
+        for btn_cfg in [('multi_max_btn', 'pal_editor.bulk_max_btn', self._on_bulk_max_selected, '#A78BFA', '#A78BFA'),
+                         ('multi_heal_btn', 'pal_editor.bulk_heal_btn', self._on_bulk_heal_selected, '#4ADE80', '#4ADE80'),
+                         ('multi_rename_btn', 'pal_editor.bulk_rename_btn', self._on_bulk_rename_selected, '#FBBF24', '#FBBF24'),
+                         ('multi_delete_btn', 'pal_editor.bulk_delete_btn', self._on_bulk_delete_selected, '#FB7185', '#FB7185')]:
+            btn = QPushButton(t(btn_cfg[1]))
+            btn.setObjectName(btn_cfg[0])
+            btn.setFixedHeight(22)
+            btn.setCursor(Qt.PointingHandCursor)
+            btn.setStyleSheet(f'QPushButton {{ background: rgba({_hex_to_rgb(btn_cfg[3])},0.12); color: {btn_cfg[4]}; border: 1px solid rgba({_hex_to_rgb(btn_cfg[3])},0.25); border-radius: 4px; padding: 2px 8px; font-weight: 600; font-size: 10px; }} QPushButton:hover {{ background: rgba({_hex_to_rgb(btn_cfg[3])},0.25); color: #FFFFFF; }}')
+            btn.clicked.connect(btn_cfg[2])
+            mt_layout.addWidget(btn)
+        deselect_btn = QPushButton(t('pal_editor.bulk_deselect_btn'))
+        deselect_btn.setObjectName('multi_deselect_btn')
+        deselect_btn.setFixedHeight(22)
+        deselect_btn.setCursor(Qt.PointingHandCursor)
+        deselect_btn.setStyleSheet('QPushButton { background: rgba(255,255,255,0.05); color: #9CA3AF; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 2px 8px; font-weight: 600; font-size: 10px; } QPushButton:hover { background: rgba(255,255,255,0.1); color: #FFFFFF; }')
+        deselect_btn.clicked.connect(self._clear_multi_selection)
+        mt_layout.addWidget(deselect_btn)
+        mode_bar.addWidget(self.multi_toolbar)
         mode_bar.addStretch()
         palbox_layout.addLayout(mode_bar)
         self._update_mode_buttons()
@@ -210,6 +245,7 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
         self._clicked_pal = None
         self.selected_pal_slot = None
         self._hovered_pal = None
+        self._clear_multi_selection()
         self._clear_party_highlight()
         self._clear_palbox_highlight()
         self.pal_info.set_clicked_pal(None)
@@ -303,6 +339,9 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
             self.current_box_index -= 1
         else:
             self.current_box_index = self._get_max_box()
+        self._clicked_pal = None
+        self.selected_pal_slot = None
+        self.pal_info.set_clicked_pal(None)
         self._update_box_label()
         self._update_palbox_page()
     def _next_box(self):
@@ -310,6 +349,9 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
             self.current_box_index += 1
         else:
             self.current_box_index = 1
+        self._clicked_pal = None
+        self.selected_pal_slot = None
+        self.pal_info.set_clicked_pal(None)
         self._update_box_label()
         self._update_palbox_page()
     def _on_party_slot_clicked(self, idx):
@@ -317,16 +359,42 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
         is_context = getattr(slot, '_context_click', False)
         if is_context:
             slot._context_click = False
-        if idx in self.party_pals:
-            pal = self.party_pals[idx]
-            if not is_context and self._clicked_pal is pal and (self.selected_pal_slot == ('party', idx)):
-                self._clicked_pal = None
-                self.selected_pal_slot = None
-                self._clear_party_highlight()
-                self.pal_info.last_clicked_data = None
-                self.pal_info._hovered_data = None
-                self.pal_info._clear_display()
+            return
+        mods = getattr(slot, '_click_modifiers', Qt.NoModifier)
+        slot._click_modifiers = Qt.NoModifier
+        has_pal = idx in self.party_pals
+        if mods & Qt.ControlModifier:
+            if not has_pal:
                 return
+            if self.selected_pal_slot:
+                sp_type, sp_idx = self.selected_pal_slot
+                if self._multi_key(sp_type, sp_idx) not in self._multi_selected and sp_type == 'party' and sp_idx in self.party_pals:
+                    self._toggle_multi_slot(sp_type, sp_idx, force_add=True)
+            if self.selected_pal_slot != ('party', idx):
+                self._toggle_multi_slot('party', idx)
+            self._multi_select_anchor = ('party', idx)
+            return
+        if mods & Qt.ShiftModifier and self._multi_select_anchor:
+            anchor = self._multi_select_anchor
+            if anchor[0] == 'party':
+                self._clear_multi_selection(update_toolbar=False)
+                lo, hi = min(anchor[1], idx), max(anchor[1], idx)
+                for i in range(lo, hi + 1):
+                    if i in self.party_pals:
+                        self._toggle_multi_slot('party', i, force_add=True)
+            self._multi_select_anchor = ('party', idx)
+            if has_pal:
+                self._clicked_pal = self.party_pals[idx]
+                self.pal_info.set_clicked_pal(self.party_pals[idx])
+                self.selected_pal_slot = ('party', idx)
+                self._highlight_party_slot(idx)
+                self._clear_palbox_highlight()
+            self._update_multi_toolbar()
+            return
+        self._clear_multi_selection()
+        self._multi_select_anchor = ('party', idx)
+        if has_pal:
+            pal = self.party_pals[idx]
             self._clicked_pal = pal
             self.pal_info.set_clicked_pal(pal)
             self.selected_pal_slot = ('party', idx)
@@ -351,17 +419,44 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
         is_context = getattr(slot, '_context_click', False)
         if is_context:
             slot._context_click = False
+            return
+        mods = getattr(slot, '_click_modifiers', Qt.NoModifier)
+        slot._click_modifiers = Qt.NoModifier
         pals_on_page = self._get_palbox_page_pals()
         slot_type = 'dps' if is_dps else 'palbox'
-        if idx < len(pals_on_page) and pals_on_page[idx] is not None:
-            if not is_context and self._clicked_pal is pals_on_page[idx] and self.selected_pal_slot == (slot_type, idx):
-                self._clicked_pal = None
-                self.selected_pal_slot = None
-                self._clear_palbox_highlight()
-                self.pal_info.last_clicked_data = None
-                self.pal_info._hovered_data = None
-                self.pal_info._clear_display()
+        has_pal = idx < len(pals_on_page) and pals_on_page[idx] is not None
+        if mods & Qt.ControlModifier:
+            if not has_pal:
                 return
+            if self.selected_pal_slot:
+                sp_type, sp_idx = self.selected_pal_slot
+                sp_key = self._multi_key(sp_type, sp_idx)
+                if sp_key not in self._multi_selected and sp_type == slot_type and sp_idx < len(pals_on_page) and pals_on_page[sp_idx] is not None:
+                    self._toggle_multi_slot(sp_type, sp_idx, force_add=True)
+            if self.selected_pal_slot != (slot_type, idx):
+                self._toggle_multi_slot(slot_type, idx)
+            self._multi_select_anchor = (slot_type, idx)
+            return
+        if mods & Qt.ShiftModifier and self._multi_select_anchor:
+            anchor = self._multi_select_anchor
+            if anchor[0] == slot_type:
+                self._clear_multi_selection(update_toolbar=False)
+                lo, hi = min(anchor[1], idx), max(anchor[1], idx)
+                for i in range(lo, hi + 1):
+                    if i < len(pals_on_page) and pals_on_page[i] is not None:
+                        self._toggle_multi_slot(slot_type, i, force_add=True)
+            self._multi_select_anchor = (slot_type, idx)
+            if has_pal:
+                self._clicked_pal = pals_on_page[idx]
+                self.pal_info.set_clicked_pal(pals_on_page[idx])
+                self.selected_pal_slot = (slot_type, idx)
+                self._highlight_palbox_slot(idx)
+                self._clear_party_highlight()
+            self._update_multi_toolbar()
+            return
+        self._clear_multi_selection()
+        self._multi_select_anchor = (slot_type, idx)
+        if has_pal:
             self._clicked_pal = pals_on_page[idx]
             self.pal_info.set_clicked_pal(pals_on_page[idx])
             self.selected_pal_slot = (slot_type, idx)
@@ -381,6 +476,7 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
     def _on_palbox_slot_left(self):
         self.pal_info.clear_hover()
     def _on_slot_right_clicked(self, slot_index, action):
+        self._clear_multi_selection()
         sender = self.sender()
         is_party = sender in self.party_slots
         is_dps = (not is_party) and self._palbox_mode == 'dps'
@@ -1091,6 +1187,347 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
     def _clear_palbox_highlight(self):
         for slot in self.palbox_slots:
             slot.set_selected(False)
+    def _clear_multi_selection(self, update_toolbar=True):
+        self._multi_selected.clear()
+        self._multi_select_anchor = None
+        for slot in self.party_slots:
+            slot.set_selected_multi(False)
+        for slot in self.palbox_slots:
+            slot.set_selected_multi(False)
+        if update_toolbar:
+            self._update_multi_toolbar()
+    def _multi_key(self, slot_type, idx):
+        if slot_type in ('palbox', 'dps'):
+            return (slot_type, (self.current_box_index - 1) * 30 + idx)
+        return (slot_type, idx)
+    def _toggle_multi_slot(self, slot_type, idx, force_add=False):
+        key = self._multi_key(slot_type, idx)
+        abs_idx = key[1]
+        if key in self._multi_selected:
+            if force_add:
+                return
+            self._multi_selected.discard(key)
+            if slot_type == 'party' and idx < len(self.party_slots):
+                self.party_slots[idx].set_selected_multi(False)
+            elif slot_type in ('palbox', 'dps') and abs_idx % 30 < len(self.palbox_slots):
+                page = (abs_idx // 30) + 1
+                if page == self.current_box_index:
+                    self.palbox_slots[abs_idx % 30].set_selected_multi(False)
+        else:
+            self._multi_selected.add(key)
+            if slot_type == 'party' and idx < len(self.party_slots):
+                self.party_slots[idx].set_selected_multi(True)
+            elif slot_type in ('palbox', 'dps') and abs_idx % 30 < len(self.palbox_slots):
+                page = (abs_idx // 30) + 1
+                if page == self.current_box_index:
+                    self.palbox_slots[abs_idx % 30].set_selected_multi(True)
+        self._update_multi_toolbar()
+    def _gather_selected_pals(self):
+        pals = []
+        seen = set()
+        if self.selected_pal_slot:
+            st, si = self.selected_pal_slot
+            pal = None
+            if st == 'party' and si in self.party_pals:
+                pal = self.party_pals[si]
+            elif st == 'palbox' and si in self.palbox_pal_dict:
+                pal = self.palbox_pal_dict[si]
+            elif st == 'dps' and si in self.dps_pals:
+                pal = self.dps_pals[si]
+            if pal:
+                iid = str(pal.get('key', {}).get('InstanceId', {}).get('value', ''))
+                if iid not in seen:
+                    seen.add(iid)
+                    pals.append(pal)
+        for slot_type, abs_idx in self._multi_selected:
+            pal = None
+            if slot_type == 'party':
+                if abs_idx in self.party_pals:
+                    pal = self.party_pals[abs_idx]
+            elif slot_type == 'palbox':
+                if abs_idx in self.palbox_pal_dict:
+                    pal = self.palbox_pal_dict[abs_idx]
+            elif slot_type == 'dps':
+                if abs_idx in self.dps_pals:
+                    pal = self.dps_pals[abs_idx]
+            if pal:
+                iid = str(pal.get('key', {}).get('InstanceId', {}).get('value', ''))
+                if iid not in seen:
+                    seen.add(iid)
+                    pals.append(pal)
+        return pals
+    def _reapply_multi_highlights(self):
+        for slot_type, abs_idx in list(self._multi_selected):
+            if slot_type == 'party':
+                if abs_idx < len(self.party_slots):
+                    self.party_slots[abs_idx].set_selected_multi(True)
+                else:
+                    self._multi_selected.discard((slot_type, abs_idx))
+            elif slot_type in ('palbox', 'dps'):
+                page = (abs_idx // 30) + 1
+                rel = abs_idx % 30
+                if page == self.current_box_index and rel < len(self.palbox_slots):
+                    self.palbox_slots[rel].set_selected_multi(True)
+        self._update_multi_toolbar()
+    def _update_multi_toolbar(self):
+        count = len(self._multi_selected)
+        if self.selected_pal_slot:
+            st, si = self.selected_pal_slot
+            if (st, si) not in self._multi_selected:
+                count += 1
+        if count >= 2:
+            self.multi_count_label.setText(t('pal_editor.multi_selected', n=count))
+            self.multi_toolbar.setVisible(True)
+            self.restore_all_btn.setVisible(False)
+            self.max_all_btn.setVisible(False)
+            self.bulk_clone_btn.setVisible(False)
+            self.bulk_delete_btn.setVisible(False)
+        else:
+            self.multi_toolbar.setVisible(False)
+            self.restore_all_btn.setVisible(True)
+            self.max_all_btn.setVisible(True)
+            self.bulk_clone_btn.setVisible(True)
+            self.bulk_delete_btn.setVisible(True)
+    def _on_bulk_delete_selected(self):
+        pals = self._gather_selected_pals()
+        if not pals:
+            return
+        reply = show_question(self, t('edit_pals.confirm_delete'), t('pal_editor.bulk_delete_confirm', n=len(pals)))
+        if not reply:
+            return
+        removed_party = []
+        removed_palbox = []
+        removed_dps = []
+        for pal in pals:
+            raw = _get_raw_from_item(pal)
+            if not raw:
+                continue
+            try:
+                cmap = constants.loaded_level_json['properties']['worldSaveData']['value']['CharacterSaveParameterMap']['value']
+                if pal in cmap:
+                    cmap.remove(pal)
+            except Exception:
+                pass
+            for idx, p in list(self.party_pals.items()):
+                if p is pal:
+                    removed_party.append(idx)
+                    break
+            for abs_idx, p in list(self.palbox_pal_dict.items()):
+                if p is pal:
+                    removed_palbox.append(abs_idx)
+                    break
+            if hasattr(self, 'dps_pals'):
+                for abs_idx, p in list(self.dps_pals.items()):
+                    if p is pal:
+                        removed_dps.append(abs_idx)
+                        break
+        for idx in removed_party:
+            self.party_pals.pop(idx, None)
+        for abs_idx in removed_palbox:
+            self.palbox_pal_dict.pop(abs_idx, None)
+        for abs_idx in removed_dps:
+            self.dps_pals.pop(abs_idx, None)
+            if self.dps_gvas:
+                arr = self.dps_gvas.properties.get('SaveParameterArray', {}).get('value', {}).get('values', [])
+                if abs_idx < len(arr) and isinstance(arr[abs_idx], dict):
+                    inst = arr[abs_idx].get('InstanceId')
+                    if isinstance(inst, dict):
+                        empty_guid = '00000000-0000-0000-0000-000000000000'
+                        inst_val = inst.get('value', {})
+                        if isinstance(inst_val, dict):
+                            inst_val['PlayerUId'] = {'struct_type': 'Guid', 'struct_id': empty_guid, 'id': None, 'value': empty_guid, 'type': 'StructProperty'}
+                            inst_val['InstanceId'] = {'struct_type': 'Guid', 'struct_id': empty_guid, 'id': None, 'value': empty_guid, 'type': 'StructProperty'}
+                            inst_val['DebugName'] = {'id': None, 'type': 'StrProperty', 'value': ''}
+            if self.dps_pals and hasattr(self, '_save_dps'):
+                self._save_dps(force=True)
+        self._clear_multi_selection()
+        self._clicked_pal = None
+        self.selected_pal_slot = None
+        self.pal_info.set_clicked_pal(None)
+        self._clear_party_highlight()
+        self._clear_palbox_highlight()
+        self._update_party_slots()
+        self._update_palbox_page()
+        self._update_dashboard_stats()
+        QApplication.processEvents()
+    def _on_bulk_max_selected(self):
+        pals = self._gather_selected_pals()
+        if not pals:
+            return
+        cheat = PalFrame._cheat_mode
+        cap = 255 if cheat else 100
+        soul_cap = 255 if cheat else 20
+        lv_cap = 255 if cheat else 80
+        for pi in pals:
+            tr = _get_raw_from_item(pi)
+            if not tr:
+                continue
+            cid_i = extract_value(tr, 'CharacterID', '')
+            base_i = _data.get_pal_base_data(cid_i)
+            tr['Talent_HP'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': cap}}
+            tr['Talent_Shot'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': cap}}
+            tr['Talent_Defense'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': cap}}
+            tr['Rank_HP'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': soul_cap}}
+            tr['Rank_Attack'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': soul_cap}}
+            tr['Rank_Defence'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': soul_cap}}
+            tr['Rank_CraftSpeed'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': soul_cap}}
+            tr['Rank'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 5}}
+            tr['FriendshipPoint'] = {'id': None, 'type': 'IntProperty', 'value': 200000}
+            tr['bIsAwakening'] = {'id': None, 'type': 'BoolProperty', 'value': True}
+            if base_i:
+                ws_base = base_i.get('work_suitabilities', {})
+                for k, v in ws_base.items():
+                    if v > 0:
+                        _set_work_suitability(tr, k, 10)
+            tr['Level'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': lv_cap}}
+            exp_val = _data.PAL_EXP_TABLE.get(str(lv_cap), {}).get('PalTotalEXP', 0)
+            if exp_val == 0 and lv_cap >= 80:
+                exp_val = _data.PAL_EXP_TABLE.get('100', {}).get('PalTotalEXP', 282766395)
+            tr['Exp'] = {'id': None, 'type': 'Int64Property', 'value': exp_val}
+        for pi in pals:
+            tr = _get_raw_from_item(pi)
+            if not tr:
+                continue
+            cid_i = extract_value(tr, 'CharacterID', '')
+            is_boss_i = cid_i.upper().startswith('BOSS_')
+            is_lucky_i = extract_value(tr, 'IsRarePal', False)
+            lv_i = extract_value(tr, 'Level', 1)
+            talent_hp_i = extract_value(tr, 'Talent_HP', 0)
+            rank_hp_i = extract_value(tr, 'Rank_HP', 0)
+            trust_i = extract_value(tr, 'FriendshipPoint', 0)
+            rank_i = extract_value(tr, 'Rank', 0)
+            is_awake_i = bool(extract_value(tr, 'bIsAwakening', False))
+            thr = _ensure_friendship_thresholds()
+            trust_rank_i = 0
+            for r in range(len(thr) - 1, 0, -1):
+                if trust_i >= thr[r]:
+                    trust_rank_i = r
+                    break
+            condenser_i = int(rank_i) if isinstance(rank_i, (int, float)) else 0
+            base_i = _data.get_pal_base_data(cid_i)
+            if base_i:
+                max_hp = calculate_max_hp(base_i, lv_i, talent_hp_i, rank_hp_i, is_boss_i, is_lucky_i, trust_rank_i, condenser_i, is_awake_i)
+            else:
+                max_hp = safe_nested_get(tr, ['MaxHP', 'value', 'Value', 'value'], 1)
+            if max_hp <= 0:
+                max_hp = 1
+            tr['Hp'] = {'struct_type': 'FixedPoint64', 'struct_id': '00000000-0000-0000-0000-000000000000', 'id': None, 'value': {'Value': {'id': None, 'value': int(max_hp), 'type': 'Int64Property'}}, 'type': 'StructProperty'}
+            max_stomach = (base_i.get('stats', {}).get('max_full_stomach', 300) if base_i else 300)
+            tr['FullStomach'] = {'id': None, 'type': 'FloatProperty', 'value': float(max_stomach)}
+            tr['SanityValue'] = {'id': None, 'type': 'FloatProperty', 'value': 100.0}
+            tr.pop('WorkerSick', None)
+            tr.pop('PhysicalHealth', None)
+            tr.pop('HungerType', None)
+            tr.pop('FoodWithStatusEffect', None)
+            tr.pop('Tiemr_FoodWithStatusEffect', None)
+            tr.pop('FoodRegeneEffectInfo', None)
+        self._clear_multi_selection()
+        self._clicked_pal = None
+        self.selected_pal_slot = None
+        self.pal_info.set_clicked_pal(None)
+        self._clear_party_highlight()
+        self._clear_palbox_highlight()
+        self._update_party_slots()
+        self._update_palbox_page()
+        QApplication.processEvents()
+        self._update_dashboard_stats()
+    def _on_bulk_heal_selected(self):
+        pals = self._gather_selected_pals()
+        if not pals:
+            return
+        for pi in pals:
+            tr = _get_raw_from_item(pi)
+            if not tr:
+                continue
+            cid_i = extract_value(tr, 'CharacterID', '')
+            is_boss_i = cid_i.upper().startswith('BOSS_')
+            is_lucky_i = extract_value(tr, 'IsRarePal', False)
+            lv_i = extract_value(tr, 'Level', 1)
+            talent_hp_i = extract_value(tr, 'Talent_HP', 0)
+            rank_hp_i = extract_value(tr, 'Rank_HP', 0)
+            trust_i = extract_value(tr, 'FriendshipPoint', 0)
+            rank_i = extract_value(tr, 'Rank', 0)
+            is_awake_i = bool(extract_value(tr, 'bIsAwakening', False))
+            thr = _ensure_friendship_thresholds()
+            trust_rank_i = 0
+            for r in range(len(thr) - 1, 0, -1):
+                if trust_i >= thr[r]:
+                    trust_rank_i = r
+                    break
+            condenser_i = int(rank_i) if isinstance(rank_i, (int, float)) else 0
+            base = _data.get_pal_base_data(cid_i)
+            max_hp = safe_nested_get(tr, ['MaxHP', 'value', 'Value', 'value'], 0)
+            if max_hp <= 0 and base:
+                max_hp = calculate_max_hp(base, lv_i, talent_hp_i, rank_hp_i, is_boss_i, is_lucky_i, trust_rank_i, condenser_i, is_awake_i)
+            if max_hp <= 0:
+                max_hp = 1
+            tr['Hp'] = {'struct_type': 'FixedPoint64', 'struct_id': '00000000-0000-0000-0000-000000000000', 'id': None, 'value': {'Value': {'id': None, 'value': int(max_hp), 'type': 'Int64Property'}}, 'type': 'StructProperty'}
+            max_stomach = (base.get('stats', {}).get('max_full_stomach', 300) if base else 300)
+            tr['FullStomach'] = {'id': None, 'type': 'FloatProperty', 'value': float(max_stomach)}
+            tr['SanityValue'] = {'id': None, 'type': 'FloatProperty', 'value': 100.0}
+            tr.pop('WorkerSick', None)
+            tr.pop('PhysicalHealth', None)
+            tr.pop('HungerType', None)
+            tr.pop('FoodWithStatusEffect', None)
+            tr.pop('Tiemr_FoodWithStatusEffect', None)
+            tr.pop('FoodRegeneEffectInfo', None)
+        self._clear_multi_selection()
+        self._clicked_pal = None
+        self.selected_pal_slot = None
+        self.pal_info.set_clicked_pal(None)
+        self._clear_party_highlight()
+        self._clear_palbox_highlight()
+        self._update_party_slots()
+        self._update_palbox_page()
+        QApplication.processEvents()
+        self._update_dashboard_stats()
+    def _on_bulk_rename_selected(self):
+        pals = self._gather_selected_pals()
+        if not pals:
+            return
+        dlg = FramelessDialog('pal_editor.bulk_rename_title', self)
+        dlg.setWindowTitle(t('pal_editor.bulk_rename_title'))
+        dlg.setModal(True)
+        dlg.setMinimumSize(360, 160)
+        inner = QWidget()
+        il = QVBoxLayout(inner)
+        il.setContentsMargins(12, 8, 12, 12)
+        il.setSpacing(8)
+        lbl = QLabel(t('pal_editor.bulk_rename_label'))
+        lbl.setStyleSheet('font-size: 12px; font-weight: 600; color: #E2E8F0; background: transparent; border: none;')
+        il.addWidget(lbl)
+        rename_edit = QLineEdit()
+        rename_edit.setPlaceholderText(t('pal_editor.bulk_rename_placeholder'))
+        rename_edit.setStyleSheet('QLineEdit { background: rgba(0,0,0,0.4); color: #E2E8F0; border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; padding: 8px 10px; font-size: 12px; } QLineEdit:focus { border-color: #7DD3FC; }')
+        rename_edit.setFocus()
+        il.addWidget(rename_edit)
+        btn_row = QHBoxLayout()
+        btn_row.addStretch()
+        cancel_btn = QPushButton(t('pal_editor.bulk_rename_cancel'))
+        cancel_btn.setStyleSheet('QPushButton { background: rgba(255,255,255,0.05); color: #9CA3AF; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 6px 16px; font-size: 12px; font-weight: 600; } QPushButton:hover { background: rgba(255,255,255,0.1); color: #FFFFFF; }')
+        cancel_btn.clicked.connect(dlg.reject)
+        btn_row.addWidget(cancel_btn)
+        apply_btn = QPushButton(t('pal_editor.bulk_rename_apply'))
+        apply_btn.setStyleSheet('QPushButton { background: rgba(251,191,36,0.15); color: #FBBF24; border: 1px solid rgba(251,191,36,0.3); border-radius: 4px; padding: 6px 20px; font-size: 12px; font-weight: 700; } QPushButton:hover { background: rgba(251,191,36,0.25); color: #FFFFFF; }')
+        btn_row.addWidget(apply_btn)
+        il.addLayout(btn_row)
+        dlg.content_layout.addWidget(inner)
+        def on_apply():
+            text = rename_edit.text().strip()
+            if not text:
+                show_warning(dlg, t('pal_editor.bulk_rename_title'), t('pal_editor.bulk_rename_no_name'))
+                return
+            name = text
+            for pi in pals:
+                tr = _get_raw_from_item(pi)
+                if tr:
+                    tr['NickName'] = {'id': None, 'type': 'StrProperty', 'value': name}
+            self._update_party_slots()
+            self._update_palbox_page()
+            dlg.accept()
+        apply_btn.clicked.connect(on_apply)
+        rename_edit.returnPressed.connect(on_apply)
+        dlg.exec()
     def _get_palbox_page_pals(self):
         start = (self.current_box_index - 1) * 30
         source = self.dps_pals if self._palbox_mode == 'dps' else self.palbox_pal_dict
@@ -1098,15 +1535,18 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
     def _update_palbox_page(self):
         page_pals = self._get_palbox_page_pals()
         for i, slot in enumerate(self.palbox_slots):
+            slot.multi_selected = False
             slot.pal_data = page_pals[i] if i < len(page_pals) else None
             slot.update_display()
             slot.set_selected(False)
+        self._reapply_multi_highlights()
         self._update_box_label()
     def set_player(self, player_uid, player_name):
         self.player_uid = player_uid
         self.player_name = player_name
         self._clicked_pal = None
         self.selected_pal_slot = None
+        self._clear_multi_selection()
         self._palbox_mode = 'box'
         self._get_container_ids()
         PalFrame._load_maps()
@@ -1180,6 +1620,7 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
         self.selected_pal_slot = None
         self._hovered_pal = None
         self._clicked_pal = None
+        self._clear_multi_selection()
         for slot in self.party_slots:
             slot.pal_data = None
             slot.update_display()
@@ -1229,6 +1670,19 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
             self.mode_box_btn.setText(t('pal_editor.box_tab') if t else 'Box')
         if hasattr(self, 'mode_dps_btn'):
             self.mode_dps_btn.setText(t('pal_editor.dps') if t else 'DPS')
+        if hasattr(self, 'multi_toolbar') and self.multi_toolbar:
+            for btn in self.multi_toolbar.findChildren(QPushButton):
+                obj = btn.objectName()
+                if obj == 'multi_max_btn':
+                    btn.setText(t('pal_editor.bulk_max_btn'))
+                elif obj == 'multi_heal_btn':
+                    btn.setText(t('pal_editor.bulk_heal_btn'))
+                elif obj == 'multi_rename_btn':
+                    btn.setText(t('pal_editor.bulk_rename_btn'))
+                elif obj == 'multi_delete_btn':
+                    btn.setText(t('pal_editor.bulk_delete_btn'))
+                elif obj == 'multi_deselect_btn':
+                    btn.setText(t('pal_editor.bulk_deselect_btn'))
         if hasattr(self, 'pal_info') and self.pal_info:
             self.pal_info.refresh_labels()
     def _load_pals(self):
@@ -1286,6 +1740,7 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
         for slot in self.party_slots:
             slot.update_display()
             slot.set_selected(False)
+        self._reapply_multi_highlights()
     def eventFilter(self, obj, event):
         if obj == self.grid_scroll.viewport() and event.type() == QEvent.Type.Wheel:
             delta = event.angleDelta().y()

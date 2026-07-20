@@ -5,6 +5,7 @@
 - **Unsaved changes warning for Character Transfer** — closing the Character Transfer dialog after transfers (without saving) prompts Save/Don't Save/Cancel.
 - **Drop .sav anywhere on the window** — drag-and-drop a save file onto any tab (not just the Tools tab) to load it. A visual overlay confirms the drop zone.
 - **Save button translations** — Yes/No/Cancel in unsaved-changes dialogs now use translated text (button.save / button.dont_save / button.cancel).
+- **Multi-select in pal editor, player inventory, and guild/base inventory** — Ctrl+click to select multiple pals or items, Shift+click for range selection. Bulk actions appear in an inline toolbar: Max/Heal/Rename/Delete for pals, Delete/Clear Qty for items. Selection persists across palbox page navigation. Themed rename dialog for bulk pal renaming.
 - Bumped version to 2.1.7
 
 #2.1.6

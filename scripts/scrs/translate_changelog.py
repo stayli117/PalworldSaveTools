@@ -24,7 +24,7 @@ LANGUAGES = [
     ('ja_JP', '日本語', 'ja', '🇯🇵', False),
     ('ko_KR', '한국어', 'ko', '🇰🇷', False),
     ('pt_BR', 'Português', 'pt_BR', '🇧🇷', False),
-    ('pt_BR', 'Português', 'pt_PT', '🇵🇹', False),
+    ('pt_PT', 'Português', 'pt_PT', '🇵🇹', False),
 ]
 
 def extract_latest_version(text: str) -> tuple[str, str]:

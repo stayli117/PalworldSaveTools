@@ -1,7 +1,10 @@
 #2.1.7
 - **Unsaved changes warning on exit** — if you've edited the save and try to close the app, a dialog asks if you want to save first. Yes saves, No discards, Cancel stays in the app.
 - **Stale save detection** — if Level.sav was modified on disk (e.g. the game/server re-saved it) since you loaded it, a warning appears before overwriting those changes with your in-memory edits.
+- **Stale save detection for standalone tools** — Character Transfer, Fix Host Save, and Slot Injector now also warn if the target Level.sav changed on disk since load.
+- **Unsaved changes warning for Character Transfer** — closing the Character Transfer dialog after transfers (without saving) prompts Save/Don't Save/Cancel.
 - **Drop .sav anywhere on the window** — drag-and-drop a save file onto any tab (not just the Tools tab) to load it. A visual overlay confirms the drop zone.
+- **Save button translations** — Yes/No/Cancel in unsaved-changes dialogs now use translated text (button.save / button.dont_save / button.cancel).
 - Bumped version to 2.1.7
 
 #2.1.6

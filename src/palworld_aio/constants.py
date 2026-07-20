@@ -47,6 +47,7 @@ EXCLUSIONS_FILE = os.path.join(get_user_config_dir(), 'deletion_exclusions.json'
 ZONE_EXCLUSIONS_FILE = os.path.join(get_user_config_dir(), 'zone_exclusions.json')
 current_save_path: str | None = None
 loaded_level_json = None
+loaded_level_mtime: float | None = None
 original_loaded_level_json = None
 backup_save_path = None
 srcGuildMapping = None

@@ -410,6 +410,8 @@
     "error.overlay.copy": "复制到剪贴板",
     "error.overlay.title": "发生错误",
     "error.players_folder_missing": "缺少 Players 文件夹",
+    "error.save_stale_msg": "磁盘上的 Level.sav 自加载后已发生变化（可能是游戏重新保存了存档）。现在保存将用内存中的修改覆盖这些变化。\n\n仍要保存吗？",
+    "error.save_stale_title": "存档文件已变化",
     "error.title": "错误！",
     "error.tool": "无效的选择或运行工具时发生错误：",
     "exclusions.add_title": "添加到排除项",

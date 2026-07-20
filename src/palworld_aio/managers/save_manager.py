@@ -10,7 +10,7 @@ from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor, as_completed
 from PySide6.QtWidgets import QFileDialog
 from PySide6.QtCore import QObject, Signal
-from loading_manager import show_critical
+from loading_manager import show_critical, show_question
 from palsav.gvas import GvasFile
 from palsav.core import decompress_sav_to_gvas
 from palworld_aio.managers.data_manager import load_game_data_map
@@ -88,6 +88,7 @@ class SaveManager(QObject):
     def _reset_state(self):
         from palobject import MappingCacheObject
         constants.loaded_level_json = None
+        constants.loaded_level_mtime = None
         constants.current_save_path = None
         constants.backup_save_path = None
         constants.srcGuildMapping = None
@@ -119,6 +120,7 @@ class SaveManager(QObject):
     def _load_from_path(self, level_sav_path: str, parent=None) -> bool:
         t0 = time.perf_counter()
         constants.loaded_level_json = sav_to_gvas_wrapper(level_sav_path)
+        constants.loaded_level_mtime = os.path.getmtime(level_sav_path)
         t1 = time.perf_counter()
         constants.invalidate_container_lookup()
         from palworld_aio.managers.func_manager import scan_and_protect_death_bags
@@ -206,7 +208,8 @@ class SaveManager(QObject):
         from resource_resolver import get_data_base
         base_path = get_data_base()
         t0 = time.perf_counter()
-        constants.loaded_level_json = sav_to_gvas_wrapper(level_sav_path)          
+        constants.loaded_level_json = sav_to_gvas_wrapper(level_sav_path)
+        constants.loaded_level_mtime = os.path.getmtime(level_sav_path)
         t1 = time.perf_counter()
         constants.invalidate_container_lookup()
         from palworld_aio.managers.func_manager import scan_and_protect_death_bags
@@ -240,6 +243,15 @@ class SaveManager(QObject):
         playerdir = os.path.join(constants.current_save_path, 'Players')
         self._process_scan_log(data_source, playerdir, log_folder, guild_name_map, base_path, illegal_pals_by_owner, owner_nicknames)
         return True
+    def is_save_stale(self, level_sav_path=None) -> bool:
+        if constants.loaded_level_mtime is None or not constants.current_save_path:
+            return False
+        if level_sav_path is None:
+            level_sav_path = os.path.join(constants.current_save_path, 'Level.sav')
+        try:
+            return os.path.getmtime(level_sav_path) != constants.loaded_level_mtime
+        except OSError:
+            return False
     def save_changes(self, parent=None):
         if not constants.current_save_path or not constants.loaded_level_json:
             return
@@ -247,6 +259,10 @@ class SaveManager(QObject):
             show_critical(parent, t('error.title'),
                 'Administrator privileges required to write XGP containers.')
             return
+        if not constants.xgp_loaded and self.is_save_stale():
+            if not show_question(parent, t('error.save_stale_title', default='Save File Changed'),
+                    t('error.save_stale_msg', default='Level.sav on disk has changed since it was loaded (it may have been re-saved by the game). Saving now will overwrite those changes with your in-memory edits.\n\nSave anyway?')):
+                return
         self._xgp_new_world_name = None
         if constants.xgp_loaded and parent:
             from PySide6.QtWidgets import QInputDialog, QLineEdit
@@ -282,6 +298,8 @@ class SaveManager(QObject):
                 constants.files_to_delete.clear()
                 if constants.xgp_loaded:
                     self._save_xgp_container()
+                else:
+                    constants.loaded_level_mtime = os.path.getmtime(level_sav_path)
             except Exception:
                 import traceback
                 traceback.print_exc()

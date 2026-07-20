@@ -11,6 +11,7 @@
 - **Bulk sync same species now copies work suitabilities** — syncing a pal to others of the same species also transfers work suitability ranks. Bulk sync all (cross-species) still preserves each pal's natural suitabilities.
 - **Added translations for missing keys** — common.confirm and various other keys now translated across all 8 languages.
 - **Fixed player selection not working for names starting with `--`** — the popup list was treating any name starting with `--` as the "clear" marker, preventing players like `--Sasok--` from being selected. Same fix applied to skill picker dialog.
+- **Fix Host Save search crash** — the search boxes in Fix Host Save no longer crash with `AttributeError: 'QTreeWidget' object has no attribute 'original_items'` when no save is loaded yet. Guards added to skip filtering until player data is populated.
 - Bumped version to 2.1.6
 
 #2.1.5

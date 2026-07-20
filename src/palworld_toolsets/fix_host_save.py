@@ -415,7 +415,10 @@ def populate_player_tree(tree, folder_path):
     tree.original_items = [tree.topLevelItem(i) for i in range(tree.topLevelItemCount())]
 def filter_treeview(tree, query):
     query = query.lower()
-    for item in tree.original_items:
+    items = getattr(tree, 'original_items', None)
+    if items is None:
+        return
+    for item in items:
         tree.addTopLevelItem(item)
     for item in tree.original_items:
         values = [item.text(col) for col in range(item.columnCount())]

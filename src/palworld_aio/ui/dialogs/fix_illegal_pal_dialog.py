@@ -12,10 +12,11 @@ class PalRowWidget(QFrame):
         self._setup_ui()
     def _setup_ui(self):
         self.setStyleSheet('PalRowWidget { background: rgba(255,255,255,0.03); border-radius: 4px; margin: 1px 0; } PalRowWidget:hover { background: rgba(125,211,252,0.06); }')
-        row = QHBoxLayout(self)
-        row.setContentsMargins(6, 3, 6, 3)
-        row.setSpacing(6)
-        # checkbox removed — fix all
+        main = QVBoxLayout(self)
+        main.setContentsMargins(6, 3, 6, 3)
+        main.setSpacing(2)
+        top_row = QHBoxLayout()
+        top_row.setSpacing(6)
         icon_path = _get_pal_icon_path(self.pal_data.get('cid', ''))
         icon_lbl = QLabel()
         icon_lbl.setFixedSize(22, 22)
@@ -23,7 +24,7 @@ class PalRowWidget(QFrame):
             pix = _get_cached_pixmap(icon_path, 22)
             if pix and not pix.isNull():
                 icon_lbl.setPixmap(pix)
-        row.addWidget(icon_lbl)
+        top_row.addWidget(icon_lbl)
         nick = self.pal_data.get('nickname', '')
         name_text = nick if nick else self.pal_data.get('name', 'Unknown')
         lvl = self.pal_data.get('level', 1)
@@ -38,7 +39,15 @@ class PalRowWidget(QFrame):
         detail = f'{info_text} | {ivs} | {souls} | {self.pal_data.get("location", "")}'
         line_label = QLabel(f'{name_text} — {detail}')
         line_label.setStyleSheet('color: #e2e8f0; font-size: 11px;')
-        row.addWidget(line_label, 1)
+        top_row.addWidget(line_label, 1)
+        main.addLayout(top_row)
+        markers = self.pal_data.get('illegal_markers', [])
+        if markers:
+            marker_text = '  '.join(f'[{m}]' for m in markers)
+            marker_lbl = QLabel(marker_text)
+            marker_lbl.setStyleSheet('color: #f97316; font-size: 10px; font-weight: 700; padding: 1px 8px; background: rgba(249,115,22,0.15); border: 1px solid rgba(249,115,22,0.3); border-radius: 4px;')
+            marker_lbl.setWordWrap(True)
+            main.addWidget(marker_lbl)
 class PlayerCardWidget(QFrame):
     clicked = Signal(str)
     def __init__(self, uid, data, parent=None):

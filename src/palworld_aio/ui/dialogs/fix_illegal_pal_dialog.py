@@ -214,6 +214,7 @@ class FixIllegalPalDialog(QDialog):
                 self.right_layout_inner.addWidget(row)
                 u_rows.append(row)
             self._player_pal_rows[uid_clean] = u_rows
+        self.right_layout_inner.addStretch(1)
     def _select_player(self, uid):
         if self._selected_uid == uid:
             return

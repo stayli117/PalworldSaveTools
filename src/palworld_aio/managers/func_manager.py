@@ -2723,6 +2723,15 @@ def fix_illegal_pals_in_save(parent=None, selected_uids=None):
                                 else:
                                     sp['PassiveSkillList']['value'] = deduped
                                 changed = True
+                    eq_raw = sp.get('EquipWaza')
+                    if isinstance(eq_raw, dict):
+                        eq_v = eq_raw.get('value')
+                        active_skills = eq_v.get('values', []) if isinstance(eq_v, dict) else (eq_v if isinstance(eq_v, list) else [])
+                        if isinstance(active_skills, list):
+                            valid_skills = [s for s in active_skills if s and s.strip()]
+                            if len(valid_skills) > 3:
+                                sp['EquipWaza']['value']['values'] = valid_skills[:3]
+                                changed = True
                     if changed:
                         from palworld_aio.editor.pal_editor.data import get_pal_base_data, _ensure_friendship_thresholds
                         cid = extract_value(sp, 'CharacterID', '')

@@ -1,3 +1,7 @@
+#2.1.8
+- **Fix Illegal Pals now fixes >3 active skills** — the fix function was trimming passive skills and all other illegal stats but skipped `EquipWaza` entirely. Pals with more than 3 active skills are now correctly clamped to the top 3.
+- Bumped version to 2.1.8
+
 #2.1.7
 - **Unsaved changes warning on exit** — if you've edited the save and try to close the app, a dialog asks if you want to save first. Yes saves, No discards, Cancel stays in the app.
 - **Stale save detection** — if Level.sav was modified on disk (e.g. the game/server re-saved it) since you loaded it, a warning appears before overwriting those changes with your in-memory edits.

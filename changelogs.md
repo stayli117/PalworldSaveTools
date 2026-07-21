@@ -5,6 +5,9 @@
 - **Unsaved changes warning for Character Transfer** — closing the Character Transfer dialog after transfers (without saving) prompts Save/Don't Save/Cancel.
 - **Drop .sav anywhere on the window** — drag-and-drop a save file onto any tab (not just the Tools tab) to load it. A visual overlay confirms the drop zone.
 - **Save button translations** — Yes/No/Cancel in unsaved-changes dialogs now use translated text (button.save / button.dont_save / button.cancel).
+- **Selection colors unified** — multi-select and single-select now use the same accent color everywhere: pal editor slots, player inventory, base inventory lists, tree widgets, picker lists, and dropdown menus. No more mismatched blue shades.
+- **Error overlay replaces popup dialogs** — errors now appear as a dark overlay on the main window (matching the loading screen style) instead of a separate popup window. Consistent look, no more floating dialogs.
+- **Removed stale GamingServices warning** — the "Stop Xbox Gaming Services" confirmation no longer shows during Steam→GamePass conversion. The service stop/restart was already removed, but the dialog was still asking about it.
 - **Multi-select in pal editor, player inventory, and guild/base inventory** — Ctrl+click to select multiple pals or items, Shift+click for range selection. Bulk actions appear in an inline toolbar: Max/Heal/Rename/Delete for pals, Delete/Clear Qty for items. Selection persists across palbox page navigation. Themed rename dialog for bulk pal renaming.
 - **Cross-family structure replacement** — the Replace Structures dialog now has a "Show all structure types" toggle. When enabled, you can replace any building with any other building type (e.g. a wall with a fence). Off by default, only same-family variants shown.
 - Bumped version to 2.1.7

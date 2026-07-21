@@ -101,46 +101,6 @@ jobs:
           path: PST_standalone_v*.7z
           if-no-files-found: warn
 
-  build-windows-nuitka:
-    runs-on: windows-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
-        with:
-          submodules: recursive
-      - name: Bootstrap environment
-        id: env
-        uses: ./.github/actions/setup-build-env
-      - name: Restore cached dist
-        if: github.event.inputs.force_rebuild != 'true'
-        id: cache-dist
-        uses: actions/cache@v4
-        with:
-          path: dist
-          key: ${{ runner.os }}-pst-dist-${{ steps.env.outputs.version }}-${{ hashFiles('build/**') }}
-      - name: Install dependencies
-        if: steps.cache-dist.outputs.cache-hit != 'true'
-        run: |
-          uv venv --clear
-          uv pip install -r requirements.txt nuitka
-      - name: Build Nuitka onefile
-        if: steps.cache-dist.outputs.cache-hit != 'true'
-        run: uv run python build/nuitka/build_nuitka.py --onefile
-      - name: Apply app icon
-        if: steps.cache-dist.outputs.cache-hit != 'true'
-        shell: pwsh
-        run: |
-          curl.exe -sL https://github.com/electron/rcedit/releases/download/v2.0.0/rcedit-x64.exe -o rcedit.exe
-          $exe = (Get-Item "dist/PalworldSaveTools-*.exe").FullName
-          .\rcedit.exe $exe --set-icon "resources/assets/icons/app/icon.ico"
-      - name: List built files
-        run: ls -la dist/ || { echo "dist/ directory not found"; exit 1; }
-      - uses: actions/upload-artifact@v7
-        with:
-          name: windows-nuitka-build
-          path: dist/PalworldSaveTools-*.exe
-          if-no-files-found: error
-
   build-linux:
     runs-on: ubuntu-latest
     steps:
@@ -215,7 +175,7 @@ jobs:
           if-no-files-found: error
 
   create-release:
-    needs: [prepare-source, build-windows-standalone, build-windows-nuitka, build-linux, build-mac]
+    needs: [prepare-source, build-windows-standalone, build-linux, build-mac]
     if: ${{ github.event.inputs.skip_github_release != 'true' }}
     runs-on: ubuntu-latest
     outputs:

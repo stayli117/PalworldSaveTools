@@ -2007,7 +2007,7 @@ class PlayerInventoryTab(QWidget):
             ft_count = len(json.load(open(ft_path, 'r'))) if os.path.exists(ft_path) else 0
         except:
             ft_count = 0
-        reply = self._themed_message_box(QMessageBox.Question, t('inventory.unlock_all_map_confirm.title', default='Unlock All Fast Travel'), t('inventory.unlock_all_map_confirm.msg', count=ft_count, default=f'Unlock all {ft_count} fast travel points for 1 player?'), QMessageBox.Yes | QMessageBox.No)
+        reply = self._themed_message_box(QMessageBox.Question, t('inventory.unlock_all_map_confirm.title', default='Unlock All Fast Travel'), t('inventory.unlock_all_map_confirm.msg', points=ft_count, players=1, default=f'Unlock all {ft_count} fast travel points for 1 player?'), QMessageBox.Yes | QMessageBox.No)
         if reply == QMessageBox.Yes:
             self.unlock_all_map_requested.emit([self.current_player_uid])
     def _update_stats(self):

@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QScrollArea, QWidget, QFrame
+from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QScrollArea, QWidget, QFrame, QSplitter
 from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QPixmap
 from i18n import t
@@ -66,16 +66,58 @@ class PalRowWidget(QFrame):
     def set_checked(self, checked):
         self.checkbox.setChecked(checked)
 
+class PlayerCardWidget(QFrame):
+    def __init__(self, uid, data, parent=None):
+        super().__init__(parent)
+        self.uid = uid
+        self.data = data
+        self._setup_ui()
+    def _setup_ui(self):
+        self.setStyleSheet('PlayerCardWidget { background: rgba(255,255,255,0.03); border-radius: 4px; margin: 1px 0; border: 1px solid transparent; } PlayerCardWidget:hover { background: rgba(125,211,252,0.06); } PlayerCardWidget[selected="true"] { border: 1px solid rgba(125,211,252,0.4); background: rgba(125,211,252,0.08); }')
+        self.setFixedHeight(48)
+        card = QHBoxLayout(self)
+        card.setContentsMargins(8, 4, 8, 4)
+        card.setSpacing(6)
+        self.checkbox = ToggleCheckBtn('')
+        self.checkbox.setChecked(True)
+        self.checkbox.toggled.connect(lambda c: self._on_toggle(c))
+        card.addWidget(self.checkbox)
+        text_w = QWidget()
+        text_l = QVBoxLayout(text_w)
+        text_l.setContentsMargins(0, 0, 0, 0)
+        text_l.setSpacing(1)
+        name = self.data.get('player_name', 'Unknown')
+        guild = self.data.get('guild_name', 'Unknown')
+        level = self.data.get('level', 1)
+        count = self.data['pal_count']
+        name_lbl = QLabel(f'{name} (Lv.{level})')
+        name_lbl.setStyleSheet('color: #e2e8f0; font-size: 12px; font-weight: 600;')
+        text_l.addWidget(name_lbl)
+        extra_lbl = QLabel(f'{guild}  [{count} illegal]')
+        extra_lbl.setStyleSheet('color: #94a3b8; font-size: 10px;')
+        text_l.addWidget(extra_lbl)
+        card.addWidget(text_w, 1)
+    def _on_toggle(self, checked):
+        self.setProperty('selected', 'true' if checked else 'false')
+        self.style().unpolish(self)
+        self.style().polish(self)
+    def is_checked(self):
+        return self.checkbox.isChecked()
+    def set_checked(self, checked):
+        self.checkbox.setChecked(checked)
+
 class FixIllegalPalDialog(QDialog):
     def __init__(self, scan_data, parent=None):
         super().__init__(parent)
         self.setWindowTitle(t('fix_illegal_pal.title') if t else 'Fix Illegal Pals')
-        self.setMinimumSize(900, 550)
+        self.setMinimumSize(1000, 550)
         self.scan_data = scan_data
-        self._player_groups = []
+        self._player_cards = {}
+        self._player_pal_rows = {}
         self._pal_rows = []
         self._setup_ui()
         self._populate_players()
+        self._show_initial_pals()
     def _setup_ui(self):
         self.setStyleSheet(DARK_THEME_STYLE)
         layout = QVBoxLayout(self)
@@ -86,24 +128,72 @@ class FixIllegalPalDialog(QDialog):
         self.summary_label = QLabel('')
         self.summary_label.setStyleSheet('color: #fbbf24; font-size: 12px; padding: 2px 0;')
         layout.addWidget(self.summary_label)
-        btn_row = QHBoxLayout()
-        self.select_all_btn = QPushButton(t('player_item.select_all') if t else 'Select All')
-        self.select_all_btn.clicked.connect(self._select_all)
-        btn_row.addWidget(self.select_all_btn)
-        self.deselect_all_btn = QPushButton(t('player_item.deselect_all') if t else 'Deselect All')
-        self.deselect_all_btn.clicked.connect(self._deselect_all)
-        btn_row.addWidget(self.deselect_all_btn)
-        btn_row.addStretch()
-        layout.addLayout(btn_row)
-        scroll = QScrollArea()
-        scroll.setWidgetResizable(True)
-        scroll.setStyleSheet('QScrollArea { border: none; background: transparent; }')
-        self.scroll_content = QWidget()
-        self.scroll_layout = QVBoxLayout(self.scroll_content)
-        self.scroll_layout.setContentsMargins(0, 0, 0, 0)
-        self.scroll_layout.setSpacing(2)
-        scroll.setWidget(self.scroll_content)
-        layout.addWidget(scroll, 1)
+        splitter = QSplitter(Qt.Horizontal)
+        splitter.setChildrenCollapsible(False)
+        left_panel = QFrame()
+        left_panel.setStyleSheet('QFrame { background: rgba(0,0,0,0.15); border-radius: 6px; }')
+        left_layout = QVBoxLayout(left_panel)
+        left_layout.setContentsMargins(6, 6, 6, 6)
+        left_layout.setSpacing(4)
+        left_header = QLabel(t('fix_illegal_pal.players_header') if t else 'Players')
+        left_header.setStyleSheet('color: #93c5fd; font-size: 12px; font-weight: 700; padding: 2px 4px;')
+        left_layout.addWidget(left_header)
+        left_btn_row = QHBoxLayout()
+        left_sel_all = QPushButton(t('player_item.select_all') if t else 'All')
+        left_sel_all.setFixedHeight(22)
+        left_sel_all.setStyleSheet('QPushButton { background: rgba(74,222,128,0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.2); border-radius: 4px; padding: 2px 8px; font-weight: 600; font-size: 9px; } QPushButton:hover { background: rgba(74,222,128,0.2); }')
+        left_sel_all.clicked.connect(lambda: self._set_all_players(True))
+        left_btn_row.addWidget(left_sel_all)
+        left_sel_none = QPushButton(t('player_item.deselect_all') if t else 'None')
+        left_sel_none.setFixedHeight(22)
+        left_sel_none.setStyleSheet('QPushButton { background: rgba(251,113,133,0.12); color: #FB7185; border: 1px solid rgba(251,113,133,0.2); border-radius: 4px; padding: 2px 8px; font-weight: 600; font-size: 9px; } QPushButton:hover { background: rgba(251,113,133,0.2); }')
+        left_sel_none.clicked.connect(lambda: self._set_all_players(False))
+        left_btn_row.addWidget(left_sel_none)
+        left_btn_row.addStretch()
+        left_layout.addLayout(left_btn_row)
+        left_scroll = QScrollArea()
+        left_scroll.setWidgetResizable(True)
+        left_scroll.setStyleSheet('QScrollArea { border: none; background: transparent; }')
+        self.left_content = QWidget()
+        self.left_layout_inner = QVBoxLayout(self.left_content)
+        self.left_layout_inner.setContentsMargins(0, 0, 0, 0)
+        self.left_layout_inner.setSpacing(2)
+        left_scroll.setWidget(self.left_content)
+        left_layout.addWidget(left_scroll, 1)
+        right_panel = QFrame()
+        right_panel.setStyleSheet('QFrame { background: rgba(0,0,0,0.15); border-radius: 6px; }')
+        right_layout = QVBoxLayout(right_panel)
+        right_layout.setContentsMargins(6, 6, 6, 6)
+        right_layout.setSpacing(4)
+        right_header = QLabel(t('fix_illegal_pal.pals_header') if t else 'Illegal Pals')
+        right_header.setStyleSheet('color: #93c5fd; font-size: 12px; font-weight: 700; padding: 2px 4px;')
+        right_layout.addWidget(right_header)
+        right_btn_row = QHBoxLayout()
+        right_sel_all = QPushButton(t('player_item.select_all') if t else 'All')
+        right_sel_all.setFixedHeight(22)
+        right_sel_all.setStyleSheet('QPushButton { background: rgba(74,222,128,0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.2); border-radius: 4px; padding: 2px 8px; font-weight: 600; font-size: 9px; } QPushButton:hover { background: rgba(74,222,128,0.2); }')
+        right_sel_all.clicked.connect(self._select_all_pals)
+        right_btn_row.addWidget(right_sel_all)
+        right_sel_none = QPushButton(t('player_item.deselect_all') if t else 'None')
+        right_sel_none.setFixedHeight(22)
+        right_sel_none.setStyleSheet('QPushButton { background: rgba(251,113,133,0.12); color: #FB7185; border: 1px solid rgba(251,113,133,0.2); border-radius: 4px; padding: 2px 8px; font-weight: 600; font-size: 9px; } QPushButton:hover { background: rgba(251,113,133,0.2); }')
+        right_sel_none.clicked.connect(self._deselect_all_pals)
+        right_btn_row.addWidget(right_sel_none)
+        right_btn_row.addStretch()
+        right_layout.addLayout(right_btn_row)
+        right_scroll = QScrollArea()
+        right_scroll.setWidgetResizable(True)
+        right_scroll.setStyleSheet('QScrollArea { border: none; background: transparent; }')
+        self.right_content = QWidget()
+        self.right_layout_inner = QVBoxLayout(self.right_content)
+        self.right_layout_inner.setContentsMargins(0, 0, 0, 0)
+        self.right_layout_inner.setSpacing(2)
+        right_scroll.setWidget(self.right_content)
+        right_layout.addWidget(right_scroll, 1)
+        splitter.addWidget(left_panel)
+        splitter.addWidget(right_panel)
+        splitter.setSizes([350, 650])
+        layout.addWidget(splitter, 1)
         sep = QFrame()
         sep.setFrameShape(QFrame.HLine)
         sep.setStyleSheet('color: rgba(255,255,255,0.1);')
@@ -123,93 +213,60 @@ class FixIllegalPalDialog(QDialog):
         self.status_label = QLabel('')
         self.status_label.setStyleSheet('color: #4ade80; font-weight: bold; padding: 5px;')
         layout.addWidget(self.status_label)
-    def refresh_labels(self):
-        self.setWindowTitle(t('fix_illegal_pal.title') if t else 'Fix Illegal Pals')
-        self._header.setText(t('fix_illegal_pal.description') if t else 'Select illegal pals to fix:')
-        self.select_all_btn.setText(t('player_item.select_all') if t else 'Select All')
-        self.deselect_all_btn.setText(t('player_item.deselect_all') if t else 'Deselect All')
-        self.fix_btn.setText(t('fix_illegal_pal.fix_selected') if t else 'Fix Selected')
-        self._close_btn.setText(t('button.close') if t else 'Close')
-        self._update_summary()
     def _update_summary(self):
         total_players = sum(1 for d in self.scan_data.values() if d['pal_count'] > 0)
         total_illegals = sum(d['pal_count'] for d in self.scan_data.values() if d['pal_count'] > 0)
         self.summary_label.setText(t('fix_illegal_pal.summary').format(players=total_players, pals=total_illegals) if t else f'Found {total_players} player(s) with {total_illegals} illegal pal(s)')
-    def _make_player_header(self, uid, data):
-        header = QFrame()
-        header.setStyleSheet('QFrame { background: rgba(59,130,246,0.08); border-radius: 4px; }')
-        hl = QHBoxLayout(header)
-        hl.setContentsMargins(8, 4, 8, 4)
-        name = data.get('player_name', 'Unknown')
-        guild = data.get('guild_name', 'Unknown')
-        level = data.get('level', 1)
-        count = data['pal_count']
-        title = QLabel(f'{name} (Lv.{level}) — {guild}  [{count} illegal]')
-        title.setStyleSheet('color: #93c5fd; font-size: 12px; font-weight: 700;')
-        hl.addWidget(title, 1)
-        sel_all = QPushButton(t('player_item.select_all') if t else 'All')
-        sel_all.setFixedHeight(22)
-        sel_all.setStyleSheet('QPushButton { background: rgba(74,222,128,0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.2); border-radius: 4px; padding: 2px 8px; font-weight: 600; font-size: 9px; } QPushButton:hover { background: rgba(74,222,128,0.2); }')
-        sel_all.clicked.connect(lambda: self._set_player_pals(uid, True))
-        hl.addWidget(sel_all)
-        sel_none = QPushButton(t('player_item.deselect_all') if t else 'None')
-        sel_none.setFixedHeight(22)
-        sel_none.setStyleSheet('QPushButton { background: rgba(251,113,133,0.12); color: #FB7185; border: 1px solid rgba(251,113,133,0.2); border-radius: 4px; padding: 2px 8px; font-weight: 600; font-size: 9px; } QPushButton:hover { background: rgba(251,113,133,0.2); }')
-        sel_none.clicked.connect(lambda: self._set_player_pals(uid, False))
-        hl.addWidget(sel_none)
-        return header
     def _populate_players(self):
-        for i in reversed(range(self.scroll_layout.count())):
-            w = self.scroll_layout.itemAt(i).widget()
-            if w:
-                w.deleteLater()
-        self._player_groups = []
-        self._pal_rows = []
-        total_players = 0
-        total_illegals = 0
         for uid_clean, data in sorted(self.scan_data.items(), key=lambda x: x[1].get('player_name', '')):
             if data['pal_count'] <= 0:
                 continue
-            total_players += 1
-            total_illegals += data['pal_count']
-            header = self._make_player_header(uid_clean, data)
-            self.scroll_layout.addWidget(header)
-            self._player_groups.append((uid_clean, []))
+            card = PlayerCardWidget(uid_clean, data)
+            card.checkbox.toggled.connect(self._on_player_toggled)
+            self.left_layout_inner.addWidget(card)
+            self._player_cards[uid_clean] = card
+        self.left_layout_inner.addStretch(1)
+        self._update_summary()
+        if self._player_cards:
+            self.fix_btn.setEnabled(True)
+    def _populate_all_pal_rows(self):
+        for uid_clean, data in self.scan_data.items():
+            u_rows = []
             for pal in data.get('illegals', []):
                 row = PalRowWidget(pal)
-                self.scroll_layout.addWidget(row)
+                row.setVisible(False)
+                self.right_layout_inner.addWidget(row)
+                u_rows.append(row)
                 self._pal_rows.append(row)
-                self._player_groups[-1][1].append(row)
-        self.scroll_layout.addStretch(1)
-        self._update_summary()
-        if total_players > 0:
-            self.select_all_btn.setEnabled(True)
-            self.deselect_all_btn.setEnabled(True)
-            self.fix_btn.setEnabled(True)
-    def _set_player_pals(self, uid, checked):
-        for g_uid, rows in self._player_groups:
-            if g_uid == uid:
+            self._player_pal_rows[uid_clean] = u_rows
+    def _show_initial_pals(self):
+        self._populate_all_pal_rows()
+        self.right_layout_inner.addStretch(1)
+        for uid, card in self._player_cards.items():
+            if card.is_checked():
+                for r in self._player_pal_rows.get(uid, []):
+                    r.setVisible(True)
+    def _on_player_toggled(self, checked):
+        for uid, rows in self._player_pal_rows.items():
+            card = self._player_cards.get(uid)
+            if card and card.is_checked():
                 for r in rows:
-                    r.set_checked(checked)
-                break
-        self._update_fix_btn()
-    def _update_fix_btn(self):
-        any_checked = any(r.is_checked() for r in self._pal_rows)
-        self.fix_btn.setEnabled(any_checked)
-    def _select_all(self):
+                    r.setVisible(True)
+            else:
+                for r in rows:
+                    r.setVisible(False)
+    def _set_all_players(self, checked):
+        for card in self._player_cards.values():
+            card.set_checked(checked)
+        self._on_player_toggled(None)
+    def _select_all_pals(self):
         for r in self._pal_rows:
             r.set_checked(True)
-        self.fix_btn.setEnabled(True)
-    def _deselect_all(self):
+    def _deselect_all_pals(self):
         for r in self._pal_rows:
             r.set_checked(False)
-        self.fix_btn.setEnabled(False)
     def _get_selected_uids(self):
-        uids = set()
-        for g_uid, rows in self._player_groups:
-            if any(r.is_checked() for r in rows):
-                uids.add(g_uid)
-        return list(uids)
+        return [uid for uid, card in self._player_cards.items() if card.is_checked()]
     def _on_fix(self):
         uids = self._get_selected_uids()
         if not uids:

@@ -2484,7 +2484,31 @@ def scan_illegal_pals_by_owner():
             cid = extract_value(sp, 'CharacterID', '')
             pal_name = resolve_name(cid, NAMEMAP) or cid
             result[uid_str]['pal_count'] += 1
-            result[uid_str]['illegals'].append({'name': pal_name, 'nickname': nick, 'cid': cid, 'location': location, 'illegal_markers': illegal_markers})
+            level = int(extract_value(sp, 'Level', 1))
+            rank = int(extract_value(sp, 'Rank', 1))
+            talent_hp = int(extract_value(sp, 'Talent_HP', 0))
+            talent_shot = int(extract_value(sp, 'Talent_Shot', 0))
+            talent_defense = int(extract_value(sp, 'Talent_Defense', 0))
+            rank_hp = int(extract_value(sp, 'Rank_HP', 0))
+            rank_atk = int(extract_value(sp, 'Rank_Attack', 0))
+            rank_def = int(extract_value(sp, 'Rank_Defence', 0))
+            rank_craft = int(extract_value(sp, 'Rank_CraftSpeed', 0))
+            ps_val = sp.get('PassiveSkillList', {})
+            pv = ps_val.get('value', {}) if isinstance(ps_val, dict) else {}
+            pv_list = pv.get('values', []) if isinstance(pv, dict) else []
+            passive_count = len(pv_list)
+            eq_val = sp.get('EquipWaza', {})
+            ev = eq_val.get('value', {}) if isinstance(eq_val, dict) else {}
+            ev_list = ev.get('values', []) if isinstance(ev, dict) else []
+            active_count = sum(1 for s in ev_list if s and isinstance(s, str) and s.strip())
+            result[uid_str]['illegals'].append({
+                'name': pal_name, 'nickname': nick, 'cid': cid,
+                'location': location, 'illegal_markers': illegal_markers,
+                'level': level, 'rank': rank,
+                'talent_hp': talent_hp, 'talent_shot': talent_shot, 'talent_defense': talent_defense,
+                'rank_hp': rank_hp, 'rank_attack': rank_atk, 'rank_defense': rank_def, 'rank_craftspeed': rank_craft,
+                'passive_count': passive_count, 'active_count': active_count,
+            })
             if result[uid_str]['player_name'] == 'Unknown':
                 pinfo = players_by_uid.get(uid_str, {})
                 result[uid_str]['player_name'] = pinfo.get('name', owner_nicknames.get(uid_str, 'Unknown'))

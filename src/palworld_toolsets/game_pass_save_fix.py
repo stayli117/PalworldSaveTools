@@ -219,12 +219,6 @@ class GamePassSaveFixWidget(QWidget):
                 del meta_json
             except Exception as e:
                 print(f'Metadata processing failed: {e}')
-        if not self.is_admin():
-            self.message_signal.emit('critical', t('xgp.err.admin_required.title'), t('xgp.err.admin_required.msg'))
-            return
-        reply = QMessageBox.warning(self, t('xgp.admin_warning.title'), t('xgp.admin_warning.msg'), QMessageBox.Yes | QMessageBox.No)
-        if reply != QMessageBox.Yes:
-            return
         run_with_loading(None, lambda: self.transfer_steam_to_gamepass(folder))
     @staticmethod
     def list_folders_in_directory(directory):
@@ -483,11 +477,6 @@ class GamePassSaveFixWidget(QWidget):
             traceback.print_exc()
             self.message_signal.emit('critical', t('Error'), t('xgp.err.copy_failed', err=error_msg))
         run_with_loading(on_finished, task, on_error=on_error)
-    def is_admin(self):
-        try:
-            return ctypes.windll.shell32.IsUserAnAdmin() != 0
-        except:
-            return False
     @staticmethod
     def get_save_info(save_path):
         info = {'world_name': 'Unknown World', 'player_name': 'Unknown Player'}

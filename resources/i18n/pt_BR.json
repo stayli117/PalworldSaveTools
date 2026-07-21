@@ -2237,5 +2237,6 @@
     "modify.confirm.path": "Caminho: {path}",
     "modify.confirm.sha256": "SHA256: {sha}",
     "modify.confirm.warning": "Isso iniciará um executável de terceiros baixado do GitHub. Prossiga apenas se você confiar na fonte.",
-    "modify.confirm.cli_prompt": "Lançar? [S/N]:"
+    "modify.confirm.cli_prompt": "Lançar? [S/N]:",
+    "base_inventory.replace_show_all": "Mostrar todos os tipos de estrutura"
 }

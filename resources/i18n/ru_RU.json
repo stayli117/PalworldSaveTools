@@ -1949,5 +1949,6 @@
     "modify.confirm.path": "Путь: {path}",
     "modify.confirm.sha256": "SHA256: {sha}",
     "modify.confirm.warning": "Это запустит сторонний исполняемый файл, загруженный с GitHub. Продолжайте, только если вы доверяете источнику.",
-    "modify.confirm.cli_prompt": "Запуск? [да/нет]:"
+    "modify.confirm.cli_prompt": "Запуск? [да/нет]:",
+    "base_inventory.replace_show_all": "Показать все типы структур"
 }

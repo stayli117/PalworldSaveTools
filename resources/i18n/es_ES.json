@@ -1945,5 +1945,6 @@
     "modify.confirm.path": "Ruta: {path}",
     "modify.confirm.sha256": "SHA256: {sha}",
     "modify.confirm.warning": "Esto iniciará un ejecutable de terceros descargado de GitHub. Continúe solo si confía en la fuente.",
-    "modify.confirm.cli_prompt": "¿Lanzamiento? [s/n]:"
+    "modify.confirm.cli_prompt": "¿Lanzamiento? [s/n]:",
+    "base_inventory.replace_show_all": "Mostrar todos los tipos de estructura"
 }

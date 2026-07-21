@@ -1933,5 +1933,6 @@
     "modify.confirm.path": "Chemin : {path}",
     "modify.confirm.sha256": "SHA256 : {sha}",
     "modify.confirm.warning": "Cela lancera un exécutable tiers téléchargé depuis GitHub. Ne continuez que si vous faites confiance à la source.",
-    "modify.confirm.cli_prompt": "Lancement? [o/N] :"
+    "modify.confirm.cli_prompt": "Lancement? [o/N] :",
+    "base_inventory.replace_show_all": "Afficher tous les types de structures"
 }

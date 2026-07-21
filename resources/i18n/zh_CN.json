@@ -1953,5 +1953,6 @@
     "modify.confirm.path": "路径：{path}",
     "modify.confirm.sha256": "SHA256：{sha}",
     "modify.confirm.warning": "这将启动从 GitHub 下载的第三方可执行文件。仅当您信任来源时才继续。",
-    "modify.confirm.cli_prompt": "发射？ [是/否]："
+    "modify.confirm.cli_prompt": "发射？ [是/否]：",
+    "base_inventory.replace_show_all": "显示所有结构类型"
 }

@@ -47,6 +47,7 @@ NEW_TRANSLATIONS = {
     'modify.confirm.sha256': 'SHA256: {sha}',
     'modify.confirm.warning': 'This will launch a third-party executable downloaded from GitHub. Only proceed if you trust the source.',
     'modify.confirm.cli_prompt': 'Launch? [y/N]: ',
+    'base_inventory.replace_show_all': 'Show all structure types',
 }
 OLD_KEYS = []
 def _clean_uv_locks():

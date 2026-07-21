@@ -1950,5 +1950,6 @@
     "modify.confirm.path": "경로: {path}",
     "modify.confirm.sha256": "SHA256: {sha}",
     "modify.confirm.warning": "그러면 GitHub에서 다운로드한 타사 실행 파일이 시작됩니다. 출처를 신뢰하는 경우에만 진행하세요.",
-    "modify.confirm.cli_prompt": "시작하다? [예/아니요]:"
+    "modify.confirm.cli_prompt": "시작하다? [예/아니요]:",
+    "base_inventory.replace_show_all": "모든 구조 유형 표시"
 }

@@ -4,7 +4,7 @@ from functools import partial
 from palsav import json_tools
 from palworld_aio.widgets.toggle_check import ToggleCheckBtn
 import time
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QComboBox, QTreeWidget, QTreeWidgetItem, QSplitter, QFrame, QScrollArea, QGridLayout, QGroupBox, QMenu, QHeaderView, QMessageBox, QFileDialog, QInputDialog, QDialog, QSpinBox, QDoubleSpinBox, QSizePolicy, QAbstractItemView, QSpacerItem, QTabWidget, QTabBar, QStyleOptionTab, QStyle, QApplication, QStyledItemDelegate, QListWidget, QListWidgetItem, QLineEdit, QListView, QStackedWidget
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QComboBox, QCheckBox, QTreeWidget, QTreeWidgetItem, QSplitter, QFrame, QScrollArea, QGridLayout, QGroupBox, QMenu, QHeaderView, QMessageBox, QFileDialog, QInputDialog, QDialog, QSpinBox, QDoubleSpinBox, QSizePolicy, QAbstractItemView, QSpacerItem, QTabWidget, QTabBar, QStyleOptionTab, QStyle, QApplication, QStyledItemDelegate, QListWidget, QListWidgetItem, QLineEdit, QListView, QStackedWidget
 from PySide6.QtCore import Qt, Signal, QTimer, QPropertyAnimation, QEasingCurve, QSize, QPoint, QRect, QEvent, QMargins, QThread
 from PySide6.QtGui import QPixmap, QIcon, QFont, QAction, QCursor, QPainter, QColor, QBrush, QPen, QLinearGradient, QPalette, QMouseEvent, QWheelEvent, QResizeEvent, QPaintEvent, QContextMenuEvent, QDragEnterEvent, QDragMoveEvent, QDropEvent, QDrag
 from PySide6.QtWidgets import QStyledItemDelegate
@@ -774,6 +774,7 @@ class ReplaceStructureDialog(QDialog):
         self._source_asset = None
         self._target_asset = None
         self._source_count = 0
+        self._show_all = False
 
         self._dialog_base_name = base_name
         self.setWindowTitle(self._dialog_title_text())
@@ -832,6 +833,13 @@ class ReplaceStructureDialog(QDialog):
         layout = QVBoxLayout(self)
         layout.setSpacing(8)
         layout.setContentsMargins(12, 12, 12, 12)
+
+        header_row = QHBoxLayout()
+        header_row.addStretch()
+        self.show_all_cb = ToggleCheckBtn(t('base_inventory.replace_show_all') if t else 'Show all structure types')
+        self.show_all_cb.toggled.connect(self._on_show_all_toggled)
+        header_row.addWidget(self.show_all_cb)
+        layout.addLayout(header_row)
 
         content_layout = QHBoxLayout()
         content_layout.setSpacing(12)
@@ -992,19 +1000,29 @@ class ReplaceStructureDialog(QDialog):
         self._target_asset = None
         self.confirm_btn.setEnabled(False)
 
-        family_variants = self._all_family_variants.get(family, {})
+        if self._show_all:
+            entries = []
+            for fam, variants in self._all_family_variants.items():
+                for elem, asset in variants.items():
+                    if asset == self._source_asset:
+                        continue
+                    entries.append((elem, fam, asset))
+            entries.sort(key=lambda x: (self._get_family_display_name(x[1]), self._get_element_display_name(x[0])))
+        else:
+            variants = self._all_family_variants.get(family, {})
+            if not variants:
+                item = QListWidgetItem(t('base_inventory.replace_incompatible') if t else 'No compatible replacements')
+                item.setFlags(item.flags() & ~Qt.ItemIsSelectable)
+                item.setForeground(QColor('#94a3b8'))
+                self.right_list.addItem(item)
+                self.info_label.setText(t('base_inventory.replace_incompatible') if t else 'No compatible replacements for this structure.')
+                return
+            entries = [(elem, family, asset) for elem, asset in variants.items() if elem != source_element]
+            entries.sort(key=lambda x: (self._get_family_display_name(x[1]), self._get_element_display_name(x[0])))
 
-        if not family_variants:
-            item = QListWidgetItem(t('base_inventory.replace_incompatible') if t else 'No compatible replacements')
-            item.setFlags(item.flags() & ~Qt.ItemIsSelectable)
-            item.setForeground(QColor('#94a3b8'))
-            self.right_list.addItem(item)
-            self.info_label.setText(t('base_inventory.replace_incompatible') if t else 'No compatible replacements for this structure.')
-            return
-
-        for element, asset in sorted(family_variants.items()):
+        for element, fam, asset in entries:
             element_display = self._get_element_display_name(element)
-            family_display = self._get_family_display_name(family)
+            family_display = self._get_family_display_name(fam)
             display_text = f'{element_display} {family_display}'
             icon = self._resolve_structure_icon(asset)
 
@@ -1013,9 +1031,6 @@ class ReplaceStructureDialog(QDialog):
             list_item.setData(Qt.UserRole + 1, element)
             if not icon.isNull():
                 list_item.setIcon(icon)
-
-            if element == source_element:
-                continue
 
             list_item.setToolTip(f'<b>{display_text}</b><br>({asset})')
             list_item.setForeground(QColor('#e0e0e0'))
@@ -1031,6 +1046,15 @@ class ReplaceStructureDialog(QDialog):
                 new_name='...'
             )
         )
+
+    def _on_show_all_toggled(self, checked):
+        self._show_all = checked
+        if self._source_asset:
+            for i in range(self.left_list.count()):
+                item = self.left_list.item(i)
+                if item.data(Qt.UserRole) == self._source_asset:
+                    self._on_left_clicked(item)
+                    break
 
     def _on_right_clicked(self, item):
         target_asset = item.data(Qt.UserRole)

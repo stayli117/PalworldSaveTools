@@ -1,5 +1,9 @@
 #2.1.8
 - **Fix Illegal Pals now fixes >3 active skills** — the fix function was trimming passive skills and all other illegal stats but skipped `EquipWaza` entirely. Pals with more than 3 active skills are now correctly clamped to the top 3.
+- **Character Transfer no longer loses technology and recipes** — player save data is now fully copied from source to target with identity fields patched in place. Previously only a subset of keys was transferred, missing unlocked recipes, technology data, capture records, and exploration progress.
+- **Save Changes in Character Transfer no longer triggers false "unsaved changes" warning** — clicking Save Changes then closing the dialog no longer asks if you want to save. The dirty-flag tracking is now properly cleared after a successful save.
+- **Level-2 requirement removed from Character Transfer and Fix Host Save** — both tools no longer block level-1 players from being selected or processed. Useful for testing and fresh characters.
+- **Level editing in Stats tab works for fresh characters** — players without an existing Level field (new/level-1 characters) can now have their level changed without silently breaking the save. The GVAS serializer was crashing on the missing property type metadata, causing File > Save Changes to appear successful while writing nothing. Also fixed the same bug in the Exp field and StatusPoint creation.
 - Bumped version to 2.1.8
 
 #2.1.7

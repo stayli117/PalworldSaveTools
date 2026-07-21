@@ -198,15 +198,7 @@ def fix_save(save_path, new_guid, old_guid, guild_fix=True):
         new_j = sav_to_json(new_sav)
         old_player_level = get_player_level_from_cspm(level, old_uid)
         new_player_level = get_player_level_from_cspm(level, new_uid)
-        if old_player_level < 2 or new_player_level < 2:
-            error_msg = t('fix_host_save.both_players_level_2', old_level=old_player_level, new_level=new_player_level)
-            print(f'Error: {error_msg}')
-            try:
-                parent = QApplication.activeWindow()
-                show_warning(parent, t('Error'), error_msg)
-            except:
-                pass
-            return False
+
         old_j['properties']['SaveData']['value']['PlayerUId']['value'] = new_uid
         old_j['properties']['SaveData']['value']['IndividualId']['value']['PlayerUId']['value'] = new_uid
         new_j['properties']['SaveData']['value']['PlayerUId']['value'] = old_uid
@@ -526,9 +518,7 @@ def fix_save_wrapper(window, level_sav_entry, old_tree, new_tree):
         f_new_j = sav_to_json(f_new_sav)
         f_p_level = get_player_level_from_cspm(f_level, f_old_uid)
         f_p_level2 = get_player_level_from_cspm(f_level, f_new_uid)
-        if f_p_level < 2 or f_p_level2 < 2:
-            print(f'Error: Both players must be level 2+')
-            return False
+
         f_old_j['properties']['SaveData']['value']['PlayerUId']['value'] = f_new_uid
         f_old_j['properties']['SaveData']['value']['IndividualId']['value']['PlayerUId']['value'] = f_new_uid
         f_new_j['properties']['SaveData']['value']['PlayerUId']['value'] = f_old_uid
@@ -907,13 +897,6 @@ class FixHostSaveWindow(QWidget):
                 self.source_result_label.setText(t('Source Player: N/A'))
                 show_warning(self, t('Error'), t('fix_host_save.player_file_missing', guid=player_guid))
                 return
-            if hasattr(self, 'level_json') and self.level_json:
-                player_level = get_player_level_from_cspm(self.level_json, player_guid)
-                if player_level < 2:
-                    self.old_tree.clearSelection()
-                    self.source_result_label.setText(t('Source Player: N/A'))
-                    show_warning(self, t('fix_host_save.cannot_select_title'), t('fix_host_save.cannot_select_message', name=values[1], level=player_level))
-                    return
             self.source_result_label.setText(t('Source Player: {name}({guid})', name=values[1], guid=player_guid))
         else:
             self.source_result_label.setText(t('Source Player: N/A'))
@@ -927,13 +910,6 @@ class FixHostSaveWindow(QWidget):
                 self.target_result_label.setText(t('Target Player: N/A'))
                 show_warning(self, t('Error'), t('fix_host_save.player_file_missing', guid=player_guid))
                 return
-            if hasattr(self, 'level_json') and self.level_json:
-                player_level = get_player_level_from_cspm(self.level_json, player_guid)
-                if player_level < 2:
-                    self.new_tree.clearSelection()
-                    self.target_result_label.setText(t('Target Player: N/A'))
-                    show_warning(self, t('fix_host_save.cannot_select_title'), t('fix_host_save.cannot_select_message', name=values[1], level=player_level))
-                    return
             self.target_result_label.setText(t('Target Player: {name}({guid})', name=values[1], guid=player_guid))
         else:
             self.target_result_label.setText(t('Target Player: N/A'))

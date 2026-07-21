@@ -2491,8 +2491,8 @@ class PlayerInventoryTab(QWidget):
         char_map = wsd.get('CharacterSaveParameterMap', {}).get('value', [])
         print(f'[inner] setup done, char_map len={len(char_map)}: {__import__("time").time() - _t0:.3f}s')
         from palworld_aio.managers.player_manager import set_player_level
-        set_player_level(player_uid, new_level)
-        print(f'[inner] set_player_level done: {__import__("time").time() - _t0:.3f}s')
+        result = set_player_level(player_uid, new_level)
+        print(f'[inner] set_player_level result={result}: {__import__("time").time() - _t0:.3f}s')
         stat_map_reverse = {'hp': '最大HP', 'stamina': '最大SP', 'attack': '攻撃力', 'defense': '防御力', 'work_speed': '作業速度', 'weight': '所持重量'}
         for entry in char_map:
             raw = entry.get('value', {}).get('RawData', {}).get('value', {})
@@ -2520,7 +2520,7 @@ class PlayerInventoryTab(QWidget):
                                     if 'StatusPoint' in status_item:
                                         status_item['StatusPoint']['value'] = stat_point
                                     else:
-                                        status_item['StatusPoint'] = {'value': stat_point}
+                                        status_item['StatusPoint'] = {'id': None, 'type': 'IntProperty', 'value': stat_point}
                                     break
                 print(f'[inner] done: {__import__("time").time() - _t0:.3f}s')
                 return

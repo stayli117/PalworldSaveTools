@@ -115,15 +115,16 @@ def set_player_level(player_uid, new_level):
         uid_obj = entry.get('key', {}).get('PlayerUId', {})
         uid = str(uid_obj.get('value', '')).replace('-', '') if isinstance(uid_obj, dict) else ''
         if uid == uid_clean:
-            if 'Level' not in sp_val:
-                sp_val['Level'] = {}
+            if 'Level' not in sp_val or not sp_val['Level']:
+                sp_val['Level'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None'}}
             if 'value' not in sp_val['Level']:
-                sp_val['Level']['value'] = {}
+                sp_val['Level']['value'] = {'type': 'None'}
             sp_val['Level']['value']['value'] = new_level
+            exp_val = EXP_DATA[str(new_level)]['TotalEXP']
             if 'Exp' not in sp_val:
-                sp_val['Exp'] = {'value': EXP_DATA[str(new_level)]['TotalEXP']}
+                sp_val['Exp'] = {'id': None, 'type': 'IntProperty', 'value': exp_val}
             else:
-                sp_val['Exp']['value'] = EXP_DATA[str(new_level)]['TotalEXP']
+                sp_val['Exp']['value'] = exp_val
             constants.player_levels[uid] = new_level
             return True
     return False

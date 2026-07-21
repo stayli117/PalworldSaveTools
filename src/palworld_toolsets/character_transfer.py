@@ -926,37 +926,7 @@ def main(skip_msgbox=False, skip_gui=False):
     if not load_json_files():
         print('Load Error: Failed to load JSON files.')
         return False
-    source_player_level = get_player_level_from_cspm(level_json, selected_source_player)
-    if source_player_level < 2:
-        print(f'Error: Source player must be at least level 2. Current level: {source_player_level}')
-        error_msg = t('character_transfer.source_player_level_2', level=source_player_level) if source_player_level > 0 else t('character_transfer.source_player_not_leveled')
-        show_warning(None, t('Error!'), error_msg)
-        selected_source_player = None
-        selected_target_player = None
-        host_guid = None
-        targ_uid = None
-        exported_map = None
-        if not skip_gui:
-            current_selection_label.setText('Source: None,Target: None')
-            source_player_list.clearSelection()
-            target_player_list.clearSelection()
-        return False
-    if selected_target_player and selected_target_player != selected_source_player:
-        target_player_level = get_player_level_from_cspm(targ_lvl, selected_target_player)
-        if target_player_level < 2:
-            print(f'Error: Target player must be at least level 2. Current level: {target_player_level}')
-            error_msg = t('character_transfer.target_player_level_2', level=target_player_level) if target_player_level > 0 else t('character_transfer.target_player_not_leveled')
-            show_warning(None, t('Error!'), error_msg)
-            selected_source_player = None
-            selected_target_player = None
-            host_guid = None
-            targ_uid = None
-            exported_map = None
-            if not skip_gui:
-                current_selection_label.setText('Source: None,Target: None')
-                source_player_list.clearSelection()
-                target_player_list.clearSelection()
-            return False
+
     def task():
         src_players_folder = os.path.join(os.path.dirname(level_sav_path), 'Players')
         tgt_players_folder = os.path.join(os.path.dirname(t_level_sav_path), 'Players')
@@ -1218,21 +1188,16 @@ def transfer_tech_and_data():
     try:
         src_sd = host_json['SaveData']['value']
         tgt_sd = targ_json['SaveData']['value']
-        tech_keys = ['SkillMap', 'PlayerTechData', 'player_tech_data']
-        for k in tech_keys:
-            if k in src_sd:
-                tgt_sd[k] = fast_deepcopy(src_sd[k])
-        appearance_keys = ['PlayerCustomName', 'PlayerCustomNameCharacterName', 'PlayerCustomNameCharacterName2', 'PlayerCustomNameCharacterName3']
-        for k in appearance_keys:
-            if k in src_sd:
-                tgt_sd[k] = fast_deepcopy(src_sd[k])
-        for k in ['PlayerCharacterAppearanceData', 'PlayerCustomName', 'PlayerCustomNameCharacterName', 'PlayerCustomNameCharacterName2', 'PlayerCustomNameCharacterName3', 'PlayerInputAllowDieData', 'PlayerTechnologyData', 'PlayerTechnologyData2', 'TechnologyPoint', 'TechnologyPoint2', 'BossTechnologyPoint', 'AdditionalTechnologyPoint']:
-            if k in src_sd:
-                tgt_sd[k] = fast_deepcopy(src_sd[k])
-        record_keys = ['RecordData', 'PlayerCaptureRecordData', 'PlayerCaptureRecordData2', 'PlayerDefeatBossRecordData', 'PlayerDiscoverMapData', 'PlayerExploreMapData', 'PlayerExploreMapData2', 'PlayerMapPingData', 'PlayerDungeonData', 'PlayerDungeonData2', 'BuildObjectMapData', 'SkyPresetData', 'PlayerSpawnLocationData']
-        for k in record_keys:
-            if k in src_sd:
-                tgt_sd[k] = fast_deepcopy(src_sd[k])
+        identity_fields = {}
+        for k in ('PlayerUId', 'IndividualId', 'GroupId',
+                   'PalStorageContainerId', 'OtomoCharacterContainerId',
+                   'InventoryInfo'):
+            if k in tgt_sd:
+                identity_fields[k] = fast_deepcopy(tgt_sd[k])
+        tgt_sd.clear()
+        tgt_sd.update(fast_deepcopy(src_sd))
+        for k, v in identity_fields.items():
+            tgt_sd[k] = v
         return True
     except Exception as e:
         print(f'[FAIL] transfer_tech_and_data: {e}')
@@ -1448,6 +1413,8 @@ def finalize_save_task():
     if errors:
         print(f"[ERROR] Save errors: {'; '.join(errors)}")
         return False
+    modified_target_players.clear()
+    modified_targets_data.clear()
     if _xgp_new_world_name is not None and _xgp_cpath:
         from palworld_xgp_import.gamepass_manager import save_xgp_changes
         save_xgp_changes(

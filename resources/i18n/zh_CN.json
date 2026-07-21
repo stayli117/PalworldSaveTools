@@ -1950,5 +1950,8 @@
     "modify.confirm.sha256": "SHA256：{sha}",
     "modify.confirm.warning": "这将启动从 GitHub 下载的第三方可执行文件。仅当您信任来源时才继续。",
     "modify.confirm.cli_prompt": "发射？ [是/否]：",
-    "base_inventory.replace_show_all": "显示所有结构类型"
+    "base_inventory.replace_show_all": "显示所有结构类型",
+    "fix_illegal_pal.players_header": "玩家",
+    "fix_illegal_pal.pals_header": "非法好友",
+    "fix_illegal_pal.pals_for_header": "非法好友 — {name}"
 }

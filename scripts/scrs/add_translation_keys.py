@@ -48,6 +48,9 @@ NEW_TRANSLATIONS = {
     'modify.confirm.warning': 'This will launch a third-party executable downloaded from GitHub. Only proceed if you trust the source.',
     'modify.confirm.cli_prompt': 'Launch? [y/N]: ',
     'base_inventory.replace_show_all': 'Show all structure types',
+    'fix_illegal_pal.players_header': 'Players',
+    'fix_illegal_pal.pals_header': 'Illegal Pals',
+    'fix_illegal_pal.pals_for_header': 'Illegal Pals — {name}',
 }
 OLD_KEYS = []
 def _clean_uv_locks():

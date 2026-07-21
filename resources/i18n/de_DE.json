@@ -1972,5 +1972,8 @@
     "modify.confirm.sha256": "SHA256: {sha}",
     "modify.confirm.warning": "Dadurch wird eine von GitHub heruntergeladene ausführbare Datei eines Drittanbieters gestartet. Fahren Sie nur fort, wenn Sie der Quelle vertrauen.",
     "modify.confirm.cli_prompt": "Start? [j/N]:",
-    "base_inventory.replace_show_all": "Alle Strukturtypen anzeigen"
+    "base_inventory.replace_show_all": "Alle Strukturtypen anzeigen",
+    "fix_illegal_pal.players_header": "Spieler",
+    "fix_illegal_pal.pals_header": "Illegale Freunde",
+    "fix_illegal_pal.pals_for_header": "Illegale Freunde – {name}"
 }

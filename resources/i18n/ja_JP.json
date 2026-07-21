@@ -1948,5 +1948,8 @@
     "modify.confirm.sha256": "SHA256: {sha}",
     "modify.confirm.warning": "これにより、GitHub からダウンロードされたサードパーティの実行可能ファイルが起動します。情報源を信頼できる場合にのみ続行してください。",
     "modify.confirm.cli_prompt": "打ち上げ？ [y/N]:",
-    "base_inventory.replace_show_all": "すべての構造タイプを表示"
+    "base_inventory.replace_show_all": "すべての構造タイプを表示",
+    "fix_illegal_pal.players_header": "選手",
+    "fix_illegal_pal.pals_header": "不法仲間",
+    "fix_illegal_pal.pals_for_header": "不法仲間 — {name}"
 }

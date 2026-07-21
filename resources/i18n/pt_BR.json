@@ -2235,5 +2235,8 @@
     "modify.confirm.sha256": "SHA256: {sha}",
     "modify.confirm.warning": "Isso iniciará um executável de terceiros baixado do GitHub. Prossiga apenas se você confiar na fonte.",
     "modify.confirm.cli_prompt": "Lançar? [S/N]:",
-    "base_inventory.replace_show_all": "Mostrar todos os tipos de estrutura"
+    "base_inventory.replace_show_all": "Mostrar todos os tipos de estrutura",
+    "fix_illegal_pal.players_header": "Jogadores",
+    "fix_illegal_pal.pals_header": "Amigos ilegais",
+    "fix_illegal_pal.pals_for_header": "Amigos ilegais - {name}"
 }

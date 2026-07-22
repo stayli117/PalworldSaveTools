@@ -314,6 +314,20 @@ class PalInfoHandlerMixin:
         cid = extract_value(self._raw, 'CharacterID', '') if self._raw else ''
         self._show_skill_picker(t('edit_pals.select_skill'), PalFrame._SKILLMAP, slot_idx, True, pos, pal_asset=cid)
 
+    def _on_add_active_skill(self):
+        if not self._raw:
+            return
+        cid = extract_value(self._raw, 'CharacterID', '') if self._raw else ''
+        ew = self._raw.get('EquipWaza', {})
+        cur = ew.get('value', {}).get('values', []) if isinstance(ew, dict) else ew if isinstance(ew, list) else []
+        if not isinstance(cur, list):
+            cur = []
+        cap = 255 if PalFrame._cheat_mode else 3
+        if len(cur) >= cap:
+            return
+        slot_idx = len(cur)
+        self._show_skill_picker(t('edit_pals.select_skill'), PalFrame._SKILLMAP, slot_idx, True, pal_asset=cid)
+
     def _on_passive_click(self, slot_idx, pos=None):
         self._show_skill_picker(t('edit_pals.select_passive'), PalFrame._PASSMAP, slot_idx, False, pos)
 

@@ -993,8 +993,8 @@ def fix_missions(parent=None):
         file_path = os.path.join(save_path, filename)
         try:
             gvas = sav_to_gvasfile(file_path)
-            rd = gvas.properties.get('SaveData', {}).get('value', {}).get('RecordData', {}).get('value', {})
-            ca = rd.get('CompletedQuestArray_FullRelease', {}).get('value', {}).get('values')
+            sd = gvas.properties.get('SaveData', {}).get('value', {})
+            ca = sd.get('CompletedQuestArray_FullRelease', {}).get('value', {}).get('values')
             if ca is not None and isinstance(ca, list):
                 ca.clear()
                 gvasfile_to_sav(gvas, file_path)

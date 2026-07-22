@@ -262,7 +262,7 @@ def _show_learned_moves_dialog(raw, parent):
         from palworld_aio.ui.dialogs.skill_picker import SkillPicker
         picker = SkillPicker(dlg)
         pal_asset = raw.get('CharacterID', {}).get('value', '') if isinstance(raw, dict) else ''
-        result = picker.pick(PalFrame._SKILLMAP, False, pal_asset=pal_asset)
+        result = picker.pick(PalFrame._SKILLMAP, True, pal_asset=pal_asset, use_exclusions=False)
         if result is None:
             return
         asset = None

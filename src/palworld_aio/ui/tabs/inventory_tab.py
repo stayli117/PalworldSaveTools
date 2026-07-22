@@ -2002,8 +2002,6 @@ class PlayerInventoryTab(QWidget):
                 if not slot_widget.is_locked():
                     slot_widget.set_item(item)
         self._update_stats()
-        if self.current_player_uid:
-            self.missions_panel.load_player(self.current_player_uid)
     def _on_slot_unlock_request(self, slot_name: str):
         if not self.inventory:
             return

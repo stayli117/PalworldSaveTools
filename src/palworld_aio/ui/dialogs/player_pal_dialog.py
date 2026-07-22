@@ -291,7 +291,11 @@ class PlayerPalActionDialog(QDialog):
         if query is None or isinstance(query, bool):
             query = self.pal_search_input.text()
         query_lower = query.lower()
-        self.pal_list.clear()
+        self.pal_list.setUpdatesEnabled(False)
+        while self.pal_list.count():
+            item = self.pal_list.takeItem(0)
+            self.pal_list.removeItemWidget(item)
+            del item
         for asset, name in sorted(PalFrame._NAMEMAP.items(), key=lambda x: x[1]):
             asset_lower = asset.lower()
             is_predator = asset.upper().startswith('PREDATOR_')
@@ -335,6 +339,7 @@ class PlayerPalActionDialog(QDialog):
                 list_item.setData(Qt.UserRole + 2, list(elems.keys())[:2])
             list_item.setSizeHint(QSize(84, 84))
             self.pal_list.addItem(list_item)
+        self.pal_list.setUpdatesEnabled(True)
     def _on_pal_clicked(self, item):
         self.selected_pal_id = item.data(Qt.UserRole)
         self.selected_pal_name = item.text()

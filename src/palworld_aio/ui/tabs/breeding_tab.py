@@ -87,7 +87,11 @@ class _SelectPalDialog(PalCreateDialog):
         show_predator = self._show_predator_chk.isChecked() if hasattr(self, '_show_predator_chk') else True
         show_boss = self._show_boss_chk.isChecked() if hasattr(self, '_show_boss_chk') else True
         show_npc = self._show_npc_chk.isChecked() if hasattr(self, '_show_npc_chk') else True
-        self.pal_list.clear()
+        self.pal_list.setUpdatesEnabled(False)
+        while self.pal_list.count():
+            item = self.pal_list.takeItem(0)
+            self.pal_list.removeItemWidget(item)
+            del item
         for asset, info in sorted(self._pal_info.items(), key=lambda kv: (kv[1].get('name', kv[0]), kv[0])):
             if info.get('ignore_combi') and asset not in self._unique_combo_children:
                 continue
@@ -136,6 +140,7 @@ class _SelectPalDialog(PalCreateDialog):
             if elems:
                 li.setData(Qt.UserRole + 2, list(elems.keys())[:2])
             self.pal_list.addItem(li)
+        self.pal_list.setUpdatesEnabled(True)
 
     def _on_select(self):
         item = self.pal_list.currentItem()

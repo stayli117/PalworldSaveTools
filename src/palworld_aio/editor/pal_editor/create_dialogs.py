@@ -834,22 +834,17 @@ class PalCreateDialog(QDialog):
         if hasattr(self, 'nick_edit'):
             self.nick_edit.setPlaceholderText(t('edit_pals.nickname_placeholder') if t else 'Optional')
     def _filter_pal_list(self):
-        try:
-            search_text = self._search_edit.text().lower() if hasattr(self, '_search_edit') else ''
-        except Exception:
-            search_text = ''
-        try:
-            show_standard = self._show_standard_chk.isChecked() if hasattr(self, '_show_standard_chk') else True
-            show_predator = self._show_predator_chk.isChecked() if hasattr(self, '_show_predator_chk') else False
-            show_boss = self._show_boss_chk.isChecked() if hasattr(self, '_show_boss_chk') else False
-            show_npc = self._show_npc_chk.isChecked() if hasattr(self, '_show_npc_chk') else True
-        except Exception:
-            show_standard = True; show_predator = False; show_boss = False; show_npc = True
+        search_text = self._search_edit.text().lower() if hasattr(self, '_search_edit') else ''
+        show_standard = self._show_standard_chk.isChecked() if hasattr(self, '_show_standard_chk') else True
+        show_predator = self._show_predator_chk.isChecked() if hasattr(self, '_show_predator_chk') else False
+        show_boss = self._show_boss_chk.isChecked() if hasattr(self, '_show_boss_chk') else False
+        show_npc = self._show_npc_chk.isChecked() if hasattr(self, '_show_npc_chk') else True
+        self.pal_list.setUpdatesEnabled(False)
         self.pal_list.setItemDelegate(None)
-        try:
-            self.pal_list.clear()
-        except Exception as e:
-            import traceback; traceback.print_exc()
+        while self.pal_list.count():
+            item = self.pal_list.takeItem(0)
+            self.pal_list.removeItemWidget(item)
+            del item
         for asset, name in sorted(PalFrame._NAMEMAP.items(), key=lambda kv: (kv[1] or '', kv[0])):
             asset_lower = asset.lower()
             if search_text and search_text not in name.lower() and (search_text not in asset.lower()):
@@ -896,6 +891,7 @@ class PalCreateDialog(QDialog):
                 li.setData(Qt.UserRole + 2, list(elems.keys())[:2])
             self.pal_list.addItem(li)
         self.pal_list.setItemDelegate(_PalSlotDelegate(self.pal_list))
+        self.pal_list.setUpdatesEnabled(True)
     def _on_create(self):
         if not self.selected_pal['asset']:
             show_warning(self, 'Error', t('edit_pals.error_select_pal_type'))

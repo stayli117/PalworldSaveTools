@@ -88,6 +88,21 @@ def _load_pal_base_data():
         print(f'Error loading pal base data: {e}')
         return {}
 
+_FOOD_BUFF_MAP = None
+def _ensure_food_buff_map():
+    global _FOOD_BUFF_MAP
+    if _FOOD_BUFF_MAP is not None:
+        return _FOOD_BUFF_MAP
+    _FOOD_BUFF_MAP = {}
+    try:
+        base_dir = constants.get_base_path()
+        path = resource_path(base_dir, 'game_data', 'foodbuffdata.json')
+        data = json_tools.load(path)
+        _FOOD_BUFF_MAP = data.get('food_buffs', {})
+    except Exception:
+        pass
+    return _FOOD_BUFF_MAP
+
 def get_pal_base_data(cid):
     cache = _load_pal_base_data()
     cid_lower = cid.lower()

@@ -169,6 +169,19 @@ class PalInfoDisplayMixin:
                             passive_def_bonus += float(ev)
                         elif 'CraftSpeed' in etype:
                             passive_craft_bonus += float(ev)
+            food_item = extract_value(raw, 'FoodWithStatusEffect', '')
+            food_atk_bonus = 0; food_def_bonus = 0; food_ws_bonus = 0
+            if food_item:
+                from palworld_aio.editor.pal_editor.data import _ensure_food_buff_map
+                fb_map = _ensure_food_buff_map()
+                fb = fb_map.get(food_item)
+                if fb:
+                    for eff in fb.get('effects', []):
+                        et = eff.get('type', '')
+                        ev = eff.get('value', 0) / 100.0
+                        if et == 'Attack': food_atk_bonus = ev
+                        elif et == 'Defense': food_def_bonus = ev
+                        elif et == 'WorkSpeed': food_ws_bonus = ev
             if base:
                 max_hp = calculate_max_hp(base, level, talent_hp, rank_hp, is_boss, is_lucky, trust_rank, condenser_rank, is_awake, passive_bonus=passive_hp_bonus / 100)
                 if passive_hp_bonus != 0:
@@ -177,10 +190,10 @@ class PalInfoDisplayMixin:
             rank_atk_tmp = extract_value(raw, 'Rank_Attack', 0)
             condenser_atk_tmp = int(extract_value(raw, 'Rank', 0))
             is_awake_tmp = bool(extract_value(raw, 'bIsAwakening', False))
-            atk_val = calculate_shot_attack(base, level, talent_shot_tmp, rank_atk_tmp, trust_rank, condenser_atk_tmp, passive_bonus=passive_shot_bonus / 100, is_awake=is_awake_tmp) if base else atk_val
-            def_val = calculate_defense(base, level, extract_value(raw, 'Talent_Defense', 0), extract_value(raw, 'Rank_Defence', 0), trust_rank, condenser_atk_tmp, passive_bonus=passive_def_bonus / 100, is_awake=is_awake_tmp) if base else def_val
+            atk_val = calculate_shot_attack(base, level, talent_shot_tmp, rank_atk_tmp, trust_rank, condenser_atk_tmp, passive_bonus=passive_shot_bonus / 100, is_awake=is_awake_tmp, food_bonus=food_atk_bonus) if base else atk_val
+            def_val = calculate_defense(base, level, extract_value(raw, 'Talent_Defense', 0), extract_value(raw, 'Rank_Defence', 0), trust_rank, condenser_atk_tmp, passive_bonus=passive_def_bonus / 100, is_awake=is_awake_tmp, food_bonus=food_def_bonus) if base else def_val
             if wspd_val == 0 or base:
-                wspd_val = calculate_work_speed(base, level, extract_value(raw, 'Rank_CraftSpeed', 0), passive_craft_bonus / 100, condenser_atk_tmp)
+                wspd_val = calculate_work_speed(base, level, extract_value(raw, 'Rank_CraftSpeed', 0), passive_craft_bonus / 100, condenser_atk_tmp, food_bonus=food_ws_bonus)
             ws = _get_effective_work_suitabilities(raw)
             for i, (icon_lbl, (val_lbl, ws_key, val_badge)) in enumerate(zip(self.work_icon_labels, self.work_icon_values)):
                 ws_level = ws.get(ws_key, 0)
@@ -224,10 +237,10 @@ class PalInfoDisplayMixin:
             self.atk_lbl.setText(str(int(atk_val)))
             self.def_lbl.setText(str(int(def_val)))
             self.wspd_lbl.setText(str(int(wspd_val)))
-            bd_hp = _hp_breakdown(base, level, talent_hp, rank_hp, is_boss, is_lucky, trust_rank, condenser_rank, is_awake, passive_bonus=passive_hp_bonus / 100)
-            bd_atk = _atk_breakdown(base, level, talent_shot_tmp, rank_atk_tmp, trust_rank, condenser_atk_tmp, passive_bonus=passive_shot_bonus / 100, is_awake=is_awake_tmp)
-            bd_def = _def_breakdown(base, level, extract_value(raw, 'Talent_Defense', 0), extract_value(raw, 'Rank_Defence', 0), trust_rank, condenser_atk_tmp, passive_bonus=passive_def_bonus / 100, is_awake=is_awake_tmp)
-            bd_ws = _ws_breakdown(base, level, extract_value(raw, 'Rank_CraftSpeed', 0), passive_craft_bonus / 100, condenser_atk_tmp)
+            bd_hp = _hp_breakdown(base, level, talent_hp, rank_hp, is_boss, is_lucky, trust_rank, condenser_rank, is_awake, passive_bonus=passive_hp_bonus / 100, food_bonus=0)
+            bd_atk = _atk_breakdown(base, level, talent_shot_tmp, rank_atk_tmp, trust_rank, condenser_atk_tmp, passive_bonus=passive_shot_bonus / 100, is_awake=is_awake_tmp, food_bonus=food_atk_bonus)
+            bd_def = _def_breakdown(base, level, extract_value(raw, 'Talent_Defense', 0), extract_value(raw, 'Rank_Defence', 0), trust_rank, condenser_atk_tmp, passive_bonus=passive_def_bonus / 100, is_awake=is_awake_tmp, food_bonus=food_def_bonus)
+            bd_ws = _ws_breakdown(base, level, extract_value(raw, 'Rank_CraftSpeed', 0), passive_craft_bonus / 100, condenser_atk_tmp, food_bonus=food_ws_bonus)
             texts = {self.hp_bar: ('HP', bd_hp), self.atk_lbl: ('ATK', bd_atk), self.def_lbl: ('DEF', bd_def), self.wspd_lbl: ('WS', bd_ws)}
             for w, (lbl, bd) in texts.items():
                 w._stat_tip_text = stat_breakdown_tooltip(lbl, bd)

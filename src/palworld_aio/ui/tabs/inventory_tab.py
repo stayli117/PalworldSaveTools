@@ -883,22 +883,35 @@ class MissionPanelWidget(QFrame):
         try:
             from palworld_aio.utils import sav_to_gvasfile
             save_path = os.path.join(constants.current_save_path, 'Players', f'{self._uid_filename(uid)}.sav')
+            print(f'[MISSIONS] save_path={save_path} exists={os.path.exists(save_path)}', flush=True)
             if not os.path.exists(save_path):
+                self._rebuild_list()
                 return
             gvas = sav_to_gvasfile(save_path)
-            rd = gvas.properties.get('SaveData', {}).get('value', {}).get('RecordData', {}).get('value', {})
+            props = gvas.properties
+            print(f'[MISSIONS] props top keys={list(props.keys())}', flush=True)
+            sd = props.get('SaveData', {}).get('value', {})
+            print(f'[MISSIONS] SaveData keys={list(sd.keys())}', flush=True)
+            rd = sd.get('RecordData', {}).get('value', {})
+            print(f'[MISSIONS] RecordData keys={list(rd.keys())}', flush=True)
             completed = rd.get('CompletedQuestArray_FullRelease', {}).get('value', {}).get('values', [])
+            print(f'[MISSIONS] CompletedQuestArray_FullRelease values={completed}', flush=True)
             if isinstance(completed, list):
                 self._completed_quests = [str(v) for v in completed]
             active_raw = rd.get('OrderedQuestArray_FullRelease', {}).get('value', {}).get('values', [])
+            print(f'[MISSIONS] OrderedQuestArray_FullRelease raw={type(active_raw).__name__} len={len(active_raw) if isinstance(active_raw, list) else "N/A"}', flush=True)
             if isinstance(active_raw, list):
                 for entry in active_raw:
                     if isinstance(entry, dict):
                         qn = entry.get('QuestName', {}).get('value', '')
+                        print(f'[MISSIONS]   active entry qn={qn!r}', flush=True)
                         if qn:
                             self._active_quests.append(str(qn))
-        except Exception:
-            pass
+            print(f'[MISSIONS] found: {len(self._active_quests)} active, {len(self._completed_quests)} completed', flush=True)
+        except Exception as e:
+            import traceback
+            print(f'[MISSIONS] EXCEPTION: {e}', flush=True)
+            traceback.print_exc()
         self._rebuild_list()
     def clear(self):
         self._player_uid = None; self._active_quests = []; self._completed_quests = []

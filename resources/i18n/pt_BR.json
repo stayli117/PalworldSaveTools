@@ -2244,5 +2244,6 @@
     "inventory.missions_reset": "Redefinir selecionado",
     "inventory.missions_active": "Missões Ativas",
     "inventory.missions_completed": "Missões Concluídas",
-    "inventory.missions_not_started": "Não iniciado"
+    "inventory.missions_not_started": "Não iniciado",
+    "edit_pals.add_active_skill": "Adicionar habilidade ativa"
 }

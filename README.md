@@ -84,6 +84,18 @@ Whether you need to manage a dedicated server, migrate between co-op and dedicat
 
 </div>
 
+| Category | What you can do |
+|---|---|
+| **Player Management** | Edit names, levels, stats, tech points. Bulk manage items, pals, tech across players. Clean up inactive or duplicate players. |
+| **Pal Editor** | Change stats, IVs, souls, rank, skills, passives, work suitability, boss/lucky flags. Export/import pals. Detect and fix illegal pals. Cheat mode for uncapped editing. |
+| **Guild Management** | Rename guilds, change leaders, set levels. Unlock lab research. Move players between guilds. Delete empty or inactive guilds. |
+| **Base Camp Tools** | View all bases with guild info. Export/import blueprints. Clone bases to other guilds. Reposition bases on the map. Adjust radius. Delete inactive bases. |
+| **Map Viewer** | Interactive world map with base and player markers. Draw exclusion zones. Calibration mode. World Map and Tree Map views. Zoom, pan, fly-to. |
+| **Inventory Management** | Edit player items, key items, equipment slots. Unlock all fast-travel points. Browse and edit base inventories and containers across all guilds. Manage base worker pals. |
+| **Exclusions** | Protect players, guilds, and bases from cleanup with persistent exclusion lists. Add entries from context menus. |
+| **Save Tools** | Convert saves between SAV and JSON. Convert GamePass to Steam. Transfer characters between worlds. Fix host saves. Restore map progress. Expand palbox slots. |
+| **Cleanup & Utilities** | Delete empty guilds, inactive bases/players, unreferenced data. Remove invalid items/pals/structures. Reset dungeons, oil rig, supply drops. Fix timestamps. |
+
 ### Player Management
 
 - View and search all players by name, level, pal count, UID, guild, and last-seen time.

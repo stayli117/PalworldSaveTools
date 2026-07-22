@@ -1180,7 +1180,14 @@ class TechnologyPanelWidget(QFrame):
         frame = QFrame()
         frame.setFixedSize(self.BUTTON_SIZE, self.BUTTON_SIZE)
         frame.setCursor(Qt.PointingHandCursor)
-        frame.setToolTip(f'<b>{tech.get("name", "")}</b><br><br>{tech.get("description", "")}<br><br>Level {tech.get("level_cap",0)}  Cost: {tech.get("cost",0)}')
+        name = tech.get('name', ''); asset = tech.get('asset', '')
+        tip = f'<b>{name}</b><br>({asset})'
+        tech_desc = tech.get('description', '')
+        if tech_desc:
+            cleaned = _clean_desc_for_tooltip(tech_desc)
+            tip += f'<br><br>{wrap_tooltip_text(cleaned)}'
+        tip += f'<br><br>Level {tech.get("level_cap",0)}  Cost: {tech.get("cost",0)}'
+        frame.setToolTip(tip)
         fg = '#e2e8f0' if unlocked else '#555'
         bg = 'rgba(125,211,252,0.06)' if unlocked else 'rgba(255,255,255,0.03)'
         bd = '1px solid rgba(125,211,252,0.2)' if unlocked else '1px solid rgba(255,255,255,0.06)'

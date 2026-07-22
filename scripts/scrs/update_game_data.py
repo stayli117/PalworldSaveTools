@@ -2357,6 +2357,40 @@ def update_boss_mapping():
         for a in sorted(unmatched):
             name = next((it.get('name','?') for it in items_data.get('items',[]) if it.get('asset')==a), a)
             print(f'    {a} ({name})')
+def update_food_buff_data():
+    print('\n=== Updating Food Buff Data ===')
+    food_data = load_export_json('Item/DT_StatusEffectFood.json')
+    if not food_data:
+        print('  No food buff data found. Skipping.')
+        return
+    rows = get_rows(food_data)
+    if not rows:
+        print('  No food buff rows found. Skipping.')
+        return
+    buffs = {}
+    for key, row in rows.items():
+        et1 = row.get('EffectType1', '')
+        ev1 = row.get('EffectValue1', 0)
+        et2 = row.get('EffectType2', '')
+        ev2 = row.get('EffectValue2', 0)
+        et = row.get('EffectTime', 0)
+        if isinstance(et1, dict): et1 = et1.get('value', '')
+        if isinstance(ev1, dict): ev1 = ev1.get('value', 0)
+        if isinstance(et2, dict): et2 = et2.get('value', '')
+        if isinstance(ev2, dict): ev2 = ev2.get('value', 0)
+        if isinstance(et, dict): et = et.get('value', 0)
+        et1 = et1.replace('EPalFoodStatusEffectType::', '')
+        et2 = et2.replace('EPalFoodStatusEffectType::', '')
+        effects = []
+        if et1 != 'None':
+            effects.append({'type': et1, 'value': ev1})
+        if et2 != 'None':
+            effects.append({'type': et2, 'value': ev2})
+        buffs[key] = {'duration': et, 'effects': effects}
+    output = {'food_buffs': buffs}
+    save_resource_json('foodbuffdata.json', output)
+    print(f'  Total food buff items: {len(buffs)}')
+
 def update_quest_data():
     print('\n=== Updating Quest Data ===')
     quest_data = load_export_json('Quest/DT_PalQuestData.json')
@@ -3119,6 +3153,7 @@ def main():
     _run_step('Updating UI icons...', update_ui_icons)
     _run_step('Updating boss mapping...', update_boss_mapping)
     _run_step('Updating quest data...', update_quest_data)
+    _run_step('Updating food buff data...', update_food_buff_data)
     _run_step('Updating work data...', update_work_data)
     _run_step('Updating world map areas...', update_world_map_area_data)
     _run_step('Updating fast travel data...', update_fast_travel_data)

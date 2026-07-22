@@ -33,6 +33,7 @@ cd tests && pytest --no-deep-audit --no-strict-paths # skip import graph + AST r
 - **Two save locations**: `constants.loaded_level_json` (Level.sav, deferred write) + per-player .sav files (written immediately).
 - **i18n default**: `init_language()` falls back to `zh_CN`, not English.
 - **Re-export hub**: `import_libs.py` star-imports everything from palsav into namespace.
+- **NEVER call deleteLater() or mutate widget tree inside modal dialog.exec() signal handlers**: Qt nested event loop processes deferred delete events during dialog.exec(). If _refresh_display() calls set_max_slots → deleteLater() while dialog is still open, the event loop can destroy C++ widgets before accept() finishes, causing use-after-free segfault in repaint. Always defer widget mutations (_refresh_display, load_items, set_max_slots) to after dialog.exec() returns.
 
 ## Dynamic test imports (MUST follow)
 

@@ -1384,10 +1384,14 @@ class InventoryGridWidget(QWidget):
         if max_slots == self.max_visible_slots and self.slots:
             return
         self.max_visible_slots = max_slots
-        for slot in self.slots.values():
-            slot.deleteLater()
-        self.slots.clear()
-        for i in range(max_slots):
+        current_count = len(self.slots)
+        if max_slots < current_count:
+            for i in range(max_slots, current_count):
+                slot = self.slots.pop(i)
+                self.grid_layout.removeWidget(slot)
+                slot.setParent(None)
+                slot.deleteLater()
+        for i in range(len(self.slots), max_slots):
             row = i // GRID_COLS
             col = i % GRID_COLS
             slot = ItemSlotWidget(i, self.container_type)
@@ -2340,9 +2344,9 @@ class PlayerInventoryTab(QWidget):
                 _consolidate_container_slots(key_c, 'key', SINGLETON_TYPE_A)
                 self._update_raw_save_data('key', key_c)
             self.inventory.save()
-            self._refresh_display()
         dlg = InventoryLoadoutDialog(self, _get_items, _apply_items, loadouts_path=_INV_LOADOUTS_PATH)
         dlg.exec()
+        self._refresh_display()
     def _on_sort_requested(self):
         if not self.inventory:
             return
@@ -2422,9 +2426,9 @@ class PlayerInventoryTab(QWidget):
                 container.update_slots([s for s in container.slots if s.get('slot_index') != slot_idx])
                 container._standardized_container.add_item(equip_item['id'], equip_item.get('qty', 1), slot_index=slot_idx)
             self.inventory.save()
-            self._refresh_display()
         dlg = InventoryLoadoutDialog(self, _get_equipment, _apply_equipment, title=t('inventory.equip_loadouts_title', default='Equipment Loadouts'), loadouts_path=_EQ_LOADOUTS_PATH, key_prefix='inventory.equip')
         dlg.exec()
+        self._refresh_display()
     def _clear_all_inventory(self):
         if not self.current_player_uid:
             QMessageBox.warning(self, t('inventory.select_player', default='Select Player...'), t('inventory.select_player_first', default='Please select a player first.'))
@@ -2754,6 +2758,7 @@ class PlayerInventoryTab(QWidget):
         dialog = ItemPickerDialog(self, filter_type_a=slot_filter.get('type_a'), filter_type_b=slot_filter.get('type_b'), hide_quantity=slot_type not in ('food', 'weapon'), exclude_assets=exclude_assets)
         dialog.item_selected.connect(lambda item_id, qty: self._do_add_to_equip_slot(slot_name, container_type, item_id, qty))
         dialog.exec()
+        self._refresh_display()
     def _do_add_to_equip_slot(self, slot_name: str, container_type: str, item_id: str, quantity: int):
         if not self.inventory:
             return
@@ -2766,7 +2771,6 @@ class PlayerInventoryTab(QWidget):
         container.update_slots([s for s in container.slots if s.get('slot_index') != slot_index] + [new_slot])
         self._update_raw_save_data(container_type, container)
         self.inventory.save()
-        self._refresh_display()
     def _edit_equip_item(self, slot_name: str, current_item: dict):
         current_qty = current_item.get('stack_count', 1)
         item_id = current_item.get('item_id', '')
@@ -2826,6 +2830,7 @@ class PlayerInventoryTab(QWidget):
             dialog = ItemPickerDialog(self, filter_exclude_type_a='EPalItemTypeA::Essential')
         dialog.item_selected.connect(self._add_item_to_inventory)
         dialog.exec()
+        self._refresh_display()
     def _add_item_to_inventory(self, item_id: str, quantity: int):
         if not self.inventory:
             return
@@ -2839,7 +2844,6 @@ class PlayerInventoryTab(QWidget):
         else:
             slot_index = None
         self.inventory.add_item(actual_container_type, item_id, quantity, slot_index=slot_index)
-        self._refresh_display()
     def _update_raw_save_data(self, container_type: str, container):
         if not self.inventory or not container:
             return

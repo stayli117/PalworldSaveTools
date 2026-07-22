@@ -16,7 +16,7 @@ class PlayerTechnologyActionDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle(t('player_technology.title') if t else 'Bulk Technology Management')
-        self.setMinimumSize(1100, 650)
+        self.setMinimumSize(1120, 650)
         self._selected_techs = {}
         self.tech_data = []
         self.players_data = []

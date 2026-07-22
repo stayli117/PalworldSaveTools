@@ -1,7 +1,7 @@
 import os
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QListWidget, QListWidgetItem, QGroupBox, QCheckBox, QMessageBox, QSpinBox, QFrame, QAbstractItemView, QListView, QTabWidget, QWidget, QInputDialog
 from PySide6.QtCore import Qt, Signal, QSize, QTimer
-from PySide6.QtGui import QPixmap, QIcon, QColor, QPainter, QPen
+from PySide6.QtGui import QPixmap, QIcon, QColor, QPainter, QPen, QIntValidator
 from PySide6.QtWidgets import QStyledItemDelegate, QSplitter
 from i18n import t
 from palworld_aio import constants
@@ -135,12 +135,11 @@ class PlayerItemActionDialog(QDialog):
         self.remove_btn.clicked.connect(self._on_remove_item)
         self.remove_btn.setEnabled(False)
         action_layout.addWidget(self.remove_btn)
-        self.qty_spin = QSpinBox()
-        self.qty_spin.setRange(1, constants.MAX_QUANTITY)
-        self.qty_spin.setValue(1)
-        self.qty_spin.setFixedWidth(70)
-        self.qty_spin.setVisible(False)
-        action_layout.addWidget(self.qty_spin)
+        self.qty_input = QLineEdit('1')
+        self.qty_input.setValidator(QIntValidator(1, constants.MAX_QUANTITY))
+        self.qty_input.setFixedWidth(70)
+        self.qty_input.setVisible(False)
+        action_layout.addWidget(self.qty_input)
         action_layout.addStretch()
         close_btn = QPushButton(t('button.close') if t else 'Close')
         close_btn.clicked.connect(self.reject)
@@ -232,13 +231,11 @@ class PlayerItemActionDialog(QDialog):
             self.item_desc_label.setVisible(False)
         is_singleton = type_a in SINGLETON_TYPE_A and type_b != 'EPalItemTypeB::WeaponThrowObject'
         if is_singleton:
-            self.qty_spin.setValue(1)
-            self.qty_spin.setVisible(False)
+            self.qty_input.setText('1')
+            self.qty_input.setVisible(False)
         else:
-            self.qty_spin.setVisible(True)
+            self.qty_input.setVisible(True)
             self.add_btn.setEnabled(True)
-            item_id = self.selected_item_id or ''
-            self.qty_spin.setMaximum(ItemData.get_effective_max_stack(item_id))
         self.remove_btn.setEnabled(True)
         self.find_players_btn.setEnabled(True)
         self._update_player_list()
@@ -413,7 +410,10 @@ class PlayerItemActionDialog(QDialog):
         if not selected_players:
             QMessageBox.warning(self, t('player_item.no_players_selected') if t else 'No Players Selected', t('player_item.select_at_least_one') if t else 'Please select at least one player.')
             return
-        qty = self.qty_spin.value()
+        try:
+            qty = int(self.qty_input.text())
+        except ValueError:
+            qty = 1
         container_type = ItemData.get_target_container(self.selected_item_id)
         self.item_action_selected.emit(self.selected_item_id, f'add:{qty}:{container_type}', selected_players)
         self._refresh_after_action()

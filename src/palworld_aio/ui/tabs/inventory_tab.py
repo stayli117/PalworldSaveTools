@@ -2,7 +2,7 @@ import os
 import json
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QScrollArea, QLabel, QPushButton, QFrame, QDialog, QLineEdit, QListWidget, QListWidgetItem, QSpinBox, QMessageBox, QTabWidget, QSizePolicy, QAbstractItemView, QMenu, QToolTip, QListView, QProgressBar, QComboBox, QApplication, QInputDialog
 from PySide6.QtCore import Qt, QSize, Signal, QPoint, QTimer, QThread
-from PySide6.QtGui import QPixmap, QIcon, QFont, QCursor, QColor, QPainter, QPen
+from PySide6.QtGui import QPixmap, QIcon, QFont, QCursor, QColor, QPainter, QPen, QIntValidator
 from PySide6.QtWidgets import QStyledItemDelegate
 from i18n import t
 from palworld_aio.ui.chrome.styles import DIALOG_STYLE as DARK_THEME_STYLE, STATS_PANEL_STYLE, MENU_STYLE, PICKER_BG_STYLE, PICKER_SEARCH_STYLE, PICKER_LIST_STYLE, wrap_tooltip_text, slot_full, slot_rarity, slot_selected, slot_multi_selected, CONTENT_PANEL_STYLE, SLOT_EMPTY_STYLE, SLOT_HOVER_STYLE, INPUT_DIALOG_STYLE
@@ -1604,14 +1604,15 @@ class ItemPickerDialog(QDialog):
         layout.addWidget(self.desc_label)
         qty_layout = QHBoxLayout()
         self.qty_label = QLabel(t('inventory.quantity', default='Quantity:'))
-        self.qty_spin = QSpinBox()
-        self.qty_spin.setRange(1, constants.MAX_QUANTITY)
-        self.qty_spin.setValue(1)
+        self.qty_input = QLineEdit('1')
+        self.qty_input.setValidator(QIntValidator(1, constants.MAX_QUANTITY))
+        self.qty_input.setFixedWidth(100)
+        self.qty_input.setStyleSheet('QLineEdit { background: rgba(255,255,255,0.06); color: #e2e8f0; border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; padding: 2px 6px; }')
         qty_layout.addWidget(self.qty_label)
-        qty_layout.addWidget(self.qty_spin)
+        qty_layout.addWidget(self.qty_input)
         if self._hide_quantity:
             self.qty_label.setVisible(False)
-            self.qty_spin.setVisible(False)
+            self.qty_input.setVisible(False)
         qty_layout.addStretch()
         add_btn = QPushButton(t('button.add', default='Add'))
         add_btn.clicked.connect(self._add_item)
@@ -1701,11 +1702,9 @@ class ItemPickerDialog(QDialog):
         is_singleton = type_a in SINGLETON_TYPE_A and type_b != 'EPalItemTypeB::WeaponThrowObject'
         if not self._hide_quantity:
             self.qty_label.setVisible(not is_singleton)
-            self.qty_spin.setVisible(not is_singleton)
+            self.qty_input.setVisible(not is_singleton)
             if is_singleton:
-                self.qty_spin.setValue(1)
-            item_id = self.selected_item or ''
-            self.qty_spin.setMaximum(ItemData.get_effective_max_stack(item_id))
+                self.qty_input.setText('1')
         if item_desc:
             self.desc_label.setText(_clean_desc_for_tooltip(item_desc))
             self.desc_label.setVisible(True)
@@ -1716,7 +1715,11 @@ class ItemPickerDialog(QDialog):
         self._add_item()
     def _add_item(self):
         if self.selected_item:
-            self.item_selected.emit(self.selected_item, self.qty_spin.value())
+            try:
+                qty = int(self.qty_input.text())
+            except ValueError:
+                qty = 1
+            self.item_selected.emit(self.selected_item, qty)
             self.accept()
 class PlayerInventoryTab(QWidget):
     unlock_all_map_requested = Signal(list)
@@ -1840,6 +1843,7 @@ class PlayerInventoryTab(QWidget):
         self.tech_panel.tech_changed.connect(self._on_tech_changed)
         tech_tab_layout.addWidget(self.tech_panel)
         self.inv_tabs.addTab(self.tech_tab, t('inventory.technology', default='Technology'))
+        self.inv_tabs.currentChanged.connect(self._on_tab_changed)
         inner_content.addWidget(self.inv_tabs, 2)
         equip_wrapper = QWidget()
         self.equip_wrapper = equip_wrapper
@@ -1997,6 +2001,14 @@ class PlayerInventoryTab(QWidget):
             self.parent_window.refresh_all()
     def _on_tech_changed(self):
         pass
+    def _on_tab_changed(self, idx):
+        if not self.current_player_uid:
+            return
+        uid = self.current_player_uid
+        if idx == 3:
+            self.missions_panel.load_player(uid)
+        elif idx == 4:
+            self.tech_panel.load_player(uid)
     def refresh_players(self):
         self._player_list = []
         self.current_player_uid = None
@@ -2015,8 +2027,6 @@ class PlayerInventoryTab(QWidget):
             self.current_player_uid = uid
             self.current_player_name = name
             self.modified = False
-            self.missions_panel.load_player(uid)
-            self.tech_panel.load_player(uid)
             return get_player_inventory(self.current_player_uid)
         def on_finished(inv):
             self.inventory = inv
@@ -2033,8 +2043,6 @@ class PlayerInventoryTab(QWidget):
             return
         self.current_player_uid = uid
         self.current_player_name = name
-        self.missions_panel.load_player(uid)
-        self.tech_panel.load_player(uid)
         self.player_select_btn.setText(display)
         self.modified = False
         self._show_inventory()
@@ -2066,8 +2074,6 @@ class PlayerInventoryTab(QWidget):
             self.current_player_name = name
             self.player_select_btn.setText(display)
             self.modified = False
-            self.missions_panel.load_player(uid)
-            self.tech_panel.load_player(uid)
             if hasattr(self.parent_window, 'pal_editor_tab'):
                 self._syncing = True
                 self.parent_window.pal_editor_tab._select_player_ref_only(uid, name, display)
@@ -3134,10 +3140,11 @@ class QuantityDialog(QDialog):
         self.setFixedSize(280, 120)
         self.setStyleSheet(DARK_THEME_STYLE)
         layout = QVBoxLayout(self)
-        self.spin_box = QSpinBox()
-        self.spin_box.setRange(1, max_val if max_val is not None else constants.MAX_QUANTITY)
-        self.spin_box.setValue(current_qty)
-        layout.addWidget(self.spin_box)
+        max_q = max_val if max_val is not None else constants.MAX_QUANTITY
+        self.qty_input = QLineEdit(str(current_qty))
+        self.qty_input.setValidator(QIntValidator(1, max_q))
+        self.qty_input.setStyleSheet('QLineEdit { background: rgba(255,255,255,0.06); color: #e2e8f0; border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; padding: 4px 8px; font-size: 14px; }')
+        layout.addWidget(self.qty_input)
         btn_layout = QHBoxLayout()
         ok_btn = QPushButton(t('button.ok', default='OK'))
         ok_btn.clicked.connect(self.accept)
@@ -3147,7 +3154,10 @@ class QuantityDialog(QDialog):
         btn_layout.addStretch()
         layout.addLayout(btn_layout)
     def get_quantity(self) -> int:
-        return self.spin_box.value()
+        try:
+            return int(self.qty_input.text())
+        except ValueError:
+            return 1
 from resource_resolver import get_user_config_dir
 _INV_LOADOUTS_PATH = os.path.join(get_user_config_dir(), 'inventory_loadouts.json')
 _EQ_LOADOUTS_PATH = os.path.join(get_user_config_dir(), 'equipment_loadouts.json')

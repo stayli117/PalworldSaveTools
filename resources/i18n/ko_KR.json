@@ -1958,5 +1958,6 @@
     "inventory.missions_completed": "완료된 임무",
     "inventory.missions_not_started": "시작되지 않음",
     "edit_pals.add_active_skill": "액티브 스킬 추가",
-    "inventory.technology": "기술"
+    "inventory.technology": "기술",
+    "player_technology.applied": "{players} 플레이어에 {count} 기술을 적용했습니다."
 }

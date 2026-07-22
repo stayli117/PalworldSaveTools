@@ -2246,5 +2246,6 @@
     "inventory.missions_completed": "Missões Concluídas",
     "inventory.missions_not_started": "Não iniciado",
     "edit_pals.add_active_skill": "Adicionar habilidade ativa",
-    "inventory.technology": "Tecnologia"
+    "inventory.technology": "Tecnologia",
+    "player_technology.applied": "Aplicou tecnologia(s) {count} ao(s) jogador(es) {players}."
 }

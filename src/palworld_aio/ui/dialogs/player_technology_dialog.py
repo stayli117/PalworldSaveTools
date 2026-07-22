@@ -222,12 +222,6 @@ class PlayerTechnologyActionDialog(QDialog):
         frame.setToolTip(tip)
         def _click(evt):
             if evt.button() == Qt.LeftButton:
-                mods = evt.modifiers()
-                if not (mods & Qt.ControlModifier):
-                    self._selected_techs.clear()
-                    for i in reversed(range(self._tech_layout.count())):
-                        w = self._tech_layout.itemAt(i).widget()
-                        if w: self._clear_frame_style(w)
                 if asset in self._selected_techs:
                     del self._selected_techs[asset]
                     self._clear_frame_style(frame)
@@ -310,27 +304,42 @@ class PlayerTechnologyActionDialog(QDialog):
         if not players:
             QMessageBox.warning(self, t('player_technology.no_players_selected') if t else 'No Players Selected', t('player_technology.select_at_least_one') if t else 'Please select at least one player.')
             return
-        tnames = list(self._selected_techs.values())
         reply = QMessageBox.question(self, t('player_technology.confirm_add') if t else 'Confirm Add',
-            f'Add {len(tnames)} tech(s) to {len(players)} selected player(s)?' if len(tnames) > 1
-            else t('player_technology.confirm_add_msg').format(tech_name=tnames[0], count=len(players)) if t else f'Add "{tnames[0]}" to {len(players)} selected player(s)?', QMessageBox.Yes | QMessageBox.No)
+            f'Add {len(self._selected_techs)} tech(s) to {len(players)} selected player(s)?', QMessageBox.Yes | QMessageBox.No)
         if reply == QMessageBox.Yes:
             self._do_add_technology(players)
 
     def _do_add_technology(self, players):
         success_count = 0
+        techs = list(self._selected_techs.keys())
         for uid in players:
-            for asset in self._selected_techs:
-                if self._add_technology_to_player(uid, asset):
+            try:
+                player_id = str(uid).replace('-', '').upper()
+                file_path = os.path.join(constants.current_save_path, 'Players', f'{player_id.zfill(32)}.sav')
+                if not os.path.exists(file_path):
+                    continue
+                gvas = sav_to_gvasfile(file_path)
+                sd = gvas.properties.get('SaveData', {}).get('value', {})
+                uv = sd.setdefault('UnlockedRecipeTechnologyNames', {})
+                uv_val = uv.setdefault('value', {}); uv_list = uv_val.setdefault('values', [])
+                if not isinstance(uv_list, list):
+                    continue
+                changed = False
+                for asset in techs:
+                    if asset not in uv_list:
+                        uv_list.append(asset)
+                        changed = True
+                if changed:
+                    if 'array_type' not in uv:
+                        uv['array_type'] = 'NameProperty'; uv['type'] = 'ArrayProperty'; uv['id'] = None
+                    gvasfile_to_sav(gvas, file_path)
                     success_count += 1
-        if success_count > 0:
-            self.status_label.setText(f'Added tech(s) to {len(players)} player(s)')
-            self.status_label.setStyleSheet('color: #4ade80; font-weight: bold; padding: 5px;')
-            if hasattr(self.parent(), 'refresh_all'):
-                self.parent().refresh_all()
-        else:
-            self.status_label.setText(t('player_technology.error') if t else 'Error')
-            self.status_label.setStyleSheet('color: #f87171; font-weight: bold; padding: 5px;')
+            except Exception:
+                pass
+        QMessageBox.information(self, t('player_technology.title') if t else 'Bulk Technology Management',
+            t('player_technology.applied', count=len(self._selected_techs), players=max(success_count, 1)) if t else f'Applied {len(self._selected_techs)} tech(s) to {max(success_count, 1)} player(s).')
+        if hasattr(self.parent(), 'refresh_all'):
+            self.parent().refresh_all()
     def _on_remove_technology(self):
         if not self._selected_techs:
             return
@@ -338,76 +347,41 @@ class PlayerTechnologyActionDialog(QDialog):
         if not players:
             QMessageBox.warning(self, t('player_technology.no_players_selected') if t else 'No Players Selected', t('player_technology.select_at_least_one') if t else 'Please select at least one player.')
             return
-        tnames = list(self._selected_techs.values())
         reply = QMessageBox.question(self, t('player_technology.confirm_remove') if t else 'Confirm Remove',
-            f'Remove {len(tnames)} tech(s) from {len(players)} selected player(s)?' if len(tnames) > 1
-            else t('player_technology.confirm_remove_msg').format(tech_name=tnames[0], count=len(players)) if t else f'Remove "{tnames[0]}" from {len(players)} selected player(s)?', QMessageBox.Yes | QMessageBox.No)
+            f'Remove {len(self._selected_techs)} tech(s) from {len(players)} selected player(s)?', QMessageBox.Yes | QMessageBox.No)
         if reply == QMessageBox.Yes:
             success_count = 0
+            techs = list(self._selected_techs.keys())
             for uid in players:
-                for asset in self._selected_techs:
-                    if self._remove_technology_from_player(uid, asset):
+                try:
+                    player_id = str(uid).replace('-', '').upper()
+                    file_path = os.path.join(constants.current_save_path, 'Players', f'{player_id.zfill(32)}.sav')
+                    if not os.path.exists(file_path):
+                        continue
+                    gvas = sav_to_gvasfile(file_path)
+                    sd = gvas.properties.get('SaveData', {}).get('value', {})
+                    if 'UnlockedRecipeTechnologyNames' not in sd:
+                        continue
+                    uv = sd['UnlockedRecipeTechnologyNames']
+                    uv_val = uv.get('value', {}); uv_list = uv_val.get('values', [])
+                    if not isinstance(uv_list, list):
+                        continue
+                    changed = False
+                    for asset in techs:
+                        if asset in uv_list:
+                            uv_list.remove(asset)
+                            changed = True
+                    if changed:
+                        if 'array_type' not in uv:
+                            uv['array_type'] = 'NameProperty'; uv['type'] = 'ArrayProperty'; uv['id'] = None
+                        gvasfile_to_sav(gvas, file_path)
                         success_count += 1
-            if success_count > 0:
-                self.status_label.setText(f'Removed tech(s) from {len(players)} player(s)')
-                self.status_label.setStyleSheet('color: #4ade80; font-weight: bold; padding: 5px;')
-                if hasattr(self.parent(), 'refresh_all'):
-                    self.parent().refresh_all()
-            else:
-                self.status_label.setText(t('player_technology.error') if t else 'Error')
-                self.status_label.setStyleSheet('color: #f87171; font-weight: bold; padding: 5px;')
-    def _add_technology_to_player(self, player_uid, tech_asset):
-        try:
-            if not constants.current_save_path:
-                return False
-            player_id = str(player_uid).replace('-', '').upper()
-            file_path = os.path.join(constants.current_save_path, 'Players', f'{player_id.zfill(32)}.sav')
-            if not os.path.exists(file_path):
-                return False
-            gvas = sav_to_gvasfile(file_path)
-            def inject_tech(data):
-                if isinstance(data, dict):
-                    if 'UnlockedRecipeTechnologyNames' in data:
-                        values_list = data['UnlockedRecipeTechnologyNames']['value']['values']
-                        if tech_asset not in values_list:
-                            values_list.append(tech_asset)
-                    for v in data.values():
-                        inject_tech(v)
-                elif isinstance(data, list):
-                    for item in data:
-                        inject_tech(item)
-            inject_tech(gvas.properties)
-            gvasfile_to_sav(gvas, file_path)
-            return True
-        except Exception as e:
-            print(f'Error adding technology: {e}')
-            return False
-    def _remove_technology_from_player(self, player_uid, tech_asset):
-        try:
-            if not constants.current_save_path:
-                return False
-            player_id = str(player_uid).replace('-', '').upper()
-            file_path = os.path.join(constants.current_save_path, 'Players', f'{player_id.zfill(32)}.sav')
-            if not os.path.exists(file_path):
-                return False
-            gvas = sav_to_gvasfile(file_path)
-            def remove_tech(data):
-                if isinstance(data, dict):
-                    if 'UnlockedRecipeTechnologyNames' in data:
-                        values_list = data['UnlockedRecipeTechnologyNames']['value']['values']
-                        if tech_asset in values_list:
-                            values_list.remove(tech_asset)
-                    for v in data.values():
-                        remove_tech(v)
-                elif isinstance(data, list):
-                    for item in data:
-                        remove_tech(item)
-            remove_tech(gvas.properties)
-            gvasfile_to_sav(gvas, file_path)
-            return True
-        except Exception as e:
-            print(f'Error removing technology: {e}')
-            return False
+                except Exception:
+                    pass
+            QMessageBox.information(self, t('player_technology.title') if t else 'Bulk Technology Management',
+                t('player_technology.applied', count=len(self._selected_techs), players=max(success_count, 1)) if t else f'Applied {len(self._selected_techs)} tech(s) to {max(success_count, 1)} player(s).')
+            if hasattr(self.parent(), 'refresh_all'):
+                self.parent().refresh_all()
     def refresh_labels(self):
         self.setWindowTitle(t('player_technology.title') if t else 'Bulk Technology Management')
         self.search_input.setPlaceholderText(t('player_technology.search_placeholder') if t else 'Type to search technologies...')

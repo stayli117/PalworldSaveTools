@@ -1983,5 +1983,6 @@
     "inventory.missions_completed": "Abgeschlossene Missionen",
     "inventory.missions_not_started": "Nicht gestartet",
     "edit_pals.add_active_skill": "Aktiven Skill hinzufügen",
-    "inventory.technology": "Technologie"
+    "inventory.technology": "Technologie",
+    "player_technology.applied": "{count} Technologie(n) auf {players} Spieler angewendet."
 }

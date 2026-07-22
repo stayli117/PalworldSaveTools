@@ -1941,5 +1941,6 @@
     "inventory.missions_completed": "Missions terminées",
     "inventory.missions_not_started": "Non démarré",
     "edit_pals.add_active_skill": "Ajouter une compétence active",
-    "inventory.technology": "Technologie"
+    "inventory.technology": "Technologie",
+    "player_technology.applied": "Application de la ou des technologies {count} au(x) joueur(s) {players}."
 }

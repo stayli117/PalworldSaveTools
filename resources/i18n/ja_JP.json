@@ -1958,5 +1958,6 @@
     "inventory.missions_active": "アクティブなミッション",
     "inventory.missions_completed": "完了したミッション",
     "inventory.missions_not_started": "未開始",
-    "edit_pals.add_active_skill": "アクティブスキルの追加"
+    "edit_pals.add_active_skill": "アクティブスキルの追加",
+    "inventory.technology": "テクノロジー"
 }

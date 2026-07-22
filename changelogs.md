@@ -3,6 +3,7 @@
 - **Missions tab in Player Inventory** — new Missions subtab (next to Stats) shows all 120 quests from the game data, grouped by status (Not Started / Active / Completed). Select individual quests or use Select All/Deselect All to complete or reset them. Each quest displays its type badge (Main/Sub/Hidden), derived name, and internal ID. Works on per-player save data, writes directly to CompletedQuestArray_FullRelease.
 - **Food buff stats in pal editor** — pal stat calculations now factor in active food buffs (Attack/Defense/WorkSpeed) from `FoodWithStatusEffect`. A third row in the pal info panel shows buff timer icons when a food buff is active, matching the in-game UI.
 - **Add individual skills in Learned Moves dialog** — new `+` button opens the skill picker to add a single skill to `MasteredWaza`, instead of only having Learn All then remove one by one.
+- **Technology tab in Player Inventory** — new Technology subtab (5th, after Missions) shows all 588 techs grouped by level cap with a grid matching in-game UX: level badge, 8 regular techs per row, divider, ancient tech column. Click to toggle unlock, Select All / Deselect All / Apply buttons. Tech Point and Ancient Tech Point spinners included. Writes to player `.sav`.
 - Bumped version to 2.2.0
 
 #2.1.9

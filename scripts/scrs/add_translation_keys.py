@@ -20,6 +20,7 @@ NEW_TRANSLATIONS = {
     'inventory.missions_completed': 'Completed Missions',
     'inventory.missions_not_started': 'Not Started',
     'edit_pals.add_active_skill': 'Add Active Skill',
+    'inventory.technology': 'Technology',
 }
 OLD_KEYS = []
 def _clean_uv_locks():

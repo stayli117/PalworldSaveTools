@@ -1952,5 +1952,6 @@
     "inventory.missions_active": "Misiones activas",
     "inventory.missions_completed": "Misiones completadas",
     "inventory.missions_not_started": "No iniciado",
-    "edit_pals.add_active_skill": "Agregar habilidad activa"
+    "edit_pals.add_active_skill": "Agregar habilidad activa",
+    "inventory.technology": "Tecnología"
 }

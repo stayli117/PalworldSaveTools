@@ -1033,6 +1033,233 @@ class MissionPanelWidget(QFrame):
         self._save(gvas)
         self._completed_set.difference_update(to_reset)
         self._rebuild_list()
+class TechnologyPanelWidget(QFrame):
+    tech_changed = Signal()
+    BUTTON_SIZE = 76
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self._player_uid = None
+        self._tech_data = []
+        self._unlocked = set()
+        self._tp_value = 0; self._atp_value = 0
+        self._setup_ui()
+        self._load_tech_data()
+    def _load_tech_data(self):
+        try:
+            base_dir = constants.get_base_path()
+            fp = resource_path(base_dir, 'game_data', 'world.json')
+            with open(fp, encoding='utf-8') as f:
+                data = json.load(f)
+            self._tech_data = data.get('technology', [])
+        except Exception:
+            self._tech_data = []
+    def _grouped_techs(self):
+        groups = {}
+        for t in self._tech_data:
+            lc = t.get('level_cap', 0)
+            bt = t.get('is_boss_tech', False)
+            if lc not in groups:
+                groups[lc] = {'regular': [], 'ancient': None}
+            if bt:
+                groups[lc]['ancient'] = t
+            else:
+                groups[lc]['regular'].append(t)
+        return dict(sorted(groups.items()))
+    def _uid_filename(self, uid):
+        return str(uid).replace('-', '').upper()
+    def load_player(self, uid):
+        self._player_uid = uid
+        self._unlocked = set(); self._tp_value = 0; self._atp_value = 0
+        try:
+            from palworld_aio.utils import sav_to_gvasfile
+            save_path = os.path.join(constants.current_save_path, 'Players', f'{self._uid_filename(uid)}.sav')
+            if not os.path.exists(save_path):
+                self._rebuild(); return
+            gvas = sav_to_gvasfile(save_path)
+            sd = gvas.properties.get('SaveData', {}).get('value', {})
+            uv = sd.get('UnlockedRecipeTechnologyNames', {}).get('value', {}).get('values', [])
+            if isinstance(uv, list):
+                self._unlocked = {str(v) for v in uv}
+            self._tp_value = int(sd.get('TechnologyPoint', {}).get('value', 0))
+            self._atp_value = int(sd.get('bossTechnologyPoint', {}).get('value', 0))
+        except Exception:
+            pass
+        self._rebuild()
+    def clear(self):
+        self._player_uid = None; self._unlocked = set()
+        self._tp_value = 0; self._atp_value = 0
+        self._rebuild()
+    def _setup_ui(self):
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(6, 6, 6, 6); layout.setSpacing(4)
+        top = QHBoxLayout()
+        self._tp_label = QLabel('Tech Points')
+        self._tp_label.setStyleSheet('font-size: 10px; font-weight: bold; color: #7dd3fc;')
+        top.addWidget(self._tp_label)
+        self._tp_spin = QSpinBox()
+        self._tp_spin.setRange(0, 9999999); self._tp_spin.setFixedWidth(100)
+        self._tp_spin.valueChanged.connect(self._save_tp)
+        top.addWidget(self._tp_spin)
+        top.addSpacing(16)
+        self._atp_label = QLabel('Ancient Tech Points')
+        self._atp_label.setStyleSheet('font-size: 10px; font-weight: bold; color: #a78bfa;')
+        top.addWidget(self._atp_label)
+        self._atp_spin = QSpinBox()
+        self._atp_spin.setRange(0, 9999999); self._atp_spin.setFixedWidth(100)
+        self._atp_spin.valueChanged.connect(self._save_atp)
+        top.addWidget(self._atp_spin)
+        top.addStretch()
+        self._sel_all_btn = QPushButton(t('player_technology.select_all', default='Select All'))
+        self._sel_all_btn.setFixedHeight(22)
+        self._sel_all_btn.setStyleSheet('QPushButton { background: rgba(74,222,128,0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.2); border-radius: 4px; padding: 2px 8px; font-weight: 600; font-size: 9px; } QPushButton:hover { background: rgba(74,222,128,0.2); color: #FFFFFF; }')
+        self._sel_all_btn.setCursor(Qt.PointingHandCursor)
+        self._sel_all_btn.clicked.connect(self._select_all)
+        top.addWidget(self._sel_all_btn)
+        self._desel_all_btn = QPushButton(t('player_technology.deselect_all', default='Deselect All'))
+        self._desel_all_btn.setFixedHeight(22)
+        self._desel_all_btn.setStyleSheet('QPushButton { background: rgba(251,113,133,0.12); color: #FB7185; border: 1px solid rgba(251,113,133,0.2); border-radius: 4px; padding: 2px 8px; font-weight: 600; font-size: 9px; } QPushButton:hover { background: rgba(251,113,133,0.2); color: #FFFFFF; }')
+        self._desel_all_btn.setCursor(Qt.PointingHandCursor)
+        self._desel_all_btn.clicked.connect(self._deselect_all)
+        top.addWidget(self._desel_all_btn)
+        self._apply_btn = QPushButton(t('button.apply', default='Apply'))
+        self._apply_btn.setFixedHeight(22)
+        self._apply_btn.setStyleSheet('QPushButton { background: rgba(125,211,252,0.12); color: #7DD3FC; border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; padding: 2px 8px; font-weight: 600; font-size: 9px; } QPushButton:hover { background: rgba(125,211,252,0.2); color: #FFFFFF; }')
+        self._apply_btn.setCursor(Qt.PointingHandCursor)
+        self._apply_btn.clicked.connect(self._apply_changes)
+        top.addWidget(self._apply_btn)
+        layout.addLayout(top)
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setStyleSheet('QScrollArea { border: none; background: transparent; }')
+        self._scroll_ct = QWidget()
+        self._scroll_layout = QVBoxLayout(self._scroll_ct)
+        self._scroll_layout.setContentsMargins(0, 0, 0, 0); self._scroll_layout.setSpacing(6)
+        self._scroll_layout.addStretch()
+        scroll.setWidget(self._scroll_ct)
+        layout.addWidget(scroll, 1)
+    def _rebuild(self):
+        for i in reversed(range(self._scroll_layout.count())):
+            w = self._scroll_layout.itemAt(i).widget()
+            if w: w.deleteLater()
+        self._tp_spin.blockSignals(True); self._atp_spin.blockSignals(True)
+        self._tp_spin.setValue(self._tp_value); self._atp_spin.setValue(self._atp_value)
+        self._tp_spin.blockSignals(False); self._atp_spin.blockSignals(False)
+        groups = self._grouped_techs()
+        for lc, g in groups.items():
+            row_w = QWidget()
+            row_w.setStyleSheet('QWidget:hover { background: rgba(255,255,255,0.02); }')
+            rl = QHBoxLayout(row_w); rl.setContentsMargins(0, 0, 0, 0); rl.setSpacing(4)
+            badge = QLabel(str(lc))
+            badge.setFixedSize(36, self.BUTTON_SIZE)
+            badge.setAlignment(Qt.AlignCenter)
+            badge.setStyleSheet('font-size: 13px; font-weight: 700; color: #fbbf24; border: 2px solid rgba(251,191,36,0.3); border-radius: 6px; background: rgba(251,191,36,0.06);')
+            rl.addWidget(badge)
+            for tech in g['regular']:
+                rl.addWidget(self._make_tech_button(tech))
+            for _ in range(max(0, 8 - len(g['regular']))):
+                ph = QWidget(); ph.setFixedSize(self.BUTTON_SIZE, self.BUTTON_SIZE); rl.addWidget(ph)
+            div = QFrame()
+            div.setFrameShape(QFrame.VLine)
+            div.setStyleSheet('background: rgba(167,139,250,0.3); max-width: 1px;')
+            div.setFixedWidth(1)
+            rl.addWidget(div)
+            if g['ancient']:
+                rl.addWidget(self._make_tech_button(g['ancient']))
+            else:
+                ph = QWidget()
+                ph.setFixedSize(self.BUTTON_SIZE, self.BUTTON_SIZE)
+                ph.setStyleSheet('background: rgba(167,139,250,0.04); border: 1px dashed rgba(167,139,250,0.1); border-radius: 4px;')
+                rl.addWidget(ph)
+            rl.addStretch()
+            self._scroll_layout.addWidget(row_w)
+        self._scroll_layout.addStretch()
+        self._scroll_ct.update()
+    def _make_tech_button(self, tech):
+        asset = tech.get('asset', '')
+        unlocked = asset in self._unlocked
+        frame = QFrame()
+        frame.setFixedSize(self.BUTTON_SIZE, self.BUTTON_SIZE)
+        frame.setCursor(Qt.PointingHandCursor)
+        frame.setToolTip(f'<b>{tech.get("name", "")}</b><br><br>{tech.get("description", "")}<br><br>Level {tech.get("level_cap",0)}  Cost: {tech.get("cost",0)}')
+        fg = '#e2e8f0' if unlocked else '#555'
+        bg = 'rgba(125,211,252,0.06)' if unlocked else 'rgba(255,255,255,0.03)'
+        bd = '1px solid rgba(125,211,252,0.2)' if unlocked else '1px solid rgba(255,255,255,0.06)'
+        frame.setStyleSheet(f'QFrame {{ background: {bg}; border: {bd}; border-radius: 4px; }} QFrame:hover {{ background: rgba(125,211,252,0.12); }}')
+        vl = QVBoxLayout(frame); vl.setContentsMargins(2, 2, 2, 2); vl.setSpacing(0)
+        icon = tech.get('icon', '')
+        if icon:
+            base_dir = constants.get_base_path()
+            fp = resource_path(base_dir, 'game_data', icon.lstrip('/'))
+            if os.path.exists(fp):
+                pix = QPixmap(fp)
+                il = QLabel()
+                il.setPixmap(pix.scaled(36, 36, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+                il.setAlignment(Qt.AlignCenter)
+                vl.addWidget(il, 1)
+        if not unlocked:
+            cl = QLabel(str(tech.get('cost', 0)))
+            cl.setAlignment(Qt.AlignCenter)
+            cl.setStyleSheet(f'font-size: 9px; font-weight: 700; color: #fbbf24; background: transparent;')
+            vl.addWidget(cl)
+        nl = QLabel(tech.get('name', ''))
+        nl.setAlignment(Qt.AlignCenter)
+        nl.setStyleSheet(f'font-size: 7px; color: {fg}; background: transparent;')
+        vl.addWidget(nl)
+        def _click(evt):
+            if evt.button() == Qt.LeftButton:
+                self._toggle_tech(asset, unlocked)
+            super(QFrame, frame).mousePressEvent(evt)
+        frame.mousePressEvent = _click
+        return frame
+    def _toggle_tech(self, asset, currently_unlocked):
+        if currently_unlocked:
+            self._unlocked.discard(asset)
+        else:
+            self._unlocked.add(asset)
+        self._rebuild()
+    def _save_tp(self, val):
+        if not self._player_uid: return
+        from palworld_aio.managers.player_manager import set_player_tech_points
+        set_player_tech_points(self._player_uid, val)
+    def _save_atp(self, val):
+        if not self._player_uid: return
+        from palworld_aio.managers.player_manager import set_player_boss_tech_points
+        set_player_boss_tech_points(self._player_uid, val)
+    def _select_all(self):
+        self._unlocked = {t.get('asset', '') for t in self._tech_data if t.get('asset')}
+        self._rebuild()
+    def _deselect_all(self):
+        self._unlocked.clear()
+        self._rebuild()
+    def _apply_changes(self):
+        if not self._player_uid: return
+        from palworld_aio.utils import sav_to_gvasfile, gvasfile_to_sav
+        save_path = os.path.join(constants.current_save_path, 'Players', f'{self._uid_filename(self._player_uid)}.sav')
+        try:
+            gvas = sav_to_gvasfile(save_path)
+            sd = gvas.properties.get('SaveData', {}).get('value', {})
+            uv = sd.setdefault('UnlockedRecipeTechnologyNames', {})
+            uv_val = uv.setdefault('value', {}); uv_list = uv_val.setdefault('values', [])
+            if not isinstance(uv_list, list): return
+            uv_list[:] = list(self._unlocked)
+            if 'array_type' not in uv:
+                uv['array_type'] = 'NameProperty'; uv['type'] = 'ArrayProperty'; uv['id'] = None
+            if 'TechnologyPoint' not in sd:
+                sd['TechnologyPoint'] = {'id': None, 'value': 0, 'type': 'IntProperty'}
+            sd['TechnologyPoint']['value'] = self._tp_spin.value()
+            if 'bossTechnologyPoint' not in sd:
+                sd['bossTechnologyPoint'] = {'id': None, 'value': 0, 'type': 'IntProperty'}
+            sd['bossTechnologyPoint']['value'] = self._atp_spin.value()
+            gvasfile_to_sav(gvas, save_path)
+            self.tech_changed.emit()
+        except Exception:
+            pass
+    def refresh_labels(self):
+        self._tp_label.setText(t('player.tech_points', default='Tech Points'))
+        self._atp_label.setText(t('player.boss_tech_points', default='Ancient Tech Points'))
+        self._sel_all_btn.setText(t('player_technology.select_all', default='Select All'))
+        self._desel_all_btn.setText(t('player_technology.deselect_all', default='Deselect All'))
+        self._apply_btn.setText(t('button.apply', default='Apply'))
 class InventoryGridWidget(QWidget):
     item_added = Signal(int, str, int)
     item_removed = Signal(int, int)
@@ -1598,6 +1825,14 @@ class PlayerInventoryTab(QWidget):
         self.missions_panel.missions_changed.connect(self._on_missions_changed)
         missions_tab_layout.addWidget(self.missions_panel)
         self.inv_tabs.addTab(self.missions_tab, t('inventory.missions', default='Missions'))
+        self.tech_tab = QWidget()
+        tech_tab_layout = QHBoxLayout(self.tech_tab)
+        tech_tab_layout.setContentsMargins(6, 6, 6, 6)
+        tech_tab_layout.setSpacing(10)
+        self.tech_panel = TechnologyPanelWidget()
+        self.tech_panel.tech_changed.connect(self._on_tech_changed)
+        tech_tab_layout.addWidget(self.tech_panel)
+        self.inv_tabs.addTab(self.tech_tab, t('inventory.technology', default='Technology'))
         inner_content.addWidget(self.inv_tabs, 2)
         equip_wrapper = QWidget()
         self.equip_wrapper = equip_wrapper
@@ -1753,6 +1988,8 @@ class PlayerInventoryTab(QWidget):
             return
         if hasattr(self.parent_window, 'refresh_all'):
             self.parent_window.refresh_all()
+    def _on_tech_changed(self):
+        pass
     def refresh_players(self):
         self._player_list = []
         self.current_player_uid = None
@@ -1772,6 +2009,7 @@ class PlayerInventoryTab(QWidget):
             self.current_player_name = name
             self.modified = False
             self.missions_panel.load_player(uid)
+            self.tech_panel.load_player(uid)
             return get_player_inventory(self.current_player_uid)
         def on_finished(inv):
             self.inventory = inv
@@ -1789,6 +2027,7 @@ class PlayerInventoryTab(QWidget):
         self.current_player_uid = uid
         self.current_player_name = name
         self.missions_panel.load_player(uid)
+        self.tech_panel.load_player(uid)
         self.player_select_btn.setText(display)
         self.modified = False
         self._show_inventory()
@@ -1821,6 +2060,7 @@ class PlayerInventoryTab(QWidget):
             self.player_select_btn.setText(display)
             self.modified = False
             self.missions_panel.load_player(uid)
+            self.tech_panel.load_player(uid)
             if hasattr(self.parent_window, 'pal_editor_tab'):
                 self._syncing = True
                 self.parent_window.pal_editor_tab._select_player_ref_only(uid, name, display)
@@ -1867,6 +2107,7 @@ class PlayerInventoryTab(QWidget):
         self.key_grid.load_items([])
         self.stats_panel.clear()
         self.missions_panel.clear()
+        self.tech_panel.clear()
         for slot_widget in self.equip_slots.values():
             slot_widget.clear_item()
     def _on_add_all_effigies(self):
@@ -2857,7 +3098,9 @@ class PlayerInventoryTab(QWidget):
         self.inv_tabs.setTabText(1, t('inventory.key_items', default='Key Items'))
         self.inv_tabs.setTabText(2, t('inventory.stats', default='Stats'))
         self.inv_tabs.setTabText(3, t('inventory.missions', default='Missions'))
+        self.inv_tabs.setTabText(4, t('inventory.technology', default='Technology'))
         self.missions_panel.refresh_labels()
+        self.tech_panel.refresh_labels()
         if not self.current_player_uid:
             self.player_select_btn.setText(t('inventory.select_player', default='Select Player...'))
         self.equip_title.setText(t('inventory.equipment', default='Equipment'))

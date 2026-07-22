@@ -1960,5 +1960,6 @@
     "inventory.missions_active": "活跃任务",
     "inventory.missions_completed": "已完成的任务",
     "inventory.missions_not_started": "未开始",
-    "edit_pals.add_active_skill": "添加主动技能"
+    "edit_pals.add_active_skill": "添加主动技能",
+    "inventory.technology": "技术"
 }

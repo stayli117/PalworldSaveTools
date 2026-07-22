@@ -92,14 +92,14 @@ class NavItem(QPushButton):
         if self._expanded:
             text = self._icon_code
             br = fm.boundingRect(text)
-            x = 8 - br.x()
+            x = 16 - br.x()
             y = (self.height() - br.height()) / 2 - br.y()
             p.drawText(int(x), int(y), text)
             label_font = QFont(constants.FONT_FAMILY_NERD, 7)
             p.setFont(label_font)
             p.setPen(self.palette().color(self.foregroundRole()))
             lfm = QFontMetrics(label_font)
-            lx = 34
+            lx = 42
             ly = (self.height() - lfm.height()) / 2 + lfm.ascent()
             p.drawText(int(lx), int(ly), self._label)
         else:
@@ -111,8 +111,8 @@ class NavItem(QPushButton):
         if self.property('active'):
             p = QPainter(self)
             p.setRenderHint(QPainter.Antialiasing)
-            pw, ph = (4, 20)
-            px, py = (3, (self.height() - ph) // 2)
+            pw, ph = (5, 24)
+            px, py = (5, (self.height() - ph) // 2)
             p.setPen(Qt.NoPen)
             p.setBrush(QBrush(QColor('#7DD3FC')))
             p.drawRoundedRect(px, py, pw, ph, pw / 2, pw / 2)
@@ -172,7 +172,7 @@ class BottomBtn(QPushButton):
         if self._expanded:
             text = self._icon_code
             br = fm.boundingRect(text)
-            x = 8 - br.x()
+            x = 16 - br.x()
             y = (self.height() - br.height()) / 2 - br.y()
             p.drawText(int(x), int(y), text)
             if self._label:
@@ -180,7 +180,7 @@ class BottomBtn(QPushButton):
                 p.setFont(label_font)
                 p.setPen(self.palette().color(self.foregroundRole()))
                 lfm = QFontMetrics(label_font)
-                lx = 38
+                lx = 46
                 ly = (self.height() - lfm.height()) / 2 + lfm.ascent()
                 p.drawText(int(lx), int(ly), self._label)
         else:
@@ -192,8 +192,8 @@ class BottomBtn(QPushButton):
         if self.property('active'):
             p = QPainter(self)
             p.setRenderHint(QPainter.Antialiasing)
-            pw, ph = (4, 20)
-            px, py = (3, (self.height() - ph) // 2)
+            pw, ph = (5, 24)
+            px, py = (5, (self.height() - ph) // 2)
             p.setPen(Qt.NoPen)
             p.setBrush(QBrush(QColor('#7DD3FC')))
             p.drawRoundedRect(px, py, pw, ph, pw / 2, pw / 2)
@@ -232,8 +232,8 @@ class SidebarWidget(QWidget):
         self._console_btn.set_label(t('console.detach') if t else 'Console')
         self._console_btn.clicked.connect(self.console_toggled.emit)
         self._layout.addWidget(self._console_btn)
-        self._right_panel_btn = BottomBtn(ICONS['collapse_open'], t('sidebar.close') if t else 'Close Panel')
-        self._right_panel_btn.set_label(t('sidebar.close') if t else 'Close Panel')
+        self._right_panel_btn = BottomBtn(ICONS['collapse_open'], t('sidebar.close') if t else 'Hide Results')
+        self._right_panel_btn.set_label(t('sidebar.close') if t else 'Hide Results')
         self._right_panel_btn.clicked.connect(self._on_right_panel_toggle)
         self._right_panel_btn.set_active(True)
         self._layout.addWidget(self._right_panel_btn)
@@ -285,12 +285,12 @@ class SidebarWidget(QWidget):
     def _update_right_panel_icon(self):
         if self._right_panel_visible:
             self._right_panel_btn.set_icon(ICONS['collapse_open'])
-            self._right_panel_btn.set_label(t('sidebar.close') if t else 'Close Panel')
-            self._right_panel_btn.setToolTip(t('sidebar.close') if t else 'Close Panel' if self._collapsed else '')
+            self._right_panel_btn.set_label(t('sidebar.close') if t else 'Hide Results')
+            self._right_panel_btn.setToolTip(t('sidebar.close') if t else 'Hide Results' if self._collapsed else '')
         else:
             self._right_panel_btn.set_icon(ICONS['collapse_close'])
-            self._right_panel_btn.set_label(t('sidebar.open') if t else 'Open Panel')
-            self._right_panel_btn.setToolTip(t('sidebar.open') if t else 'Open Panel' if self._collapsed else '')
+            self._right_panel_btn.set_label(t('sidebar.open') if t else 'Show Results')
+            self._right_panel_btn.setToolTip(t('sidebar.open') if t else 'Show Results' if self._collapsed else '')
     def refresh_labels(self):
         nav_keys = {'tools': 'tools_tab', 'map': 'map.viewer', 'base_inventory': 'base_inventory.tab', 'player_inventory': 'inventory.tab', 'pal_editor': 'pal_editor.tab', 'players': 'deletion.search_players', 'guilds': 'deletion.search_guilds', 'bases': 'deletion.search_bases', 'exclusions': 'deletion.menu.exclusions', 'json_editor': 'json_editor.tab', 'breeding': 'breeding.tab', 'docs': 'docs.tab'}
         for btn_id, btn in self._buttons.items():

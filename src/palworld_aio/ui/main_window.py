@@ -260,8 +260,11 @@ class MainWindow(QMainWindow):
             self.sidebar.set_console_visible(True)
     def _setup_ui(self):
         self.setWindowTitle(t('deletion.title') if t else 'All-in-One Tools')
-        self.setMinimumSize(1448, 800)
-        self.resize(1448, 800)
+        self.setMinimumSize(1200, 750)
+        screen = QApplication.primaryScreen().availableGeometry()
+        w = min(1448, screen.width() - 40)
+        h = min(800, screen.height() - 40)
+        self.resize(w, h)
         self.setWindowFlags(Qt.FramelessWindowHint)
         if os.path.exists(constants.ICON_PATH):
             self.setWindowIcon(QIcon(constants.ICON_PATH))
@@ -319,6 +322,7 @@ class MainWindow(QMainWindow):
         self.splitter.addWidget(self.stacked_widget)
         from .chrome.results_widget import ResultsWidget
         self.results_widget = ResultsWidget()
+        self.results_widget.hide_requested.connect(self._toggle_dashboard)
         self.splitter.addWidget(self.results_widget)
         body_layout.addWidget(self.splitter, stretch=1)
         if self._init_collapse:

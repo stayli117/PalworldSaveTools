@@ -1,10 +1,11 @@
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QFrame, QSizePolicy
-from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QFrame, QSizePolicy, QPushButton
+from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QFont
 from i18n import t
 from palworld_aio import constants
 from palworld_aio.widgets import StatsPanel
 class ResultsWidget(QWidget):
+    hide_requested = Signal()
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setObjectName('resultsWidget')
@@ -35,7 +36,32 @@ class ResultsWidget(QWidget):
         self.results_title.setStyleSheet('QLabel#sectionHeader { margin-left: 0px; padding-left: 10px; }')
         self.results_title.setAlignment(Qt.AlignCenter)
         self.results_title.setFont(QFont(constants.FONT_FAMILY, 14, QFont.Bold))
-        layout.addWidget(self.results_title)
+        title_layout = QHBoxLayout()
+        title_layout.addWidget(self.results_title)
+        self.close_btn = QPushButton('\u2715')
+        self.close_btn.setFixedSize(28, 28)
+        self.close_btn.setToolTip(t('sidebar.close') if t else 'Hide Results')
+        self.close_btn.setObjectName('resultsCloseBtn')
+        self.close_btn.setStyleSheet('''
+            QPushButton#resultsCloseBtn {
+                background: rgba(125,211,252,0.10);
+                color: #7DD3FC;
+                border: 1px solid rgba(125,211,252,0.2);
+                border-radius: 6px;
+                font-size: 14px;
+                font-weight: 600;
+                padding: 0;
+            }
+            QPushButton#resultsCloseBtn:hover {
+                background: rgba(125,211,252,0.2);
+                border-color: rgba(125,211,252,0.4);
+                color: #FFFFFF;
+            }
+        ''')
+        self.close_btn.clicked.connect(self.hide_requested.emit)
+        title_layout.addWidget(self.close_btn)
+        title_layout.addStretch()
+        layout.addLayout(title_layout)
         separator = self._create_gradient_separator()
         layout.addWidget(separator)
         selection_frame = QFrame()

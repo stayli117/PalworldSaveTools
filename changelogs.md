@@ -1,3 +1,9 @@
+#2.1.9
+- **Clear XGP Fog no longer crashes when Steam save path doesn't exist** — the Game Pass fog clearing button now directly clears fog on the extracted save instead of calling the Steam-focused batch function, which crashed with a file-not-found error on Game Pass-only systems.
+- **DPI scaling fixed for Mac and small screens** — window size now adapts to screen geometry (1280×800 to 4K) instead of a hardcoded 1448×800. `QT_SCALE_FACTOR_ROUNDING_POLICY=PassThrough` only applies on macOS to avoid blurry fractional scaling on Windows.
+- **README features summary table** — a compact overview table at the top of the Features section so new visitors can quickly see what the tool does without reading 80+ bullet points. Added to all 9 language versions.
+- Bumped version to 2.1.9
+
 #2.1.8
 - **Fix Illegal Pals now fixes >3 active skills** — the fix function was trimming passive skills and all other illegal stats but skipped `EquipWaza` entirely. Pals with more than 3 active skills are now correctly clamped to the top 3.
 - **Character Transfer no longer loses technology and recipes** — player save data is now fully copied from source to target with identity fields patched in place. Previously only a subset of keys was transferred, missing unlocked recipes, technology data, capture records, and exploration progress.
@@ -5,7 +11,6 @@
 - **Level-2 requirement removed from Character Transfer and Fix Host Save** — both tools no longer block level-1 players from being selected or processed. Useful for testing and fresh characters.
 - **Level editing in Stats tab works for fresh characters** — players without an existing Level field (new/level-1 characters) can now have their level changed without silently breaking the save. The GVAS serializer was crashing on the missing property type metadata, causing File > Save Changes to appear successful while writing nothing. Also fixed the same bug in the Exp field and StatusPoint creation.
 - **Fix Illegal Pals dialog redesigned** — two-column layout with player/guild checkboxes on the left and per-pal detail rows (species icon, name, level, IVs, souls, location) on the right. Click a player to view their illegal pals. Base workers now display guild name and resolved base ID, and are scoped per base for targeted fixing.
-- **Clear XGP Fog no longer crashes when Steam save path doesn't exist** — the Game Pass fog clearing button now directly clears fog on the extracted save instead of calling the Steam-focused batch function, which crashed with a file-not-found error on Game Pass-only systems.
 - Bumped version to 2.1.8
 
 #2.1.7

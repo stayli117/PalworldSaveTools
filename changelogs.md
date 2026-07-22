@@ -1,6 +1,7 @@
 #2.2.0
 - **NPC names now resolve correctly** — generic NPCs (Male_Trader01 variants, Believer_Bat, Hunter_Rifle, etc.) now show proper in-game names like "Villager", "Butcher in Training", "Free Pal Alliance Believer", and "Syndicate Gunner" instead of technical asset names. The game data updater was only looking up `NAME_{npc_id}` directly in the localization table, missing the indirect `OverrideNameTextID` path from `DT_PalHumanParameter.json`. 154 NPCs fixed.
 - **Missions tab in Player Inventory** — new Missions subtab (next to Stats) shows all 120 quests from the game data, grouped by status (Not Started / Active / Completed). Select individual quests or use Select All/Deselect All to complete or reset them. Each quest displays its type badge (Main/Sub/Hidden), derived name, and internal ID. Works on per-player save data, writes directly to CompletedQuestArray_FullRelease.
+- **Food buff stats in pal editor** — pal stat calculations now factor in active food buffs (Attack/Defense/WorkSpeed) from `FoodWithStatusEffect`. A third row in the pal info panel shows buff timer icons when a food buff is active, matching the in-game UI.
 - Bumped version to 2.2.0
 
 #2.1.9

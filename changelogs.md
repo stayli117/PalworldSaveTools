@@ -1,3 +1,7 @@
+#2.2.0
+- **NPC names now resolve correctly** — generic NPCs (Male_Trader01 variants, Believer_Bat, Hunter_Rifle, etc.) now show proper in-game names like "Villager", "Butcher in Training", "Free Pal Alliance Believer", and "Syndicate Gunner" instead of technical asset names. The game data updater was only looking up `NAME_{npc_id}` directly in the localization table, missing the indirect `OverrideNameTextID` path from `DT_PalHumanParameter.json`. 154 NPCs fixed.
+- Bumped version to 2.2.0
+
 #2.1.9
 - **Clear XGP Fog no longer crashes when Steam save path doesn't exist** — the Game Pass fog clearing button now directly clears fog on the extracted save instead of calling the Steam-focused batch function, which crashed with a file-not-found error on Game Pass-only systems.
 - **DPI scaling fixed for Mac and small screens** — window size now adapts to screen geometry (1280×800 to 4K) instead of a hardcoded 1448×800. `QT_SCALE_FACTOR_ROUNDING_POLICY=PassThrough` only applies on macOS to avoid blurry fractional scaling on Windows.

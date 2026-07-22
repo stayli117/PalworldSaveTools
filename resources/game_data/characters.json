@@ -46226,7 +46226,7 @@
             }
         },
         {
-            "name": "Believer Bat",
+            "name": "Free Pal Alliance Believer",
             "asset": "Believer_Bat",
             "icon": "/icons/npcs/T_Believer_icon_normal.webp",
             "stats": {
@@ -46258,7 +46258,7 @@
             }
         },
         {
-            "name": "Believer Bat Camp02",
+            "name": "Free Pal Alliance Believer",
             "asset": "Believer_Bat_Camp02",
             "icon": "/icons/npcs/T_Believer_icon_normal.webp",
             "stats": {
@@ -46290,7 +46290,7 @@
             }
         },
         {
-            "name": "Believer Bat Invader",
+            "name": "Free Pal Alliance Believer",
             "asset": "Believer_Bat_Invader",
             "icon": "/icons/npcs/T_Believer_icon_normal.webp",
             "stats": {
@@ -46322,7 +46322,7 @@
             }
         },
         {
-            "name": "Believer Cross Bow",
+            "name": "Free Pal Alliance Believer",
             "asset": "Believer_CrossBow",
             "icon": "/icons/npcs/T_Believer_icon_normal.webp",
             "stats": {
@@ -46354,7 +46354,7 @@
             }
         },
         {
-            "name": "Believer Cross Bow Camp02",
+            "name": "Free Pal Alliance Believer",
             "asset": "Believer_CrossBow_Camp02",
             "icon": "/icons/npcs/T_Believer_icon_normal.webp",
             "stats": {
@@ -46386,7 +46386,7 @@
             }
         },
         {
-            "name": "Believer Cross Bow Invader",
+            "name": "Free Pal Alliance Believer",
             "asset": "Believer_CrossBow_Invader",
             "icon": "/icons/npcs/T_Believer_icon_normal.webp",
             "stats": {
@@ -46418,7 +46418,7 @@
             }
         },
         {
-            "name": "Believer Cross Bow Tower",
+            "name": "Free Pal Alliance Believer",
             "asset": "Believer_CrossBow_Tower",
             "icon": "/icons/npcs/T_Believer_icon_normal.webp",
             "stats": {
@@ -46450,7 +46450,7 @@
             }
         },
         {
-            "name": "Believer Fat Cane",
+            "name": "Free Pal Alliance Judicator",
             "asset": "Believer_Fat_Cane",
             "icon": "/icons/npcs/T_Believer_Fat_icon_normal.webp",
             "stats": {
@@ -46482,7 +46482,7 @@
             }
         },
         {
-            "name": "Believer Fat Gatling Gun",
+            "name": "Free Pal Alliance Judicator",
             "asset": "Believer_Fat_GatlingGun",
             "icon": "/icons/npcs/T_Believer_Fat_icon_normal.webp",
             "stats": {
@@ -46514,7 +46514,7 @@
             }
         },
         {
-            "name": "Believer Fat Prisoner",
+            "name": "Free Pal Alliance Judicator",
             "asset": "Believer_Fat_Prisoner",
             "icon": "/icons/npcs/T_Believer_Fat_icon_normal.webp",
             "stats": {
@@ -46546,7 +46546,7 @@
             }
         },
         {
-            "name": "Believer Prisoner",
+            "name": "Free Pal Alliance Believer",
             "asset": "Believer_Prisoner",
             "icon": "/icons/npcs/T_Believer_icon_normal.webp",
             "stats": {
@@ -46610,7 +46610,7 @@
             }
         },
         {
-            "name": "Bounty Trader",
+            "name": "Guard",
             "asset": "BountyTrader",
             "icon": "/icons/npcs/T_Police_icon_normal.webp",
             "stats": {
@@ -46674,7 +46674,7 @@
             }
         },
         {
-            "name": "Caravan Leader02",
+            "name": "Caravan Leader",
             "asset": "CaravanLeader02",
             "icon": "/icons/npcs/T_SalesPerson_Green_icon_normal.webp",
             "stats": {
@@ -46706,7 +46706,7 @@
             }
         },
         {
-            "name": "Caravan Leader03",
+            "name": "Caravan Leader",
             "asset": "CaravanLeader03",
             "icon": "/icons/npcs/T_SalesPerson_Green_icon_normal.webp",
             "stats": {
@@ -46738,7 +46738,7 @@
             }
         },
         {
-            "name": "Caravan Leader04",
+            "name": "Caravan Leader",
             "asset": "CaravanLeader04",
             "icon": "/icons/npcs/T_SalesPerson_Green_icon_normal.webp",
             "stats": {
@@ -46770,7 +46770,7 @@
             }
         },
         {
-            "name": "Death Penalty guide",
+            "name": "Veteran Pal Tamer",
             "asset": "DeathPenalty_guide",
             "icon": "/icons/npcs/T_Female_Soldier03_icon_normal.webp",
             "stats": {
@@ -46802,7 +46802,7 @@
             }
         },
         {
-            "name": "Doctor",
+            "name": "Islander",
             "asset": "Doctor",
             "icon": "/icons/npcs/T_Doctor_icon_normal.webp",
             "stats": {
@@ -46866,7 +46866,7 @@
             }
         },
         {
-            "name": "Emote location A 01",
+            "name": "Islander",
             "asset": "Emote_location_A_01",
             "icon": "/icons/npcs/T_Reward_Emote_icon_normal.webp",
             "stats": {
@@ -46898,7 +46898,7 @@
             }
         },
         {
-            "name": "Emote location A 02",
+            "name": "Islander",
             "asset": "Emote_location_A_02",
             "icon": "/icons/npcs/T_Reward_Emote_icon_normal.webp",
             "stats": {
@@ -46930,7 +46930,7 @@
             }
         },
         {
-            "name": "Emote location B 01",
+            "name": "Islander",
             "asset": "Emote_location_B_01",
             "icon": "/icons/npcs/T_Reward_Emote_icon_normal.webp",
             "stats": {
@@ -46962,7 +46962,7 @@
             }
         },
         {
-            "name": "Emote location B 02",
+            "name": "Islander",
             "asset": "Emote_location_B_02",
             "icon": "/icons/npcs/T_Reward_Emote_icon_normal.webp",
             "stats": {
@@ -46994,7 +46994,7 @@
             }
         },
         {
-            "name": "Emote location C 01",
+            "name": "Islander",
             "asset": "Emote_location_C_01",
             "icon": "/icons/npcs/T_Reward_Emote_icon_normal.webp",
             "stats": {
@@ -47026,7 +47026,7 @@
             }
         },
         {
-            "name": "Emote location C 02",
+            "name": "Islander",
             "asset": "Emote_location_C_02",
             "icon": "/icons/npcs/T_Reward_Emote_icon_normal.webp",
             "stats": {
@@ -47058,7 +47058,7 @@
             }
         },
         {
-            "name": "Emote location D 01",
+            "name": "Islander",
             "asset": "Emote_location_D_01",
             "icon": "/icons/npcs/T_Reward_Emote_icon_normal.webp",
             "stats": {
@@ -47090,7 +47090,7 @@
             }
         },
         {
-            "name": "Emote location D 02",
+            "name": "Islander",
             "asset": "Emote_location_D_02",
             "icon": "/icons/npcs/T_Reward_Emote_icon_normal.webp",
             "stats": {
@@ -47122,7 +47122,7 @@
             }
         },
         {
-            "name": "Emote location E 01",
+            "name": "Islander",
             "asset": "Emote_location_E_01",
             "icon": "/icons/npcs/T_Reward_Emote_icon_normal.webp",
             "stats": {
@@ -47154,7 +47154,7 @@
             }
         },
         {
-            "name": "Emote location E 02",
+            "name": "Islander",
             "asset": "Emote_location_E_02",
             "icon": "/icons/npcs/T_Reward_Emote_icon_normal.webp",
             "stats": {
@@ -47186,7 +47186,7 @@
             }
         },
         {
-            "name": "Emote location F 01",
+            "name": "Islander",
             "asset": "Emote_location_F_01",
             "icon": "/icons/npcs/T_Reward_Emote_icon_normal.webp",
             "stats": {
@@ -47218,7 +47218,7 @@
             }
         },
         {
-            "name": "Emote location F 02",
+            "name": "Islander",
             "asset": "Emote_location_F_02",
             "icon": "/icons/npcs/T_Reward_Emote_icon_normal.webp",
             "stats": {
@@ -47250,7 +47250,7 @@
             }
         },
         {
-            "name": "Emote location G 01",
+            "name": "Islander",
             "asset": "Emote_location_G_01",
             "icon": "/icons/npcs/T_Reward_Emote_icon_normal.webp",
             "stats": {
@@ -47282,7 +47282,7 @@
             }
         },
         {
-            "name": "Emote location G 02",
+            "name": "Islander",
             "asset": "Emote_location_G_02",
             "icon": "/icons/npcs/T_Reward_Emote_icon_normal.webp",
             "stats": {
@@ -47314,7 +47314,7 @@
             }
         },
         {
-            "name": "Emote location H 01",
+            "name": "Islander",
             "asset": "Emote_location_H_01",
             "icon": "/icons/npcs/T_Reward_Emote_icon_normal.webp",
             "stats": {
@@ -47346,7 +47346,7 @@
             }
         },
         {
-            "name": "Emote location H 02",
+            "name": "Islander",
             "asset": "Emote_location_H_02",
             "icon": "/icons/npcs/T_Reward_Emote_icon_normal.webp",
             "stats": {
@@ -47378,7 +47378,7 @@
             }
         },
         {
-            "name": "Emote location I 01",
+            "name": "Islander",
             "asset": "Emote_location_I_01",
             "icon": "/icons/npcs/T_Reward_Emote_icon_normal.webp",
             "stats": {
@@ -47410,7 +47410,7 @@
             }
         },
         {
-            "name": "Emote location I 02",
+            "name": "Islander",
             "asset": "Emote_location_I_02",
             "icon": "/icons/npcs/T_Reward_Emote_icon_normal.webp",
             "stats": {
@@ -47538,7 +47538,7 @@
             }
         },
         {
-            "name": "Female DTairiku People01 v01",
+            "name": "Islander",
             "asset": "Female_DTairikuPeople01_v01",
             "icon": "/icons/npcs/T_Female_DTairikuPeople01_v01_icon_normal.webp",
             "stats": {
@@ -47570,7 +47570,7 @@
             }
         },
         {
-            "name": "Female Desert People02",
+            "name": "Villager",
             "asset": "Female_DesertPeople02",
             "icon": "/icons/npcs/T_Female_DesertPeople02_icon_normal.webp",
             "stats": {
@@ -47602,7 +47602,7 @@
             }
         },
         {
-            "name": "Female Farmer01 v01",
+            "name": "Islander",
             "asset": "Female_Farmer01_v01",
             "icon": "/icons/npcs/T_Female_Farmer01_v01_icon_normal.webp",
             "stats": {
@@ -47634,7 +47634,7 @@
             }
         },
         {
-            "name": "Female Farmer01 v02",
+            "name": "Islander",
             "asset": "Female_Farmer01_v02",
             "icon": "/icons/npcs/T_Female_Farmer01_v02_icon_normal.webp",
             "stats": {
@@ -47666,7 +47666,7 @@
             }
         },
         {
-            "name": "Female Farmer01 v03",
+            "name": "Islander",
             "asset": "Female_Farmer01_v03",
             "icon": "/icons/npcs/T_Female_Farmer01_v03_icon_normal.webp",
             "stats": {
@@ -47698,7 +47698,7 @@
             }
         },
         {
-            "name": "Female Farmer01 v04",
+            "name": "Islander",
             "asset": "Female_Farmer01_v04",
             "icon": "/icons/npcs/T_Female_Farmer01_v04_icon_normal.webp",
             "stats": {
@@ -47730,7 +47730,7 @@
             }
         },
         {
-            "name": "Female Farmer01 v05",
+            "name": "Islander",
             "asset": "Female_Farmer01_v05",
             "icon": "/icons/npcs/T_Female_Farmer01_v05_icon_normal.webp",
             "stats": {
@@ -47762,7 +47762,7 @@
             }
         },
         {
-            "name": "Female Kunoichi01",
+            "name": "Azure Covenant Enforcer",
             "asset": "Female_Kunoichi01",
             "icon": "/icons/npcs/T_Female_Kunoichi01_icon_normal.webp",
             "stats": {
@@ -47794,7 +47794,7 @@
             }
         },
         {
-            "name": "Female Nomad01 v01",
+            "name": "Islander",
             "asset": "Female_Nomad01_v01",
             "icon": "/icons/npcs/T_Female_Nomad01_v01_icon_normal.webp",
             "stats": {
@@ -47826,7 +47826,7 @@
             }
         },
         {
-            "name": "Female Nomad01 v02",
+            "name": "Islander",
             "asset": "Female_Nomad01_v02",
             "icon": "/icons/npcs/T_Female_Nomad01_v02_icon_normal.webp",
             "stats": {
@@ -47858,7 +47858,7 @@
             }
         },
         {
-            "name": "Female Nomad01 v03",
+            "name": "Islander",
             "asset": "Female_Nomad01_v03",
             "icon": "/icons/npcs/T_Female_Nomad01_v03_icon_normal.webp",
             "stats": {
@@ -47890,7 +47890,7 @@
             }
         },
         {
-            "name": "Female Nomad01 v04",
+            "name": "Islander",
             "asset": "Female_Nomad01_v04",
             "icon": "/icons/npcs/T_Female_Nomad01_v04_icon_normal.webp",
             "stats": {
@@ -47922,7 +47922,7 @@
             }
         },
         {
-            "name": "Female Nomad01 v05",
+            "name": "Islander",
             "asset": "Female_Nomad01_v05",
             "icon": "/icons/npcs/T_Female_Nomad01_v05_icon_normal.webp",
             "stats": {
@@ -47954,7 +47954,7 @@
             }
         },
         {
-            "name": "Female People02",
+            "name": "Villager",
             "asset": "Female_People02",
             "icon": "/icons/npcs/T_Female_People02_icon_normal.webp",
             "stats": {
@@ -47986,7 +47986,7 @@
             }
         },
         {
-            "name": "Female People03",
+            "name": "Villager",
             "asset": "Female_People03",
             "icon": "/icons/npcs/T_Female_People03_icon_normal.webp",
             "stats": {
@@ -48050,7 +48050,7 @@
             }
         },
         {
-            "name": "Female Ranger01 v01",
+            "name": "Islander",
             "asset": "Female_Ranger01_v01",
             "icon": "/icons/npcs/T_Female_Ranger01_v01_icon_normal.webp",
             "stats": {
@@ -48082,7 +48082,7 @@
             }
         },
         {
-            "name": "Female Ranger01 v02",
+            "name": "Islander",
             "asset": "Female_Ranger01_v02",
             "icon": "/icons/npcs/T_Female_Ranger01_v02_icon_normal.webp",
             "stats": {
@@ -48114,7 +48114,7 @@
             }
         },
         {
-            "name": "Female Ranger01 v03",
+            "name": "Islander",
             "asset": "Female_Ranger01_v03",
             "icon": "/icons/npcs/T_Female_Ranger01_v03_icon_normal.webp",
             "stats": {
@@ -48146,7 +48146,7 @@
             }
         },
         {
-            "name": "Female Ranger01 v04",
+            "name": "Islander",
             "asset": "Female_Ranger01_v04",
             "icon": "/icons/npcs/T_Female_Ranger01_v04_icon_normal.webp",
             "stats": {
@@ -48178,7 +48178,7 @@
             }
         },
         {
-            "name": "Female Ranger01 v05",
+            "name": "Islander",
             "asset": "Female_Ranger01_v05",
             "icon": "/icons/npcs/T_Female_Ranger01_v05_icon_normal.webp",
             "stats": {
@@ -48210,7 +48210,7 @@
             }
         },
         {
-            "name": "Female Sakurajima People01",
+            "name": "Islander",
             "asset": "Female_SakurajimaPeople01",
             "icon": "/icons/npcs/T_Female_SakurajimaPeople01_icon_normal.webp",
             "stats": {
@@ -48242,7 +48242,7 @@
             }
         },
         {
-            "name": "Female Snow People01",
+            "name": "Islander",
             "asset": "Female_SnowPeople01",
             "icon": "/icons/npcs/T_Female_SnowPeople01_icon_normal.webp",
             "stats": {
@@ -48274,7 +48274,7 @@
             }
         },
         {
-            "name": "Female Soldier01",
+            "name": "Islander",
             "asset": "Female_Soldier01",
             "icon": "/icons/npcs/T_Female_Soldier01_icon_normal.webp",
             "stats": {
@@ -48306,7 +48306,7 @@
             }
         },
         {
-            "name": "Female Soldier02",
+            "name": "Islander",
             "asset": "Female_Soldier02",
             "icon": "/icons/npcs/T_Female_Soldier02_icon_normal.webp",
             "stats": {
@@ -48338,7 +48338,7 @@
             }
         },
         {
-            "name": "Female Soldier03",
+            "name": "Islander",
             "asset": "Female_Soldier03",
             "icon": "/icons/npcs/T_Female_Soldier03_icon_normal.webp",
             "stats": {
@@ -48402,7 +48402,7 @@
             }
         },
         {
-            "name": "Female Soldier04",
+            "name": "Islander",
             "asset": "Female_Soldier04",
             "icon": "/icons/npcs/T_Female_Soldier04_icon_normal.webp",
             "stats": {
@@ -48434,7 +48434,7 @@
             }
         },
         {
-            "name": "Female Soldier04 Invader",
+            "name": "Gemini Tamers",
             "asset": "Female_Soldier04_Invader",
             "icon": "/icons/npcs/T_Female_Soldier04_icon_normal.webp",
             "stats": {
@@ -48466,7 +48466,7 @@
             }
         },
         {
-            "name": "Female Sorajima People01",
+            "name": "Islander",
             "asset": "Female_SorajimaPeople01",
             "icon": "/icons/npcs/T_Female_SorajimaPeople01_icon_normal.webp",
             "stats": {
@@ -48498,7 +48498,7 @@
             }
         },
         {
-            "name": "Female Survey Girl01",
+            "name": "Fia",
             "asset": "Female_SurveyGirl01",
             "icon": "/icons/npcs/T_Female_SurveyGirl01_icon_normal.webp",
             "stats": {
@@ -48530,7 +48530,7 @@
             }
         },
         {
-            "name": "Female Survey Girl02",
+            "name": "Fia",
             "asset": "Female_SurveyGirl02",
             "icon": "/icons/npcs/T_Female_SurveyGirl02_icon_normal.webp",
             "stats": {
@@ -48562,7 +48562,7 @@
             }
         },
         {
-            "name": "Female Survey Girl03",
+            "name": "Fia",
             "asset": "Female_SurveyGirl03",
             "icon": "/icons/npcs/T_Female_SurveyGirl03_icon_normal.webp",
             "stats": {
@@ -48594,7 +48594,7 @@
             }
         },
         {
-            "name": "Female Survey Girl04",
+            "name": "Fia",
             "asset": "Female_SurveyGirl04",
             "icon": "/icons/npcs/T_Female_SurveyGirl04_icon_normal.webp",
             "stats": {
@@ -48626,7 +48626,7 @@
             }
         },
         {
-            "name": "Female Survey Woman01",
+            "name": "Carla",
             "asset": "Female_SurveyWoman01",
             "icon": "/icons/npcs/T_Female_SurveyWoman01_icon_normal.webp",
             "stats": {
@@ -48658,7 +48658,7 @@
             }
         },
         {
-            "name": "Female Survey Woman02",
+            "name": "Carla",
             "asset": "Female_SurveyWoman02",
             "icon": "/icons/npcs/T_Female_SurveyWoman02_icon_normal.webp",
             "stats": {
@@ -48690,7 +48690,7 @@
             }
         },
         {
-            "name": "Female Tenraku People01",
+            "name": "Islander",
             "asset": "Female_TenrakuPeople01",
             "icon": "/icons/npcs/T_Female_TenrakuPeople01_icon_normal.webp",
             "stats": {
@@ -48722,7 +48722,7 @@
             }
         },
         {
-            "name": "Female World Tree People01",
+            "name": "Islander",
             "asset": "Female_WorldTreePeople01",
             "icon": "/icons/npcs/T_Female_WorldTreePeople01_icon_normal.webp",
             "stats": {
@@ -48754,7 +48754,7 @@
             }
         },
         {
-            "name": "Fire Cult Flame Thrower",
+            "name": "Brothers of the Eternal Pyre Martyr",
             "asset": "FireCult_FlameThrower",
             "icon": "/icons/npcs/T_FireCult_icon_normal.webp",
             "stats": {
@@ -48786,7 +48786,7 @@
             }
         },
         {
-            "name": "Fire Cult Flame Thrower Invader",
+            "name": "Brothers of the Eternal Pyre Martyr",
             "asset": "FireCult_FlameThrower_Invader",
             "icon": "/icons/npcs/T_FireCult_icon_normal.webp",
             "stats": {
@@ -48818,7 +48818,7 @@
             }
         },
         {
-            "name": "Fire Cult Flame Thrower Relax",
+            "name": "Brothers of the Eternal Pyre Martyr",
             "asset": "FireCult_FlameThrower_Relax",
             "icon": "/icons/npcs/T_FireCult_icon_normal.webp",
             "stats": {
@@ -48850,7 +48850,7 @@
             }
         },
         {
-            "name": "Fire Cult Grenade Launcher",
+            "name": "Brothers of the Eternal Pyre Martyr",
             "asset": "FireCult_GrenadeLauncher",
             "icon": "/icons/npcs/T_FireCult_icon_normal.webp",
             "stats": {
@@ -48882,7 +48882,7 @@
             }
         },
         {
-            "name": "Fire Cult Missile Launcher",
+            "name": "Brothers of the Eternal Pyre Martyr",
             "asset": "FireCult_MissileLauncher",
             "icon": "/icons/npcs/T_FireCult_icon_normal.webp",
             "stats": {
@@ -48914,7 +48914,7 @@
             }
         },
         {
-            "name": "Fire Cult Prisoner",
+            "name": "Brothers of the Eternal Pyre Martyr",
             "asset": "FireCult_Prisoner",
             "icon": "/icons/npcs/T_FireCult_icon_normal.webp",
             "stats": {
@@ -48946,7 +48946,7 @@
             }
         },
         {
-            "name": "Fire Cult Rifle",
+            "name": "Brothers of the Eternal Pyre Martyr",
             "asset": "FireCult_Rifle",
             "icon": "/icons/npcs/T_FireCult_icon_normal.webp",
             "stats": {
@@ -48978,7 +48978,7 @@
             }
         },
         {
-            "name": "Fire Cult Rifle Invader",
+            "name": "Brothers of the Eternal Pyre Martyr",
             "asset": "FireCult_Rifle_Invader",
             "icon": "/icons/npcs/T_FireCult_icon_normal.webp",
             "stats": {
@@ -49010,7 +49010,7 @@
             }
         },
         {
-            "name": "Fire Cult Rifle Relax",
+            "name": "Brothers of the Eternal Pyre Martyr",
             "asset": "FireCult_Rifle_Relax",
             "icon": "/icons/npcs/T_FireCult_icon_normal.webp",
             "stats": {
@@ -49042,7 +49042,7 @@
             }
         },
         {
-            "name": "Fire Cult Rocket Launcher",
+            "name": "Brothers of the Eternal Pyre Martyr",
             "asset": "FireCult_RocketLauncher",
             "icon": "/icons/npcs/T_FireCult_icon_normal.webp",
             "stats": {
@@ -49074,7 +49074,7 @@
             }
         },
         {
-            "name": "Goodwill Ambassador",
+            "name": "Pal Merchant",
             "asset": "GoodwillAmbassador",
             "icon": "/icons/npcs/T_Female_MobuCitizen_icon_normal.webp",
             "stats": {
@@ -49138,7 +49138,7 @@
             }
         },
         {
-            "name": "Guard Rifle",
+            "name": "Guard",
             "asset": "Guard_Rifle",
             "icon": "/icons/npcs/T_Police_icon_normal.webp",
             "stats": {
@@ -49170,7 +49170,7 @@
             }
         },
         {
-            "name": "Guard Shotgun",
+            "name": "Guard",
             "asset": "Guard_Shotgun",
             "icon": "/icons/npcs/T_Police_icon_normal.webp",
             "stats": {
@@ -49202,7 +49202,7 @@
             }
         },
         {
-            "name": "Help01",
+            "name": "Islander",
             "asset": "Help01",
             "icon": "/icons/npcs/T_Help01_icon_normal.webp",
             "stats": {
@@ -49234,7 +49234,7 @@
             }
         },
         {
-            "name": "Help02",
+            "name": "Islander",
             "asset": "Help02",
             "icon": "/icons/npcs/T_Help02_icon_normal.webp",
             "stats": {
@@ -49266,7 +49266,7 @@
             }
         },
         {
-            "name": "Help03",
+            "name": "Islander",
             "asset": "Help03",
             "icon": "/icons/npcs/T_Help03_icon_normal.webp",
             "stats": {
@@ -49298,7 +49298,7 @@
             }
         },
         {
-            "name": "Help04",
+            "name": "Islander",
             "asset": "Help04",
             "icon": "/icons/npcs/T_Help04_icon_normal.webp",
             "stats": {
@@ -49335,7 +49335,7 @@
             "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp"
         },
         {
-            "name": "Hunter Bat",
+            "name": "Syndicate Thug",
             "asset": "Hunter_Bat",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -49367,7 +49367,7 @@
             }
         },
         {
-            "name": "Hunter Bat Invader",
+            "name": "Syndicate Thug",
             "asset": "Hunter_Bat_Invader",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -49399,7 +49399,7 @@
             }
         },
         {
-            "name": "Hunter Bow Gun",
+            "name": "Syndicate Crossbowman",
             "asset": "Hunter_BowGun",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -49431,7 +49431,7 @@
             }
         },
         {
-            "name": "Hunter Bow Gun Oilrig",
+            "name": "Syndicate Crossbowman",
             "asset": "Hunter_BowGun_Oilrig",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -49463,7 +49463,7 @@
             }
         },
         {
-            "name": "Hunter Fat Gatling Gun",
+            "name": "Syndicate Crusher",
             "asset": "Hunter_Fat_GatlingGun",
             "icon": "/icons/npcs/T_Hunter_Fat_icon_normal.webp",
             "stats": {
@@ -49495,7 +49495,7 @@
             }
         },
         {
-            "name": "Hunter Fat Gatling Gun Invader",
+            "name": "Syndicate Crusher",
             "asset": "Hunter_Fat_GatlingGun_Invader",
             "icon": "/icons/npcs/T_Hunter_Fat_icon_normal.webp",
             "stats": {
@@ -49527,7 +49527,7 @@
             }
         },
         {
-            "name": "Hunter Fat Gatling Gun Large Oilrig",
+            "name": "Syndicate Crusher",
             "asset": "Hunter_Fat_GatlingGun_LargeOilrig",
             "icon": "/icons/npcs/T_Hunter_Fat_icon_normal.webp",
             "stats": {
@@ -49559,7 +49559,7 @@
             }
         },
         {
-            "name": "Hunter Fat Gatling Gun Mini Oilrig",
+            "name": "Syndicate Crusher",
             "asset": "Hunter_Fat_GatlingGun_MiniOilrig",
             "icon": "/icons/npcs/T_Hunter_Fat_icon_normal.webp",
             "stats": {
@@ -49591,7 +49591,7 @@
             }
         },
         {
-            "name": "Hunter Fat Gatling Gun Oilrig",
+            "name": "Syndicate Crusher",
             "asset": "Hunter_Fat_GatlingGun_Oilrig",
             "icon": "/icons/npcs/T_Hunter_Fat_icon_normal.webp",
             "stats": {
@@ -49623,7 +49623,7 @@
             }
         },
         {
-            "name": "Hunter Fat Gatling Gun Tower",
+            "name": "Syndicate Crusher",
             "asset": "Hunter_Fat_GatlingGun_Tower",
             "icon": "/icons/npcs/T_Hunter_Fat_icon_normal.webp",
             "stats": {
@@ -49655,7 +49655,7 @@
             }
         },
         {
-            "name": "Hunter Fat Prisoner",
+            "name": "Syndicate Crusher",
             "asset": "Hunter_Fat_Prisoner",
             "icon": "/icons/npcs/T_Hunter_Fat_icon_normal.webp",
             "stats": {
@@ -49687,7 +49687,7 @@
             }
         },
         {
-            "name": "Hunter Flame Thrower",
+            "name": "Syndicate Cleaner",
             "asset": "Hunter_FlameThrower",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -49719,7 +49719,7 @@
             }
         },
         {
-            "name": "Hunter Flame Thrower Invader",
+            "name": "Syndicate Cleaner",
             "asset": "Hunter_FlameThrower_Invader",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -49751,7 +49751,7 @@
             }
         },
         {
-            "name": "Hunter Flame Thrower Large Oilrig",
+            "name": "Syndicate Cleaner",
             "asset": "Hunter_FlameThrower_LargeOilrig",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -49783,7 +49783,7 @@
             }
         },
         {
-            "name": "Hunter Flame Thrower Miini Oilrig",
+            "name": "Syndicate Cleaner",
             "asset": "Hunter_FlameThrower_MiiniOilrig",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -49815,7 +49815,7 @@
             }
         },
         {
-            "name": "Hunter Flame Thrower Oilrig",
+            "name": "Syndicate Cleaner",
             "asset": "Hunter_FlameThrower_Oilrig",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -49847,7 +49847,7 @@
             }
         },
         {
-            "name": "Hunter Grenade",
+            "name": "Syndicate Grenadier",
             "asset": "Hunter_Grenade",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -49879,7 +49879,7 @@
             }
         },
         {
-            "name": "Hunter Grenade Launcher",
+            "name": "Syndicate Veteran",
             "asset": "Hunter_GrenadeLauncher",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -49911,7 +49911,7 @@
             }
         },
         {
-            "name": "Hunter Grenade Launcher Large Oilrig",
+            "name": "Syndicate Veteran",
             "asset": "Hunter_GrenadeLauncher_LargeOilrig",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -49943,7 +49943,7 @@
             }
         },
         {
-            "name": "Hunter Grenade Launcher Oilrig",
+            "name": "Syndicate Veteran",
             "asset": "Hunter_GrenadeLauncher_Oilrig",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -49975,7 +49975,7 @@
             }
         },
         {
-            "name": "Hunter Grenade Invader",
+            "name": "Syndicate Grenadier",
             "asset": "Hunter_Grenade_Invader",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50007,7 +50007,7 @@
             }
         },
         {
-            "name": "Hunter Grenade Large Oilrig",
+            "name": "Syndicate Grenadier",
             "asset": "Hunter_Grenade_LargeOilrig",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50039,7 +50039,7 @@
             }
         },
         {
-            "name": "Hunter Grenade Mini Oilrig",
+            "name": "Syndicate Grenadier",
             "asset": "Hunter_Grenade_MiniOilrig",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50071,7 +50071,7 @@
             }
         },
         {
-            "name": "Hunter Grenade Oilrig",
+            "name": "Syndicate Grenadier",
             "asset": "Hunter_Grenade_Oilrig",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50103,7 +50103,7 @@
             }
         },
         {
-            "name": "Hunter Handgun",
+            "name": "Syndicate Thug",
             "asset": "Hunter_Handgun",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50135,7 +50135,7 @@
             }
         },
         {
-            "name": "Hunter Handgun Invader",
+            "name": "Syndicate Thug",
             "asset": "Hunter_Handgun_Invader",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50167,7 +50167,7 @@
             }
         },
         {
-            "name": "Hunter Handgun Mini Oilrig",
+            "name": "Syndicate Thug",
             "asset": "Hunter_Handgun_MiniOilrig",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50199,7 +50199,7 @@
             }
         },
         {
-            "name": "Hunter Handgun Quest Strong Old Man",
+            "name": "Syndicate Thug",
             "asset": "Hunter_Handgun_Quest_StrongOldMan",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50231,7 +50231,7 @@
             }
         },
         {
-            "name": "Hunter Katana",
+            "name": "Syndicate Swordsman",
             "asset": "Hunter_Katana",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50263,7 +50263,7 @@
             }
         },
         {
-            "name": "Hunter Katana Oilrig",
+            "name": "Syndicate Swordsman",
             "asset": "Hunter_Katana_Oilrig",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50295,7 +50295,7 @@
             }
         },
         {
-            "name": "Hunter Laser Rifle",
+            "name": "Syndicate Laser Rifleman",
             "asset": "Hunter_LaserRifle",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50327,7 +50327,7 @@
             }
         },
         {
-            "name": "Hunter Laser Rifle Oilrig",
+            "name": "Syndicate Laser Rifleman",
             "asset": "Hunter_LaserRifle_Oilrig",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50359,7 +50359,7 @@
             }
         },
         {
-            "name": "Hunter Missile Launcher",
+            "name": "Syndicate Interceptor",
             "asset": "Hunter_MissileLauncher",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50391,7 +50391,7 @@
             }
         },
         {
-            "name": "Hunter Missile Launcher Large Oilrig",
+            "name": "Syndicate Interceptor",
             "asset": "Hunter_MissileLauncher_LargeOilrig",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50423,7 +50423,7 @@
             }
         },
         {
-            "name": "Hunter Missile Launcher Oilrig",
+            "name": "Syndicate Interceptor",
             "asset": "Hunter_MissileLauncher_Oilrig",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50455,7 +50455,7 @@
             }
         },
         {
-            "name": "Hunter Prisoner",
+            "name": "Syndicate Thug",
             "asset": "Hunter_Prisoner",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50487,7 +50487,7 @@
             }
         },
         {
-            "name": "Hunter Rifle",
+            "name": "Syndicate Gunner",
             "asset": "Hunter_Rifle",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50519,7 +50519,7 @@
             }
         },
         {
-            "name": "Hunter Rifle Invader",
+            "name": "Syndicate Gunner",
             "asset": "Hunter_Rifle_Invader",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50551,7 +50551,7 @@
             }
         },
         {
-            "name": "Hunter Rifle Large Oilrig",
+            "name": "Syndicate Gunner",
             "asset": "Hunter_Rifle_LargeOilrig",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50583,7 +50583,7 @@
             }
         },
         {
-            "name": "Hunter Rifle Mini Oilrig",
+            "name": "Syndicate Gunner",
             "asset": "Hunter_Rifle_MiniOilrig",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50615,7 +50615,7 @@
             }
         },
         {
-            "name": "Hunter Rifle Oilrig",
+            "name": "Syndicate Gunner",
             "asset": "Hunter_Rifle_Oilrig",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50647,7 +50647,7 @@
             }
         },
         {
-            "name": "Hunter Rocket Launcher",
+            "name": "Syndicate Elite",
             "asset": "Hunter_RocketLauncher",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50679,7 +50679,7 @@
             }
         },
         {
-            "name": "Hunter Rocket Launcher Invader",
+            "name": "Syndicate Elite",
             "asset": "Hunter_RocketLauncher_Invader",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50711,7 +50711,7 @@
             }
         },
         {
-            "name": "Hunter Rocket Launcher Large Oilrig",
+            "name": "Syndicate Elite",
             "asset": "Hunter_RocketLauncher_LargeOilrig",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50743,7 +50743,7 @@
             }
         },
         {
-            "name": "Hunter Rocket Launcher Mini Oilrig",
+            "name": "Syndicate Elite",
             "asset": "Hunter_RocketLauncher_MiniOilrig",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50775,7 +50775,7 @@
             }
         },
         {
-            "name": "Hunter Rocket Launcher Oilrig",
+            "name": "Syndicate Elite",
             "asset": "Hunter_RocketLauncher_Oilrig",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50807,7 +50807,7 @@
             }
         },
         {
-            "name": "Hunter Rocket Launcher Oilrig LD",
+            "name": "Syndicate Elite",
             "asset": "Hunter_RocketLauncher_Oilrig_LD",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50839,7 +50839,7 @@
             }
         },
         {
-            "name": "Hunter Rocket Launcher Quest Strong Old Man",
+            "name": "Syndicate Elite",
             "asset": "Hunter_RocketLauncher_Quest_StrongOldMan",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50871,7 +50871,7 @@
             }
         },
         {
-            "name": "Hunter Shotgun",
+            "name": "Syndicate Hunter",
             "asset": "Hunter_Shotgun",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50903,7 +50903,7 @@
             }
         },
         {
-            "name": "Hunter Shotgun Invader",
+            "name": "Syndicate Hunter",
             "asset": "Hunter_Shotgun_Invader",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50935,7 +50935,7 @@
             }
         },
         {
-            "name": "Hunter Shotgun Large Oilrig",
+            "name": "Syndicate Hunter",
             "asset": "Hunter_Shotgun_LargeOilrig",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50967,7 +50967,7 @@
             }
         },
         {
-            "name": "Hunter Shotgun Mini Oilrig",
+            "name": "Syndicate Hunter",
             "asset": "Hunter_Shotgun_MiniOilrig",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -50999,7 +50999,7 @@
             }
         },
         {
-            "name": "Hunter Shotgun Oilrig",
+            "name": "Syndicate Hunter",
             "asset": "Hunter_Shotgun_Oilrig",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -51031,7 +51031,7 @@
             }
         },
         {
-            "name": "Hunter Shotgun Quest Strong Old Man",
+            "name": "Syndicate Hunter",
             "asset": "Hunter_Shotgun_Quest_StrongOldMan",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -51063,7 +51063,7 @@
             }
         },
         {
-            "name": "Inspector",
+            "name": "Pal Merchant",
             "asset": "Inspector",
             "icon": "/icons/npcs/T_Female_MobuCitizen_icon_normal.webp",
             "stats": {
@@ -51095,7 +51095,7 @@
             }
         },
         {
-            "name": "Male Angler01 v01",
+            "name": "Islander",
             "asset": "Male_Angler01_v01",
             "icon": "/icons/npcs/T_Male_People02_icon_normal.webp",
             "stats": {
@@ -51127,7 +51127,7 @@
             }
         },
         {
-            "name": "Male Breeder01 v01",
+            "name": "Islander",
             "asset": "Male_Breeder01_v01",
             "icon": "/icons/npcs/T_Male_Breeder01_v01_icon_normal.webp",
             "stats": {
@@ -51159,7 +51159,7 @@
             }
         },
         {
-            "name": "Male Breeder01 v02",
+            "name": "Islander",
             "asset": "Male_Breeder01_v02",
             "icon": "/icons/npcs/T_Male_Breeder01_v02_icon_normal.webp",
             "stats": {
@@ -51191,7 +51191,7 @@
             }
         },
         {
-            "name": "Male Breeder01 v03",
+            "name": "Islander",
             "asset": "Male_Breeder01_v03",
             "icon": "/icons/npcs/T_Male_Breeder01_v03_icon_normal.webp",
             "stats": {
@@ -51223,7 +51223,7 @@
             }
         },
         {
-            "name": "Male Breeder01 v04",
+            "name": "Islander",
             "asset": "Male_Breeder01_v04",
             "icon": "/icons/npcs/T_Male_Breeder01_v04_icon_normal.webp",
             "stats": {
@@ -51255,7 +51255,7 @@
             }
         },
         {
-            "name": "Male Breeder01 v05",
+            "name": "Islander",
             "asset": "Male_Breeder01_v05",
             "icon": "/icons/npcs/T_Male_Breeder01_v05_icon_normal.webp",
             "stats": {
@@ -51287,7 +51287,7 @@
             }
         },
         {
-            "name": "Male DTairiku People01 v01",
+            "name": "Islander",
             "asset": "Male_DTairikuPeople01_v01",
             "icon": "/icons/npcs/T_Male_DTairikuPeople01_v01_icon_normal.webp",
             "stats": {
@@ -51319,7 +51319,7 @@
             }
         },
         {
-            "name": "Male Dark Trader01",
+            "name": "Black Marketeer",
             "asset": "Male_DarkTrader01",
             "icon": "/icons/npcs/T_Male_DarkTrader01_icon_normal.webp",
             "stats": {
@@ -51351,7 +51351,7 @@
             }
         },
         {
-            "name": "Male Dark Trader02",
+            "name": "Medal Merchant",
             "asset": "Male_DarkTrader02",
             "icon": "/icons/npcs/T_Male_DarkTrader02_icon_normal.webp",
             "stats": {
@@ -51383,7 +51383,7 @@
             }
         },
         {
-            "name": "Male Desert People01",
+            "name": "Villager",
             "asset": "Male_DesertPeople01",
             "icon": "/icons/npcs/T_Male_DesertPeople01_icon_normal.webp",
             "stats": {
@@ -51415,7 +51415,7 @@
             }
         },
         {
-            "name": "Male Kigurumi01 v01",
+            "name": "Islander",
             "asset": "Male_Kigurumi01_v01",
             "icon": "/icons/npcs/T_Male_Kigurumi01_v01_icon_normal.webp",
             "stats": {
@@ -51447,7 +51447,7 @@
             }
         },
         {
-            "name": "Male Ninja01",
+            "name": "Moonflower Genin",
             "asset": "Male_Ninja01",
             "icon": "/icons/npcs/T_Male_Ninja01_icon_normal.webp",
             "stats": {
@@ -51479,7 +51479,7 @@
             }
         },
         {
-            "name": "Male Ninja01 Seabase",
+            "name": "Moonflower Genin",
             "asset": "Male_Ninja01_Seabase",
             "icon": "/icons/npcs/T_Male_Ninja01_icon_normal.webp",
             "stats": {
@@ -51511,7 +51511,7 @@
             }
         },
         {
-            "name": "Male Ninja Elite01",
+            "name": "Moonflower Jonin",
             "asset": "Male_NinjaElite01",
             "icon": "/icons/npcs/T_Male_NinjaElite01_icon_normal.webp",
             "stats": {
@@ -51543,7 +51543,7 @@
             }
         },
         {
-            "name": "Male Ninja Elite01 Invader",
+            "name": "Moonflower Jonin",
             "asset": "Male_NinjaElite01_Invader",
             "icon": "/icons/npcs/T_Male_NinjaElite01_icon_normal.webp",
             "stats": {
@@ -51575,7 +51575,7 @@
             }
         },
         {
-            "name": "Male Ninja Elite01 Seabase",
+            "name": "Moonflower Jonin",
             "asset": "Male_NinjaElite01_Seabase",
             "icon": "/icons/npcs/T_Male_Ninja01_icon_normal.webp",
             "stats": {
@@ -51607,7 +51607,7 @@
             }
         },
         {
-            "name": "Male People02",
+            "name": "Villager",
             "asset": "Male_People02",
             "icon": "/icons/npcs/T_Male_People02_icon_normal.webp",
             "stats": {
@@ -51639,7 +51639,7 @@
             }
         },
         {
-            "name": "Male People03",
+            "name": "Villager",
             "asset": "Male_People03",
             "icon": "/icons/npcs/T_Male_People03_icon_normal.webp",
             "stats": {
@@ -51671,7 +51671,7 @@
             }
         },
         {
-            "name": "Male Police old",
+            "name": "Islander",
             "asset": "Male_Police_old",
             "icon": "/icons/npcs/T_Male_Police_old_icon_normal.webp",
             "stats": {
@@ -51703,7 +51703,7 @@
             }
         },
         {
-            "name": "Male Sakurajima People01",
+            "name": "Islander",
             "asset": "Male_SakurajimaPeople01",
             "icon": "/icons/npcs/T_Male_SakurajimaPeople01_icon_normal.webp",
             "stats": {
@@ -51735,7 +51735,7 @@
             }
         },
         {
-            "name": "Male Scholar01 v01",
+            "name": "Islander",
             "asset": "Male_Scholar01_v01",
             "icon": "/icons/npcs/T_Male_Scholar01_v01_icon_normal.webp",
             "stats": {
@@ -51767,7 +51767,7 @@
             }
         },
         {
-            "name": "Male Scholar01 v02",
+            "name": "Islander",
             "asset": "Male_Scholar01_v02",
             "icon": "/icons/npcs/T_Male_Scholar01_v02_Icon_normal.webp",
             "stats": {
@@ -51799,7 +51799,7 @@
             }
         },
         {
-            "name": "Male Scholar01 v03",
+            "name": "Islander",
             "asset": "Male_Scholar01_v03",
             "icon": "/icons/npcs/T_Male_Scholar01_v03_icon_normal.webp",
             "stats": {
@@ -51831,7 +51831,7 @@
             }
         },
         {
-            "name": "Male Scholar01 v04",
+            "name": "Islander",
             "asset": "Male_Scholar01_v04",
             "icon": "/icons/npcs/T_Male_Scholar01_v04_icon_normal.webp",
             "stats": {
@@ -51863,7 +51863,7 @@
             }
         },
         {
-            "name": "Male Scholar01 v05",
+            "name": "Islander",
             "asset": "Male_Scholar01_v05",
             "icon": "/icons/npcs/T_Male_Scholar01_v05_icon_normal.webp",
             "stats": {
@@ -51895,7 +51895,7 @@
             }
         },
         {
-            "name": "Male Scholar02",
+            "name": "Islander",
             "asset": "Male_Scholar02",
             "icon": "/icons/npcs/T_Male_Scholar01_v02_Icon_normal.webp",
             "stats": {
@@ -51927,7 +51927,7 @@
             }
         },
         {
-            "name": "Male Scientist01 Laser Rifle",
+            "name": "PAL Genetic Research Unit Executioner",
             "asset": "Male_Scientist01_LaserRifle",
             "icon": "/icons/npcs/T_Male_Scientist01_icon_normal.webp",
             "stats": {
@@ -51959,7 +51959,7 @@
             }
         },
         {
-            "name": "Male Scientist01 Laser Rifle Invader",
+            "name": "PAL Genetic Research Unit Executioner",
             "asset": "Male_Scientist01_LaserRifle_Invader",
             "icon": "/icons/npcs/T_Male_Scientist01_icon_normal.webp",
             "stats": {
@@ -51991,7 +51991,7 @@
             }
         },
         {
-            "name": "Male Snow People01",
+            "name": "Islander",
             "asset": "Male_SnowPeople01",
             "icon": "/icons/npcs/T_Male_SnowPeople01_icon_normal.webp",
             "stats": {
@@ -52023,7 +52023,7 @@
             }
         },
         {
-            "name": "Male Soldier01",
+            "name": "Islander",
             "asset": "Male_Soldier01",
             "icon": "/icons/npcs/T_Male_Soldier01_icon_normal.webp",
             "stats": {
@@ -52055,7 +52055,7 @@
             }
         },
         {
-            "name": "Male Soldier01 Enemy Group",
+            "name": "Sturdy Mercenary",
             "asset": "Male_Soldier01_EnemyGroup",
             "icon": "/icons/npcs/T_Male_Soldier01_icon_normal.webp",
             "stats": {
@@ -52087,7 +52087,7 @@
             }
         },
         {
-            "name": "Male Soldier02",
+            "name": "Islander",
             "asset": "Male_Soldier02",
             "icon": "/icons/npcs/T_Male_Soldier02_icon_normal.webp",
             "stats": {
@@ -52119,7 +52119,7 @@
             }
         },
         {
-            "name": "Male Soldier02 Enemy Group",
+            "name": "Sturdy Mercenary",
             "asset": "Male_Soldier02_EnemyGroup",
             "icon": "/icons/npcs/T_Male_Soldier02_icon_normal.webp",
             "stats": {
@@ -52183,7 +52183,7 @@
             }
         },
         {
-            "name": "Male Soldier03",
+            "name": "Islander",
             "asset": "Male_Soldier03",
             "icon": "/icons/npcs/T_Male_Soldier03_icon_normal.webp",
             "stats": {
@@ -52215,7 +52215,7 @@
             }
         },
         {
-            "name": "Male Soldier04",
+            "name": "Islander",
             "asset": "Male_Soldier04",
             "icon": "/icons/npcs/T_Male_Soldier04_icon_normal.webp",
             "stats": {
@@ -52247,7 +52247,7 @@
             }
         },
         {
-            "name": "Male Sorajima People01",
+            "name": "Islander",
             "asset": "Male_SorajimaPeople01",
             "icon": "/icons/npcs/T_Male_SorajimaPeople01_icon_normal.webp",
             "stats": {
@@ -52279,7 +52279,7 @@
             }
         },
         {
-            "name": "Male Strong Old Man01",
+            "name": "Harold",
             "asset": "Male_StrongOldMan01",
             "icon": "/icons/npcs/T_Male_StrongOldMan01_icon_normal.webp",
             "stats": {
@@ -52311,7 +52311,7 @@
             }
         },
         {
-            "name": "Male Strong Old Man02",
+            "name": "Harold",
             "asset": "Male_StrongOldMan02",
             "icon": "/icons/npcs/T_Male_StrongOldMan02_icon_normal.webp",
             "stats": {
@@ -52343,7 +52343,7 @@
             }
         },
         {
-            "name": "Male Survey Man01",
+            "name": "Gadel",
             "asset": "Male_SurveyMan01",
             "icon": "/icons/npcs/T_Male_SurveyMan01_icon_normal.webp",
             "stats": {
@@ -52375,7 +52375,7 @@
             }
         },
         {
-            "name": "Male Survey Man02",
+            "name": "Gadel",
             "asset": "Male_SurveyMan02",
             "icon": "/icons/npcs/T_Male_SurveyMan02_icon_normal.webp",
             "stats": {
@@ -52407,7 +52407,7 @@
             }
         },
         {
-            "name": "Male Survey Man03",
+            "name": "Gadel",
             "asset": "Male_SurveyMan03",
             "icon": "/icons/npcs/T_Male_SurveyMan03_icon_normal.webp",
             "stats": {
@@ -52439,7 +52439,7 @@
             }
         },
         {
-            "name": "Male Tenraku People01",
+            "name": "Islander",
             "asset": "Male_TenrakuPeople01",
             "icon": "/icons/npcs/T_Male_TenrakuPeople01_icon_normal.webp",
             "stats": {
@@ -52471,7 +52471,7 @@
             }
         },
         {
-            "name": "Male Trader01",
+            "name": "Villager",
             "asset": "Male_Trader01",
             "icon": "/icons/npcs/T_PalDealer_icon_normal.webp",
             "stats": {
@@ -52503,7 +52503,7 @@
             }
         },
         {
-            "name": "Male Trader01 v04",
+            "name": "Butcher in Training",
             "asset": "Male_Trader01_v04",
             "icon": "/icons/npcs/T_Male_Trader01_v04_icon_normal.webp",
             "stats": {
@@ -52535,7 +52535,7 @@
             }
         },
         {
-            "name": "Male Trader01 v05",
+            "name": "Village Grocer",
             "asset": "Male_Trader01_v05",
             "icon": "/icons/npcs/T_Male_Trader01_v05_icon_normal.webp",
             "stats": {
@@ -52567,7 +52567,7 @@
             }
         },
         {
-            "name": "Male Trader01 v06",
+            "name": "Smugglers' Lackey",
             "asset": "Male_Trader01_v06",
             "icon": "/icons/npcs/T_Male_Trader01_v06_icon_normal.webp",
             "stats": {
@@ -52599,7 +52599,7 @@
             }
         },
         {
-            "name": "Male Trader01 v07",
+            "name": "Foraging Merchant",
             "asset": "Male_Trader01_v07",
             "icon": "/icons/npcs/T_Male_Trader01_v07_icon_normal.webp",
             "stats": {
@@ -52631,7 +52631,7 @@
             }
         },
         {
-            "name": "Male Trader01 v08",
+            "name": "Bakery Stand Baker",
             "asset": "Male_Trader01_v08",
             "icon": "/icons/npcs/T_Male_Trader01_v08_icon_normal.webp",
             "stats": {
@@ -52663,7 +52663,7 @@
             }
         },
         {
-            "name": "Male Trader01 v09",
+            "name": "Shady Pharmacist",
             "asset": "Male_Trader01_v09",
             "icon": "/icons/npcs/T_Male_Trader01_v09_icon_normal.webp",
             "stats": {
@@ -52695,7 +52695,7 @@
             }
         },
         {
-            "name": "Male Trader01 v10",
+            "name": "Surf & Turf Master",
             "asset": "Male_Trader01_v10",
             "icon": "/icons/npcs/T_Male_Trader01_v10_icon_normal.webp",
             "stats": {
@@ -52727,7 +52727,7 @@
             }
         },
         {
-            "name": "Male Trader01 v11",
+            "name": "Expert Hunter",
             "asset": "Male_Trader01_v11",
             "icon": "/icons/npcs/T_Male_Trader01_v11_icon_normal.webp",
             "stats": {
@@ -52759,7 +52759,7 @@
             }
         },
         {
-            "name": "Male Trader01 v12",
+            "name": "Legendary Game Hunter",
             "asset": "Male_Trader01_v12",
             "icon": "/icons/npcs/T_Male_Trader01_v12_icon_normal.webp",
             "stats": {
@@ -52791,7 +52791,7 @@
             }
         },
         {
-            "name": "Male Trader01 v13",
+            "name": "Mercenary Supplier",
             "asset": "Male_Trader01_v13",
             "icon": "/icons/npcs/T_Male_Trader01_v13_icon_normal.webp",
             "stats": {
@@ -52823,7 +52823,7 @@
             }
         },
         {
-            "name": "Male Trader01 v14",
+            "name": "Heavy Arms Merchant",
             "asset": "Male_Trader01_v14",
             "icon": "/icons/npcs/T_Male_Trader01_v14_icon_normal.webp",
             "stats": {
@@ -52855,7 +52855,7 @@
             }
         },
         {
-            "name": "Male Trader01 v15",
+            "name": "Legendary Ammo Merchant",
             "asset": "Male_Trader01_v15",
             "icon": "/icons/npcs/T_Male_Trader01_v15_icon_normal.webp",
             "stats": {
@@ -52887,7 +52887,7 @@
             }
         },
         {
-            "name": "Male Trader01 v16",
+            "name": "Farm Peddler",
             "asset": "Male_Trader01_v16",
             "icon": "/icons/npcs/T_Male_Trader01_v16_icon_normal.webp",
             "stats": {
@@ -52919,7 +52919,7 @@
             }
         },
         {
-            "name": "Male Trader01 v17",
+            "name": "Legendary Grocer",
             "asset": "Male_Trader01_v17",
             "icon": "/icons/npcs/T_Male_Trader01_v17_icon_normal.webp",
             "stats": {
@@ -52951,7 +52951,7 @@
             }
         },
         {
-            "name": "Male Trader01 v18",
+            "name": "Authorized Pharmacist",
             "asset": "Male_Trader01_v18",
             "icon": "/icons/npcs/T_Male_Trader01_v18_icon_normal.webp",
             "stats": {
@@ -52983,7 +52983,7 @@
             }
         },
         {
-            "name": "Male Trader01 v19",
+            "name": "Legendary Pharmacist",
             "asset": "Male_Trader01_v19",
             "icon": "/icons/npcs/T_Male_Trader01_v19_icon_normal.webp",
             "stats": {
@@ -53015,7 +53015,7 @@
             }
         },
         {
-            "name": "Male Trader01 v20",
+            "name": "Local Restaurateur",
             "asset": "Male_Trader01_v20",
             "icon": "/icons/npcs/T_Male_Trader01_v20_icon_normal.webp",
             "stats": {
@@ -53047,7 +53047,7 @@
             }
         },
         {
-            "name": "Male Trader01 v21",
+            "name": "Novice Gourmet",
             "asset": "Male_Trader01_v21",
             "icon": "/icons/npcs/T_Male_Trader01_v21_icon_normal.webp",
             "stats": {
@@ -53079,7 +53079,7 @@
             }
         },
         {
-            "name": "Male Trader01 v22",
+            "name": "Legendary Gourmet",
             "asset": "Male_Trader01_v22",
             "icon": "/icons/npcs/T_Male_Trader01_v22_icon_normal.webp",
             "stats": {
@@ -53111,7 +53111,7 @@
             }
         },
         {
-            "name": "Male Trader01 v23",
+            "name": "Authorized Materials Merchant",
             "asset": "Male_Trader01_v23",
             "icon": "/icons/npcs/T_Male_Trader01_v23_icon_normal.webp",
             "stats": {
@@ -53143,7 +53143,7 @@
             }
         },
         {
-            "name": "Male Trader01 v24",
+            "name": "Element Merchant",
             "asset": "Male_Trader01_v24",
             "icon": "/icons/npcs/T_Male_Trader01_v24_icon_normal.webp",
             "stats": {
@@ -53175,7 +53175,7 @@
             }
         },
         {
-            "name": "Male Trader01 v25",
+            "name": "Legendary Materials Merchant",
             "asset": "Male_Trader01_v25",
             "icon": "/icons/npcs/T_Male_Trader01_v25_icon_normal.webp",
             "stats": {
@@ -53207,7 +53207,7 @@
             }
         },
         {
-            "name": "Male Trader02",
+            "name": "Villager",
             "asset": "Male_Trader02",
             "icon": "/icons/npcs/T_SalesPerson_Green_icon_normal.webp",
             "stats": {
@@ -53239,7 +53239,7 @@
             }
         },
         {
-            "name": "Male Trader03",
+            "name": "Villager",
             "asset": "Male_Trader03",
             "icon": "/icons/npcs/T_SalesPerson_icon_normal.webp",
             "stats": {
@@ -53271,7 +53271,7 @@
             }
         },
         {
-            "name": "Male World Tree People01",
+            "name": "Islander",
             "asset": "Male_WorldTreePeople01",
             "icon": "/icons/npcs/T_Male_WorldTreePeople01_icon_normal.webp",
             "stats": {
@@ -53303,7 +53303,7 @@
             }
         },
         {
-            "name": "Mobu Citizen",
+            "name": "Islander",
             "asset": "MobuCitizen",
             "icon": "/icons/npcs/T_Female_MobuCitizen_icon_normal.webp",
             "stats": {
@@ -53335,7 +53335,7 @@
             }
         },
         {
-            "name": "Mobu Citizen Male",
+            "name": "Islander",
             "asset": "MobuCitizen_Male",
             "icon": "/icons/npcs/T_MobuCitizen_Male_icon_normal.webp",
             "stats": {
@@ -53367,7 +53367,7 @@
             }
         },
         {
-            "name": "Mobu Villager",
+            "name": "Villager",
             "asset": "MobuVillager",
             "icon": "/icons/npcs/T_Female_MobuCitizen_icon_normal.webp",
             "stats": {
@@ -53399,7 +53399,7 @@
             }
         },
         {
-            "name": "Food Require 1",
+            "name": "Islander",
             "asset": "NPC_FoodRequire_1",
             "icon": "/icons/npcs/T_Female_MobuCitizen_icon_normal.webp",
             "stats": {
@@ -53431,7 +53431,7 @@
             }
         },
         {
-            "name": "Pal Display 1",
+            "name": "Islander",
             "asset": "NPC_PalDisplay_1",
             "icon": "/icons/npcs/T_Reward_PalDisplay_icon_normal.webp",
             "stats": {
@@ -53495,7 +53495,7 @@
             }
         },
         {
-            "name": "Ninja01 Tower",
+            "name": "Moonflower Genin",
             "asset": "Ninja01_Tower",
             "icon": "/icons/npcs/T_Male_Ninja01_icon_normal.webp",
             "stats": {
@@ -53527,7 +53527,7 @@
             }
         },
         {
-            "name": "Ninja Elite01 Tower",
+            "name": "Moonflower Jonin",
             "asset": "NinjaElite01_Tower",
             "icon": "/icons/npcs/T_Male_NinjaElite01_icon_normal.webp",
             "stats": {
@@ -53559,7 +53559,7 @@
             }
         },
         {
-            "name": "Ninja Elite Bowgun",
+            "name": "Moonflower Jonin",
             "asset": "NinjaElite_Bowgun",
             "icon": "/icons/npcs/T_Male_NinjaElite01_icon_normal.webp",
             "stats": {
@@ -53591,7 +53591,7 @@
             }
         },
         {
-            "name": "Ninja Elite Grenade",
+            "name": "Moonflower Jonin",
             "asset": "NinjaElite_Grenade",
             "icon": "/icons/npcs/T_Male_NinjaElite01_icon_normal.webp",
             "stats": {
@@ -53623,7 +53623,7 @@
             }
         },
         {
-            "name": "Ninja Elite No Equip",
+            "name": "Moonflower Jonin",
             "asset": "NinjaElite_NoEquip",
             "icon": "/icons/npcs/T_Male_NinjaElite01_icon_normal.webp",
             "stats": {
@@ -53655,7 +53655,7 @@
             }
         },
         {
-            "name": "Ninja Bowgun",
+            "name": "Moonflower Genin",
             "asset": "Ninja_Bowgun",
             "icon": "/icons/npcs/T_Male_Ninja01_icon_normal.webp",
             "stats": {
@@ -53687,7 +53687,7 @@
             }
         },
         {
-            "name": "Ninja Bowgun Seabase",
+            "name": "Moonflower Genin",
             "asset": "Ninja_Bowgun_Seabase",
             "icon": "/icons/npcs/T_Male_Ninja01_icon_normal.webp",
             "stats": {
@@ -53719,7 +53719,7 @@
             }
         },
         {
-            "name": "Ninja Grenade",
+            "name": "Moonflower Genin",
             "asset": "Ninja_Grenade",
             "icon": "/icons/npcs/T_Male_Ninja01_icon_normal.webp",
             "stats": {
@@ -53751,7 +53751,7 @@
             }
         },
         {
-            "name": "Ninja No Equip",
+            "name": "Moonflower Genin",
             "asset": "Ninja_NoEquip",
             "icon": "/icons/npcs/T_Male_Ninja01_icon_normal.webp",
             "stats": {
@@ -53783,7 +53783,7 @@
             }
         },
         {
-            "name": "Ninja Prisoner",
+            "name": "Moonflower Genin",
             "asset": "Ninja_Prisoner",
             "icon": "/icons/npcs/T_Male_Ninja01_icon_normal.webp",
             "stats": {
@@ -53815,7 +53815,7 @@
             }
         },
         {
-            "name": "Pal Dealer",
+            "name": "Pal Merchant",
             "asset": "PalDealer",
             "icon": "/icons/npcs/T_PalDealer_icon_normal.webp",
             "stats": {
@@ -53847,7 +53847,7 @@
             }
         },
         {
-            "name": "Pal Dealer Desert",
+            "name": "Pal Merchant",
             "asset": "PalDealer_Desert",
             "icon": "/icons/npcs/T_PalDealer_icon_normal.webp",
             "stats": {
@@ -53879,7 +53879,7 @@
             }
         },
         {
-            "name": "Pal Dealer Volcano",
+            "name": "Pal Merchant",
             "asset": "PalDealer_Volcano",
             "icon": "/icons/npcs/T_PalDealer_icon_normal.webp",
             "stats": {
@@ -53943,7 +53943,7 @@
             }
         },
         {
-            "name": "Pal Trader",
+            "name": "Pal Merchant",
             "asset": "PalTrader",
             "icon": "/icons/npcs/T_Female_MobuCitizen_icon_normal.webp",
             "stats": {
@@ -53975,7 +53975,7 @@
             }
         },
         {
-            "name": "Bow Gun",
+            "name": "PIDF Rifleman",
             "asset": "Police_BowGun",
             "icon": "/icons/npcs/T_Police_icon_normal.webp",
             "stats": {
@@ -54039,7 +54039,7 @@
             }
         },
         {
-            "name": "Handgun",
+            "name": "PIDF Guard",
             "asset": "Police_Handgun",
             "icon": "/icons/npcs/T_Police_icon_normal.webp",
             "stats": {
@@ -54167,7 +54167,7 @@
             }
         },
         {
-            "name": "Invader Handgun",
+            "name": "PIDF Guard",
             "asset": "Police_Invader_Handgun",
             "icon": "/icons/npcs/T_Police_icon_normal.webp",
             "stats": {
@@ -54295,7 +54295,7 @@
             }
         },
         {
-            "name": "Invader Rifle",
+            "name": "PIDF Rifleman",
             "asset": "Police_Invader_Rifle",
             "icon": "/icons/npcs/T_Police_icon_normal.webp",
             "stats": {
@@ -54359,7 +54359,7 @@
             }
         },
         {
-            "name": "Invader Shotgun",
+            "name": "PIDF Elite",
             "asset": "Police_Invader_Shotgun",
             "icon": "/icons/npcs/T_Police_icon_normal.webp",
             "stats": {
@@ -54391,7 +54391,7 @@
             }
         },
         {
-            "name": "Rifle",
+            "name": "PIDF Rifleman",
             "asset": "Police_Rifle",
             "icon": "/icons/npcs/T_Police_icon_normal.webp",
             "stats": {
@@ -54423,7 +54423,7 @@
             }
         },
         {
-            "name": "Rifle Crime Lv4",
+            "name": "PIDF Rifleman",
             "asset": "Police_Rifle_Crime_Lv4",
             "icon": "/icons/npcs/T_Police_icon_normal.webp",
             "stats": {
@@ -54455,7 +54455,7 @@
             }
         },
         {
-            "name": "Rifle Crime Lv5",
+            "name": "PIDF Rifleman",
             "asset": "Police_Rifle_Crime_Lv5",
             "icon": "/icons/npcs/T_Police_icon_normal.webp",
             "stats": {
@@ -54487,7 +54487,7 @@
             }
         },
         {
-            "name": "Rifle Tower",
+            "name": "PIDF Rifleman",
             "asset": "Police_Rifle_Tower",
             "icon": "/icons/npcs/T_Police_icon_normal.webp",
             "stats": {
@@ -54519,7 +54519,7 @@
             }
         },
         {
-            "name": "Shield Tower",
+            "name": "PIDF Rifleman",
             "asset": "Police_Shield_Tower",
             "icon": "/icons/npcs/T_Police_icon_normal.webp",
             "stats": {
@@ -54551,7 +54551,7 @@
             }
         },
         {
-            "name": "Shotgun",
+            "name": "PIDF Elite",
             "asset": "Police_Shotgun",
             "icon": "/icons/npcs/T_Police_icon_normal.webp",
             "stats": {
@@ -54583,7 +54583,7 @@
             }
         },
         {
-            "name": "Shotgun Tower",
+            "name": "PIDF Elite",
             "asset": "Police_Shotgun_Tower",
             "icon": "/icons/npcs/T_Police_icon_normal.webp",
             "stats": {
@@ -54615,7 +54615,7 @@
             }
         },
         {
-            "name": "Treasure Guard Narrow Site",
+            "name": "PIDF Rifleman",
             "asset": "Police_TreasureGuard_NarrowSite",
             "icon": "/icons/npcs/T_Police_icon_normal.webp",
             "stats": {
@@ -54647,7 +54647,7 @@
             }
         },
         {
-            "name": "Vigilance",
+            "name": "PIDF Rifleman",
             "asset": "Police_Vigilance",
             "icon": "/icons/npcs/T_Police_icon_normal.webp",
             "stats": {
@@ -54743,7 +54743,7 @@
             }
         },
         {
-            "name": "Hunter Fat Gatling Gun01",
+            "name": "Syndicate Crusher",
             "asset": "Quest_Hunter_Fat_GatlingGun01",
             "icon": "/icons/npcs/T_Hunter_Fat_icon_normal.webp",
             "stats": {
@@ -54775,7 +54775,7 @@
             }
         },
         {
-            "name": "Hunter Flame Thrower",
+            "name": "Syndicate Cleaner",
             "asset": "Quest_Hunter_FlameThrower",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -54807,7 +54807,7 @@
             }
         },
         {
-            "name": "Hunter Katana01",
+            "name": "Syndicate Swordsman",
             "asset": "Quest_Hunter_Katana01",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -54839,7 +54839,7 @@
             }
         },
         {
-            "name": "Hunter Rocket Launcher01",
+            "name": "Syndicate Elite",
             "asset": "Quest_Hunter_RocketLauncher01",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -54871,7 +54871,7 @@
             }
         },
         {
-            "name": "Male Ninja01",
+            "name": "Moonflower Genin",
             "asset": "Quest_Male_Ninja01",
             "icon": "/icons/npcs/T_Male_Ninja01_icon_normal.webp",
             "stats": {
@@ -54903,7 +54903,7 @@
             }
         },
         {
-            "name": "Male Ninja Elite01",
+            "name": "Moonflower Jonin",
             "asset": "Quest_Male_NinjaElite01",
             "icon": "/icons/npcs/T_Male_NinjaElite01_icon_normal.webp",
             "stats": {
@@ -54935,7 +54935,7 @@
             }
         },
         {
-            "name": "Male Scientist01 Laser Rifle",
+            "name": "PAL Genetic Research Unit Executioner",
             "asset": "Quest_Male_Scientist01_LaserRifle",
             "icon": "/icons/npcs/T_Male_Scientist01_icon_normal.webp",
             "stats": {
@@ -54967,7 +54967,7 @@
             }
         },
         {
-            "name": "Scientist Flame Thrower",
+            "name": "PAL Genetic Research Unit Executioner",
             "asset": "Quest_Scientist_FlameThrower",
             "icon": "/icons/npcs/T_Male_Scientist01_icon_normal.webp",
             "stats": {
@@ -54999,7 +54999,7 @@
             }
         },
         {
-            "name": "Random Event Shop",
+            "name": "Pal Merchant",
             "asset": "RandomEventShop",
             "icon": "/icons/npcs/T_PalDealer_icon_normal.webp",
             "stats": {
@@ -55031,7 +55031,7 @@
             }
         },
         {
-            "name": "Respawn guide",
+            "name": "Friendly Pal Tamer",
             "asset": "Respawn_guide",
             "icon": "/icons/npcs/T_Male_Soldier03_icon_normal.webp",
             "stats": {
@@ -55095,7 +55095,7 @@
             }
         },
         {
-            "name": "Reward Emote A 01",
+            "name": "Islander",
             "asset": "Reward_Emote_A_01",
             "icon": "/icons/npcs/T_Reward_Emote_icon_normal.webp",
             "stats": {
@@ -55127,7 +55127,7 @@
             }
         },
         {
-            "name": "Reward Emote B 01",
+            "name": "Islander",
             "asset": "Reward_Emote_B_01",
             "icon": "/icons/npcs/T_Reward_Emote_icon_normal.webp",
             "stats": {
@@ -55159,7 +55159,7 @@
             }
         },
         {
-            "name": "Reward Emote C 01",
+            "name": "Islander",
             "asset": "Reward_Emote_C_01",
             "icon": "/icons/npcs/T_Reward_Emote_icon_normal.webp",
             "stats": {
@@ -55191,7 +55191,7 @@
             }
         },
         {
-            "name": "Reward Emote D 01",
+            "name": "Islander",
             "asset": "Reward_Emote_D_01",
             "icon": "/icons/npcs/T_Reward_Emote_icon_normal.webp",
             "stats": {
@@ -55223,7 +55223,7 @@
             }
         },
         {
-            "name": "Reward Emote E 01",
+            "name": "Islander",
             "asset": "Reward_Emote_E_01",
             "icon": "/icons/npcs/T_Reward_Emote_icon_normal.webp",
             "stats": {
@@ -55255,7 +55255,7 @@
             }
         },
         {
-            "name": "Reward Emote F 01",
+            "name": "Islander",
             "asset": "Reward_Emote_F_01",
             "icon": "/icons/npcs/T_Reward_Emote_icon_normal.webp",
             "stats": {
@@ -55287,7 +55287,7 @@
             }
         },
         {
-            "name": "Reward Emote G 01",
+            "name": "Islander",
             "asset": "Reward_Emote_G_01",
             "icon": "/icons/npcs/T_Reward_Emote_icon_normal.webp",
             "stats": {
@@ -55319,7 +55319,7 @@
             }
         },
         {
-            "name": "Reward Emote H 01",
+            "name": "Islander",
             "asset": "Reward_Emote_H_01",
             "icon": "/icons/npcs/T_Reward_Emote_icon_normal.webp",
             "stats": {
@@ -55351,7 +55351,7 @@
             }
         },
         {
-            "name": "Reward Emote I 01",
+            "name": "Islander",
             "asset": "Reward_Emote_I_01",
             "icon": "/icons/npcs/T_Reward_Emote_icon_normal.webp",
             "stats": {
@@ -55383,7 +55383,7 @@
             }
         },
         {
-            "name": "Reward Food",
+            "name": "Islander",
             "asset": "Reward_Food",
             "icon": "/icons/npcs/T_Reward_Food_icon_normal.webp",
             "stats": {
@@ -55415,7 +55415,7 @@
             }
         },
         {
-            "name": "Reward Pal Capture Count",
+            "name": "Guard",
             "asset": "Reward_PalCaptureCount",
             "icon": "/icons/npcs/T_Reward_PalCaptureCount_icon_normal.webp",
             "stats": {
@@ -55447,7 +55447,7 @@
             }
         },
         {
-            "name": "Reward Pal Capture Count v02",
+            "name": "Guard",
             "asset": "Reward_PalCaptureCount_v02",
             "icon": "/icons/npcs/T_Reward_PalCaptureCount_v02_icon_normal.webp",
             "stats": {
@@ -55479,7 +55479,7 @@
             }
         },
         {
-            "name": "Reward Pal Display A 01",
+            "name": "Guard",
             "asset": "Reward_PalDisplay_A_01",
             "icon": "/icons/npcs/T_Reward_PalDisplay_icon_normal.webp",
             "stats": {
@@ -55511,7 +55511,7 @@
             }
         },
         {
-            "name": "Reward Pal Display B 01",
+            "name": "Guard",
             "asset": "Reward_PalDisplay_B_01",
             "icon": "/icons/npcs/T_Reward_PalDisplay_icon_normal.webp",
             "stats": {
@@ -55543,7 +55543,7 @@
             }
         },
         {
-            "name": "Reward Pal Display C 01",
+            "name": "Guard",
             "asset": "Reward_PalDisplay_C_01",
             "icon": "/icons/npcs/T_Reward_PalDisplay_icon_normal.webp",
             "stats": {
@@ -55575,7 +55575,7 @@
             }
         },
         {
-            "name": "Reward Pal Display D 01",
+            "name": "Guard",
             "asset": "Reward_PalDisplay_D_01",
             "icon": "/icons/npcs/T_Reward_PalDisplay_icon_normal.webp",
             "stats": {
@@ -55607,7 +55607,7 @@
             }
         },
         {
-            "name": "Reward Pal Display E 01",
+            "name": "Guard",
             "asset": "Reward_PalDisplay_E_01",
             "icon": "/icons/npcs/T_Reward_PalDisplay_icon_normal.webp",
             "stats": {
@@ -55639,7 +55639,7 @@
             }
         },
         {
-            "name": "Reward Pal Display F 01",
+            "name": "Guard",
             "asset": "Reward_PalDisplay_F_01",
             "icon": "/icons/npcs/T_Reward_PalDisplay_icon_normal.webp",
             "stats": {
@@ -55671,7 +55671,7 @@
             }
         },
         {
-            "name": "Reward Pal Display G 01",
+            "name": "Guard",
             "asset": "Reward_PalDisplay_G_01",
             "icon": "/icons/npcs/T_Reward_PalDisplay_icon_normal.webp",
             "stats": {
@@ -55703,7 +55703,7 @@
             }
         },
         {
-            "name": "Reward Pal Display H 01",
+            "name": "Guard",
             "asset": "Reward_PalDisplay_H_01",
             "icon": "/icons/npcs/T_Reward_PalDisplay_icon_normal.webp",
             "stats": {
@@ -55735,7 +55735,7 @@
             }
         },
         {
-            "name": "Reward Pal Display I 01",
+            "name": "Guard",
             "asset": "Reward_PalDisplay_I_01",
             "icon": "/icons/npcs/T_Reward_PalDisplay_icon_normal.webp",
             "stats": {
@@ -55799,7 +55799,7 @@
             }
         },
         {
-            "name": "Reward Paldex v02",
+            "name": "Guard",
             "asset": "Reward_Paldex_v02",
             "icon": "/icons/npcs/T_Reward_Paldex_v02_icon_normal.webp",
             "stats": {
@@ -55831,7 +55831,7 @@
             }
         },
         {
-            "name": "Robbery Leader",
+            "name": "Pal Merchant",
             "asset": "Robbery_Leader",
             "icon": "/icons/npcs/T_Female_MobuCitizen_icon_normal.webp",
             "stats": {
@@ -55863,7 +55863,7 @@
             }
         },
         {
-            "name": "Robbery Minion",
+            "name": "Pal Merchant",
             "asset": "Robbery_Minion",
             "icon": "/icons/npcs/T_Female_MobuCitizen_icon_normal.webp",
             "stats": {
@@ -55895,7 +55895,7 @@
             }
         },
         {
-            "name": "Sales Person",
+            "name": "Wandering Merchant",
             "asset": "SalesPerson",
             "icon": "/icons/npcs/T_SalesPerson_icon_normal.webp",
             "stats": {
@@ -55927,7 +55927,7 @@
             }
         },
         {
-            "name": "Sales Person Desert",
+            "name": "Wandering Merchant",
             "asset": "SalesPerson_Desert",
             "icon": "/icons/npcs/T_SalesPerson_icon_normal.webp",
             "stats": {
@@ -55959,7 +55959,7 @@
             }
         },
         {
-            "name": "Sales Person Desert2",
+            "name": "Wandering Merchant",
             "asset": "SalesPerson_Desert2",
             "icon": "/icons/npcs/T_SalesPerson_Green_icon_normal.webp",
             "stats": {
@@ -55991,7 +55991,7 @@
             }
         },
         {
-            "name": "Sales Person Volcano",
+            "name": "Wandering Merchant",
             "asset": "SalesPerson_Volcano",
             "icon": "/icons/npcs/T_SalesPerson_icon_normal.webp",
             "stats": {
@@ -56023,7 +56023,7 @@
             }
         },
         {
-            "name": "Sales Person Volcano2",
+            "name": "Wandering Merchant",
             "asset": "SalesPerson_Volcano2",
             "icon": "/icons/npcs/T_SalesPerson_Green_icon_normal.webp",
             "stats": {
@@ -56055,7 +56055,7 @@
             }
         },
         {
-            "name": "Sales Person Wander",
+            "name": "Wandering Merchant",
             "asset": "SalesPerson_Wander",
             "icon": "/icons/npcs/T_SalesPerson_Green_icon_normal.webp",
             "stats": {
@@ -56087,7 +56087,7 @@
             }
         },
         {
-            "name": "Scientist Flame Thrower",
+            "name": "PAL Genetic Research Unit Executioner",
             "asset": "Scientist_FlameThrower",
             "icon": "/icons/npcs/T_Male_Scientist01_icon_normal.webp",
             "stats": {
@@ -56119,7 +56119,7 @@
             }
         },
         {
-            "name": "Scientist Flame Thrower Invader",
+            "name": "PAL Genetic Research Unit Executioner",
             "asset": "Scientist_FlameThrower_Invader",
             "icon": "/icons/npcs/T_Male_Scientist01_icon_normal.webp",
             "stats": {
@@ -56151,7 +56151,7 @@
             }
         },
         {
-            "name": "Scientist Grenade Launcher",
+            "name": "PAL Genetic Research Unit Executioner",
             "asset": "Scientist_GrenadeLauncher",
             "icon": "/icons/npcs/T_Male_Scientist01_icon_normal.webp",
             "stats": {
@@ -56183,7 +56183,7 @@
             }
         },
         {
-            "name": "Scientist Missile Launcher",
+            "name": "PAL Genetic Research Unit Executioner",
             "asset": "Scientist_MissileLauncher",
             "icon": "/icons/npcs/T_Male_Scientist01_icon_normal.webp",
             "stats": {
@@ -56215,7 +56215,7 @@
             }
         },
         {
-            "name": "Scientist Prisoner",
+            "name": "PAL Genetic Research Unit Executioner",
             "asset": "Scientist_Prisoner",
             "icon": "/icons/npcs/T_Male_Scientist01_icon_normal.webp",
             "stats": {
@@ -56311,7 +56311,7 @@
             }
         },
         {
-            "name": "Viking Elite Tower",
+            "name": "Feybreak Berserker",
             "asset": "VikingElite_Tower",
             "icon": "/icons/npcs/T_Viking_Elite_icon_normal.webp",
             "stats": {
@@ -56375,7 +56375,7 @@
             }
         },
         {
-            "name": "Viking Elite Invader",
+            "name": "Feybreak Berserker",
             "asset": "Viking_Elite_Invader",
             "icon": "/icons/npcs/T_Viking_Elite_icon_normal.webp",
             "stats": {
@@ -56407,7 +56407,7 @@
             }
         },
         {
-            "name": "Viking Grenade Launcher",
+            "name": "Feybreak Warrior",
             "asset": "Viking_GrenadeLauncher",
             "icon": "/icons/npcs/T_Viking_icon_normal.webp",
             "stats": {
@@ -56439,7 +56439,7 @@
             }
         },
         {
-            "name": "Viking Melee",
+            "name": "Feybreak Warrior",
             "asset": "Viking_Melee",
             "icon": "/icons/npcs/T_Viking_icon_normal.webp",
             "stats": {
@@ -56471,7 +56471,7 @@
             }
         },
         {
-            "name": "Viking Prisoner",
+            "name": "Feybreak Warrior",
             "asset": "Viking_Prisoner",
             "icon": "/icons/npcs/T_Viking_icon_normal.webp",
             "stats": {
@@ -56503,7 +56503,7 @@
             }
         },
         {
-            "name": "Viking Rocket Launcher",
+            "name": "Feybreak Berserker",
             "asset": "Viking_RocketLauncher",
             "icon": "/icons/npcs/T_Viking_Elite_icon_normal.webp",
             "stats": {
@@ -56535,7 +56535,7 @@
             }
         },
         {
-            "name": "Viking Tower",
+            "name": "Feybreak Warrior",
             "asset": "Viking_Tower",
             "icon": "/icons/npcs/T_Viking_icon_normal.webp",
             "stats": {
@@ -56567,7 +56567,7 @@
             }
         },
         {
-            "name": "Visiting Merchant",
+            "name": "Visitor",
             "asset": "VisitingMerchant",
             "icon": "/icons/npcs/T_Female_MobuCitizen_icon_normal.webp",
             "stats": {
@@ -56599,7 +56599,7 @@
             }
         },
         {
-            "name": "Visitor Hunter Rifle",
+            "name": "Syndicate Thug",
             "asset": "Visitor_Hunter_Rifle",
             "icon": "/icons/npcs/T_Hunter_icon_normal.webp",
             "stats": {
@@ -56631,7 +56631,7 @@
             }
         },
         {
-            "name": "Visitor Present",
+            "name": "Wandering Merchant",
             "asset": "Visitor_Present",
             "icon": "/icons/npcs/T_SalesPerson_icon_normal.webp",
             "stats": {
@@ -56663,7 +56663,7 @@
             }
         },
         {
-            "name": "Visitor Recruiter",
+            "name": "Pal Recruiter",
             "asset": "Visitor_Recruiter",
             "icon": "/icons/npcs/T_Visitor_Recruiter_icon_normal.webp",
             "stats": {
@@ -56727,7 +56727,7 @@
             }
         },
         {
-            "name": "Yamishima guide1",
+            "name": "Islander",
             "asset": "Yamishima_guide1",
             "icon": "/icons/npcs/T_MobuCitizen_Male_icon_normal.webp",
             "stats": {
@@ -56759,7 +56759,7 @@
             }
         },
         {
-            "name": "Yamishima guide2",
+            "name": "Islander",
             "asset": "Yamishima_guide2",
             "icon": "/icons/npcs/T_Male_People02_icon_normal.webp",
             "stats": {
@@ -56791,7 +56791,7 @@
             }
         },
         {
-            "name": "Yamishima guide3",
+            "name": "Islander",
             "asset": "Yamishima_guide3",
             "icon": "/icons/npcs/T_Female_People03_icon_normal.webp",
             "stats": {
@@ -56823,7 +56823,7 @@
             }
         },
         {
-            "name": "Yamishima guide4",
+            "name": "Islander",
             "asset": "Yamishima_guide4",
             "icon": "/icons/npcs/T_SalesPerson_icon_normal.webp",
             "stats": {
@@ -56855,7 +56855,7 @@
             }
         },
         {
-            "name": "Yamishima guide5",
+            "name": "Mercenary Bodyguard",
             "asset": "Yamishima_guide5",
             "icon": "/icons/npcs/T_Male_Soldier01_icon_normal.webp",
             "stats": {

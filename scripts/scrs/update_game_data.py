@@ -703,19 +703,30 @@ def _make_npc_entry(npc_id, row_data, human_rows, human_rows_ci, npc_name_l10n, 
     if icon_path:
         icon_filename = icon_path.split('/')[-1].split('.')[0] if '.' in icon_path else icon_path.split('/')[-1]
         copied_icon = find_and_copy_icon(icon_filename, 'npcs', npc_icon_subdirs)
-    key = f'NAME_{npc_id}'
-    l10n_name = npc_name_l10n.get(key)
-    if not l10n_name or l10n_name.lower() in ('en_text', 'none', ''):
-        l10n_name = npc_l10n_lower.get(key.lower())
-    if not l10n_name or l10n_name.lower() in ('en_text', 'none', ''):
-        l10n_name = None
-    display_name = l10n_name or _make_npc_name_fallback(npc_id)
-    npc_entry = {'name': display_name, 'asset': npc_id, 'icon': copied_icon or f'/icons/npcs/{npc_id}_icon_normal.webp'}
     hrow = human_rows.get(npc_id) or human_rows_ci.get(npc_id_lower)
     if not hrow:
         base_id = re.sub(r'_v\d+$', '', npc_id)
         if base_id != npc_id:
             hrow = human_rows.get(base_id) or human_rows_ci.get(base_id.lower())
+        if not hrow:
+            base_id = re.sub(r'^(BOSS_|NPC_|PREDATOR_|GYM_|RAID_|SUMMON_|QUEST_|POLICE_)', '', npc_id, flags=re.IGNORECASE)
+            if base_id != npc_id:
+                hrow = human_rows.get(base_id) or human_rows_ci.get(base_id.lower())
+    l10n_name = None
+    key = f'NAME_{npc_id}'
+    l10n_name = npc_name_l10n.get(key)
+    if not l10n_name or l10n_name.lower() in ('en_text', 'none', ''):
+        l10n_name = npc_l10n_lower.get(key.lower())
+    if (not l10n_name or l10n_name.lower() in ('en_text', 'none', '')) and hrow and isinstance(hrow, dict):
+        override = hrow.get('OverrideNameTextID', '')
+        if override:
+            l10n_name = npc_name_l10n.get(override)
+            if not l10n_name or l10n_name.lower() in ('en_text', 'none', ''):
+                l10n_name = npc_l10n_lower.get(override.lower())
+    if not l10n_name or l10n_name.lower() in ('en_text', 'none', ''):
+        l10n_name = None
+    display_name = l10n_name or _make_npc_name_fallback(npc_id)
+    npc_entry = {'name': display_name, 'asset': npc_id, 'icon': copied_icon or f'/icons/npcs/{npc_id}_icon_normal.webp'}
     if hrow and isinstance(hrow, dict):
         ws = {}
         for w in ['EmitFlame', 'Watering', 'Seeding', 'GenerateElectricity', 'Handcraft', 'Collection', 'Deforest', 'Mining', 'OilExtraction', 'ProductMedicine', 'Cool', 'Transport', 'MonsterFarm']:

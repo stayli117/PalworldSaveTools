@@ -5,6 +5,7 @@
 - **Add individual skills in Learned Moves dialog** — new `+` button opens the skill picker to add a single skill to `MasteredWaza`, instead of only having Learn All then remove one by one.
 - **Technology tab in Player Inventory** — new Technology subtab (5th, after Missions) shows all 588 techs grouped by level cap with a grid matching in-game UX: level badge, 8 regular techs per row, divider, ancient tech column. Click to toggle unlock, Select All / Deselect All / Apply buttons. Tech Point and Ancient Tech Point spinners included. Writes to player `.sav`.
 - **Bulk Technology dialog redesigned** — now uses the same row-by-row grid layout as the Player Inventory tab, with multi-select (click to toggle), search, player list on the right, and a single-pass add/remove that processes all selections in one file write.
+- **Bulk Sync with Lucky now correctly applies the alpha/boss variant** — syncing a lucky (shiny) pal to same-species pals now also copies the `CharacterID` with its `BOSS_` prefix, not just the `IsRarePal` flag. Previously target pals got the lucky star visual but remained normal-sized without the HP boost. The alpha/boss variant (increased size, HP ×1.087 multiplier, boss badge) is now fully applied.
 - Bumped version to 2.2.0
 
 #2.1.9

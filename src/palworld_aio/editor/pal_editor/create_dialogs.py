@@ -472,6 +472,9 @@ class BulkSyncPalDialog(FramelessDialog):
                 target_raw['GotWorkSuitabilityAddRankList'] = copy.deepcopy(ws)
             else:
                 target_raw.pop('GotWorkSuitabilityAddRankList', None)
+            source_cid = extract_value(current_raw, 'CharacterID', '')
+            if source_cid.upper().startswith('BOSS_') and not extract_value(target_raw, 'CharacterID', '').upper().startswith('BOSS_'):
+                target_raw['CharacterID'] = copy.deepcopy(current_raw['CharacterID'])
             if 'EquipWaza' in target_raw:
                 ew = target_raw['EquipWaza']
                 ew_list = ew.get('value', {}).get('values', []) if isinstance(ew, dict) else ew if isinstance(ew, list) else []
@@ -711,6 +714,9 @@ class BulkSyncAllDialog(FramelessDialog):
                         ew['value']['values'] = normalized
                     else:
                         target_raw['EquipWaza'] = normalized
+            source_cid = extract_value(self._source_raw, 'CharacterID', '')
+            if source_cid.upper().startswith('BOSS_') and not extract_value(target_raw, 'CharacterID', '').upper().startswith('BOSS_'):
+                target_raw['CharacterID'] = copy.deepcopy(self._source_raw['CharacterID'])
             count += 1
         self.pal_editor.pal_info._refresh()
         self.pal_editor._update_party_slots()

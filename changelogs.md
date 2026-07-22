@@ -5,6 +5,7 @@
 - **Level-2 requirement removed from Character Transfer and Fix Host Save** — both tools no longer block level-1 players from being selected or processed. Useful for testing and fresh characters.
 - **Level editing in Stats tab works for fresh characters** — players without an existing Level field (new/level-1 characters) can now have their level changed without silently breaking the save. The GVAS serializer was crashing on the missing property type metadata, causing File > Save Changes to appear successful while writing nothing. Also fixed the same bug in the Exp field and StatusPoint creation.
 - **Fix Illegal Pals dialog redesigned** — two-column layout with player/guild checkboxes on the left and per-pal detail rows (species icon, name, level, IVs, souls, location) on the right. Click a player to view their illegal pals. Base workers now display guild name and resolved base ID, and are scoped per base for targeted fixing.
+- **Clear XGP Fog no longer crashes when Steam save path doesn't exist** — the Game Pass fog clearing button now directly clears fog on the extracted save instead of calling the Steam-focused batch function, which crashed with a file-not-found error on Game Pass-only systems.
 - Bumped version to 2.1.8
 
 #2.1.7

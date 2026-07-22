@@ -53,7 +53,7 @@ def clear_fog_in_all_subfolders():
         print(t('Clearing fog in: {path}', path=savegames_path))
         clear_fog_in_local_data(target)
         updated_count += 1
-    else:
+    elif os.path.isdir(savegames_path):
         for folder in os.listdir(savegames_path):
             folder_path = os.path.join(savegames_path, folder)
             if os.path.isdir(folder_path):
@@ -211,7 +211,7 @@ def restore_map():
             constants.xgp_loaded = True
             try:
                 backup_local_data(tmp)
-                clear_fog_in_all_subfolders()
+                clear_fog_in_local_data(os.path.join(tmp, 'LocalData.sav'))
                 wrapper_to_sav(constants.loaded_level_json, level_path)
                 save_xgp_changes(
                     container_path=cpath,

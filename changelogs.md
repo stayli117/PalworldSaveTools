@@ -4,6 +4,7 @@
 - **Food buff stats in pal editor** — pal stat calculations now factor in active food buffs (Attack/Defense/WorkSpeed) from `FoodWithStatusEffect`. A third row in the pal info panel shows buff timer icons when a food buff is active, matching the in-game UI.
 - **Add individual skills in Learned Moves dialog** — new `+` button opens the skill picker to add a single skill to `MasteredWaza`, instead of only having Learn All then remove one by one.
 - **Technology tab in Player Inventory** — new Technology subtab (5th, after Missions) shows all 588 techs grouped by level cap with a grid matching in-game UX: level badge, 8 regular techs per row, divider, ancient tech column. Click to toggle unlock, Select All / Deselect All / Apply buttons. Tech Point and Ancient Tech Point spinners included. Writes to player `.sav`.
+- **Bulk Technology dialog redesigned** — now uses the same row-by-row grid layout as the Player Inventory tab, with multi-select (click to toggle), search, player list on the right, and a single-pass add/remove that processes all selections in one file write.
 - Bumped version to 2.2.0
 
 #2.1.9

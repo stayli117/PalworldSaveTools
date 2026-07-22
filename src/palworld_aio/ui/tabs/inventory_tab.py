@@ -875,12 +875,14 @@ class MissionPanelWidget(QFrame):
         self._scroll_layout.setContentsMargins(0, 0, 0, 0); self._scroll_layout.setSpacing(2)
         scroll.setWidget(scroll_content)
         layout.addWidget(scroll, 1)
+    def _uid_filename(self, uid):
+        return str(uid).replace('-', '').upper()
     def load_player(self, uid):
         self._player_uid = uid
         self._active_quests = []; self._completed_quests = []
         try:
             from palworld_aio.utils import sav_to_gvasfile
-            save_path = os.path.join(constants.current_save_path, 'Players', f'{uid}.sav')
+            save_path = os.path.join(constants.current_save_path, 'Players', f'{self._uid_filename(uid)}.sav')
             if not os.path.exists(save_path):
                 return
             gvas = sav_to_gvasfile(save_path)
@@ -955,14 +957,14 @@ class MissionPanelWidget(QFrame):
         return sel
     def _gvas_for_player(self):
         from palworld_aio.utils import sav_to_gvasfile
-        save_path = os.path.join(constants.current_save_path, 'Players', f'{self._player_uid}.sav')
+        save_path = os.path.join(constants.current_save_path, 'Players', f'{self._uid_filename(self._player_uid)}.sav')
         if not os.path.exists(save_path): return None, None
         gvas = sav_to_gvasfile(save_path)
         rd = gvas.properties.get('SaveData', {}).get('value', {}).get('RecordData', {}).get('value', {})
         return gvas, rd
     def _save(self, gvas):
         from palworld_aio.utils import gvasfile_to_sav
-        save_path = os.path.join(constants.current_save_path, 'Players', f'{self._player_uid}.sav')
+        save_path = os.path.join(constants.current_save_path, 'Players', f'{self._uid_filename(self._player_uid)}.sav')
         gvasfile_to_sav(gvas, save_path)
     def _complete_selected(self):
         sel = self._get_selected()

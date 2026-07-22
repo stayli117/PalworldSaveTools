@@ -18,6 +18,7 @@ NEW_TRANSLATIONS = {
     'inventory.missions_reset': 'Reset Selected',
     'inventory.missions_active': 'Active Missions',
     'inventory.missions_completed': 'Completed Missions',
+    'inventory.missions_not_started': 'Not Started',
 }
 OLD_KEYS = []
 def _clean_uv_locks():

@@ -1938,5 +1938,6 @@
     "inventory.missions_complete": "Terminer la sélection",
     "inventory.missions_reset": "Réinitialiser la sélection",
     "inventory.missions_active": "Missions actives",
-    "inventory.missions_completed": "Missions terminées"
+    "inventory.missions_completed": "Missions terminées",
+    "inventory.missions_not_started": "Non démarré"
 }

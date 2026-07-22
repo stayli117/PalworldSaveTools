@@ -1980,5 +1980,6 @@
     "inventory.missions_complete": "Komplett ausgewählt",
     "inventory.missions_reset": "Ausgewählte zurücksetzen",
     "inventory.missions_active": "Aktive Missionen",
-    "inventory.missions_completed": "Abgeschlossene Missionen"
+    "inventory.missions_completed": "Abgeschlossene Missionen",
+    "inventory.missions_not_started": "Nicht gestartet"
 }

@@ -1950,5 +1950,6 @@
     "inventory.missions_complete": "Completado Seleccionado",
     "inventory.missions_reset": "Restablecer seleccionado",
     "inventory.missions_active": "Misiones activas",
-    "inventory.missions_completed": "Misiones completadas"
+    "inventory.missions_completed": "Misiones completadas",
+    "inventory.missions_not_started": "No iniciado"
 }

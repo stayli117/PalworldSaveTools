@@ -2243,5 +2243,6 @@
     "inventory.missions_complete": "Complete Selected",
     "inventory.missions_reset": "Reset Selected",
     "inventory.missions_active": "Active Missions",
-    "inventory.missions_completed": "Completed Missions"
+    "inventory.missions_completed": "Completed Missions",
+    "inventory.missions_not_started": "Not Started"
 }

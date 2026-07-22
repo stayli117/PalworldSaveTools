@@ -2243,5 +2243,6 @@
     "inventory.missions_complete": "Concluir selecionado",
     "inventory.missions_reset": "Redefinir selecionado",
     "inventory.missions_active": "Missões Ativas",
-    "inventory.missions_completed": "Missões Concluídas"
+    "inventory.missions_completed": "Missões Concluídas",
+    "inventory.missions_not_started": "Não iniciado"
 }

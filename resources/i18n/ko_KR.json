@@ -1955,5 +1955,6 @@
     "inventory.missions_complete": "선택 완료",
     "inventory.missions_reset": "선택 재설정",
     "inventory.missions_active": "활성 임무",
-    "inventory.missions_completed": "완료된 임무"
+    "inventory.missions_completed": "완료된 임무",
+    "inventory.missions_not_started": "시작되지 않음"
 }

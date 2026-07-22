@@ -1954,5 +1954,6 @@
     "inventory.missions_complete": "Завершить выбранное",
     "inventory.missions_reset": "Сбросить выбранное",
     "inventory.missions_active": "Активные миссии",
-    "inventory.missions_completed": "Завершенные миссии"
+    "inventory.missions_completed": "Завершенные миссии",
+    "inventory.missions_not_started": "Не запущено"
 }

@@ -1956,5 +1956,6 @@
     "inventory.missions_complete": "選択済みを完了",
     "inventory.missions_reset": "選択をリセット",
     "inventory.missions_active": "アクティブなミッション",
-    "inventory.missions_completed": "完了したミッション"
+    "inventory.missions_completed": "完了したミッション",
+    "inventory.missions_not_started": "未開始"
 }

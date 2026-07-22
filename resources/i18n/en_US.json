@@ -2238,5 +2238,10 @@
     "base_inventory.replace_show_all": "Show all structure types",
     "fix_illegal_pal.players_header": "Players",
     "fix_illegal_pal.pals_header": "Illegal Pals",
-    "fix_illegal_pal.pals_for_header": "Illegal Pals — {name}"
+    "fix_illegal_pal.pals_for_header": "Illegal Pals — {name}",
+    "inventory.missions": "Missions",
+    "inventory.missions_complete": "Complete Selected",
+    "inventory.missions_reset": "Reset Selected",
+    "inventory.missions_active": "Active Missions",
+    "inventory.missions_completed": "Completed Missions"
 }

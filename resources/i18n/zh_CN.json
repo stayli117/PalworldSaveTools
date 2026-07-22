@@ -1953,5 +1953,10 @@
     "base_inventory.replace_show_all": "显示所有结构类型",
     "fix_illegal_pal.players_header": "玩家",
     "fix_illegal_pal.pals_header": "非法好友",
-    "fix_illegal_pal.pals_for_header": "非法好友 — {name}"
+    "fix_illegal_pal.pals_for_header": "非法好友 — {name}",
+    "inventory.missions": "使命",
+    "inventory.missions_complete": "完成选择",
+    "inventory.missions_reset": "重置所选内容",
+    "inventory.missions_active": "活跃任务",
+    "inventory.missions_completed": "已完成的任务"
 }

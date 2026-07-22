@@ -989,25 +989,14 @@ def fix_missions(parent=None):
     player_files = [f for f in os.listdir(save_path) if f.endswith('.sav') and '_dps' not in f]
     if not player_files:
         return {'total': 0, 'fixed': 0, 'skipped': 0}
-    def deep_delete_completed_quest_array(data):
-        found = False
-        if isinstance(data, dict):
-            if 'CompletedQuestArray' in data:
-                data['CompletedQuestArray']['value']['values'] = []
-                return True
-            for v in data.values():
-                if deep_delete_completed_quest_array(v):
-                    found = True
-        elif isinstance(data, list):
-            for item in data:
-                if deep_delete_completed_quest_array(item):
-                    found = True
-        return found
     def process_player_file(filename):
         file_path = os.path.join(save_path, filename)
         try:
             gvas = sav_to_gvasfile(file_path)
-            if deep_delete_completed_quest_array(gvas.properties):
+            rd = gvas.properties.get('SaveData', {}).get('value', {}).get('RecordData', {}).get('value', {})
+            ca = rd.get('CompletedQuestArray_FullRelease', {}).get('value', {}).get('values')
+            if ca is not None and isinstance(ca, list):
+                ca.clear()
                 gvasfile_to_sav(gvas, file_path)
                 return (1, 1, 0)
             else:

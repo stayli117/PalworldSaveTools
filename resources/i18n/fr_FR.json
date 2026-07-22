@@ -1933,5 +1933,10 @@
     "base_inventory.replace_show_all": "Afficher tous les types de structures",
     "fix_illegal_pal.players_header": "Joueurs",
     "fix_illegal_pal.pals_header": "Copains illégaux",
-    "fix_illegal_pal.pals_for_header": "Copains illégaux — {name}"
+    "fix_illegal_pal.pals_for_header": "Copains illégaux — {name}",
+    "inventory.missions": "Missions",
+    "inventory.missions_complete": "Terminer la sélection",
+    "inventory.missions_reset": "Réinitialiser la sélection",
+    "inventory.missions_active": "Missions actives",
+    "inventory.missions_completed": "Missions terminées"
 }

@@ -1949,5 +1949,10 @@
     "base_inventory.replace_show_all": "Показать все типы структур",
     "fix_illegal_pal.players_header": "Игроки",
     "fix_illegal_pal.pals_header": "Нелегальные приятели",
-    "fix_illegal_pal.pals_for_header": "Нелегальные друзья — {name}"
+    "fix_illegal_pal.pals_for_header": "Нелегальные друзья — {name}",
+    "inventory.missions": "Миссии",
+    "inventory.missions_complete": "Завершить выбранное",
+    "inventory.missions_reset": "Сбросить выбранное",
+    "inventory.missions_active": "Активные миссии",
+    "inventory.missions_completed": "Завершенные миссии"
 }

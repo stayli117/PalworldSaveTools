@@ -1950,5 +1950,10 @@
     "base_inventory.replace_show_all": "모든 구조 유형 표시",
     "fix_illegal_pal.players_header": "플레이어",
     "fix_illegal_pal.pals_header": "불법친구",
-    "fix_illegal_pal.pals_for_header": "불법 친구 — {name}"
+    "fix_illegal_pal.pals_for_header": "불법 친구 — {name}",
+    "inventory.missions": "임무",
+    "inventory.missions_complete": "선택 완료",
+    "inventory.missions_reset": "선택 재설정",
+    "inventory.missions_active": "활성 임무",
+    "inventory.missions_completed": "완료된 임무"
 }

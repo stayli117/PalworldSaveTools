@@ -2238,5 +2238,10 @@
     "base_inventory.replace_show_all": "Mostrar todos os tipos de estrutura",
     "fix_illegal_pal.players_header": "Jogadores",
     "fix_illegal_pal.pals_header": "Amigos ilegais",
-    "fix_illegal_pal.pals_for_header": "Amigos ilegais - {name}"
+    "fix_illegal_pal.pals_for_header": "Amigos ilegais - {name}",
+    "inventory.missions": "Missões",
+    "inventory.missions_complete": "Concluir selecionado",
+    "inventory.missions_reset": "Redefinir selecionado",
+    "inventory.missions_active": "Missões Ativas",
+    "inventory.missions_completed": "Missões Concluídas"
 }

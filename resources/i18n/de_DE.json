@@ -1975,5 +1975,10 @@
     "base_inventory.replace_show_all": "Alle Strukturtypen anzeigen",
     "fix_illegal_pal.players_header": "Spieler",
     "fix_illegal_pal.pals_header": "Illegale Freunde",
-    "fix_illegal_pal.pals_for_header": "Illegale Freunde – {name}"
+    "fix_illegal_pal.pals_for_header": "Illegale Freunde – {name}",
+    "inventory.missions": "Missionen",
+    "inventory.missions_complete": "Komplett ausgewählt",
+    "inventory.missions_reset": "Ausgewählte zurücksetzen",
+    "inventory.missions_active": "Aktive Missionen",
+    "inventory.missions_completed": "Abgeschlossene Missionen"
 }

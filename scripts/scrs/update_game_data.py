@@ -2357,6 +2357,29 @@ def update_boss_mapping():
         for a in sorted(unmatched):
             name = next((it.get('name','?') for it in items_data.get('items',[]) if it.get('asset')==a), a)
             print(f'    {a} ({name})')
+def update_quest_data():
+    print('\n=== Updating Quest Data ===')
+    quest_data = load_export_json('Quest/DT_PalQuestData.json')
+    if not quest_data:
+        print('  No quest data found. Skipping.')
+        return
+    rows = get_rows(quest_data)
+    if not rows:
+        print('  No quest rows found. Skipping.')
+        return
+    quests = []
+    for qid in sorted(rows.keys()):
+        row = rows[qid]
+        qtype = row.get('QuestType', '')
+        if isinstance(qtype, dict):
+            qtype = qtype.get('value', '')
+        qtype = qtype.replace('EPalQuestType::', '')
+        display = qid.replace('_', ' ').strip()
+        quests.append({'id': qid, 'type': qtype, 'name': display})
+    output = {'quests': quests}
+    save_resource_json('questdata.json', output)
+    print(f'  Total quests: {len(quests)}')
+
 def update_world_map_area_data():
     print('\n=== Updating World Map Area Data ===')
     area_data = load_export_json('WorldMapAreaData/DT_WorldMapAreaData.json')
@@ -3095,6 +3118,7 @@ def main():
     _run_step('Updating relic data...', update_relic_data)
     _run_step('Updating UI icons...', update_ui_icons)
     _run_step('Updating boss mapping...', update_boss_mapping)
+    _run_step('Updating quest data...', update_quest_data)
     _run_step('Updating work data...', update_work_data)
     _run_step('Updating world map areas...', update_world_map_area_data)
     _run_step('Updating fast travel data...', update_fast_travel_data)

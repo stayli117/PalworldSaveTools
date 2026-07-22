@@ -800,6 +800,199 @@ class StatsPanelWidget(QFrame):
         self.tp_spin.blockSignals(False)
         self.atp_spin.blockSignals(False)
         self._ability_status.setText('')
+class MissionPanelWidget(QFrame):
+    missions_changed = Signal()
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self._quest_data = {}
+        self._active_quests = []
+        self._completed_quests = []
+        self._player_uid = None
+        self._checkboxes = {'active': [], 'completed': []}
+        self._setup_ui()
+        self._load_quest_data()
+    def _load_quest_data(self):
+        try:
+            base_dir = constants.get_base_path()
+            fp = resource_path(base_dir, 'game_data', 'questdata.json')
+            with open(fp, encoding='utf-8') as f:
+                data = json.load(f)
+            self._quest_data = {q['id']: q for q in data.get('quests', [])}
+        except Exception:
+            self._quest_data = {}
+    def _derive_name(self, qid):
+        q = self._quest_data.get(qid)
+        if q:
+            return q['name']
+        return qid.replace('_', ' ').strip()
+    def _derive_type(self, qid):
+        q = self._quest_data.get(qid)
+        if q:
+            return q['type']
+        if qid.startswith('Main_'): return 'Main'
+        if qid.startswith('Sub_'): return 'Sub'
+        if qid.startswith('Hidden_'): return 'Hidden'
+        return ''
+    def _setup_ui(self):
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(6, 6, 6, 6); layout.setSpacing(4)
+        header = QHBoxLayout()
+        title = QLabel(t('inventory.missions', default='Missions'))
+        title.setStyleSheet('font-size: 11px; font-weight: bold; color: #fff;')
+        title.setAlignment(Qt.AlignCenter)
+        header.addWidget(title); header.addStretch()
+        sel_all = QPushButton(t('player_item.select_all', default='All'))
+        sel_all.setFixedHeight(20)
+        sel_all.setStyleSheet('QPushButton { background: rgba(74,222,128,0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.2); border-radius: 4px; padding: 2px 6px; font-weight: 600; font-size: 9px; } QPushButton:hover { background: rgba(74,222,128,0.2); color: #FFFFFF; }')
+        sel_all.setCursor(Qt.PointingHandCursor)
+        sel_all.clicked.connect(lambda: self._toggle_all(True))
+        header.addWidget(sel_all)
+        sel_none = QPushButton(t('player_item.deselect_all', default='None'))
+        sel_none.setFixedHeight(20)
+        sel_none.setStyleSheet('QPushButton { background: rgba(251,113,133,0.12); color: #FB7185; border: 1px solid rgba(251,113,133,0.2); border-radius: 4px; padding: 2px 6px; font-weight: 600; font-size: 9px; } QPushButton:hover { background: rgba(251,113,133,0.2); color: #FFFFFF; }')
+        sel_none.setCursor(Qt.PointingHandCursor)
+        sel_none.clicked.connect(lambda: self._toggle_all(False))
+        header.addWidget(sel_none)
+        layout.addLayout(header)
+        btn_row = QHBoxLayout()
+        self.complete_btn = QPushButton(t('inventory.missions_complete', default='Complete Selected'))
+        self.complete_btn.setStyleSheet('QPushButton { background: rgba(74,222,128,0.15); color: #4ade80; border: 1px solid rgba(74,222,128,0.3); border-radius: 6px; padding: 4px 8px; font-weight: 600; font-size: 10px; } QPushButton:hover { background: rgba(74,222,128,0.25); border-color: rgba(74,222,128,0.5); color: #FFFFFF; }')
+        self.complete_btn.setCursor(Qt.PointingHandCursor)
+        self.complete_btn.clicked.connect(self._complete_selected)
+        btn_row.addWidget(self.complete_btn)
+        self.reset_btn = QPushButton(t('inventory.missions_reset', default='Reset Selected'))
+        self.reset_btn.setStyleSheet('QPushButton { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); border-radius: 6px; padding: 4px 8px; font-weight: 600; font-size: 10px; } QPushButton:hover { background: rgba(251,191,36,0.25); border-color: rgba(251,191,36,0.5); color: #FFFFFF; }')
+        self.reset_btn.setCursor(Qt.PointingHandCursor)
+        self.reset_btn.clicked.connect(self._reset_selected)
+        btn_row.addWidget(self.reset_btn)
+        btn_row.addStretch()
+        layout.addLayout(btn_row)
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setStyleSheet('QScrollArea { border: none; background: transparent; }')
+        scroll_content = QWidget()
+        self._scroll_layout = QVBoxLayout(scroll_content)
+        self._scroll_layout.setContentsMargins(0, 0, 0, 0); self._scroll_layout.setSpacing(2)
+        scroll.setWidget(scroll_content)
+        layout.addWidget(scroll, 1)
+    def load_player(self, uid):
+        self._player_uid = uid
+        self._active_quests = []; self._completed_quests = []
+        try:
+            from palworld_aio.utils import sav_to_gvasfile
+            save_path = os.path.join(constants.current_save_path, 'Players', f'{uid}.sav')
+            if not os.path.exists(save_path):
+                return
+            gvas = sav_to_gvasfile(save_path)
+            rd = gvas.properties.get('SaveData', {}).get('value', {}).get('RecordData', {}).get('value', {})
+            completed = rd.get('CompletedQuestArray_FullRelease', {}).get('value', {}).get('values', [])
+            if isinstance(completed, list):
+                self._completed_quests = [str(v) for v in completed]
+            active_raw = rd.get('OrderedQuestArray_FullRelease', {}).get('value', {}).get('values', [])
+            if isinstance(active_raw, list):
+                for entry in active_raw:
+                    if isinstance(entry, dict):
+                        qn = entry.get('QuestName', {}).get('value', '')
+                        if qn:
+                            self._active_quests.append(str(qn))
+        except Exception:
+            pass
+        self._rebuild_list()
+    def clear(self):
+        self._player_uid = None; self._active_quests = []; self._completed_quests = []
+        self._rebuild_list()
+    def _rebuild_list(self):
+        for i in reversed(range(self._scroll_layout.count())):
+            w = self._scroll_layout.itemAt(i).widget()
+            if w: w.deleteLater()
+        self._checkboxes = {'active': [], 'completed': []}
+        if self._active_quests:
+            al = QLabel(t('inventory.missions_active', default='Active Missions'))
+            al.setStyleSheet('font-size: 10px; font-weight: bold; color: #4ade80; padding: 4px 0;')
+            self._scroll_layout.addWidget(al)
+            for qid in self._active_quests:
+                self._scroll_layout.addWidget(self._make_quest_row(qid, 'active'))
+        if self._completed_quests:
+            cl = QLabel(t('inventory.missions_completed', default='Completed Missions'))
+            cl.setStyleSheet('font-size: 10px; font-weight: bold; color: #888; padding: 4px 0;')
+            self._scroll_layout.addWidget(cl)
+            for qid in self._completed_quests:
+                self._scroll_layout.addWidget(self._make_quest_row(qid, 'completed'))
+        self._scroll_layout.addStretch()
+    def _make_quest_row(self, qid, list_key):
+        row = QFrame(); row.setFixedHeight(24)
+        row.setStyleSheet('QFrame:hover { background: rgba(255,255,255,0.03); }')
+        rl = QHBoxLayout(row); rl.setContentsMargins(4, 0, 4, 0); rl.setSpacing(4)
+        cb = ToggleCheckBtn(); cb.setFixedSize(16, 16)
+        rl.addWidget(cb)
+        qtype = self._derive_type(qid)
+        type_colors = {'Main': '#fbbf24', 'Sub': '#7dd3fc', 'Hidden': '#a78bfa'}
+        tc = type_colors.get(qtype, '#888')
+        type_lbl = QLabel(qtype); type_lbl.setFixedWidth(45)
+        type_lbl.setStyleSheet(f'font-size: 8px; font-weight: bold; color: {tc};')
+        rl.addWidget(type_lbl)
+        name = self._derive_name(qid)
+        name_lbl = QLabel(name)
+        name_lbl.setStyleSheet('font-size: 10px; color: #e2e8f0;')
+        rl.addWidget(name_lbl, 1)
+        id_lbl = QLabel(qid); id_lbl.setStyleSheet('font-size: 8px; color: #555;')
+        rl.addWidget(id_lbl)
+        self._checkboxes.setdefault(list_key, []).append(row)
+        return row
+    def _toggle_all(self, checked):
+        for k, rows in self._checkboxes.items():
+            for row in rows:
+                cb = row.findChild(ToggleCheckBtn)
+                if cb: cb.setChecked(checked)
+    def _get_selected(self):
+        sel = {'active': [], 'completed': []}
+        for key, rows in self._checkboxes.items():
+            lst = self._active_quests if key == 'active' else self._completed_quests
+            for i, row in enumerate(rows):
+                cb = row.findChild(ToggleCheckBtn)
+                if cb and cb.isChecked() and i < len(lst):
+                    sel[key].append(lst[i])
+        return sel
+    def _gvas_for_player(self):
+        from palworld_aio.utils import sav_to_gvasfile
+        save_path = os.path.join(constants.current_save_path, 'Players', f'{self._player_uid}.sav')
+        if not os.path.exists(save_path): return None, None
+        gvas = sav_to_gvasfile(save_path)
+        rd = gvas.properties.get('SaveData', {}).get('value', {}).get('RecordData', {}).get('value', {})
+        return gvas, rd
+    def _save(self, gvas):
+        from palworld_aio.utils import gvasfile_to_sav
+        save_path = os.path.join(constants.current_save_path, 'Players', f'{self._player_uid}.sav')
+        gvasfile_to_sav(gvas, save_path)
+    def _complete_selected(self):
+        sel = self._get_selected()
+        if not sel.get('active'): return
+        gvas, rd = self._gvas_for_player()
+        if rd is None: return
+        from palworld_aio.utils import gvasfile_to_sav
+        completed_arr = rd.setdefault('CompletedQuestArray_FullRelease', {})
+        completed_val = completed_arr.setdefault('value', {})
+        completed_list = completed_val.setdefault('values', [])
+        active_arr = rd.get('OrderedQuestArray_FullRelease', {}).get('value', {}).get('values', [])
+        if isinstance(active_arr, list):
+            rd['OrderedQuestArray_FullRelease']['value']['values'] = [e for e in active_arr if not (isinstance(e, dict) and e.get('QuestName', {}).get('value', '') in sel['active'])]
+        for qid in sel['active']:
+            if qid not in completed_list:
+                completed_list.append(qid)
+        self._save(gvas)
+        self.load_player(self._player_uid)
+        self.missions_changed.emit()
+    def _reset_selected(self):
+        sel = self._get_selected()
+        if not sel.get('completed'): return
+        gvas, rd = self._gvas_for_player()
+        if rd is None: return
+        completed_arr = rd.get('CompletedQuestArray_FullRelease', {}).get('value', {}).get('values', [])
+        if isinstance(completed_arr, list):
+            rd['CompletedQuestArray_FullRelease']['value']['values'] = [q for q in completed_arr if q not in sel['completed']]
+        self._save(gvas)
+        self.load_player(self._player_uid)
+        self.missions_changed.emit()
 class InventoryGridWidget(QWidget):
     item_added = Signal(int, str, int)
     item_removed = Signal(int, int)
@@ -1357,6 +1550,14 @@ class PlayerInventoryTab(QWidget):
         self.stats_panel.stats_changed.connect(self._on_stats_changed)
         stats_tab_layout.addWidget(self.stats_panel)
         self.inv_tabs.addTab(self.stats_tab, t('inventory.stats', default='Stats'))
+        self.missions_tab = QWidget()
+        missions_tab_layout = QHBoxLayout(self.missions_tab)
+        missions_tab_layout.setContentsMargins(6, 6, 6, 6)
+        missions_tab_layout.setSpacing(10)
+        self.missions_panel = MissionPanelWidget()
+        self.missions_panel.missions_changed.connect(self._on_missions_changed)
+        missions_tab_layout.addWidget(self.missions_panel)
+        self.inv_tabs.addTab(self.missions_tab, t('inventory.missions', default='Missions'))
         inner_content.addWidget(self.inv_tabs, 2)
         equip_wrapper = QWidget()
         self.equip_wrapper = equip_wrapper
@@ -1507,6 +1708,11 @@ class PlayerInventoryTab(QWidget):
         self._update_player_dropdown_level()
         if hasattr(self.parent_window, 'refresh_all'):
             self.parent_window.refresh_all()
+    def _on_missions_changed(self):
+        if not self.current_player_uid:
+            return
+        if hasattr(self.parent_window, 'refresh_all'):
+            self.parent_window.refresh_all()
     def refresh_players(self):
         self._player_list = []
         self.current_player_uid = None
@@ -1525,6 +1731,7 @@ class PlayerInventoryTab(QWidget):
             self.current_player_uid = uid
             self.current_player_name = name
             self.modified = False
+            self.missions_panel.load_player(uid)
             return get_player_inventory(self.current_player_uid)
         def on_finished(inv):
             self.inventory = inv
@@ -1541,6 +1748,7 @@ class PlayerInventoryTab(QWidget):
             return
         self.current_player_uid = uid
         self.current_player_name = name
+        self.missions_panel.load_player(uid)
         self.player_select_btn.setText(display)
         self.modified = False
         self._show_inventory()
@@ -1617,6 +1825,7 @@ class PlayerInventoryTab(QWidget):
         self.main_grid.load_items([])
         self.key_grid.load_items([])
         self.stats_panel.clear()
+        self.missions_panel.clear()
         for slot_widget in self.equip_slots.values():
             slot_widget.clear_item()
     def _on_add_all_effigies(self):

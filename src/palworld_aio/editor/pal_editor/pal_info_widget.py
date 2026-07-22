@@ -348,6 +348,22 @@ class PalInfoWidget(PalInfoDisplayMixin, PalInfoHandlerMixin, QFrame):
         self.info_fav_btn.clicked.connect(self._on_fav_toggle)
         next_row.addWidget(self.info_fav_btn)
         nc_layout.addLayout(next_row)
+        buff_row = QHBoxLayout()
+        buff_row.setContentsMargins(0, 0, 0, 0)
+        buff_row.setSpacing(2)
+        buff_row.addStretch()
+        self.buff_icons = {}
+        for key, icon_name in [('atk', 'buff_buff_02'), ('def', 'buff_buff_03'), ('ws', 'buff_buff_05'), ('hunger', 'buff_buff_08'), ('exp', 'buff_buff_11')]:
+            pix = _icons._get_ui_icon_pixmap(icon_name, 14)
+            lbl = QLabel()
+            lbl.setFixedSize(16, 16)
+            if pix:
+                lbl.setPixmap(pix)
+            lbl.setStyleSheet('background: transparent; border: none;')
+            lbl.hide()
+            buff_row.addWidget(lbl)
+            self.buff_icons[key] = lbl
+        nc_layout.addLayout(buff_row)
         hrow.addWidget(name_col, 0, Qt.AlignTop)
         header_layout = QVBoxLayout(header)
         header_layout.setContentsMargins(0, 0, 0, 0)

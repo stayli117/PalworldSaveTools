@@ -2524,6 +2524,12 @@ def update_ui_icons():
         ui_icons['talent_checker'] = path_talent
     else:
         print('    WARNING: Talent checker icon not found')
+    for cat in ('Buff', 'Debuff', 'Base'):
+        for num in range(1, 16):
+            src = main_menu_dir / f'T_icon_BuffTimer_{cat}_{num:02d}.png'
+            path = copy_icon_to_resources(src, target_subdir)
+            if path:
+                ui_icons[f'buff_{cat.lower()}_{num:02d}'] = path
     result = {'ui_icons': ui_icons}
     save_resource_json('uidata.json', result)
     print(f'  Total UI icons: {len(ui_icons)}')

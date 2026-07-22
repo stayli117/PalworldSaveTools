@@ -171,6 +171,7 @@ class PalInfoDisplayMixin:
                             passive_craft_bonus += float(ev)
             food_item = extract_value(raw, 'FoodWithStatusEffect', '')
             food_atk_bonus = 0; food_def_bonus = 0; food_ws_bonus = 0
+            food_effect_types = set()
             if food_item:
                 from palworld_aio.editor.pal_editor.data import _ensure_food_buff_map
                 fb_map = _ensure_food_buff_map()
@@ -179,9 +180,18 @@ class PalInfoDisplayMixin:
                     for eff in fb.get('effects', []):
                         et = eff.get('type', '')
                         ev = eff.get('value', 0) / 100.0
+                        food_effect_types.add(et)
                         if et == 'Attack': food_atk_bonus = ev
                         elif et == 'Defense': food_def_bonus = ev
                         elif et == 'WorkSpeed': food_ws_bonus = ev
+            buff_icon_map = {'Attack': 'atk', 'Defense': 'def', 'WorkSpeed': 'ws', 'HungerResist': 'hunger', 'Exp_Increase': 'exp'}
+            if hasattr(self, 'buff_icons'):
+                for bk, lbl in self.buff_icons.items():
+                    et_for_key = next((et for et, bk2 in buff_icon_map.items() if bk2 == bk), None)
+                    if et_for_key and et_for_key in food_effect_types:
+                        lbl.show()
+                    else:
+                        lbl.hide()
             if base:
                 max_hp = calculate_max_hp(base, level, talent_hp, rank_hp, is_boss, is_lucky, trust_rank, condenser_rank, is_awake, passive_bonus=passive_hp_bonus / 100)
                 if passive_hp_bonus != 0:

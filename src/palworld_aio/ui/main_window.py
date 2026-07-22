@@ -261,7 +261,10 @@ class MainWindow(QMainWindow):
     def _setup_ui(self):
         self.setWindowTitle(t('deletion.title') if t else 'All-in-One Tools')
         self.setMinimumSize(1200, 750)
-        self.resize(1200, 750)
+        screen = QApplication.primaryScreen().availableGeometry()
+        w = min(1448, screen.width() - 40)
+        h = min(800, screen.height() - 40)
+        self.resize(w, h)
         self.setWindowFlags(Qt.FramelessWindowHint)
         if os.path.exists(constants.ICON_PATH):
             self.setWindowIcon(QIcon(constants.ICON_PATH))

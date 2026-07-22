@@ -273,8 +273,8 @@ def run_aio():
         from PySide6.QtCore import QTimer
         QTimer.singleShot(5000, hide_popup)
         sys.exit(app.exec())
-    os.environ.setdefault('QT_ENABLE_HIGHDPI_SCALING', '1')
-    os.environ.setdefault('QT_SCALE_FACTOR_ROUNDING_POLICY', 'PassThrough')
+    if sys.platform == 'darwin':
+        os.environ.setdefault('QT_SCALE_FACTOR_ROUNDING_POLICY', 'PassThrough')
     app = QApplication.instance()
     if app is None:
         app = QApplication(sys.argv)

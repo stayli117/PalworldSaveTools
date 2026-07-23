@@ -29,10 +29,7 @@ class BaseRadiusRing(QGraphicsEllipseItem):
         self.setRect(-diameter / 2, -diameter / 2, diameter, diameter)
     @staticmethod
     def _save_radius_to_scene_pixels(save_radius):
-        display_radius = save_radius / 3500.0 * 7.9
-        scene_radius = display_radius * (2048 / 2000)
-        scene_radius = scene_radius + 5
-        return max(scene_radius, 15)
+        return max(save_radius / 3500.0 * 15.0, 3.0)
     def update_radius(self, new_save_radius):
         self.save_radius = new_save_radius
         self._update_radius()

@@ -1138,9 +1138,12 @@ class TechnologyPanelWidget(QFrame):
         scroll.setWidget(self._scroll_ct)
         layout.addWidget(scroll, 1)
     def _rebuild(self):
-        for i in reversed(range(self._scroll_layout.count())):
-            w = self._scroll_layout.itemAt(i).widget()
-            if w: w.deleteLater()
+        while self._scroll_layout.count():
+            item = self._scroll_layout.takeAt(0)
+            w = item.widget()
+            if w:
+                w.setParent(None)
+                w.deleteLater()
         self._tp_spin.blockSignals(True); self._atp_spin.blockSignals(True)
         self._tp_spin.setValue(self._tp_value); self._atp_spin.setValue(self._atp_value)
         self._tp_spin.blockSignals(False); self._atp_spin.blockSignals(False)
@@ -1212,10 +1215,12 @@ class TechnologyPanelWidget(QFrame):
         nl.setAlignment(Qt.AlignCenter)
         nl.setStyleSheet(f'font-size: 7px; color: {fg}; background: transparent;')
         vl.addWidget(nl)
-        def _click(evt):
+        frame._click_asset = asset
+        frame._click_unlocked = unlocked
+        def _click(evt, f=frame):
             if evt.button() == Qt.LeftButton:
-                self._toggle_tech(asset, unlocked)
-            super(QFrame, frame).mousePressEvent(evt)
+                f._click_unlocked = f._click_asset not in self._unlocked
+                self._toggle_tech(f._click_asset, f._click_unlocked)
         frame.mousePressEvent = _click
         return frame
     def _toggle_tech(self, asset, currently_unlocked):
@@ -1390,6 +1395,7 @@ class InventoryGridWidget(QWidget):
                 slot = self.slots.pop(i)
                 self.grid_layout.removeWidget(slot)
                 slot.setParent(None)
+                slot.hide()
                 slot.deleteLater()
         for i in range(len(self.slots), max_slots):
             row = i // GRID_COLS

@@ -36,7 +36,7 @@ def extract_guild_bases_from_save():
             if bid_str in base_map:
                 try:
                     translation = base_map[bid_str]['RawData']['value']['transform']['translation']
-                    pt = palworld_coord.sav_to_map_by_z(translation['x'], translation['y'], translation['z'])
+                    pt = palworld_coord.sav_to_map(translation['x'], translation['y'], new=True)
                     guild_bases.append({'guild': guild_name, 'leader': leader_name, 'x': pt.x, 'y': pt.y, 'z': translation['z'], 'raw_x': translation['x'], 'raw_y': translation['y']})
                 except:
                     continue
@@ -130,20 +130,10 @@ def generate_world_map(output_path=None, map_type='world'):
             img_x, img_y = palworld_coord.treemap_to_pixel(x_world, y_world, base_map.width(), base_map.height())
             return (img_x, img_y)
         return (x_img, y_img)
-    map_z_threshold = palworld_coord.MAP_Z_THRESHOLD
     base_count = 0
     for base_data in guild_bases:
-        base_z = base_data.get('z', 0)
-        if map_type == 'world' and base_z >= map_z_threshold:
-            continue
-        if map_type == 'tree' and base_z < map_z_threshold:
-            continue
         try:
-            if map_type == 'tree' and 'raw_x' in base_data:
-                pt = palworld_coord.sav_to_treemap(base_data['raw_x'], base_data['raw_y'])
-                xi, yi = to_image_coordinates(pt.x, pt.y)
-            else:
-                xi, yi = to_image_coordinates(base_data['x'], base_data['y'])
+            xi, yi = to_image_coordinates(base_data['x'], base_data['y'])
             x_img = xi * scale
             y_img = yi * scale
             painter.setPen(QPen(QColor(255, 0, 0), 4 * scale))

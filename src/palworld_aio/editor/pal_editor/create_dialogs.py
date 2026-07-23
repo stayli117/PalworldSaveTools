@@ -483,7 +483,7 @@ class BulkSyncPalDialog(FramelessDialog):
             source_cid = extract_value(current_raw, 'CharacterID', '')
             if source_cid.upper().startswith('BOSS_') and not extract_value(target_raw, 'CharacterID', '').upper().startswith('BOSS_'):
                 tgt_cid = extract_value(target_raw, 'CharacterID', '')
-                if tgt_cid:
+                if tgt_cid and f'boss_{tgt_cid.lower()}' in _data._load_pal_base_data():
                     target_raw['CharacterID'] = {'id': None, 'type': 'NameProperty', 'value': 'BOSS_' + tgt_cid}
             if 'EquipWaza' in target_raw:
                 ew = target_raw['EquipWaza']
@@ -727,7 +727,7 @@ class BulkSyncAllDialog(FramelessDialog):
             source_cid = extract_value(self._source_raw, 'CharacterID', '')
             if source_cid.upper().startswith('BOSS_') and not extract_value(target_raw, 'CharacterID', '').upper().startswith('BOSS_'):
                 tgt_cid = extract_value(target_raw, 'CharacterID', '')
-                if tgt_cid:
+                if tgt_cid and f'boss_{tgt_cid.lower()}' in _data._load_pal_base_data():
                     target_raw['CharacterID'] = {'id': None, 'type': 'NameProperty', 'value': 'BOSS_' + tgt_cid}
             count += 1
         self.pal_editor.pal_info._refresh()

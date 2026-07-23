@@ -280,6 +280,14 @@ def _show_learned_moves_dialog(raw, parent):
         if full not in mw_list:
             mw_list.append(full)
             raw['MasteredWaza'] = {'array_type': 'EnumProperty', 'id': None, 'value': {'values': mw_list}, 'type': 'ArrayProperty'}
+        ew_data = raw.get('EquipWaza', {})
+        e_list = ew_data.get('value', {}).get('values', []) if isinstance(ew_data, dict) else ew_data if isinstance(ew_data, list) else []
+        if not isinstance(e_list, list):
+            e_list = []
+        filled = [s for s in e_list if s]
+        if len(filled) < 3 and full not in filled:
+            filled.append(full)
+            raw['EquipWaza'] = {'array_type': 'EnumProperty', 'id': None, 'value': {'values': filled[:3]}, 'type': 'ArrayProperty'}
         _rebuild_list()
     add_skill_btn.clicked.connect(_add_skill_handler)
     btn_row.addWidget(add_skill_btn)
@@ -474,7 +482,9 @@ class BulkSyncPalDialog(FramelessDialog):
                 target_raw.pop('GotWorkSuitabilityAddRankList', None)
             source_cid = extract_value(current_raw, 'CharacterID', '')
             if source_cid.upper().startswith('BOSS_') and not extract_value(target_raw, 'CharacterID', '').upper().startswith('BOSS_'):
-                target_raw['CharacterID'] = copy.deepcopy(current_raw['CharacterID'])
+                tgt_cid = extract_value(target_raw, 'CharacterID', '')
+                if tgt_cid:
+                    target_raw['CharacterID'] = {'id': None, 'type': 'NameProperty', 'value': 'BOSS_' + tgt_cid}
             if 'EquipWaza' in target_raw:
                 ew = target_raw['EquipWaza']
                 ew_list = ew.get('value', {}).get('values', []) if isinstance(ew, dict) else ew if isinstance(ew, list) else []
@@ -716,7 +726,9 @@ class BulkSyncAllDialog(FramelessDialog):
                         target_raw['EquipWaza'] = normalized
             source_cid = extract_value(self._source_raw, 'CharacterID', '')
             if source_cid.upper().startswith('BOSS_') and not extract_value(target_raw, 'CharacterID', '').upper().startswith('BOSS_'):
-                target_raw['CharacterID'] = copy.deepcopy(self._source_raw['CharacterID'])
+                tgt_cid = extract_value(target_raw, 'CharacterID', '')
+                if tgt_cid:
+                    target_raw['CharacterID'] = {'id': None, 'type': 'NameProperty', 'value': 'BOSS_' + tgt_cid}
             count += 1
         self.pal_editor.pal_info._refresh()
         self.pal_editor._update_party_slots()

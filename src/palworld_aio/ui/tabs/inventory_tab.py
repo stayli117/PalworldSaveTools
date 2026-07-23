@@ -1216,11 +1216,9 @@ class TechnologyPanelWidget(QFrame):
         nl.setStyleSheet(f'font-size: 7px; color: {fg}; background: transparent;')
         vl.addWidget(nl)
         frame._click_asset = asset
-        frame._click_unlocked = unlocked
-        def _click(evt, f=frame):
+        def _click(evt):
             if evt.button() == Qt.LeftButton:
-                f._click_unlocked = f._click_asset not in self._unlocked
-                self._toggle_tech(f._click_asset, f._click_unlocked)
+                self._toggle_tech(asset, asset in self._unlocked)
         frame.mousePressEvent = _click
         return frame
     def _toggle_tech(self, asset, currently_unlocked):

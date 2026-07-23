@@ -5,6 +5,9 @@
 - **Repair All Structures no longer resets max durability to default** — the function was reading HP values from game data and overwriting each structure's max HP with the game's default, discarding custom durability set via server config. Structures with millions of HP were silently downgraded. Now it only sets current HP equal to the existing max HP, leaving whatever durability the server or mod has configured.
 - **Import/Clone Base and Replace Structures also preserve custom HP** — same game-data HP override was present in base import and structure replacement. Both now leave existing max HP untouched and only set current to max.
 - **Results widget resets on save reload** — the player/guild/base picker labels in the right panel previously showed stale selections from the previous save after reloading. Now cleared to default.
+- **Tab picker selections reset on save load** — inventory, pal editor, and base inventory tabs were re-selecting the previously chosen player/guild/base after loading a new save. Now all picker buttons reset to their default state on load.
+- **Tech tree toggle fixed** — the `_click` handler for tech buttons had inverted logic (`not in` instead of `in`), causing single-click to lock an unlocked tech and vice versa. Also no longer calls `super().mousePressEvent()` on a frame already scheduled for deferred deletion.
+- **Base inventory add-item crash fixed** — adding an item to a container called `_refresh_container_ui()` (which mutates the widget tree) inside `dialog.exec()`'s signal handler, causing a segfault from deferred delete processing in the nested event loop. UI refresh now happens after `dialog.exec()` returns.
 - Bumped version to 2.2.1
 
 #2.2.0

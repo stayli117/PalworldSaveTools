@@ -3507,6 +3507,7 @@ class BaseInventoryTab(QWidget):
         dialog = ItemPickerDialog(self, filter_exclude_type_a='EPalItemTypeA::Essential')
         dialog.item_selected.connect(lambda item_id, qty: self._do_add_item(item_id, qty))
         dialog.exec()
+        self._refresh_container_ui()
     def _do_add_item(self, item_id: str, count: int):
         if item_id and count > 0:
             empty_slot_index = self.manager.find_empty_slot()
@@ -3514,7 +3515,6 @@ class BaseInventoryTab(QWidget):
                 self._show_warning(t('base_inventory.container_full') if t else 'Container is full!')
                 return
             if self.manager.add_item_to_slot(empty_slot_index, item_id, count):
-                self._refresh_container_ui()
                 self._update_container_stats()
                 self._trigger_auto_save()
             else:

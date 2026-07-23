@@ -614,6 +614,7 @@ class MainWindow(QMainWindow):
         if success:
             self.refresh_all()
             constants.dirty = False
+            self.results_widget.clear_selection()
             self.results_widget.refresh_stats_before()
             self.status_bar.showMessage(t('status.loaded') if t else 'Save loaded successfully', 5000)
         else:

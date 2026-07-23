@@ -1,7 +1,7 @@
 import os
 import json
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QScrollArea, QLabel, QPushButton, QFrame, QDialog, QLineEdit, QListWidget, QListWidgetItem, QSpinBox, QMessageBox, QTabWidget, QSizePolicy, QAbstractItemView, QMenu, QToolTip, QListView, QProgressBar, QComboBox, QApplication, QInputDialog
-from PySide6.QtCore import Qt, QSize, Signal, QPoint, QTimer, QThread
+from PySide6.QtCore import Qt, QSize, Signal, QPoint, QTimer, QThread, QEvent
 from PySide6.QtGui import QPixmap, QIcon, QFont, QCursor, QColor, QPainter, QPen, QIntValidator
 from PySide6.QtWidgets import QStyledItemDelegate
 from i18n import t
@@ -1042,6 +1042,7 @@ class TechnologyPanelWidget(QFrame):
         self._tech_data = []
         self._unlocked = set()
         self._tp_value = 0; self._atp_value = 0
+        self._tech_buttons = {}
         self._setup_ui()
         self._load_tech_data()
     def _load_tech_data(self):
@@ -1089,6 +1090,13 @@ class TechnologyPanelWidget(QFrame):
         self._player_uid = None; self._unlocked = set()
         self._tp_value = 0; self._atp_value = 0
         self._rebuild()
+    def eventFilter(self, obj, event):
+        if event.type() == QEvent.MouseButtonPress and event.button() == Qt.LeftButton:
+            asset = getattr(obj, '_tech_asset', None)
+            if asset:
+                self._toggle_tech(asset)
+                return True
+        return super().eventFilter(obj, event)
     def _setup_ui(self):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(6, 6, 6, 6); layout.setSpacing(4)
@@ -1137,7 +1145,20 @@ class TechnologyPanelWidget(QFrame):
         self._scroll_layout.addStretch()
         scroll.setWidget(self._scroll_ct)
         layout.addWidget(scroll, 1)
+    def _apply_tech_style(self, frame, asset):
+        unlocked = asset in self._unlocked
+        fg = '#e2e8f0' if unlocked else '#555'
+        bg = 'rgba(125,211,252,0.08)' if unlocked else 'rgba(255,255,255,0.03)'
+        bd = '1px solid rgba(125,211,252,0.3)' if unlocked else '1px solid rgba(255,255,255,0.06)'
+        frame.setStyleSheet(f'QFrame {{ background: {bg}; border: {bd}; border-radius: 4px; }} QFrame:hover {{ background: rgba(125,211,252,0.12); }}')
+        for child in frame.findChildren(QLabel):
+            obj_name = child.objectName()
+            if obj_name == 'cost_label':
+                child.setVisible(not unlocked)
+            elif obj_name == 'name_label':
+                child.setStyleSheet(f'font-size: 7px; color: {fg}; background: transparent;')
     def _rebuild(self):
+        self._tech_buttons.clear()
         while self._scroll_layout.count():
             item = self._scroll_layout.takeAt(0)
             w = item.widget()
@@ -1179,11 +1200,12 @@ class TechnologyPanelWidget(QFrame):
         self._scroll_ct.update()
     def _make_tech_button(self, tech):
         asset = tech.get('asset', '')
-        unlocked = asset in self._unlocked
         frame = QFrame()
         frame.setFixedSize(self.BUTTON_SIZE, self.BUTTON_SIZE)
         frame.setCursor(Qt.PointingHandCursor)
-        name = tech.get('name', ''); asset = tech.get('asset', '')
+        frame._tech_asset = asset
+        frame.installEventFilter(self)
+        name = tech.get('name', '')
         tip = f'<b>{name}</b><br>({asset})'
         tech_desc = tech.get('description', '')
         if tech_desc:
@@ -1191,10 +1213,6 @@ class TechnologyPanelWidget(QFrame):
             tip += f'<br><br>{wrap_tooltip_text(cleaned)}'
         tip += f'<br><br>Level {tech.get("level_cap",0)}  Cost: {tech.get("cost",0)}'
         frame.setToolTip(tip)
-        fg = '#e2e8f0' if unlocked else '#555'
-        bg = 'rgba(125,211,252,0.06)' if unlocked else 'rgba(255,255,255,0.03)'
-        bd = '1px solid rgba(125,211,252,0.2)' if unlocked else '1px solid rgba(255,255,255,0.06)'
-        frame.setStyleSheet(f'QFrame {{ background: {bg}; border: {bd}; border-radius: 4px; }} QFrame:hover {{ background: rgba(125,211,252,0.12); }}')
         vl = QVBoxLayout(frame); vl.setContentsMargins(2, 2, 2, 2); vl.setSpacing(0)
         icon = tech.get('icon', '')
         if icon:
@@ -1206,27 +1224,26 @@ class TechnologyPanelWidget(QFrame):
                 il.setPixmap(pix.scaled(36, 36, Qt.KeepAspectRatio, Qt.SmoothTransformation))
                 il.setAlignment(Qt.AlignCenter)
                 vl.addWidget(il, 1)
-        if not unlocked:
-            cl = QLabel(str(tech.get('cost', 0)))
-            cl.setAlignment(Qt.AlignCenter)
-            cl.setStyleSheet(f'font-size: 9px; font-weight: 700; color: #fbbf24; background: transparent;')
-            vl.addWidget(cl)
+        cl = QLabel(str(tech.get('cost', 0)))
+        cl.setObjectName('cost_label')
+        cl.setAlignment(Qt.AlignCenter)
+        cl.setStyleSheet('font-size: 9px; font-weight: 700; color: #fbbf24; background: transparent;')
+        vl.addWidget(cl)
         nl = QLabel(tech.get('name', ''))
+        nl.setObjectName('name_label')
         nl.setAlignment(Qt.AlignCenter)
-        nl.setStyleSheet(f'font-size: 7px; color: {fg}; background: transparent;')
         vl.addWidget(nl)
-        frame._click_asset = asset
-        def _click(evt):
-            if evt.button() == Qt.LeftButton:
-                self._toggle_tech(asset, asset in self._unlocked)
-        frame.mousePressEvent = _click
+        self._apply_tech_style(frame, asset)
+        self._tech_buttons[asset] = frame
         return frame
-    def _toggle_tech(self, asset, currently_unlocked):
-        if currently_unlocked:
+    def _toggle_tech(self, asset):
+        if asset in self._unlocked:
             self._unlocked.discard(asset)
         else:
             self._unlocked.add(asset)
-        self._rebuild()
+        frame = self._tech_buttons.get(asset)
+        if frame:
+            self._apply_tech_style(frame, asset)
     def _save_tp(self, val):
         if not self._player_uid: return
         from palworld_aio.managers.player_manager import set_player_tech_points
@@ -1237,10 +1254,12 @@ class TechnologyPanelWidget(QFrame):
         set_player_boss_tech_points(self._player_uid, val)
     def _select_all(self):
         self._unlocked = {t.get('asset', '') for t in self._tech_data if t.get('asset')}
-        self._rebuild()
+        for asset, frame in self._tech_buttons.items():
+            self._apply_tech_style(frame, asset)
     def _deselect_all(self):
         self._unlocked.clear()
-        self._rebuild()
+        for asset, frame in self._tech_buttons.items():
+            self._apply_tech_style(frame, asset)
     def _apply_changes(self):
         if not self._player_uid: return
         from palworld_aio.utils import sav_to_gvasfile, gvasfile_to_sav

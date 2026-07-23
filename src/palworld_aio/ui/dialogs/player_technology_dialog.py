@@ -183,16 +183,14 @@ class PlayerTechnologyActionDialog(QDialog):
         self._display_technologies(filtered)
     def _make_tech_frame(self, tech):
         asset = tech.get('asset', '')
-        unlocked = True
+        name = tech.get('name', '')
         frame = QFrame()
         frame.setFixedSize(76, 76)
         frame.setCursor(Qt.PointingHandCursor)
-        frame.setProperty('tech_asset', asset)
-        frame.setProperty('tech_name', tech.get('name', ''))
-        fg = '#e2e8f0' if unlocked else '#555'
-        bg = 'rgba(125,211,252,0.06)' if unlocked else 'rgba(255,255,255,0.03)'
-        bd = '1px solid rgba(125,211,252,0.2)' if unlocked else '1px solid rgba(255,255,255,0.06)'
-        frame.setStyleSheet(f'QFrame {{ background: {bg}; border: {bd}; border-radius: 4px; }} QFrame:hover {{ background: rgba(125,211,252,0.12); }}')
+        frame._tech_asset = asset
+        frame._tech_name = name
+        frame.installEventFilter(self)
+        frame.setStyleSheet('QFrame { background: rgba(125,211,252,0.06); border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; } QFrame:hover { background: rgba(125,211,252,0.12); }')
         vl = QVBoxLayout(frame); vl.setContentsMargins(2, 2, 2, 2); vl.setSpacing(0)
         icon = tech.get('icon', '')
         if icon:
@@ -204,30 +202,29 @@ class PlayerTechnologyActionDialog(QDialog):
                 il.setPixmap(pix.scaled(36, 36, Qt.KeepAspectRatio, Qt.SmoothTransformation))
                 il.setAlignment(Qt.AlignCenter)
                 vl.addWidget(il, 1)
-        if not unlocked:
-            cl = QLabel(str(tech.get('cost', 0)))
-            cl.setAlignment(Qt.AlignCenter)
-            cl.setStyleSheet('font-size: 9px; font-weight: 700; color: #fbbf24; background: transparent;')
-            vl.addWidget(cl)
         nl = QLabel(tech.get('name', ''))
         nl.setAlignment(Qt.AlignCenter)
-        nl.setStyleSheet(f'font-size: 7px; color: {fg}; background: transparent;')
+        nl.setStyleSheet('font-size: 7px; color: #e2e8f0; background: transparent;')
         vl.addWidget(nl)
-        name = tech.get('name', ''); a2 = tech.get('asset', '')
+        a2 = tech.get('asset', '')
         tip = f'<b>{name}</b><br>({a2})'
         td = tech.get('description', '')
         if td:
             tip += f'<br><br>{wrap_tooltip_text(_clean_desc_for_tooltip(td))}'
         tip += f'<br><br>Level {tech.get("level_cap",0)}  Cost: {tech.get("cost",0)}'
         frame.setToolTip(tip)
-        def _click(evt):
-            if evt.button() == Qt.LeftButton:
+        return frame
+    def eventFilter(self, obj, event):
+        if event.type() == QEvent.MouseButtonPress and event.button() == Qt.LeftButton:
+            asset = getattr(obj, '_tech_asset', None)
+            name = getattr(obj, '_tech_name', None)
+            if asset:
                 if asset in self._selected_techs:
                     del self._selected_techs[asset]
-                    self._clear_frame_style(frame)
+                    obj.setStyleSheet('QFrame { background: rgba(125,211,252,0.06); border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; } QFrame:hover { background: rgba(125,211,252,0.12); }')
                 else:
                     self._selected_techs[asset] = name
-                    frame.setStyleSheet('QFrame { background: rgba(125,211,252,0.15); border: 1px solid rgba(125,211,252,0.5); border-radius: 4px; }')
+                    obj.setStyleSheet('QFrame { background: rgba(125,211,252,0.15); border: 1px solid rgba(125,211,252,0.5); border-radius: 4px; }')
                 count = len(self._selected_techs)
                 if count:
                     if count == 1:
@@ -244,9 +241,9 @@ class PlayerTechnologyActionDialog(QDialog):
                     self.tech_info_label.setStyleSheet('color: #888; font-style: italic; padding: 5px;')
                     self.add_btn.setEnabled(False)
                     self.remove_btn.setEnabled(False)
-            super(QFrame, frame).mousePressEvent(evt)
-        frame.mousePressEvent = _click
-        return frame
+                return True
+        return super().eventFilter(obj, event)
+
     def _clear_frame_style(self, w):
         if isinstance(w, QFrame) and w.property('tech_asset'):
             w.setStyleSheet('QFrame { background: rgba(125,211,252,0.06); border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; } QFrame:hover { background: rgba(125,211,252,0.12); }')

@@ -612,6 +612,13 @@ class MainWindow(QMainWindow):
         pass
     def _on_load_finished(self, success):
         if success:
+            if 'inventory_tab' in self.__dict__:
+                self.inventory_tab.clear_player()
+            if 'pal_editor_tab' in self.__dict__:
+                self.pal_editor_tab.clear_player()
+                self.pal_editor_tab.current_player_uid = None
+            if 'base_inventory_tab' in self.__dict__:
+                self.base_inventory_tab._clear_guild_selection()
             self.refresh_all()
             constants.dirty = False
             self.results_widget.clear_selection()

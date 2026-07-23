@@ -3,6 +3,8 @@
 - **Base radius ring scaling fixed** — ring size was using an additive `+5` pixel offset in the scene-space formula, breaking proportionality. At 200% the ring was only 42% larger instead of 100% larger. Replaced with a purely linear formula so doubling the radius value doubles the displayed ring.
 - **Fixed hard crash when editing inventory or tech tree** — the app could terminate abruptly (segfault) when adding items, changing quantities, or toggling tech unlocks. Three related issues fixed: widget layout cleanup during `_rebuild()` was leaving orphaned items that could be painted after their C++ objects were destroyed; inventory grid slot deletion had the same use-after-free pattern; tech tree button click handlers were calling `super().mousePressEvent()` on frames already scheduled for deferred deletion. Widgets are now fully detached from their parent layout before being deleted.
 - **Repair All Structures no longer resets max durability to default** — the function was reading HP values from game data and overwriting each structure's max HP with the game's default, discarding custom durability set via server config. Structures with millions of HP were silently downgraded. Now it only sets current HP equal to the existing max HP, leaving whatever durability the server or mod has configured.
+- **Import/Clone Base and Replace Structures also preserve custom HP** — same game-data HP override was present in base import and structure replacement. Both now leave existing max HP untouched and only set current to max.
+- **Results widget resets on save reload** — the player/guild/base picker labels in the right panel previously showed stale selections from the previous save after reloading. Now cleared to default.
 - Bumped version to 2.2.1
 
 #2.2.0

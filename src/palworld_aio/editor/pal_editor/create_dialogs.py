@@ -485,6 +485,8 @@ class BulkSyncPalDialog(FramelessDialog):
                 tgt_cid = extract_value(target_raw, 'CharacterID', '')
                 if tgt_cid and f'boss_{tgt_cid.lower()}' in _data._load_pal_base_data():
                     target_raw['CharacterID'] = {'id': None, 'type': 'NameProperty', 'value': 'BOSS_' + tgt_cid}
+                else:
+                    target_raw.pop('IsRarePal', None)
             if 'EquipWaza' in target_raw:
                 ew = target_raw['EquipWaza']
                 ew_list = ew.get('value', {}).get('values', []) if isinstance(ew, dict) else ew if isinstance(ew, list) else []
@@ -729,6 +731,8 @@ class BulkSyncAllDialog(FramelessDialog):
                 tgt_cid = extract_value(target_raw, 'CharacterID', '')
                 if tgt_cid and f'boss_{tgt_cid.lower()}' in _data._load_pal_base_data():
                     target_raw['CharacterID'] = {'id': None, 'type': 'NameProperty', 'value': 'BOSS_' + tgt_cid}
+                else:
+                    target_raw.pop('IsRarePal', None)
             count += 1
         self.pal_editor.pal_info._refresh()
         self.pal_editor._update_party_slots()

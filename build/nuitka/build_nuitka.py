@@ -234,6 +234,8 @@ def build_with_nuitka(onefile: bool = True, no_compression: bool = True):
         cmd.append('--copyright=Copyright (c) 2026 Pylar')
         cmd.append(f'--product-version={version}')
         cmd.append('--file-description=Palworld Save Tools')
+        # 声明 DPI 感知，避免高分屏下窗口被系统拉伸模糊
+        cmd.append(f'--windows-app-manifest={os.path.join(_SCRIPT_DIR, "dpi_manifest.xml")}')
     cmd.append('--assume-yes-for-downloads')
 
     for mod in _INCLUDE_MODULES:

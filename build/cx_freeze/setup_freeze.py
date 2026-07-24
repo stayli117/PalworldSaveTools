@@ -6,6 +6,10 @@ sys.path.insert(0, os.path.abspath('src/palsav'))
 sys.path.insert(0, os.path.abspath('src'))
 sys.path.insert(0, os.path.abspath('resources'))
 from cx_Freeze import setup, Executable
+
+# 声明 DPI 感知，避免 Windows 高分屏下窗口被系统拉伸模糊（main.py 内也会用 API 再次声明 PerMonitorV2）
+# 注意：cx_Freeze 的 manifest 参数要求是「文件路径」，不能是 XML 文本本身（否则会当成文件名去 open 而报错）
+DPI_AWARE_MANIFEST = os.path.join(os.path.dirname(__file__), 'dpi_manifest.xml')
 def find_pyside6_assets():
     result = []
     try:
@@ -31,4 +35,4 @@ build_exe_options = {'packages': _BUILD_PACKAGES, 'excludes': _BUILD_EXCLUDES, '
 ps6_a = find_pyside6_assets()
 if ps6_a:
     build_exe_options['include_files'].extend(ps6_a)
-setup(name='PalworldSaveTools', version="2.4.4", options={'build_exe': build_exe_options}, executables=[Executable('src/palworld_aio/main.py', base='gui', target_name='PalworldSaveTools.exe', icon='resources/assets/icons/app/icon.ico')])
+setup(name='PalworldSaveTools', version="2.4.4", options={'build_exe': build_exe_options}, executables=[Executable('src/palworld_aio/main.py', base='gui', target_name='PalworldSaveTools.exe', icon='resources/assets/icons/app/icon.ico', manifest=DPI_AWARE_MANIFEST)])

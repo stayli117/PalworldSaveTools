@@ -8,7 +8,6 @@ class LoadingPopup(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent, Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
         self.setAttribute(Qt.WA_TranslucentBackground, True)
-        self.setAttribute(Qt.WA_DeleteOnClose, True)
         self._setup_ui()
         self.fade_animation = None
         self._is_visible = False
@@ -74,7 +73,6 @@ class LoadingOverlay(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent, Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool)
         self.setAttribute(Qt.WA_TranslucentBackground)
-        self.setAttribute(Qt.WA_DeleteOnClose, True)
         self.setFixedSize(850, 500)
         self._parent = parent
         self._phrases = ['LOADING...']

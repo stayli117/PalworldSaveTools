@@ -104,7 +104,29 @@ def qt_message_handler(mode, context, message):
     if 'QThreadStorage' in str(message) and 'destroyed before end of thread' in str(message):
         return
 qInstallMessageHandler(qt_message_handler)
+
+def _apply_dpi_awareness():
+    """在创建任何窗口前声明 DPI 感知，否则 Windows 会把进程当成 96DPI 位图由系统拉伸，
+    导致字体与窗口标题栏模糊。必须在 QApplication 实例化之前调用。"""
+    if sys.platform == 'darwin':
+        os.environ.setdefault('QT_SCALE_FACTOR_ROUNDING_POLICY', 'PassThrough')
+        return
+    if sys.platform != 'win32':
+        return
+    try:
+        import ctypes
+        # PerMonitorV2 (-4)：每个显示器独立 DPI，文字/标题栏/图标均按物理像素渲染。
+        # 每个进程只能设置一次，故必须早于任何 Qt 窗口创建。
+        ctypes.windll.shcore.SetProcessDpiAwarenessContext(-4)
+    except Exception:
+        try:
+            ctypes.windll.user32.SetProcessDPIAware()
+        except Exception:
+            pass
+    os.environ.setdefault('QT_SCALE_FACTOR_ROUNDING_POLICY', 'PassThrough')
+
 def run_aio():
+    _apply_dpi_awareness()
     try:
         with redirect_stderr(stderr_capture):
             init_language()
@@ -278,11 +300,13 @@ def run_aio():
         from PySide6.QtCore import QTimer
         QTimer.singleShot(5000, hide_popup)
         sys.exit(app.exec())
-    if sys.platform == 'darwin':
-        os.environ.setdefault('QT_SCALE_FACTOR_ROUNDING_POLICY', 'PassThrough')
     app = QApplication.instance()
     if app is None:
         app = QApplication(sys.argv)
+    try:
+        app.setHighDpiScaleFactorRoundingPolicy(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
+    except Exception:
+        pass
     app.setStyle('Fusion')
     app.setStyleSheet(
         'QToolTip { color: #e2e8f0; background: #1e2128; border: 1px solid #3B8ED0; '

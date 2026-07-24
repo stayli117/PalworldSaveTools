@@ -182,7 +182,8 @@ def run_with_loading(callback, func, *args, parent=None, **kwargs):
         tt.timeout.connect(tick)
         tt.setInterval(250)
         tt.start()
-        parent.installEventFilter(OverlayResizer(overlay_widget))
+        overlay_widget._resizer = OverlayResizer(overlay_widget)
+        parent.installEventFilter(overlay_widget._resizer)
     result = {'data': None, 'done': False}
     def task():
         try:
@@ -204,6 +205,18 @@ def run_with_loading(callback, func, *args, parent=None, **kwargs):
             try:
                 overlay_widget.hide()
                 overlay_widget.setParent(None)
+                # 移除挂在父窗口上的 resize 跟踪器，避免父窗口 resize 时
+                # 访问已被销毁的 overlay_widget（use-after-free）。
+                if parent is not None and getattr(overlay_widget, '_resizer', None) is not None:
+                    try:
+                        parent.removeEventFilter(overlay_widget._resizer)
+                    except Exception:
+                        pass
+                # 关键修复：用 deleteLater 让 Qt 在下一个事件循环安全回收，
+                # 而不是依赖 Python GC 在 poll() 返回时同步 delete 这个仍可能
+                # 位于鼠标下的全屏覆盖层（否则会触发 QWidget::mapFromGlobal
+                # 悬垂指针崩溃，见 macOS 崩溃报告 EXC_BAD_ACCESS @ dispatchEnterLeave）。
+                overlay_widget.deleteLater()
             except RuntimeError:
                 pass
         res = result['data']

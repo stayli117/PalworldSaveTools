@@ -397,36 +397,67 @@ Take your dedicated server character back to a local co-op save — useful if yo
 <details>
 <summary>Click to expand</summary>
 
-When two players in a co-op world want to swap who hosts — e.g., Player A has been hosting but Player B wants to take over.
+Two players want to switch who hosts. Player A has been hosting — their character lives in `0001.sav`. Player B joins as a client — their character lives in `1234.sav`. Now they want Player B to become the host, but the host slot is always `0001.sav`.
 
-**How it works:** The host always occupies `0001.sav`. Fix Host Save swaps Player A (`0001.sav`) with Player B (`XXXX.sav`) so Player B becomes `0001.sav`. Then Player B hosts, Player A joins as a client, and a second swap restores Player A's progress into their new client UID.
+**Key concept — Fix Host Save always SWAPS two players.** It exchanges their save files, like two people trading seats. It does NOT copy one onto the other. After any swap, both players still exist — they're just in different files.
 
-**Prerequisites:**
-- Both players must have joined this world before (both have `.sav` files in the `Players` folder).
-- Both players must be at least **Level 2**.
-- Back up your entire save folder before starting.
-- Close Palworld while editing.
+Since one swap moves Player B into the host slot but leaves Player A's data sitting in B's old file, a second swap is needed to put Player A's original character back. Here's how:
 
 ---
 
-**Step 1 — Swap B into the host slot.**
+**Starting state:**
+```
+0001.sav  = Player A (current host)
+1234.sav  = Player B (current client)
+```
+
+---
+
+**Step 1 — Swap A and B.**
 - Open PST → **Tools** → **Fix Host Save**.
 - Browse to your co-op `Level.sav`.
-- **Source Player**: Select Player A (`0001.sav`).
-- **Target Player**: Select Player B (regular UID).
-- Run the swap. Now `0001.sav` holds Player B's progress.
+- **Source**: Player A (`0001.sav`). **Target**: Player B (`1234.sav`).
+- Click the button. Fix Host Save exchanges the two files.
+
+**After step 1:**
+```
+0001.sav  = Player B  ← now the host with B's character
+1234.sav  = Player A  ← A's data is here, but this UID no longer exists in the game
+```
+
+---
 
 **Step 2 — Player B hosts, Player A joins.**
-- Player B hosts the world. Player A joins and creates a temporary character. Palworld assigns Player A a new UID (e.g., `NEWUID.sav`).
-- Player A reaches **Level 2** with the temp character, then everyone closes the game.
+- Player B hosts the world. Player A joins.
+- Since A is no longer the host, Palworld assigns a brand-new UID for A's temporary character (e.g., `9999.sav`).
+- Player A reaches **Level 2** with the temp character, then everyone exits the game.
 
-**Step 3 — Restore Player A's original progress.**
+**After step 2:**
+```
+0001.sav  = Player B (host, correct)
+1234.sav  = Player A's original data (not linked to any active UID)
+9999.sav  = Player A's temporary character (fresh, Level 2+)
+```
+
+---
+
+**Step 3 — Swap A's original data into A's new UID.**
 - Open **Fix Host Save** again with the same `Level.sav`.
-- **Source Player**: Select Player A's original progress (now in B's old UID, e.g., `ORIGUID.sav`).
-- **Target Player**: Select Player A's new temp UID (`NEWUID.sav`).
-- Run the swap. Player A's original character is now linked to their new client UID.
+- **Source**: `1234.sav` (Player A's original data). **Target**: `9999.sav` (Player A's temporary character).
+- Click the button. They swap again.
 
-**Done.** Player B hosts with B's original progress. Player A joins with A's original progress. The leftover temp file can be ignored or cleaned up.
+**After step 3:**
+```
+0001.sav  = Player B (host, correct)
+1234.sav  = Player A's temp character (unused, can delete)
+9999.sav  = Player A's original character  ← restored!
+```
+
+---
+
+**Done.** Player B hosts with Player B's original character. Player A joins with Player A's original character. The leftover `1234.sav` can be ignored or deleted.
+
+> **Why two swaps?** Fix Host Save **exchanges** two files — it's not a copy. The first swap puts B in the host slot, but A's data ends up in B's old UID (which no longer exists in-game). The second swap moves A's data into A's new client UID. Two swaps, all progress preserved.
 
 </details>
 

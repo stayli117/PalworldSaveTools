@@ -91,7 +91,7 @@ Ya sea que necesite administrar un servidor dedicado, migrar entre servidores co
 
 | Categoría | Qué puedes hacer |
 |---|---|
-| **Gestión de jugadores** | Edite nombres, niveles, estadísticas, puntos tecnológicos. Administre elementos de forma masiva, pals y tecnología entre jugadores. Limpiar jugadores inactivos o duplicados. |
+| **Gestión de jugadores** | Edite nombres, niveles, estadísticas, puntos tecnológicos. Gestión masiva de elementos, pals, tecnología entre jugadores. Limpiar jugadores inactivos o duplicados. |
 | **Pal Editor** | Cambiar estadísticas, IVs, almas, rango, habilidades, passives, idoneidad laboral, jefe/banderas de la suerte. Exportar/importar pals. Detectar y reparar pals ilegal. Modo trampa para edición sin límites. |
 | **Gestión del gremio** | Cambie el nombre de los gremios, cambie los líderes, establezca niveles. Desbloquea la investigación de laboratorio. Mueve jugadores entre gremios. Elimina gremios vacíos o inactivos. |
 | **Herramientas del campamento base** | Ver todas las bases con información del gremio. Exportar/importar planos. Clonar bases a otros gremios. Reposicionar bases en el mapa. Ajustar el radio. Eliminar bases inactivas. |
@@ -190,7 +190,7 @@ Accesible desde la pestaña **Herramientas** como tarjetas en las que se puede h
 |------|-------------|
 | **Convertir guardados** | Convertir entre formatos SAV y JSON |
 | **Convertir GamePass → Steam** | Convertir archivos guardados de Xbox/GamePass al formato Steam |
-| **Convertir SteamID** | Convierta ID de Steam a UID de Palworld |
+| **Convertir SteamID** | Convierta ID Steam a UID Palworld |
 | **Restaurar mapa** | Aplicar el progreso del mapa completamente desbloqueado a todos los mundos/servidores |
 | **Inyector de ranura** | Aumentar espacios de palbox por jugador |
 | **Modificar Guardar** | Abrir y modificar datos guardados sin procesar |
@@ -358,7 +358,7 @@ Mueve tu mundo cooperativo (donde alojas desde tu PC) a un servidor dedicado par
 3. **Cambia tu personaje cooperativo en la ranura del servidor.**
    - Abra PST → **Herramientas** → **Reparar guardado de host**.
    - Busque el `Level.sav` del servidor.
-   - **Reproductor fuente**: selecciona tu personaje cooperativo (el que está en `0001.sav`, que figura como anfitrión).
+   - **Reproductor fuente**: selecciona tu personaje cooperativo (el de `0001.sav`, que figura como anfitrión).
    - **Jugador objetivo**: selecciona el personaje temporal que acabas de crear.
    - Haga clic en el botón para ejecutar el intercambio.
 
@@ -402,36 +402,67 @@ Lleva tu personaje del servidor dedicado a un guardado cooperativo local, algo �
 <details>
 <summary>Haga clic para ampliar</summary>
 
-Cuando dos jugadores en un mundo cooperativo quieren intercambiar quién es el anfitrión, por ejemplo, el jugador A ha sido el anfitrión pero el jugador B quiere hacerse cargo.
+Dos jugadores quieren cambiar quién es el anfitrión. El jugador A ha sido anfitrión; su personaje vive en `0001.sav`. El jugador B se une como cliente: su personaje vive en `1234.sav`. Ahora quieren que el jugador B se convierta en el anfitrión, pero el puesto de anfitrión siempre es `0001.sav`.
 
-**Cómo funciona:** El host siempre ocupa `0001.sav`. Se corrige que Host Save intercambie el Jugador A (`0001.sav`) con el Jugador B (`XXXX.sav`) para que el Jugador B se convierta en `0001.sav`. Luego, el jugador B es el anfitrión, el jugador A se une como cliente y un segundo intercambio restaura el progreso del jugador A en su nuevo UID de cliente.
+**Concepto clave: Fix Host Save siempre INTERCAMBIA dos jugadores.** Intercambia sus archivos guardados, como dos personas intercambiando asientos. NO copia uno sobre el otro. Después de cualquier intercambio, ambos reproductores siguen existiendo, sólo que están en archivos diferentes.
 
-**Requisitos previos:**
-- Ambos jugadores deben haberse unido a este mundo antes (ambos tienen archivos `.sav` en la carpeta `Players`).
-- Ambos jugadores deben tener al menos **Nivel 2**.
-- Haga una copia de seguridad de toda su carpeta guardada antes de comenzar.
-- Cierra Palworld mientras editas.
+Dado que un intercambio mueve al jugador B a la ranura del anfitrión pero deja los datos del jugador A en el archivo antiguo de B, se necesita un segundo intercambio para devolver el personaje original del jugador A. He aquí cómo:
 
 ---
 
-**Paso 1: intercambie B en la ranura del host.**
+**Starting state:**
+```
+0001.sav  = Player A (current host)
+1234.sav  = Player B (current client)
+```
+
+---
+
+**Paso 1: Intercambia A y B.**
 - Abra PST → **Herramientas** → **Reparar guardado de host**.
-- Busca tu cooperativa `Level.sav`.
-- **Reproductor de origen**: seleccione el reproductor A (`0001.sav`).
-- **Jugador objetivo**: seleccione el jugador B (UID normal).
-- Ejecute el intercambio. Ahora `0001.sav` tiene el progreso del jugador B.
+- Busque su cooperativa `Level.sav`.
+- **Fuente**: Jugador A (`0001.sav`). **Objetivo**: Jugador B (`1234.sav`).
+- Haga clic en el botón. Fix Host Save intercambia los dos archivos.
+
+**After step 1:**
+```
+0001.sav  = Player B  ← now the host with B's character
+1234.sav  = Player A  ← A's data is here, but this UID no longer exists in the game
+```
+
+---
 
 **Paso 2: el jugador B es el anfitrión, el jugador A se une.**
-- El jugador B es el anfitrión del mundo. El jugador A se une y crea un personaje temporal. Palworld asigna al jugador A un nuevo UID (por ejemplo, `NEWUID.sav`).
-- El jugador A alcanza el **Nivel 2** con el personaje temporal y luego todos cierran el juego.
+- El jugador B es el anfitrión del mundo. El jugador A se une.
+- Dado que A ya no es el host, Palworld asigna un UID nuevo para el carácter temporal de A (por ejemplo, `9999.sav`).
+- El jugador A alcanza el **Nivel 2** con el personaje temporal y luego todos salen del juego.
 
-**Paso 3: Restaura el progreso original del Jugador A.**
+**After step 2:**
+```
+0001.sav  = Player B (host, correct)
+1234.sav  = Player A's original data (not linked to any active UID)
+9999.sav  = Player A's temporary character (fresh, Level 2+)
+```
+
+---
+
+**Paso 3: intercambia los datos originales de A por el nuevo UID de A.**
 - Abra **Fix Host Save** nuevamente con el mismo `Level.sav`.
-- **Reproductor de origen**: seleccione el progreso original del jugador A (ahora en el antiguo UID de B, por ejemplo, `ORIGUID.sav`).
-- **Jugador objetivo**: seleccione el nuevo UID temporal del jugador A (`NEWUID.sav`).
-- Ejecute el intercambio. El personaje original del jugador A ahora está vinculado a su nuevo UID de cliente.
+- **Fuente**: `1234.sav` (datos originales del jugador A). **Objetivo**: `9999.sav` (personaje temporal del jugador A).
+- Haga clic en el botón. They swap again.
 
-**Listo.** El jugador B presenta el progreso original de B. El jugador A se une al progreso original de A. El archivo temporal sobrante se puede ignorar o limpiar.
+**Después del paso 3:**
+```
+0001.sav  = Player B (host, correct)
+1234.sav  = Player A's temp character (unused, can delete)
+9999.sav  = Player A's original character  ← restored!
+```
+
+---
+
+**Listo.** El jugador B presenta con el personaje original del jugador B. El jugador A se une al personaje original del jugador A. El `1234.sav` sobrante se puede ignorar o eliminar.
+
+> **¿Por qué dos intercambios?** Reparar host Guardar **intercambia** dos archivos: no es una copia. El primer intercambio coloca a B en la ranura del host, pero los datos de A terminan en el antiguo UID de B (que ya no existe en el juego). El segundo intercambio mueve los datos de A al nuevo UID del cliente de A. Dos cambios, todo el progreso preservado.
 
 </details>
 
@@ -496,6 +527,7 @@ Transfiere personajes entre diferentes mundos o servidores mientras conservas lo
 ### "No se encontró VCRUNTIME140.dll" (Windows)
 
 Instale el [Microsoft Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170) (2015–2022).
+
 ### `struct.error` al analizar un guardado
 
 El formato del archivo guardado está desactualizado. Cargue el guardado en el juego (Solo, Cooperativo o Servidor Dedicado) una vez para activar una actualización automática de la estructura, luego inténtelo nuevamente. Asegúrate de que el guardado se haya actualizado a partir del último parche del juego.
@@ -544,7 +576,7 @@ uv run python build/nuitka/build_nuitka.py --onedir
 ```
 
 Las salidas van a `dist/`:
--Windows → `dist/PalworldSaveTools-*.exe`
+- Ventanas → `dist/PalworldSaveTools-*.exe`
 -Linux → `dist/PalworldSaveTools-*-linux`
 - macOS → `dist/PalworldSaveTools.app` → empaquetado como `.dmg`
 
@@ -683,7 +715,7 @@ Este proyecto no existiría sin las personas que lo respaldan.
 
 **[oMaN-Rod](https://github.com/oMaN-Rod)**: proporcionó el analizador de guardado original del que se bifurcó este proyecto. Sin su trabajo fundamental para descifrar el formato de guardado de Palworld, nada de esto existiría. La bifurcación simplificó y simplificó su analizador hasta convertirlo en lo que es PST hoy.
 
-**[Okaetsu](https://github.com/Okaetsu)** — Información sobre modificaciones que hizo posible la importación/exportación básica. Su comprensión de cómo Palworld estructura los datos básicos desde el lado de la modificación cerró la brecha entre la modificación y la edición guardada, haciendo de esta característica una realidad.
+**[Okaetsu](https://github.com/Okaetsu)** — Información sobre modificaciones que hicieron posible la importación/exportación básica. Su comprensión de cómo Palworld estructura los datos básicos desde el lado de la modificación cerró la brecha entre la modificación y la edición guardada, haciendo de esta característica una realidad.
 
 
 

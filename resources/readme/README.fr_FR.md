@@ -109,7 +109,7 @@ Que vous ayez besoin de gérer un serveur dédié, de migrer entre des serveurs 
 
 ### Pal Editor
 
-Une interface d'édition approfondie pour n'importe quel Pal appartenant à n'importe quel joueur. Pals sont organisés par **Party** (équipe active) et **Palbox** (stockage).
+Une interface d'édition approfondie pour n'importe quel Pal appartenant à n'importe quel joueur. Les Pals sont organisés par **Party** (équipe active) et **Palbox** (stockage).
 
 - **Statistiques et IVs** — HP, attaque, défense (IV 0-100), niveau (1-80), rang de confiance (0-10).
 - **Âmes** — HP, Attaque, Défense, Vitesse d'artisanat (0–20).
@@ -119,7 +119,7 @@ Une interface d'édition approfondie pour n'importe quel Pal appartenant à n'im
 - **Drapeaux d'apparence** — Basculez entre Boss/Alpha, Chanceux/Brillant, Prédateur, Éveillé et Importé/ADN.
 - **Rank & Lock** — Définissez le classement et le niveau de verrouillage des favoris (0 à 3).
 - **Cheat Mode** — Basculez pour étendre toutes les majuscules : niveau, IVs, âmes, rang du condenseur à 255 ; débloquez des compétences actives/passives illimitées avec des doublons autorisés.
-- **Exporter/Importer** — Cliquez avec le bouton droit sur n'importe quel pal pour exporter au format `.pstpal` (compressé) ou `.json`. Importez dans des emplacements vides parmi les travailleurs du groupe, de la palbox, du DPS ou de la base. Fonctionne sur les sauvegardes et les joueurs.
+- **Exporter/Importer** — Cliquez avec le bouton droit sur n'importe quel pal pour l'exporter au format `.pstpal` (compressé) ou `.json`. Importez dans des emplacements vides parmi les travailleurs du groupe, de la palbox, du DPS ou de la base. Fonctionne sur les sauvegardes et les joueurs.
 - **Max All Pals** — Maximisez toutes les statistiques (IVs, âmes, rang, niveau) pour tous les pals du groupe, toutes les pages palbox ou tous les travailleurs de la base — respecte les limites du mode de triche.
 - **Correction du Pals** illégal — Détectez et limitez le pals avec des statistiques, des compétences ou des traits illégaux par joueur.
 - **Bulk Clone/Delete** — Boîte de dialogue de sélection d'espèces avec contrôles de quantité et basculement de source (Party/Palbox/DPS) pour les opérations par lots.
@@ -237,7 +237,7 @@ Des binaires prédéfinis sont disponibles pour les trois principales plates-for
 2. Extrayez (si archivé) et exécutez l'exécutable.
 3. C'est tout – aucun Python ni dépendance n'est nécessaire.
 
-> **Windows :** Si vous voyez « VCRUNTIME140.dll n'a pas été trouvé », installez [Microsoft Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170).
+> **Windows :** Si vous voyez « VCRUNTIME140.dll n'a pas été trouvé », installez le [Microsoft Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170).
 
 > **Linux :** Vous devrez peut-être marquer le fichier comme exécutable : `chmod +x PalworldSaveTools-*-linux`
 
@@ -390,7 +390,7 @@ Ramenez votre personnage de serveur dédié dans une sauvegarde coopérative loc
    - Cliquez sur le bouton pour exécuter le swap.
 
 4. **Hébergez normalement une coopérative.**
-   - Votre personnage serveur est désormais l'hôte (`0001.sav`). Tous les progrès, Pals, et les bases intactes.
+   - Votre personnage serveur est désormais l'hôte (`0001.sav`). Tous les progrès, Pals, et bases intactes.
 
 </details>
 
@@ -399,36 +399,67 @@ Ramenez votre personnage de serveur dédié dans une sauvegarde coopérative loc
 <details>
 <summary>Cliquez pour agrandir</summary>
 
-Lorsque deux joueurs dans un monde coopératif veulent échanger qui héberge, par exemple, le joueur A héberge mais le joueur B veut prendre le relais.
+Deux joueurs veulent changer qui héberge. Le joueur A a hébergé – son personnage vit dans `0001.sav`. Le joueur B rejoint en tant que client – ​​son personnage vit à `1234.sav`. Maintenant, ils veulent que le joueur B devienne l'hôte, mais l'emplacement d'hôte est toujours `0001.sav`.
 
-**Comment ça marche :** L'hôte occupe toujours `0001.sav`. Le correctif Host Save échange le joueur A (`0001.sav`) avec le joueur B (`XXXX.sav`) afin que le joueur B devienne `0001.sav`. Ensuite, le joueur B héberge, le joueur A rejoint en tant que client et un deuxième échange restaure la progression du joueur A dans son nouvel UID client.
+**Concept clé — Fix Host Save échange toujours deux joueurs.** Il échange leurs fichiers de sauvegarde, comme deux personnes échangeant des sièges. Il ne copie PAS l'un sur l'autre. Après tout échange, les deux lecteurs existent toujours – ils se trouvent simplement dans des fichiers différents.
 
-**Prérequis :**
-- Les deux joueurs doivent avoir déjà rejoint ce monde (tous deux ont des fichiers `.sav` dans le dossier `Players`).
-- Les deux joueurs doivent être au moins **Niveau 2**.
-- Sauvegardez l'intégralité de votre dossier de sauvegarde avant de commencer.
-- Fermez Palworld pendant l'édition.
+Puisqu'un échange déplace le joueur B dans l'emplacement hôte mais laisse les données du joueur A dans l'ancien fichier de B, un deuxième échange est nécessaire pour remettre le personnage d'origine du joueur A. Voici comment procéder :
 
 ---
 
-**Étape 1 : échangez B dans l'emplacement hôte.**
+**État de départ :**
+```
+0001.sav  = Player A (current host)
+1234.sav  = Player B (current client)
+```
+
+---
+
+**Étape 1 — Échangez A et B.**
 - Ouvrez PST → **Outils** → **Fix Host Save**.
 - Accédez à votre coopérative `Level.sav`.
-- **Lecteur source** : sélectionnez le joueur A (`0001.sav`).
-- **Joueur cible** : Sélectionnez le joueur B (UID normal).
-- Exécutez l'échange. Désormais, `0001.sav` contient la progression du joueur B.
+- **Source** : Joueur A (`0001.sav`). **Cible** : Joueur B (`1234.sav`).
+- Cliquez sur le bouton. Fix Host Save échange les deux fichiers.
+
+**Après l'étape 1 :**
+```
+0001.sav  = Player B  ← now the host with B's character
+1234.sav  = Player A  ← A's data is here, but this UID no longer exists in the game
+```
+
+---
 
 **Étape 2 — Le joueur B héberge, le joueur A rejoint.**
-- Le joueur B héberge le monde. Le joueur A rejoint et crée un personnage temporaire. Palworld attribue au joueur A un nouvel UID (par exemple, `NEWUID.sav`).
-- Le joueur A atteint le **Niveau 2** avec le personnage temporaire, puis tout le monde termine la partie.
+- Le joueur B héberge le monde. Le joueur A rejoint.
+- Puisque A n'est plus l'hôte, Palworld attribue un tout nouvel UID au personnage temporaire de A (par exemple, `9999.sav`).
+- Le joueur A atteint le **Niveau 2** avec le personnage temporaire, puis tout le monde quitte la partie.
 
-**Étape 3 — Restaurez la progression d'origine du joueur A.**
+**Après l'étape 2 :**
+```
+0001.sav  = Player B (host, correct)
+1234.sav  = Player A's original data (not linked to any active UID)
+9999.sav  = Player A's temporary character (fresh, Level 2+)
+```
+
+---
+
+**Étape 3 — Échangez les données originales de A dans le nouvel UID de A.**
 - Ouvrez à nouveau **Fix Host Save** avec le même `Level.sav`.
-- **Source Player** : sélectionnez la progression originale du joueur A (maintenant dans l'ancien UID de B, par exemple, `ORIGUID.sav`).
-- **Joueur cible** : sélectionnez le nouvel UID temporaire du joueur A (`NEWUID.sav`).
-- Exécutez l'échange. Le personnage d'origine du joueur A est désormais lié à son nouvel UID client.
+- **Source** : `1234.sav` (données originales du joueur A). **Cible** : `9999.sav` (personnage temporaire du joueur A).
+- Cliquez sur le bouton. Ils échangent à nouveau.
 
-**Terminé.** Le joueur B héberge la progression initiale de B. Le joueur A rejoint la progression initiale de A. Le fichier temporaire restant peut être ignoré ou nettoyé.
+**Après l'étape 3 :**
+```
+0001.sav  = Player B (host, correct)
+1234.sav  = Player A's temp character (unused, can delete)
+9999.sav  = Player A's original character  ← restored!
+```
+
+---
+
+**Terminé.** Le joueur B héberge le personnage original du joueur B. Le joueur A rejoint le personnage original du joueur A. Le `1234.sav` restant peut être ignoré ou supprimé.
+
+> **Pourquoi deux échanges ?** Fix Host Save **échange** deux fichiers — ce n'est pas une copie. Le premier échange place B dans l'emplacement hôte, mais les données de A se retrouvent dans l'ancien UID de B (qui n'existe plus dans le jeu). Le deuxième échange déplace les données de A vers le nouvel UID client de A. Deux échanges, tous les progrès préservés.
 
 </details>
 
@@ -493,6 +524,7 @@ Transférez des personnages entre différents mondes ou serveurs tout en préser
 ### "VCRUNTIME140.dll est introuvable" (Windows)
 
 Installez le [Microsoft Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170) (2015-2022).
+
 ### `struct.error` lors de l'analyse d'une sauvegarde
 
 Le format du fichier de sauvegarde est obsolète. Chargez la sauvegarde dans le jeu (Solo, Co-op ou Serveur dédié) une fois pour déclencher une mise à jour automatique de la structure, puis réessayez. Assurez-vous que la sauvegarde a été mise à jour avec ou après le dernier patch du jeu.
@@ -626,7 +658,7 @@ Les développeurs ne sont pas responsables de toute perte de données de sauvega
 
 </div>
 
--**Discord :** [Join us for support, base builds, and more!](https://discord.gg/sYcZwcT4cT)
+- **Discord :** [Join us for support, base builds, and more!](https://discord.gg/sYcZwcT4cT)
 - **GitHub Problèmes :** [Report a bug](https://github.com/deafdudecomputers/PalworldSaveTools/issues)
 - **Mods Nexus :** [Download & discuss](https://www.nexusmods.com/palworld/mods/3190)
 

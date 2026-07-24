@@ -109,7 +109,7 @@ Ganz gleich, ob Sie einen dedizierten Server verwalten, zwischen kooperativen un
 
 ### Pal Editor
 
-Eine umfassende Bearbeitungsoberfläche für jedes Pal, das einem beliebigen Spieler gehört. Pals werden von **Party** (aktive Truppe) und **Palbox** (Lager) organisiert.
+Eine umfassende Bearbeitungsoberfläche für jedes Pal, das einem beliebigen Spieler gehört. Pals werden von **Party** (aktive Truppe) und **Palbox** (Lagerung) organisiert.
 
 - **Statistiken & IVs** – HP, Angriff, Verteidigung (IV 0–100), Level (1–80), Vertrauensrang (0–10).
 - **Seelen** – HP, Angriff, Verteidigung, Handwerksgeschwindigkeit (0–20).
@@ -119,7 +119,7 @@ Eine umfassende Bearbeitungsoberfläche für jedes Pal, das einem beliebigen Spi
 - **Aussehensflaggen** – Boss/Alpha, Lucky/Shiny, Predator, Awakened und Imported/DNA umschalten.
 - **Rang & Sperre** – Rang und bevorzugte Sperrstufe festlegen (0–3).
 - **Cheat-Modus** – Umschalten, um alle Obergrenzen zu erweitern: Level, IVs, Seelen, Kondensatorrang auf 255; Schalten Sie unbegrenzte Aktiv-/Passivfähigkeiten frei, wobei Duplikate zulässig sind.
-- **Exportieren/Importieren** – Klicken Sie mit der rechten Maustaste auf einen beliebigen pal, um ihn als `.pstpal` (komprimiert) oder `.json` zu exportieren. Importieren Sie in leere Slots über Gruppen-, Palbox-, DPS- oder Basisarbeiter hinweg. Funktioniert für alle Spielstände und Spieler.
+- **Exportieren/Importieren** – Klicken Sie mit der rechten Maustaste auf ein beliebiges pal, um es als `.pstpal` (komprimiert) oder `.json` zu exportieren. Importieren Sie in leere Slots über Gruppen-, Palbox-, DPS- oder Basisarbeiter hinweg. Funktioniert für alle Spielstände und Spieler.
 - **Max. Alle Pals** – Max. aller Statistiken (IVs, Seelen, Rang, Level) für alle pals in der Gruppe, alle Palbox-Seiten oder alle Basisarbeiter – berücksichtigt die Obergrenzen für den Cheat-Modus.
 - **Illegales Pals beheben** – pals mit illegalen Statistiken, Fertigkeiten oder Eigenschaften pro Spieler erkennen und begrenzen.
 - **Massenklonen/Löschen** – Artenauswahldialog mit Mengensteuerung und Quellenumschaltung (Party/Palbox/DPS) für Stapelvorgänge.
@@ -231,7 +231,7 @@ Vorgefertigte Binärdateien sind für alle drei Hauptplattformen ab [GitHub Rele
 | **Linux** | `PalworldSaveTools-*-linux` | Jede moderne Distribution |
 | **macOS** | `PalworldSaveTools-*-macos.dmg` | macOS 12+ (Monterey oder höher) |
 
-Auch erhältlich für [Nexus Mods](https://www.nexusmods.com/palworld/mods/3190).
+Auch erhältlich unter [Nexus Mods](https://www.nexusmods.com/palworld/mods/3190).
 
 1. Laden Sie den passenden Build für Ihre Plattform herunter.
 2. Extrahieren Sie die ausführbare Datei (falls archiviert) und führen Sie sie aus.
@@ -386,7 +386,7 @@ Bringen Sie Ihren dedizierten Server-Charakter zurück zu einem lokalen Koop-Spe
    - Öffnen Sie PST → **Tools** → **Fix Host Save**.
    - Navigieren Sie zur örtlichen Genossenschaft `Level.sav`.
    - **Quellspieler**: Wählen Sie Ihren dedizierten Servercharakter aus (aufgelistet nach seiner UID).
-   - **Zielspieler**: Wählen Sie den temporären Koop-Charakter aus (den in `0001.sav` – aufgeführt als Host).
+   - **Zielspieler**: Wählen Sie den temporären Koop-Charakter (den in `0001.sav` – aufgeführt als Host).
    - Klicken Sie auf die Schaltfläche, um den Austausch durchzuführen.
 
 4. **Normalerweise Gastgeber-Koop.**
@@ -399,36 +399,67 @@ Bringen Sie Ihren dedizierten Server-Charakter zurück zu einem lokalen Koop-Spe
 <details>
 <summary>Zum Erweitern klicken</summary>
 
-Wenn zwei Spieler in einer Koop-Welt den Gastgeber tauschen möchten – z. B. war Spieler A Gastgeber, aber Spieler B möchte übernehmen.
+Zwei Spieler wollen den Gastgeber wechseln. Spieler A war Gastgeber – sein Charakter lebt in `0001.sav`. Spieler B tritt als Kunde bei – sein Charakter lebt in `1234.sav`. Jetzt möchten sie, dass Spieler B der Host wird, aber der Host-Slot ist immer `0001.sav`.
 
-**So funktioniert es:** Der Host belegt immer `0001.sav`. Behebung: Host Save tauscht Spieler A (`0001.sav`) mit Spieler B (`XXXX.sav`), sodass Spieler B zu `0001.sav` wird. Dann ist Spieler B Gastgeber, Spieler A tritt als Client bei und ein zweiter Austausch stellt den Fortschritt von Spieler A in seiner neuen Client-UID wieder her.
+**Schlüsselkonzept – Fix Host Save tauscht immer zwei Spieler aus.** Es tauscht ihre Speicherdateien aus, als würden zwei Personen ihre Plätze tauschen. Es wird NICHT eins auf das andere kopiert. Nach jedem Austausch sind beide Player weiterhin vorhanden – sie befinden sich lediglich in unterschiedlichen Dateien.
 
-**Voraussetzungen:**
-- Beide Spieler müssen dieser Welt schon einmal beigetreten sein (beide haben `.sav`-Dateien im Ordner `Players`).
-- Beide Spieler müssen mindestens **Level 2** sein.
-- Sichern Sie Ihren gesamten Speicherordner, bevor Sie beginnen.
-- Schließen Sie Palworld während der Bearbeitung.
+Da ein Austausch Spieler B in den Host-Slot verschiebt, die Daten von Spieler A jedoch in der alten Datei von B verbleiben, ist ein zweiter Austausch erforderlich, um den ursprünglichen Charakter von Spieler A wiederherzustellen. So geht's:
 
 ---
 
-**Schritt 1 – Tauschen Sie B in den Host-Steckplatz aus.**
+**Ausgangszustand:**
+```
+0001.sav  = Player A (current host)
+1234.sav  = Player B (current client)
+```
+
+---
+
+**Schritt 1 – A und B vertauschen.**
 - Öffnen Sie PST → **Tools** → **Fix Host Save**.
 - Navigieren Sie zu Ihrer Genossenschaft `Level.sav`.
-- **Quellplayer**: Wählen Sie Player A (`0001.sav`).
-- **Zielspieler**: Wählen Sie Spieler B (normale UID).
-- Führen Sie den Tausch durch. Jetzt hält `0001.sav` den Fortschritt von Spieler B.
+- **Quelle**: Spieler A (`0001.sav`). **Ziel**: Spieler B (`1234.sav`).
+- Klicken Sie auf die Schaltfläche. Fix Host Save tauscht die beiden Dateien aus.
+
+**Nach Schritt 1:**
+```
+0001.sav  = Player B  ← now the host with B's character
+1234.sav  = Player A  ← A's data is here, but this UID no longer exists in the game
+```
+
+---
 
 **Schritt 2 – Spieler B ist Gastgeber, Spieler A tritt bei.**
-- Spieler B ist Gastgeber der Welt. Spieler A tritt bei und erstellt einen temporären Charakter. Palworld weist Spieler A eine neue UID zu (z. B. `NEWUID.sav`).
-- Spieler A erreicht **Level 2** mit dem temporären Charakter, dann schließen alle das Spiel.
+- Spieler B ist Gastgeber der Welt. Spieler A tritt bei.
+- Da A nicht mehr der Host ist, weist Palworld dem temporären Charakter von A eine brandneue UID zu (z. B. `9999.sav`).
+- Spieler A erreicht **Level 2** mit dem temporären Charakter, dann verlassen alle das Spiel.
 
-**Schritt 3 – Stellen Sie den ursprünglichen Fortschritt von Spieler A wieder her.**
+**Nach Schritt 2:**
+```
+0001.sav  = Player B (host, correct)
+1234.sav  = Player A's original data (not linked to any active UID)
+9999.sav  = Player A's temporary character (fresh, Level 2+)
+```
+
+---
+
+**Schritt 3 – Tauschen Sie die Originaldaten von A in die neue UID von A aus.**
 - Öffnen Sie **Fix Host Save** erneut mit demselben `Level.sav`.
-- **Quellspieler**: Wählen Sie den ursprünglichen Fortschritt von Spieler A aus (jetzt in der alten UID von B, z. B. `ORIGUID.sav`).
-- **Zielspieler**: Wählen Sie die neue temporäre UID von Spieler A (`NEWUID.sav`).
-- Führen Sie den Tausch durch. Der ursprüngliche Charakter von Spieler A ist jetzt mit seiner neuen Client-UID verknüpft.
+- **Quelle**: `1234.sav` (Originaldaten von Spieler A). **Ziel**: `9999.sav` (der temporäre Charakter von Spieler A).
+- Klicken Sie auf die Schaltfläche. Sie tauschen erneut.
 
-**Fertig.** Spieler B hostet mit dem ursprünglichen Fortschritt von B. Spieler A schließt sich dem ursprünglichen Fortschritt von A an. Die übrig gebliebene temporäre Datei kann ignoriert oder bereinigt werden.
+**Nach Schritt 3:**
+```
+0001.sav  = Player B (host, correct)
+1234.sav  = Player A's temp character (unused, can delete)
+9999.sav  = Player A's original character  ← restored!
+```
+
+---
+
+**Fertig.** Spieler B hostet mit dem ursprünglichen Charakter von Spieler B. Spieler A schließt sich dem ursprünglichen Charakter von Spieler A an. Der übrig gebliebene `1234.sav` kann ignoriert oder gelöscht werden.
+
+> **Warum zwei Swaps?** Fix Host Save **tauscht** zwei Dateien aus – es handelt sich nicht um eine Kopie. Durch den ersten Austausch wird B in den Host-Slot verschoben, aber die Daten von A landen in der alten UID von B (die im Spiel nicht mehr existiert). Der zweite Austausch verschiebt die Daten von A in die neue Client-UID von A. Zwei Swaps, alle Fortschritte bleiben erhalten.
 
 </details>
 
@@ -493,7 +524,8 @@ Wenn zwei Spieler in einer Koop-Welt den Gastgeber tauschen möchten – z. B. w
 ### „VCRUNTIME140.dll wurde nicht gefunden“ (Windows)
 
 Installieren Sie den [Microsoft Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170) (2015–2022).
-### `struct.error` beim Parsen eines Speichervorgangs
+
+### `struct.error` beim Parsen eines Speicherstands
 
 Das Speicherdateiformat ist veraltet. Laden Sie den Speicherstand im Spiel (Solo, Koop oder Dedizierter Server) einmal, um eine automatische Strukturaktualisierung auszulösen, und versuchen Sie es dann erneut. Stellen Sie sicher, dass der Speicherstand mit oder nach dem neuesten Spiel-Patch aktualisiert wurde.
 

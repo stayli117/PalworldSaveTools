@@ -91,7 +91,7 @@ Se você precisa gerenciar um servidor dedicado, migrar entre servidores coopera
 
 | Categoria | O que você pode fazer |
 |---|---|
-| **Gerenciamento de jogadores** | Edite nomes, níveis, estatísticas, pontos técnicos. Gerencie itens em massa, pals, tecnologia entre jogadores. Limpe jogadores inativos ou duplicados. |
+| **Gerenciamento de jogadores** | Edite nomes, níveis, estatísticas, pontos técnicos. Gerenciar itens em massa, pals, tecnologia entre jogadores. Limpe jogadores inativos ou duplicados. |
 | **Pal Editor** | Alterar estatísticas, IVs, almas, classificação, habilidades, passives, adequação ao trabalho, chefe / bandeiras de sorte. Exportar/importar pals. Detecte e corrija pals ilegal. Modo de trapaça para edição ilimitada. |
 | **Gerenciamento de Guilda** | Renomeie guildas, mude líderes, defina níveis. Desbloqueie pesquisas de laboratório. Mova jogadores entre guildas. Exclua guildas vazias ou inativas. |
 | **Ferramentas do acampamento base** | Veja todas as bases com informações da guilda. Exportar/importar projetos. Clone bases para outras guildas. Reposicione as bases no mapa. Ajuste o raio. Exclua bases inativas. |
@@ -107,7 +107,7 @@ Se você precisa gerenciar um servidor dedicado, migrar entre servidores coopera
 - Edite nomes de jogadores, níveis, estatísticas e pontos de tecnologia.
 - **Aba Estatísticas** — Estatísticas do herói (Saúde, Vigor, Ataque, Defesa, Velocidade de Trabalho, Peso) com valores corretos computados no jogo; Habilidades de relíquia com alternadores e giradores.
 - **Max All Stats** — Limite instantaneamente todas as estatísticas ao máximo (50 pontos).
-- **Operações em massa** entre vários jogadores: gerenciamento de itens, gerenciamento pal e desbloqueio de tecnologia.
+- **Operações em massa** entre vários jogadores: gerenciamento de itens, gerenciamento de pal e desbloqueio de tecnologia.
 - Excluir jogadores inativos por limite de tempo; remova duplicatas.
 
 ### Pal Editor
@@ -358,7 +358,7 @@ Mova seu mundo cooperativo (onde você hospeda seu PC) para um servidor dedicado
 3. **Troque seu personagem cooperativo no slot do servidor.**
    - Abra PST → **Ferramentas** → **Corrigir Host Save**.
    - Navegue até o `Level.sav` do servidor.
-   - **Jogador Fonte**: Selecione seu personagem cooperativo (aquele em `0001.sav` — listado como o anfitrião).
+   - **Jogador Fonte**: Selecione seu personagem cooperativo (aquele em `0001.sav` – listado como o anfitrião).
    - **Jogador alvo**: Selecione o personagem temporário que você acabou de criar.
    - Clique no botão para executar a troca.
 
@@ -402,36 +402,67 @@ Leve seu personagem de servidor dedicado de volta para um salvamento cooperativo
 <details>
 <summary>Clique para expandir</summary>
 
-Quando dois jogadores em um mundo cooperativo querem trocar quem é o anfitrião – por exemplo, o Jogador A está hospedando, mas o Jogador B quer assumir.
+Dois jogadores querem trocar o anfitrião. O jogador A está hospedando – seu personagem mora em `0001.sav`. O Jogador B entra como cliente – seu personagem mora em `1234.sav`. Agora eles querem que o Jogador B se torne o anfitrião, mas o slot do anfitrião é sempre `0001.sav`.
 
-**Como funciona:** O host sempre ocupa `0001.sav`. Fix Host Save troca o Jogador A (`0001.sav`) pelo Jogador B (`XXXX.sav`) para que o Jogador B se torne `0001.sav`. Em seguida, o Jogador B hospeda, o Jogador A ingressa como cliente e uma segunda troca restaura o progresso do Jogador A em seu novo UID de cliente.
+**Conceito principal - Fix Host Save sempre TROCA dois jogadores.** Ele troca seus arquivos salvos, como duas pessoas trocando de lugar. NÃO copia um para o outro. Após qualquer troca, ambos os players ainda existem — eles estão apenas em arquivos diferentes.
 
-**Pré-requisitos:**
-- Ambos os jogadores devem ter entrado neste mundo antes (ambos possuem arquivos `.sav` na pasta `Players`).
-- Ambos os jogadores devem ter pelo menos **Nível 2**.
-- Faça backup de toda a sua pasta salva antes de começar.
-- Feche o Palworld durante a edição.
+Como uma troca move o Jogador B para o slot de host, mas deixa os dados do Jogador A no arquivo antigo de B, uma segunda troca é necessária para colocar o personagem original do Jogador A de volta. Veja como:
 
 ---
 
-**Etapa 1 — Troque B no slot do host.**
+**Estado inicial:**
+```
+0001.sav  = Player A (current host)
+1234.sav  = Player B (current client)
+```
+
+---
+
+**Etapa 1 – Trocar A e B.**
 - Abra PST → **Ferramentas** → **Corrigir Host Save**.
 - Navegue até sua cooperativa `Level.sav`.
-- **Jogador Fonte**: Selecione o Jogador A (`0001.sav`).
-- **Jogador alvo**: Selecione o jogador B (UID normal).
-- Execute a troca. Agora `0001.sav` mantém o progresso do Jogador B.
+- **Fonte**: Jogador A (`0001.sav`). **Alvo**: Jogador B (`1234.sav`).
+- Clique no botão. Fix Host Save troca os dois arquivos.
+
+**Após a etapa 1:**
+```
+0001.sav  = Player B  ← now the host with B's character
+1234.sav  = Player A  ← A's data is here, but this UID no longer exists in the game
+```
+
+---
 
 **Etapa 2 — O Jogador B hospeda, o Jogador A entra.**
-- O jogador B hospeda o mundo. O jogador A entra e cria um personagem temporário. Palworld atribui ao Jogador A um novo UID (por exemplo, `NEWUID.sav`).
-- O jogador A atinge o **Nível 2** com o personagem temporário e então todos fecham o jogo.
+- O jogador B hospeda o mundo. O jogador A entra.
+- Como A não é mais o host, Palworld atribui um UID totalmente novo para o personagem temporário de A (por exemplo, `9999.sav`).
+- O jogador A atinge o **Nível 2** com o personagem temporário e então todos saem do jogo.
 
-**Etapa 3 — Restaurar o progresso original do Jogador A.**
+**Após a etapa 2:**
+```
+0001.sav  = Player B (host, correct)
+1234.sav  = Player A's original data (not linked to any active UID)
+9999.sav  = Player A's temporary character (fresh, Level 2+)
+```
+
+---
+
+**Etapa 3 — Troque os dados originais de A pelo novo UID de A.**
 - Abra **Fix Host Save** novamente com o mesmo `Level.sav`.
-- **Jogador Fonte**: Selecione o progresso original do Jogador A (agora no antigo UID de B, por exemplo, `ORIGUID.sav`).
-- **Jogador alvo**: Selecione o novo UID temporário do Jogador A (`NEWUID.sav`).
-- Execute a troca. O personagem original do Jogador A agora está vinculado ao seu novo UID de cliente.
+- **Fonte**: `1234.sav` (dados originais do jogador A). **Alvo**: `9999.sav` (personagem temporário do Jogador A).
+- Clique no botão. Eles trocam novamente.
 
-**Concluído.** O jogador B é o anfitrião com o progresso original de B. O jogador A junta-se ao progresso original de A. O arquivo temporário restante pode ser ignorado ou limpo.
+**Após a etapa 3:**
+```
+0001.sav  = Player B (host, correct)
+1234.sav  = Player A's temp character (unused, can delete)
+9999.sav  = Player A's original character  ← restored!
+```
+
+---
+
+**Concluído.** O Jogador B hospeda o personagem original do Jogador B. O Jogador A junta-se ao personagem original do Jogador A. O `1234.sav` restante pode ser ignorado ou excluído.
+
+> **Por que duas trocas?** Fix Host Save **troca** dois arquivos — não é uma cópia. A primeira troca coloca B no slot de host, mas os dados de A acabam no UID antigo de B (que não existe mais no jogo). A segunda troca move os dados de A para o novo UID do cliente de A. Duas trocas, todo o progresso preservado.
 
 </details>
 
@@ -496,6 +527,7 @@ Transfira personagens entre diferentes mundos ou servidores preservando personag
 ### "VCRUNTIME140.dll não foi encontrado" (Windows)
 
 Instale o [Microsoft Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170) (2015–2022).
+
 ### `struct.error` ao analisar um salvamento
 
 O formato do arquivo salvo está desatualizado. Carregue o jogo salvo (Solo, Co-op ou Servidor Dedicado) uma vez para acionar uma atualização automática da estrutura e tente novamente. Certifique-se de que o salvamento foi atualizado no ou após o patch mais recente do jogo.
@@ -550,7 +582,7 @@ As saídas vão para `dist/`:
 
 ### cx_Freeze (Instalador do Windows)
 
-Para um pacote `.7z` local do Windows:
+Para um pacote local do Windows `.7z`:
 
 ```
 scripts\build_cx.cmd
@@ -586,7 +618,7 @@ uv run python build/build_interactively.py
 Contribuições são bem-vindas! Sinta-se à vontade para enviar uma solicitação pull.
 
 1. Bifurque o repositório.
-2. Crie sua ramificação de recurso (`git checkout -b feature/AmazingFeature`).
+2. Crie sua ramificação de recursos (`git checkout -b feature/AmazingFeature`).
 3. Confirme suas alterações (`git commit -m 'Add some AmazingFeature'`).
 4. Empurre para a ramificação (`git push origin feature/AmazingFeature`).
 5. Abra uma solicitação pull.

@@ -332,134 +332,101 @@ PST can unlock the full map (all fast-travel points) for your save:
 3. Use the **Restore Map** tool in the Tools tab to apply unlocked map progress across **all** your worlds/servers at once.
 4. Save changes. Automatic backups are created.
 
-### Host → Server Transfer
+### Co-op → Dedicated Server
 
 <details>
 <summary>Click to expand</summary>
 
-1. Copy `Level.sav` and the `Players` folder from your host save.
-2. Paste them into the dedicated server save folder.
-3. Start the server, create a new character, and wait for an auto-save.
-4. Close the server.
-5. Use **Fix Host Save** in PST to migrate the old character's GUID to the new one.
-6. Copy files back and launch the server.
+Move your co-op world (where you host from your PC) to a dedicated server so others can play even when you're offline.
+
+**How it works:** Co-op saves use `0001.sav` for the host player. Dedicated servers don't — every player has a regular UID. Fix Host Save swaps your `0001.sav` character into a regular UID slot so the server recognizes you.
+
+1. **Copy your co-op save to the server.**
+   - Co-op save location: `%localappdata%\Pal\Saved\SaveGames\YOURID\RANDOMID\`
+   - Copy `Level.sav` and the `Players` folder from there.
+   - Paste into the server save folder: `steamapps\common\Palworld\Pal\Saved\SaveGames\0\RANDOMSERVERID\`
+
+2. **Join the server and create a temporary character.**
+   - Start the server, join it, and create a new character (any name/ appearance — this is just a placeholder).
+   - Wait for an auto-save, then shut down the server.
+
+3. **Swap your co-op character into the server slot.**
+   - Open PST → **Tools** → **Fix Host Save**.
+   - Browse to the server's `Level.sav`.
+   - **Source Player**: Select your co-op character (the one in `0001.sav` — listed as the host).
+   - **Target Player**: Select the temporary character you just created.
+   - Click the button to run the swap.
+
+4. **Start the server.**
+   - Your original co-op character (with all progress, Pals, bases) is now linked to the server. The temporary placeholder is gone.
 
 </details>
 
-### Host Swap (Changing Host)
+### Dedicated Server → Co-op
 
 <details>
-<summary>Click to expand host swap guide</summary>
+<summary>Click to expand</summary>
 
-**Background:**
+Take your dedicated server character back to a local co-op save — useful if you stop renting a server or want to play offline.
 
-- The host uses `0001.sav`.
-- Each client uses a unique regular UID save, such as `1234.sav`, `9876.sav`, etc.
-- Player A is the old host with progress in `0001.sav`.
-- Player B is an existing client who will become the new host.
+**How it works:** Same GUID swap in reverse. Your server character (regular UID) gets swapped into `0001.sav` (the host slot) so you can host co-op with your server progress.
 
-**Starting State:**
-```
-0001.sav = Player A, old host
-1234.sav = Player B, future host
-```
+1. **Copy your server save to your local PC.**
+   - Server save location: `steamapps\common\Palworld\Pal\Saved\SaveGames\0\RANDOMSERVERID\`
+   - Copy `Level.sav` and the `Players` folder from there.
+   - Paste into your local co-op folder: `%localappdata%\Pal\Saved\SaveGames\YOURID\RANDOMID\`
+
+2. **Host a co-op game and create a temporary character.**
+   - Start Palworld, host a co-op session, and create a new character.
+   - Let it auto-save, then close Palworld.
+
+3. **Swap your server character into the host slot.**
+   - Open PST → **Tools** → **Fix Host Save**.
+   - Browse to the local co-op `Level.sav`.
+   - **Source Player**: Select your dedicated server character (listed by its UID).
+   - **Target Player**: Select the temporary co-op character (the one in `0001.sav` — listed as the host).
+   - Click the button to run the swap.
+
+4. **Host co-op normally.**
+   - Your server character is now the host (`0001.sav`). All progress, Pals, and bases intact.
+
+</details>
+
+### Changing Host (Co-op Swap)
+
+<details>
+<summary>Click to expand</summary>
+
+When two players in a co-op world want to swap who hosts — e.g., Player A has been hosting but Player B wants to take over.
+
+**How it works:** The host always occupies `0001.sav`. Fix Host Save swaps Player A (`0001.sav`) with Player B (`XXXX.sav`) so Player B becomes `0001.sav`. Then Player B hosts, Player A joins as a client, and a second swap restores Player A's progress into their new client UID.
 
 **Prerequisites:**
-- Player B must have previously joined Player A's world and created a character.
-- Player B's regular player save must exist in the `Players` folder.
-- Player A and Player B must both be at least Level 2.
-- Back up the entire world-save folder before making changes.
-- Shut down the server or close Palworld before modifying the save.
+- Both players must have joined this world before (both have `.sav` files in the `Players` folder).
+- Both players must be at least **Level 2**.
+- Back up your entire save folder before starting.
+- Close Palworld while editing.
 
 ---
 
-### 1. Swap Player B Into the Host Slot
+**Step 1 — Swap B into the host slot.**
+- Open PST → **Tools** → **Fix Host Save**.
+- Browse to your co-op `Level.sav`.
+- **Source Player**: Select Player A (`0001.sav`).
+- **Target Player**: Select Player B (regular UID).
+- Run the swap. Now `0001.sav` holds Player B's progress.
 
-Open **Fix Host Save** and select:
-```
-Source Player: Player A, 0001.sav
-Target Player: Player B, 1234.sav
-```
-Run the migration.
+**Step 2 — Player B hosts, Player A joins.**
+- Player B hosts the world. Player A joins and creates a temporary character. Palworld assigns Player A a new UID (e.g., `NEWUID.sav`).
+- Player A reaches **Level 2** with the temp character, then everyone closes the game.
 
-Result:
-```
-0001.sav = Player B's original progress
-1234.sav = Player A's original progress
-```
-Player B now occupies the host slot. Player A's original host progress is preserved in Player B's former regular UID.
+**Step 3 — Restore Player A's original progress.**
+- Open **Fix Host Save** again with the same `Level.sav`.
+- **Source Player**: Select Player A's original progress (now in B's old UID, e.g., `ORIGUID.sav`).
+- **Target Player**: Select Player A's new temp UID (`NEWUID.sav`).
+- Run the swap. Player A's original character is now linked to their new client UID.
 
----
-
-### 2. Start the World With Player B as the New Host
-
-Start Palworld with Player B hosting the world. Confirm Player B has the correct character, level, inventory, pals, guild, bases, and ownership.
-
-Save state:
-```
-0001.sav = Player B, new host
-1234.sav = Player A's original progress
-```
-
----
-
-### 3. Have Player A Join Player B's World
-
-Player A joins the world now hosted by Player B. Palworld may assign Player A a new regular UID because they are no longer the host.
-
-Example:
-```
-3456.sav = Player A's new client UID
-```
-
-Palworld may ask Player A to create a new character (expected). Player A's original progress is still at `1234.sav`.
-
-After Player A creates the temporary character:
-```
-0001.sav = Player B's correct progress
-1234.sav = Player A's original progress
-3456.sav = Player A's new temporary character
-```
-
----
-
-### 4. Level Player A's Temporary Character
-
-1. Have Player A reach at least **Level 2** with the temporary character.
-2. Have Player A leave the server.
-3. Shut down the server completely.
-4. Back up the world-save folder again.
-
-Level 2 is required because **Fix Host Save** requires both selected characters to be at least Level 2.
-
----
-
-### 5. Restore Player A's Original Progress
-
-Open **Fix Host Save** again and select:
-```
-Source Player: Player A's original progress, 1234.sav
-Target Player: Player A's new client UID, 3456.sav
-```
-Run the migration. Because this is another two-way swap:
-
-```
-0001.sav = Player B's correct host progress
-3456.sav = Player A's restored original progress
-1234.sav = Player A's temporary character
-```
-Player A's new client UID now points to Player A's original character and progress.
-
----
-
-### Final Result:
-```
-0001.sav = Player B, new host with original progress
-3456.sav = Player A, client with restored original progress
-1234.sav = Temporary leftover character
-```
-- Player B hosts using Player B's original character.
-- Player A joins using Player A's restored original character.
+**Done.** Player B hosts with B's original progress. Player A joins with A's original progress. The leftover temp file can be ignored or cleaned up.
 
 </details>
 

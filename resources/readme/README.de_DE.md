@@ -30,7 +30,7 @@
 
 Palworld Save Tools (PST) ist eine schnelle All-in-One-Desktopanwendung zum Überprüfen und Bearbeiten von Palworld-Sicherungsdateien. Es wurde mit Python und PySide6 erstellt und liest und schreibt das komprimierte Speicherformat des Spiels direkt – keine Spielmodifikationen erforderlich.
 
-Ganz gleich, ob Sie einen dedizierten Server verwalten, zwischen Co-op- und dedizierten Servern migrieren, aufgegebene Daten bereinigen oder einzelne Pals optimieren müssen, PST bietet für alles eine einzige einheitliche Schnittstelle.
+Ganz gleich, ob Sie einen dedizierten Server verwalten, zwischen kooperativen und dedizierten Servern migrieren, aufgegebene Daten bereinigen oder einzelne Pals optimieren müssen, PST bietet für alles eine einzige einheitliche Schnittstelle.
 
 ### Highlights
 
@@ -86,9 +86,21 @@ Ganz gleich, ob Sie einen dedizierten Server verwalten, zwischen Co-op- und dedi
 
 </div>
 
+| Kategorie | Was Sie tun können |
+|---|---|
+| **Spielerverwaltung** | Bearbeiten Sie Namen, Level, Statistiken und Technologiepunkte. Massenverwaltung von Gegenständen, pals, Technologie für alle Spieler. Bereinigen Sie inaktive oder doppelte Spieler. |
+| **Pal Editor** | Ändern Sie Statistiken, IVs, Seelen, Rang, Fähigkeiten, passives, Arbeitseignung, Boss-/Glücksflaggen. Export/Import pals. Erkennen und beheben Sie illegale pals. Cheat-Modus für unbegrenztes Bearbeiten. |
+| **Gildenverwaltung** | Gilden umbenennen, Anführer wechseln, Level festlegen. Schalten Sie Laborforschung frei. Verschiebe Spieler zwischen Gilden. Leere oder inaktive Gilden löschen. |
+| **Basislager-Werkzeuge** | Alle Basen mit Gildeninformationen anzeigen. Blaupausen exportieren/importieren. Klonen Sie Basen für andere Gilden. Positionieren Sie die Basen auf der Karte neu. Radius anpassen. Inaktive Basen löschen. |
+| **Kartenbetrachter** | Interaktive Weltkarte mit Basis- und Spielermarkierungen. Zeichnen Sie Sperrzonen ein. Kalibrierungsmodus. Weltkarten- und Baumkartenansichten. Zoomen, schwenken, anfliegen. |
+| **Bestandsverwaltung** | Bearbeiten Sie Spielergegenstände, Schlüsselgegenstände und Ausrüstungsplätze. Schalte alle Schnellreisepunkte frei. Durchsuchen und bearbeiten Sie Basisinventare und Container aller Gilden. Basisarbeiter pals verwalten. |
+| **Ausschlüsse** | Schützen Sie Spieler, Gilden und Stützpunkte mit dauerhaften Ausschlusslisten vor Säuberungen. Fügen Sie Einträge aus Kontextmenüs hinzu. |
+| **Tools speichern** | Konvertieren Sie Speicherungen zwischen SAV und JSON. Konvertieren Sie GamePass in Steam. Übertragen Sie Charaktere zwischen Welten. Host-Speicherungen beheben. Kartenfortschritt wiederherstellen. Erweitern Sie die Palbox-Slots. |
+| **Bereinigung & Dienstprogramme** | Löschen Sie leere Gilden, inaktive Basen/Spieler und nicht referenzierte Daten. Entfernen Sie ungültige Elemente/pals/strukturen. Dungeons, Bohrinsel, Versorgungslieferungen zurücksetzen. Zeitstempel korrigieren. |
+
 ### Spielerverwaltung
 
-- Alle Spieler nach Name, Level, pal Anzahl, UID, Gilde und zuletzt gesehener Zeit anzeigen und durchsuchen.
+- Alle Spieler nach Name, Level, pal-Anzahl, UID, Gilde und zuletzt gesehener Zeit anzeigen und durchsuchen.
 - Bearbeiten Sie Spielernamen, Level, Statistiken und Technologiepunkte.
 - **Registerkarte „Statistik“** – Heldenstatistiken (Gesundheit, Ausdauer, Angriff, Verteidigung, Arbeitsgeschwindigkeit, Gewicht) mit korrekten, im Spiel berechneten Werten; Reliktfähigkeiten mit Schaltern und Spinnern.
 - **Alle Statistiken maximieren** – Begrenzen Sie alle Statistiken sofort auf das Maximum (50 Punkte).
@@ -97,7 +109,7 @@ Ganz gleich, ob Sie einen dedizierten Server verwalten, zwischen Co-op- und dedi
 
 ### Pal Editor
 
-Eine umfassende Bearbeitungsoberfläche für jedes Pal, das einem beliebigen Spieler gehört. Pals werden von **Party** (aktive Truppe) und **Palbox** (Lagerung) organisiert.
+Eine umfassende Bearbeitungsoberfläche für jedes Pal, das einem beliebigen Spieler gehört. Pals werden von **Party** (aktive Truppe) und **Palbox** (Lager) organisiert.
 
 - **Statistiken & IVs** – HP, Angriff, Verteidigung (IV 0–100), Level (1–80), Vertrauensrang (0–10).
 - **Seelen** – HP, Angriff, Verteidigung, Handwerksgeschwindigkeit (0–20).
@@ -107,8 +119,8 @@ Eine umfassende Bearbeitungsoberfläche für jedes Pal, das einem beliebigen Spi
 - **Aussehensflaggen** – Boss/Alpha, Lucky/Shiny, Predator, Awakened und Imported/DNA umschalten.
 - **Rang & Sperre** – Rang und bevorzugte Sperrstufe festlegen (0–3).
 - **Cheat-Modus** – Umschalten, um alle Obergrenzen zu erweitern: Level, IVs, Seelen, Kondensatorrang auf 255; Schalten Sie unbegrenzte Aktiv-/Passivfähigkeiten frei, wobei Duplikate zulässig sind.
-- **Exportieren/Importieren** – Klicken Sie mit der rechten Maustaste auf ein beliebiges pal, um es als `.pstpal` (komprimiert) oder `.json` zu exportieren. Importieren Sie in leere Slots über Gruppen-, Palbox-, DPS- oder Basisarbeiter hinweg. Funktioniert für alle Spielstände und Spieler.
-- **Max. Alle Pals** – Max. aller Statistiken (IVs, Seelen, Rang, Level) für alle pals in der Gruppe, alle Palbox-Seiten oder alle Basisarbeiter – berücksichtigt die Obergrenzen des Cheat-Modus.
+- **Exportieren/Importieren** – Klicken Sie mit der rechten Maustaste auf einen beliebigen pal, um ihn als `.pstpal` (komprimiert) oder `.json` zu exportieren. Importieren Sie in leere Slots über Gruppen-, Palbox-, DPS- oder Basisarbeiter hinweg. Funktioniert für alle Spielstände und Spieler.
+- **Max. Alle Pals** – Max. aller Statistiken (IVs, Seelen, Rang, Level) für alle pals in der Gruppe, alle Palbox-Seiten oder alle Basisarbeiter – berücksichtigt die Obergrenzen für den Cheat-Modus.
 - **Illegales Pals beheben** – pals mit illegalen Statistiken, Fertigkeiten oder Eigenschaften pro Spieler erkennen und begrenzen.
 - **Massenklonen/Löschen** – Artenauswahldialog mit Mengensteuerung und Quellenumschaltung (Party/Palbox/DPS) für Stapelvorgänge.
 - Neuen Pals hinzufügen oder per Doppelklick schnell löschen.
@@ -130,6 +142,7 @@ Zweiteilige Ansicht: Gildenliste oben, Mitgliederliste unten.
 - **Base Nudge** – Verschieben Sie eine Basis um exakte X/Y/Z-Versatze, um Bodenbeschneidungen oder -schweben zu beheben.
 - **Basisradius anpassen** (50 %–1000 %).
 - Löschen Sie inaktive Basen und Nicht-Basiskartenobjekte.
+
 ### Kartenbetrachter
 
 Interaktive Visualisierung Ihrer gesamten Welt.
@@ -185,7 +198,7 @@ Schutzlisten, die Spieler, Gilden und Stützpunkte vor Aufräumarbeiten schütze
 
 Diese Server-Vorgänge sind über **Menü → Funktionen** zugänglich und umfassen:
 
-- **Löschen** – Leere Gilden, inaktive Basen/Spieler, doppelte Spieler und nicht referenzierte Daten löschen.
+- **Löschen** – Leere Gilden, inaktive Basen/Spieler, doppelte Spieler, nicht referenzierte Daten löschen.
 - **Bereinigung** – Entfernen Sie ungültige/modifizierte Elemente, ungültige pals und passives, ungültige Strukturen; illegales pals beheben (Grenze auf zulässiges Maximum); Luftabwehrtürme zurücksetzen; entsperren private chests; alle Strukturen reparieren.
 - **Zurücksetzen** – Missionen, Dungeons, Bohrinsel, Eindringling, Versorgungslieferungen zurücksetzen.
 - **Zeitstempel** – Negative Zeitstempel korrigieren; Spielerzeiten zurücksetzen.
@@ -218,7 +231,7 @@ Vorgefertigte Binärdateien sind für alle drei Hauptplattformen ab [GitHub Rele
 | **Linux** | `PalworldSaveTools-*-linux` | Jede moderne Distribution |
 | **macOS** | `PalworldSaveTools-*-macos.dmg` | macOS 12+ (Monterey oder höher) |
 
-Auch verfügbar unter [Nexus Mods](https://www.nexusmods.com/palworld/mods/3190).
+Auch erhältlich für [Nexus Mods](https://www.nexusmods.com/palworld/mods/3190).
 
 1. Laden Sie den passenden Build für Ihre Plattform herunter.
 2. Extrahieren Sie die ausführbare Datei (falls archiviert) und führen Sie sie aus.
@@ -268,7 +281,7 @@ Der Launcher erstellt einen `.venv`, installiert Abhängigkeiten über `uv sync`
 
 1. **Laden Sie Ihren Speicherstand**
    - Klicken Sie auf **Menü → Laden und Speichern** oder ziehen Sie eine `.sav`-Datei per Drag-and-Drop in das Fenster.
-- Navigieren Sie zu Ihrem Palworld-Speicherordner und wählen Sie `Level.sav`.
+   - Navigieren Sie zu Ihrem Palworld-Speicherordner und wählen Sie `Level.sav`.
 
 2. **Erkunden Sie Ihre Daten**
    - Verwenden Sie die Registerkarten – **Karte**, **Tools**, **Spieler**, **Gilden**, **Basen**, **Spielerinventar**, **Basisinventar**, **Pal Editor**, **Ausschlüsse** – um Ihren Speicherstand zu erkunden.
@@ -321,134 +334,101 @@ PST kann die vollständige Karte (alle Schnellreisepunkte) für Ihren Speicherst
 3. Verwenden Sie das Tool **Karte wiederherstellen** auf der Registerkarte „Extras“, um den freigeschalteten Kartenfortschritt auf **allen** Ihren Welten/Servern gleichzeitig anzuwenden.
 4. Änderungen speichern. Es werden automatische Backups erstellt.
 
-### Host → Serverübertragung
+### Koop → Dedizierter Server
 
 <details>
 <summary>Zum Erweitern klicken</summary>
 
-1. Kopieren Sie `Level.sav` und den Ordner `Players` von Ihrem Hostspeicher.
-2. Fügen Sie sie in den Speicherordner des dedizierten Servers ein.
-3. Starten Sie den Server, erstellen Sie einen neuen Charakter und warten Sie auf die automatische Speicherung.
-4. Schließen Sie den Server.
-5. Verwenden Sie **Fix Host Save** in PST, um die GUID des alten Charakters auf die neue zu migrieren.
-6. Kopieren Sie die Dateien zurück und starten Sie den Server.
+Verschieben Sie Ihre Koop-Welt (die Sie von Ihrem PC aus hosten) auf einen dedizierten Server, damit andere auch dann spielen können, wenn Sie offline sind.
+
+**So funktioniert es:** Koop-Speicherungen verwenden `0001.sav` für den Host-Spieler. Bei dedizierten Servern ist das nicht der Fall – jeder Spieler hat eine reguläre UID. Fix Host Save tauscht Ihr `0001.sav`-Zeichen in einen regulären UID-Slot aus, damit der Server Sie erkennt.
+
+1. **Kopieren Sie Ihren Koop-Speicher auf den Server.**
+   - Koop-Speicherort: `%localappdata%\Pal\Saved\SaveGames\YOURID\RANDOMID\`
+   - Kopieren Sie `Level.sav` und den Ordner `Players` von dort.
+   - In den Speicherordner des Servers einfügen: `steamapps\common\Palworld\Pal\Saved\SaveGames\0\RANDOMSERVERID\`
+
+2. **Treten Sie dem Server bei und erstellen Sie einen temporären Charakter.**
+   - Starten Sie den Server, treten Sie ihm bei und erstellen Sie einen neuen Charakter (beliebiger Name/Aussehen – dies ist nur ein Platzhalter).
+   - Warten Sie auf eine automatische Speicherung und fahren Sie dann den Server herunter.
+
+3. **Tausch deinen Koop-Charakter in den Server-Slot.**
+   - Öffnen Sie PST → **Tools** → **Fix Host Save**.
+   - Navigieren Sie zum `Level.sav` des Servers.
+   - **Quellspieler**: Wählen Sie Ihren Koop-Charakter aus (den in `0001.sav` – aufgeführt als Host).
+   - **Zielspieler**: Wählen Sie den temporären Charakter aus, den Sie gerade erstellt haben.
+   - Klicken Sie auf die Schaltfläche, um den Austausch durchzuführen.
+
+4. **Starten Sie den Server.**
+- Ihr ursprünglicher Koop-Charakter (mit allen Fortschritten, Pals, Basen) ist jetzt mit dem Server verknüpft. Der temporäre Platzhalter ist verschwunden.
 
 </details>
 
-### Host Swap (Host wechseln)
+### Dedizierter Server → Koop
 
 <details>
-<summary>Klicken Sie hier, um den Host-Swap-Leitfaden zu erweitern</summary>
+<summary>Zum Erweitern klicken</summary>
 
-**Hintergrund:**
+Bringen Sie Ihren dedizierten Server-Charakter zurück zu einem lokalen Koop-Speicher – nützlich, wenn Sie keinen Server mehr mieten oder offline spielen möchten.
 
-– Der Host verwendet `0001.sav`.
-- Jeder Client verwendet einen eindeutigen regulären UID-Speicher, z. B. `1234.sav`, `9876.sav` usw.
-- Spieler A ist der alte Host mit Fortschritten in `0001.sav`.
-- Spieler B ist ein bestehender Kunde, der zum neuen Host wird.
+**So funktioniert es:** Gleicher GUID-Austausch in umgekehrter Reihenfolge. Ihr Server-Charakter (reguläre UID) wird in `0001.sav` (den Host-Slot) verschoben, sodass Sie mit Ihrem Server-Fortschritt im Koop-Modus hosten können.
 
-**Ausgangszustand:**
-```
-0001.sav = Player A, old host
-1234.sav = Player B, future host
-```
+1. **Kopieren Sie Ihren Serverspeicher auf Ihren lokalen PC.**
+   - Speicherort des Servers: `steamapps\common\Palworld\Pal\Saved\SaveGames\0\RANDOMSERVERID\`
+   - Kopieren Sie `Level.sav` und den Ordner `Players` von dort.
+   - In Ihren lokalen Koop-Ordner einfügen: `%localappdata%\Pal\Saved\SaveGames\YOURID\RANDOMID\`
+
+2. **Hosten Sie ein Koop-Spiel und erstellen Sie einen temporären Charakter.**
+   - Starten Sie Palworld, veranstalten Sie eine Koop-Sitzung und erstellen Sie einen neuen Charakter.
+   - Lassen Sie es automatisch speichern und schließen Sie dann Palworld.
+
+3. **Tausch deinen Server-Charakter in den Host-Slot.**
+   - Öffnen Sie PST → **Tools** → **Fix Host Save**.
+   - Navigieren Sie zur örtlichen Genossenschaft `Level.sav`.
+   - **Quellspieler**: Wählen Sie Ihren dedizierten Servercharakter aus (aufgelistet nach seiner UID).
+   - **Zielspieler**: Wählen Sie den temporären Koop-Charakter aus (den in `0001.sav` – aufgeführt als Host).
+   - Klicken Sie auf die Schaltfläche, um den Austausch durchzuführen.
+
+4. **Normalerweise Gastgeber-Koop.**
+   - Ihr Servercharakter ist jetzt der Host (`0001.sav`). Alle Fortschritte, Pals und Basen intakt.
+
+</details>
+
+### Host wechseln (Koop-Tausch)
+
+<details>
+<summary>Zum Erweitern klicken</summary>
+
+Wenn zwei Spieler in einer Koop-Welt den Gastgeber tauschen möchten – z. B. war Spieler A Gastgeber, aber Spieler B möchte übernehmen.
+
+**So funktioniert es:** Der Host belegt immer `0001.sav`. Behebung: Host Save tauscht Spieler A (`0001.sav`) mit Spieler B (`XXXX.sav`), sodass Spieler B zu `0001.sav` wird. Dann ist Spieler B Gastgeber, Spieler A tritt als Client bei und ein zweiter Austausch stellt den Fortschritt von Spieler A in seiner neuen Client-UID wieder her.
 
 **Voraussetzungen:**
-- Spieler B muss zuvor der Welt von Spieler A beigetreten sein und einen Charakter erstellt haben.
-- Der reguläre Spielerspeicher von Spieler B muss im Ordner `Players` vorhanden sein.
-- Spieler A und Spieler B müssen beide mindestens Level 2 sein.
-- Sichern Sie den gesamten World-Save-Ordner, bevor Sie Änderungen vornehmen.
-- Fahren Sie den Server herunter oder schließen Sie Palworld, bevor Sie den Speicher ändern.
+- Beide Spieler müssen dieser Welt schon einmal beigetreten sein (beide haben `.sav`-Dateien im Ordner `Players`).
+- Beide Spieler müssen mindestens **Level 2** sein.
+- Sichern Sie Ihren gesamten Speicherordner, bevor Sie beginnen.
+- Schließen Sie Palworld während der Bearbeitung.
 
 ---
 
-### 1. Tauschen Sie Spieler B in den Host-Slot aus
+**Schritt 1 – Tauschen Sie B in den Host-Steckplatz aus.**
+- Öffnen Sie PST → **Tools** → **Fix Host Save**.
+- Navigieren Sie zu Ihrer Genossenschaft `Level.sav`.
+- **Quellplayer**: Wählen Sie Player A (`0001.sav`).
+- **Zielspieler**: Wählen Sie Spieler B (normale UID).
+- Führen Sie den Tausch durch. Jetzt hält `0001.sav` den Fortschritt von Spieler B.
 
-Öffnen Sie **Fix Host Save** und wählen Sie:
-```
-Source Player: Player A, 0001.sav
-Target Player: Player B, 1234.sav
-```
-Führen Sie die Migration aus.
+**Schritt 2 – Spieler B ist Gastgeber, Spieler A tritt bei.**
+- Spieler B ist Gastgeber der Welt. Spieler A tritt bei und erstellt einen temporären Charakter. Palworld weist Spieler A eine neue UID zu (z. B. `NEWUID.sav`).
+- Spieler A erreicht **Level 2** mit dem temporären Charakter, dann schließen alle das Spiel.
 
-Ergebnis:
-```
-0001.sav = Player B's original progress
-1234.sav = Player A's original progress
-```
-Spieler B belegt nun den Host-Slot. Der ursprüngliche Host-Fortschritt von Spieler A bleibt in der früheren regulären UID von Spieler B erhalten.
+**Schritt 3 – Stellen Sie den ursprünglichen Fortschritt von Spieler A wieder her.**
+- Öffnen Sie **Fix Host Save** erneut mit demselben `Level.sav`.
+- **Quellspieler**: Wählen Sie den ursprünglichen Fortschritt von Spieler A aus (jetzt in der alten UID von B, z. B. `ORIGUID.sav`).
+- **Zielspieler**: Wählen Sie die neue temporäre UID von Spieler A (`NEWUID.sav`).
+- Führen Sie den Tausch durch. Der ursprüngliche Charakter von Spieler A ist jetzt mit seiner neuen Client-UID verknüpft.
 
----
-
-### 2. Starten Sie die Welt mit Spieler B als neuem Gastgeber
-
-Starten Sie Palworld mit Spieler B, der die Welt hostet. Bestätigen Sie, dass Spieler B den richtigen Charakter, das richtige Level, das richtige Inventar, pals, die richtige Gilde, die richtigen Basen und den richtigen Besitz hat.
-
-Status speichern:
-```
-0001.sav = Player B, new host
-1234.sav = Player A's original progress
-```
-
----
-
-### 3. Lassen Sie Spieler A der Welt von Spieler B beitreten
-
-Spieler A tritt der Welt bei, die jetzt von Spieler B gehostet wird. Palworld kann Spieler A eine neue reguläre UID zuweisen, da er nicht mehr der Host ist.
-
-Beispiel:
-```
-3456.sav = Player A's new client UID
-```
-
-Palworld kann Spieler A bitten, einen neuen Charakter zu erstellen (erwartet). Der ursprüngliche Fortschritt von Spieler A liegt immer noch bei `1234.sav`.
-
-Nachdem Spieler A den temporären Charakter erstellt hat:
-```
-0001.sav = Player B's correct progress
-1234.sav = Player A's original progress
-3456.sav = Player A's new temporary character
-```
-
----
-
-### 4. Den temporären Charakter von Spieler A aufleveln
-
-1. Lassen Sie Spieler A mit dem temporären Charakter mindestens **Level 2** erreichen.
-2. Lassen Sie Spieler A den Server verlassen.
-3. Fahren Sie den Server vollständig herunter.
-4. Sichern Sie den World-Save-Ordner erneut.
-
-Level 2 ist erforderlich, da **Fix Host Save** erfordert, dass beide ausgewählten Charaktere mindestens Level 2 haben.
-
----
-
-### 5. Stellen Sie den ursprünglichen Fortschritt von Spieler A wieder her
-
-Öffnen Sie **Fix Host Save** erneut und wählen Sie:
-```
-Source Player: Player A's original progress, 1234.sav
-Target Player: Player A's new client UID, 3456.sav
-```
-Führen Sie die Migration aus. Denn dies ist ein weiterer wechselseitiger Tausch:
-
-```
-0001.sav = Player B's correct host progress
-3456.sav = Player A's restored original progress
-1234.sav = Player A's temporary character
-```
-Die neue Client-UID von Spieler A verweist jetzt auf den ursprünglichen Charakter und Fortschritt von Spieler A.
-
----
-
-### Endergebnis:
-```
-0001.sav = Player B, new host with original progress
-3456.sav = Player A, client with restored original progress
-1234.sav = Temporary leftover character
-```
-- Spieler B moderiert den Originalcharakter von Spieler B.
-- Spieler A tritt mit dem wiederhergestellten Originalcharakter von Spieler A bei.
+**Fertig.** Spieler B hostet mit dem ursprünglichen Fortschritt von B. Spieler A schließt sich dem ursprünglichen Fortschritt von A an. Die übrig gebliebene temporäre Datei kann ignoriert oder bereinigt werden.
 
 </details>
 
@@ -474,7 +454,7 @@ Die neue Client-UID von Spieler A verweist jetzt auf den ursprünglichen Charakt
 **Eine Basis exportieren:**
 1. Gehen Sie zur Registerkarte **Stützpunkte** (oder verwenden Sie den Map Viewer).
 2. Klicken Sie mit der rechten Maustaste auf eine Basis → **Basis exportieren**.
-3. Als `.json`-Blueprint-Datei speichern.
+3. Speichern Sie als `.json`-Blueprint-Datei.
 
 **Eine Basis importieren:**
 1. Klicken Sie mit der rechten Maustaste auf die Zielgilde (in der Registerkarte „Basen“, „Map Viewer“ oder „Gilden“).
@@ -513,8 +493,7 @@ Die neue Client-UID von Spieler A verweist jetzt auf den ursprünglichen Charakt
 ### „VCRUNTIME140.dll wurde nicht gefunden“ (Windows)
 
 Installieren Sie den [Microsoft Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170) (2015–2022).
-
-### `struct.error` beim Parsen eines Speicherstands
+### `struct.error` beim Parsen eines Speichervorgangs
 
 Das Speicherdateiformat ist veraltet. Laden Sie den Speicherstand im Spiel (Solo, Koop oder Dedizierter Server) einmal, um eine automatische Strukturaktualisierung auszulösen, und versuchen Sie es dann erneut. Stellen Sie sicher, dass der Speicherstand mit oder nach dem neuesten Spiel-Patch aktualisiert wurde.
 
@@ -719,6 +698,7 @@ Ohne die Menschen dahinter gäbe es dieses Projekt nicht.
 <img src="https://readme-typing-svg.demolab.com?lines=Wo+Kredit+f%C3%A4llig+ist;Vielen+Dank+euch+allen;Wir+stehen+auf+Schultern&center=true&width=390&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
+
 Ein großes Dankeschön an:
 
 - **Palworld**, entwickelt von Pocketpair, Inc. – für das Spiel, das uns alle zusammengebracht hat.

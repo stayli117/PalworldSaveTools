@@ -4,6 +4,7 @@ from PySide6.QtCore import Qt, Signal, QSize, QTimer
 from PySide6.QtGui import QPixmap, QIcon, QColor, QPainter, QPen, QIntValidator
 from PySide6.QtWidgets import QStyledItemDelegate, QSplitter
 from i18n import t, desc_t
+from i18n.pinyin import py_match
 from palworld_aio import constants
 from palworld_aio.inventory.inventory_manager import ItemData
 from palworld_aio.managers.data_manager import get_guilds, get_guild_members
@@ -217,7 +218,7 @@ class PlayerItemActionDialog(QDialog):
                 item = grid.item(i)
                 name = item.text()
                 asset = item.data(Qt.UserRole) or ''
-                item.setHidden(bool(q and q not in name.lower() and (q not in asset.lower())))
+                item.setHidden(bool(q) and not py_match(query, name) and (q not in asset.lower()))
     def _on_item_clicked(self, item: QListWidgetItem):
         self.selected_item_id = item.data(Qt.UserRole)
         raw_item_name = item.text()

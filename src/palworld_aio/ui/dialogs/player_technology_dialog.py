@@ -6,6 +6,7 @@ from PySide6.QtCore import Qt, Signal, QSize, QEvent
 from PySide6.QtGui import QShowEvent
 from PySide6.QtGui import QPixmap, QIcon, QFont
 from i18n import t, desc_t
+from i18n.pinyin import py_match
 from palworld_aio import constants
 from palworld_aio.utils import sav_to_gvasfile, gvasfile_to_sav
 from palworld_aio.managers.data_manager import get_guilds, get_guild_members
@@ -179,7 +180,13 @@ class PlayerTechnologyActionDialog(QDialog):
             self._display_technologies(self.tech_data)
             return
         query_lower = query.lower()
-        filtered = [t for t in self.tech_data if query_lower in t.get('name', '').lower() or query_lower in t.get('asset', '').lower() or query_lower in t(f"technology.{t.get('name', '')}", t.get('name', '')).lower()]
+        # 注意：不能用 `t` 作循环变量，会遮蔽翻译函数 t()
+        filtered = [
+            tech for tech in self.tech_data
+            if query_lower in tech.get('name', '').lower()
+            or query_lower in tech.get('asset', '').lower()
+            or py_match(query, t(f"technology.{tech.get('name', '')}", tech.get('name', '')))
+        ]
         self._display_technologies(filtered)
     def _make_tech_frame(self, tech):
         asset = tech.get('asset', '')

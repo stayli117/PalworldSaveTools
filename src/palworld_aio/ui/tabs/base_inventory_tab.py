@@ -26,6 +26,7 @@ from resource_resolver import resource_path
 from palworld_aio.ui.chrome.styled_combo import StyledCombo
 from palworld_aio.utils import format_duration_short, calculate_max_hp
 from i18n import t, desc_t
+from i18n.pinyin import py_match
 from palworld_aio.inventory.inventory_manager import ItemData
 from palworld_aio.ui.chrome.styles import MENU_STYLE, DIALOG_STYLE as _DIALOG_STYLE, INPUT_DIALOG_STYLE, PICKER_SEARCH_STYLE, wrap_tooltip_text, CONTENT_PANEL_STYLE, slot_full, slot_selected
 from palworld_aio.editor.edit_pals import _clean_desc_for_tooltip, build_pal_context_menu, _get_cached_pixmap, _get_pal_icon_path, safe_nested_get, extract_value, resolve_name, get_pal_base_data, _resolve_partner_desc, _partner_desc_to_html, StrokedLabel, _get_element_pixmap, PalFrame, _strip_prefix_label, PalInfoWidget, _get_boss_alpha_pixmap, _get_boss_shiny_pixmap, _get_awake_pixmap, _get_ui_icon_pixmap, _export_pal_raw, _generate_pal_save_param, _import_pal_raw, _toggle_boss_raw, _toggle_lucky_raw, _toggle_awake_raw, _toggle_dna_raw, _set_fav_raw, _learn_all_skills_raw, _show_learned_moves_dialog, _register_pal_instance_to_guild, _set_work_suitability, _ensure_friendship_thresholds, _get_raw_from_item
@@ -217,7 +218,7 @@ class GuildItemPickerDialog(QDialog):
             item = self.results_list.item(i)
             name = item.text()
             asset = item.data(Qt.UserRole) or ''
-            item.setHidden(bool(q and q not in name.lower() and (q not in asset.lower())))
+            item.setHidden(bool(q) and not py_match(query, name) and (q not in asset.lower()))
     def _on_item_clicked(self, item: QListWidgetItem):
         self.selected_item_id = item.data(Qt.UserRole)
         self.selected_item_name = item.data(Qt.UserRole + 1)
@@ -533,7 +534,7 @@ class GuildStructurePickerDialog(QDialog):
             item = self.results_list.item(i)
             name = item.text()
             asset = item.data(Qt.UserRole) or ''
-            item.setHidden(bool(q and q not in name.lower() and (q not in asset.lower())))
+            item.setHidden(bool(q) and not py_match(query, name) and (q not in asset.lower()))
     def _on_structure_clicked(self, item: QListWidgetItem):
         self.selected_structure_asset = item.data(Qt.UserRole)
         self.selected_structure_name = item.data(Qt.UserRole + 1)
@@ -959,10 +960,9 @@ class ReplaceStructureDialog(QDialog):
         self.cancel_btn.setText(t('button.cancel') if t else 'Cancel')
 
     def _filter_list(self, list_widget, query):
-        q = query.lower()
         for i in range(list_widget.count()):
             item = list_widget.item(i)
-            item.setHidden(bool(q and q not in item.text().lower()))
+            item.setHidden(not py_match(query, item.text()))
 
     def _resolve_structure_icon(self, asset):
         base_path = constants.get_base_path() if hasattr(constants, 'get_base_path') else '.'
@@ -3072,10 +3072,9 @@ class BaseInventoryTab(QWidget):
             item.setData(Qt.UserRole, guild['id'])
             list_widget.addItem(item)
         def apply_filter(text):
-            q = text.lower()
             for i in range(list_widget.count()):
                 item = list_widget.item(i)
-                item.setHidden(bool(q and q not in item.text().lower()))
+                item.setHidden(not py_match(text, item.text()))
         search.textChanged.connect(apply_filter)
         def select_guild(item):
             if item:
@@ -3134,10 +3133,9 @@ class BaseInventoryTab(QWidget):
             item.setData(Qt.UserRole, base['id'])
             list_widget.addItem(item)
         def apply_filter(text):
-            q = text.lower()
             for i in range(list_widget.count()):
                 item = list_widget.item(i)
-                item.setHidden(bool(q and q not in item.text().lower()))
+                item.setHidden(not py_match(text, item.text()))
         search.textChanged.connect(apply_filter)
         def select_base(item):
             if item:
@@ -3543,7 +3541,7 @@ class BaseInventoryTab(QWidget):
         if not self.manager.inventory_container:
             self._show_warning(t('base_inventory.select_container_first') if t else 'Please select a container first')
             return
-        dialog = ItemPickerDialog(self, filter_exclude_type_a='EPalItemTypeA::Essential')
+        dialog = ItemPickerDialog(self, filter_exclude_type_a='EPalItemTypeA::Essential', multi_select=True)
         dialog.item_selected.connect(lambda item_id, qty: self._do_add_item(item_id, qty))
         dialog.exec()
         self._refresh_container_ui()

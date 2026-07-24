@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLineEdit, QListWidget, QListWidgetItem, QApplication
 from PySide6.QtCore import Qt, QThread, QPoint
 from i18n import t
+from i18n.pinyin import py_match
 from palworld_aio.ui.chrome.styles import PICKER_SEARCH_STYLE, PICKER_LIST_STYLE, PICKER_BG_STYLE
 from palworld_aio.widgets.ime_popup import setup_ime_popup, show_ime_popup
 
@@ -30,7 +31,7 @@ def show_player_select_popup(anchor_btn, player_list, current_uid=None):
         item = QListWidgetItem(player['display'])
         item.setData(Qt.UserRole, player)
         lst.addItem(item)
-    search.textChanged.connect(lambda t, l=lst: [l.item(i).setHidden(t.lower() not in l.item(i).text().lower()) for i in range(l.count())])
+    search.textChanged.connect(lambda t, l=lst: [l.item(i).setHidden(not py_match(t, l.item(i).text())) for i in range(l.count())])
     layout.addWidget(lst)
 
     popup.setFixedWidth(anchor_btn.width())

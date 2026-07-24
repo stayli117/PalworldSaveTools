@@ -793,6 +793,7 @@
     "inventory.max_food_slots": "All food slots are already unlocked!",
     "inventory.modified": "* Modified",
     "inventory.module": "Module",
+    "inventory.multi_add_hint": "Tip: hold Ctrl/Shift to select multiple items and add them at once",
     "inventory.no_item_selected": "Please select an item first",
     "inventory.no_player": "Please select a player first",
     "inventory.quantity": "Quantity:",

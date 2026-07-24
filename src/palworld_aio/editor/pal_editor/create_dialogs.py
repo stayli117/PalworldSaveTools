@@ -6,6 +6,7 @@ from palworld_aio.widgets.toggle_check import ToggleCheckBtn
 from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QIcon
 from i18n import t, desc_t
+from i18n.pinyin import py_match
 from loading_manager import show_information, show_warning, show_question, run_with_loading
 from palworld_aio import constants
 from palworld_aio.ui.chrome.styles import DIALOG_STYLE
@@ -92,10 +93,9 @@ def _show_learned_moves_dialog(raw, parent):
                 outer_layout.insertWidget(0, nl)
         return handler
     def _filter_skills(text):
-        text = text.lower()
         visible = 0
         for slot, name_lower in skill_slots:
-            if text in name_lower:
+            if py_match(text, name_lower):
                 slot.show()
                 visible += 1
             else:
@@ -888,7 +888,7 @@ class PalCreateDialog(QDialog):
         for asset, name in sorted(PalFrame._NAMEMAP.items(), key=lambda kv: (kv[1] or '', kv[0])):
             asset_lower = asset.lower()
             display_name = t(f"pal.{name}", name)
-            if search_text and search_text not in display_name.lower() and search_text not in name.lower() and search_text not in asset_lower:
+            if search_text and not py_match(search_text, display_name) and search_text not in name.lower() and search_text not in asset_lower:
                 continue
             is_predator = asset.upper().startswith('PREDATOR_')
             is_boss = any((asset.upper().startswith(p) for p in _data._BOSS_PREFIXES)) and not is_predator

@@ -5,6 +5,7 @@ from PySide6.QtCore import Qt, QTimer, QRectF, QSize, QPoint, QThread
 from PySide6.QtGui import QPainter, QColor, QPen, QBrush, QLinearGradient, QIcon, QCursor, QFontMetrics
 from PySide6.QtWidgets import QStyle
 from i18n import t, desc_t
+from i18n.pinyin import py_match
 from palworld_aio import constants as palworld_constants
 from palworld_aio.editor.pal_editor import _get_cached_pixmap, _get_element_pixmap, _ensure_skill_data, _ensure_passive_data, _clean_desc_for_tooltip
 from palworld_aio.editor.pal_editor import data as _pedata
@@ -203,7 +204,7 @@ class SkillPicker(QWidget):
             item = self._list.item(i)
             if not item.flags() & Qt.ItemIsSelectable:
                 continue
-            item.setHidden(text.lower() not in item.text().lower())
+            item.setHidden(not py_match(text, item.text()))
     def _on_select(self):
         sel = self._list.currentItem()
         if not sel or not (sel.flags() & Qt.ItemIsSelectable):

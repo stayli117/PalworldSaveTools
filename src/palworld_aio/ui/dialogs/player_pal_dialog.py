@@ -5,6 +5,7 @@ from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushBu
 from PySide6.QtCore import Qt, Signal, QSize, QTimer, QPoint
 from PySide6.QtGui import QPixmap, QIcon, QPainter, QColor, QCursor, QFont, QFontMetrics
 from i18n import t, desc_t
+from i18n.pinyin import py_match
 from palworld_aio import constants
 from palworld_aio.editor.edit_pals import PalFrame, _get_boss_alpha_pixmap, _composite_badge, _BOSS_PREFIXES, _get_element_pixmap, _ensure_element_data, _resolve_partner_desc, _partner_desc_to_html, _get_cached_pixmap, _get_pal_icon_path, PalInfoWidget
 from palworld_aio.editor.pal_editor.widgets import PassiveEffectOverlay
@@ -310,7 +311,7 @@ class PlayerPalActionDialog(QDialog):
             if (not is_predator and not is_boss and not is_npc) and not self._show_standard_chk.isChecked():
                 continue
             display_name = t(f"pal.{name}", name)
-            if query_lower and query_lower not in display_name.lower() and (query_lower not in name.lower()) and (query_lower not in asset.lower()):
+            if query_lower and not py_match(query, display_name) and (query_lower not in name.lower()) and (query_lower not in asset.lower()):
                 continue
             list_item = QListWidgetItem(t(f"pal.{name}", name))
             list_item.setData(Qt.UserRole, asset)

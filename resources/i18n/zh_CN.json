@@ -6026,6 +6026,7 @@
     "inventory.missions_reset": "重置所选",
     "inventory.modified": "* 已修改",
     "inventory.module": "模块",
+    "inventory.multi_add_hint": "提示：按住 Ctrl/Shift 可多选物品，一次批量添加",
     "inventory.multi_clear_btn": "清除数量",
     "inventory.multi_delete_btn": "删除",
     "inventory.multi_deselect_btn": "取消选择",

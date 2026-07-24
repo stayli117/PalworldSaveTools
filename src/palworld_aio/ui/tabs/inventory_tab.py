@@ -5,6 +5,7 @@ from PySide6.QtCore import Qt, QSize, Signal, QPoint, QTimer, QThread, QEvent
 from PySide6.QtGui import QPixmap, QIcon, QFont, QCursor, QColor, QPainter, QPen, QIntValidator
 from PySide6.QtWidgets import QStyledItemDelegate
 from i18n import t, desc_t
+from i18n.pinyin import py_match
 from palworld_aio.ui.chrome.styles import DIALOG_STYLE as DARK_THEME_STYLE, STATS_PANEL_STYLE, MENU_STYLE, PICKER_BG_STYLE, PICKER_SEARCH_STYLE, PICKER_LIST_STYLE, wrap_tooltip_text, slot_full, slot_rarity, slot_selected, slot_multi_selected, CONTENT_PANEL_STYLE, SLOT_EMPTY_STYLE, SLOT_HOVER_STYLE, INPUT_DIALOG_STYLE
 from palworld_aio.widgets.toggle_check import ToggleCheckBtn
 from palsav import json_tools
@@ -1615,7 +1616,7 @@ class RarityBorderDelegate(QStyledItemDelegate):
         painter.restore()
 class ItemPickerDialog(QDialog):
     item_selected = Signal(str, int)
-    def __init__(self, parent=None, filter_type_a=None, filter_type_b=None, filter_exclude_type_a=None, hide_quantity=False, exclude_assets=None):
+    def __init__(self, parent=None, filter_type_a=None, filter_type_b=None, filter_exclude_type_a=None, hide_quantity=False, exclude_assets=None, multi_select=False):
         super().__init__(parent)
         self.setWindowTitle(t('inventory.select_item', default='Select Item'))
         self.setMinimumSize(840, 600)
@@ -1626,6 +1627,7 @@ class ItemPickerDialog(QDialog):
         self._filter_exclude_type_a = filter_exclude_type_a
         self._hide_quantity = hide_quantity
         self._exclude_assets = exclude_assets or set()
+        self._multi_select = multi_select
         self.setStyleSheet(DARK_THEME_STYLE)
         self._setup_ui()
         self._adjust_width()
@@ -1654,7 +1656,14 @@ class ItemPickerDialog(QDialog):
         self.results_list.setItemDelegate(RarityBorderDelegate(self.results_list))
         self.results_list.itemClicked.connect(self._on_item_clicked)
         self.results_list.itemDoubleClicked.connect(self._on_item_double_clicked)
+        if self._multi_select:
+            # 支持 Ctrl/Shift 多选，一次添加多个物品
+            self.results_list.setSelectionMode(QAbstractItemView.ExtendedSelection)
         layout.addWidget(self.results_list)
+        if self._multi_select:
+            hint = QLabel(t('inventory.multi_add_hint', default='Tip: hold Ctrl/Shift to select multiple items and add them at once'))
+            hint.setStyleSheet('color: #7DD3FC; font-size: 11px; padding: 0 4px;')
+            layout.addWidget(hint)
         self.desc_label = QLabel('')
         self.desc_label.setStyleSheet('color: #94a3b8; font-size: 11px; padding: 2px 4px;')
         self.desc_label.setWordWrap(True)
@@ -1740,7 +1749,7 @@ class ItemPickerDialog(QDialog):
             item = self.results_list.item(i)
             name = item.text()
             asset = item.data(Qt.UserRole) or ''
-            item.setHidden(bool(q and q not in name.lower() and (q not in asset.lower())))
+            item.setHidden(bool(q) and not py_match(query, name) and (q not in asset.lower()))
     def _adjust_width(self):
         m = self.layout().contentsMargins()
         frame_w = self.frameGeometry().width() - self.geometry().width()
@@ -1766,13 +1775,36 @@ class ItemPickerDialog(QDialog):
             self.desc_label.setVisible(False)
     def _on_item_double_clicked(self, item: QListWidgetItem):
         self.selected_item = item.data(Qt.UserRole)
-        self._add_item()
+        # 双击始终只添加被双击的这一个（即便处于多选模式）
+        qty = self._current_qty()
+        type_a = item.data(Qt.UserRole + 3) or ''
+        type_b = item.data(Qt.UserRole + 5) or ''
+        if type_a in SINGLETON_TYPE_A and type_b != 'EPalItemTypeB::WeaponThrowObject':
+            qty = 1
+        self.item_selected.emit(self.selected_item, qty)
+        self.accept()
+    def _current_qty(self) -> int:
+        try:
+            return max(1, int(self.qty_input.text()))
+        except ValueError:
+            return 1
     def _add_item(self):
+        qty = self._current_qty()
+        if self._multi_select:
+            sel_items = self.results_list.selectedItems()
+            if not sel_items:
+                return
+            for it in sel_items:
+                asset = it.data(Qt.UserRole)
+                if not asset:
+                    continue
+                type_a = it.data(Qt.UserRole + 3) or ''
+                type_b = it.data(Qt.UserRole + 5) or ''
+                is_singleton = type_a in SINGLETON_TYPE_A and type_b != 'EPalItemTypeB::WeaponThrowObject'
+                self.item_selected.emit(asset, 1 if is_singleton else qty)
+            self.accept()
+            return
         if self.selected_item:
-            try:
-                qty = int(self.qty_input.text())
-            except ValueError:
-                qty = 1
             self.item_selected.emit(self.selected_item, qty)
             self.accept()
 class PlayerInventoryTab(QWidget):
@@ -2875,9 +2907,9 @@ class PlayerInventoryTab(QWidget):
         container_type = getattr(self, '_context_container_type', 'main')
         if container_type == 'key_items':
             exclude = set(FOOD_POUCH_ITEMS + ACCESSORY_UNLOCK_ITEMS + WEAPON_UNLOCK_ITEMS)
-            dialog = ItemPickerDialog(self, filter_type_a='EPalItemTypeA::Essential', exclude_assets=exclude)
+            dialog = ItemPickerDialog(self, filter_type_a='EPalItemTypeA::Essential', exclude_assets=exclude, multi_select=True)
         else:
-            dialog = ItemPickerDialog(self, filter_exclude_type_a='EPalItemTypeA::Essential')
+            dialog = ItemPickerDialog(self, filter_exclude_type_a='EPalItemTypeA::Essential', multi_select=True)
         dialog.item_selected.connect(self._add_item_to_inventory)
         dialog.exec()
         self._refresh_display()

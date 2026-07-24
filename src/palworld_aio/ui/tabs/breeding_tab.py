@@ -7,6 +7,7 @@ from PySide6.QtGui import QFont, QCursor, QPixmap, QIcon
 from palworld_aio import constants
 from resource_resolver import resource_path
 from i18n import t, desc_t
+from i18n.pinyin import py_match
 from palworld_aio.editor.pal_editor import PalFrame, PalCreateDialog, _get_pal_icon_path, _get_cached_pixmap
 from palworld_aio.editor.pal_editor.data import _BOSS_PREFIXES
 try:
@@ -98,7 +99,7 @@ class _SelectPalDialog(PalCreateDialog):
                 continue
             name = info.get('name', asset)
             display_name = t(f"pal.{name}", name)
-            if search_text and search_text not in display_name.lower() and search_text not in name.lower() and search_text not in asset.lower():
+            if search_text and not py_match(search_text, display_name) and search_text not in name.lower() and search_text not in asset.lower():
                 continue
             asset_lower = asset.lower()
             is_predator = asset.upper().startswith('PREDATOR_')

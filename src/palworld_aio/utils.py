@@ -16,15 +16,41 @@ from resource_resolver import resource_path
 from i18n import t
 
 def resolve_name(character_id: str, name_map: dict) -> str | None:
+    """Resolve a character/npc internal id to its display name.
+
+    Save-game character ids come in several shapes across game versions,
+    e.g. ``Lamball``, ``PAL_Lamball``, ``PAL_Lamball_C``, ``BOSS_Zoe_C``
+    (a category prefix plus a Gvas ``_C``/``_vN``/``_avatar`` suffix).
+    The name map is keyed by the asset's lower-cased name, which may or may
+    not carry a ``BOSS_``/``PRED_``/``RAID_`` category prefix. Try every
+    plausible variant so translation keys stay resolvable after upstream
+    shifts the id format. Does NOT mutate ``name_map``.
+    """
     if not character_id:
         return None
-    key = character_id.lower()
-    name = name_map.get(key)
-    if name is not None:
-        return name
-    stripped = re.sub('_v\\d+$', '', key)
-    if stripped != key:
-        name = name_map.get(stripped)
+    cid = character_id.lower()
+    transforms = [
+        lambda s: re.sub(r'_v\d+$', '', s),
+        lambda s: re.sub(r'_c(?:_\d+)?$', '', s),
+        lambda s: re.sub(r'_avatar$', '', s),
+        lambda s: re.sub(r'^pal_', '', s),
+        # Boss pals: game cid is BOSS_<asset> where asset already carries a
+        # lower-case boss_ prefix (e.g. BOSS_boss_anubis_C), so strip one layer.
+        lambda s: re.sub(r'^boss_', '', s),
+    ]
+    candidates = {cid}
+    frontier = [cid]
+    for _ in range(2):
+        nxt = []
+        for v in frontier:
+            for t in transforms:
+                nv = t(v)
+                if nv and nv not in candidates:
+                    candidates.add(nv)
+                    nxt.append(nv)
+        frontier = nxt
+    for cand in candidates:
+        name = name_map.get(cand)
         if name is not None:
             return name
     return None

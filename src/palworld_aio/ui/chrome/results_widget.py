@@ -117,7 +117,7 @@ class ResultsWidget(QWidget):
         label.setObjectName('statsField')
         label.setStyleSheet('')
         card_layout.addWidget(label)
-        value_label = QLabel('N/A')
+        value_label = QLabel(t('results_widget.na') if t else 'N/A')
         value_label.setFont(QFont(constants.FONT_FAMILY, constants.FONT_SIZE))
         value_label.setObjectName('statsValue')
         value_label.setStyleSheet('')
@@ -128,21 +128,21 @@ class ResultsWidget(QWidget):
         if name:
             self.player_value.setText(str(name))
         else:
-            self.player_value.setText('N/A')
+            self.player_value.setText(t('common.na') if t else 'N/A')
     def set_guild(self, name):
         if name:
             self.guild_value.setText(str(name))
         else:
-            self.guild_value.setText('N/A')
+            self.guild_value.setText(t('common.na') if t else 'N/A')
     def set_base(self, base_id):
         if base_id:
             self.base_value.setText(str(base_id))
         else:
-            self.base_value.setText('N/A')
+            self.base_value.setText(t('common.na') if t else 'N/A')
     def clear_selection(self):
-        self.player_value.setText('N/A')
-        self.guild_value.setText('N/A')
-        self.base_value.setText('N/A')
+        self.player_value.setText(t('common.na') if t else 'N/A')
+        self.guild_value.setText(t('common.na') if t else 'N/A')
+        self.base_value.setText(t('common.na') if t else 'N/A')
     def update_stats(self, stats):
         if hasattr(self, 'stats_panel') and self.stats_panel:
             self.stats_panel.update_stats(stats)

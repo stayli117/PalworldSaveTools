@@ -20,7 +20,7 @@ class LoadingPopup(QWidget):
         self._show_fallback()
         layout.addWidget(self.label)
     def _show_fallback(self):
-        self.label.setText('Loading...')
+        self.label.setText(t('common.loading') if t else 'Loading...')
         self.label.setStyleSheet("\n            QLabel {\n                color: #7DD3FC;\n                font-size: 24px;\n                font-weight: bold;\n                font-family: 'Segoe UI',Arial;\n                background: rgba(18,20,24,0.95);\n                border-radius: 12px;\n                padding: 40px;\n            }\n        ")
         self.setFixedSize(200, 120)
     def show_with_fade(self):

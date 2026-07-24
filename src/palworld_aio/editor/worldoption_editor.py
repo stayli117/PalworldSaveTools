@@ -6,6 +6,7 @@ from palworld_aio.widgets.toggle_check import ToggleCheckBtn
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont, QCursor
 from i18n import t
+from i18n.pinyin import py_match
 from loading_manager import show_warning, show_critical
 from palworld_aio.ui.chrome.styles import ThemeManager
 from palworld_aio import constants
@@ -101,10 +102,10 @@ class WorldOptionEditorDialog(QDialog):
             item = QListWidgetItem(name)
             self.settings_list.addItem(item)
     def _filter_settings(self, text):
-        search_text = text.lower()
+        search_text = text.strip().lower()
         self.settings_list.clear()
         for name in self.all_setting_names:
-            if search_text in name.lower():
+            if py_match(search_text, name):
                 item = QListWidgetItem(name)
                 self.settings_list.addItem(item)
     def _on_setting_selected(self, row):

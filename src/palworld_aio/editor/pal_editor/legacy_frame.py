@@ -1,7 +1,7 @@
 import threading
 from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QVBoxLayout
 from PySide6.QtCore import Qt
-from i18n import get_language, t
+from i18n import get_language, t, dn
 from resource_resolver import resource_path
 from palworld_aio import constants
 from palworld_aio.managers import data_manager as dm
@@ -89,14 +89,14 @@ class PalFrame(QFrame):
         layout = QHBoxLayout(self)
         layout.setContentsMargins(10, 10, 10, 10)
         layout.setSpacing(15)
-        image_label = QLabel('No Image')
+        image_label = QLabel(t('legacy_frame.no_image') if t else 'No Image')
         image_label.setAlignment(Qt.AlignCenter)
         image_label.setFixedSize(80, 80)
         image_label.setStyleSheet('QLabel { border: 2px solid #ccc; border-radius: 40px; background-color: #f0f0f0; padding: 5px; }')
         layout.addWidget(image_label)
         right_layout = QVBoxLayout()
         right_layout.setSpacing(5)
-        name_label = QLabel('Unknown Pal')
+        name_label = QLabel(t('legacy_frame.unknown_pal') if t else 'Unknown Pal')
         name_label.setStyleSheet('font-weight: bold; font-size: 14px;')
         right_layout.addWidget(name_label)
         level_exp_layout = QHBoxLayout()
@@ -164,9 +164,11 @@ class PalFrame(QFrame):
             elif isinstance(passive_skill_data, list):
                 p_list = passive_skill_data
             nick = extract_value(raw, 'NickName', '')
-            pal_name = _strip_prefix_label(resolve_name(cid, self._NAMEMAP) or cid)
+            raw_pal_name = _strip_prefix_label(resolve_name(cid, self._NAMEMAP) or cid)
             if nick:
                 pal_name = nick
+            else:
+                pal_name = dn("pal", raw_pal_name)
             self.name_label.setText(pal_name)
             self.name_label.repaint()
             self.repaint()
@@ -184,10 +186,14 @@ class PalFrame(QFrame):
             for w in e_list:
                 if w:
                     w_clean = w.split('::')[-1].lower()
-                    move_name = self._SKILLMAP.get(w_clean, w.split('::')[-1])
+                    move_raw = self._SKILLMAP.get(w_clean, w.split('::')[-1])
+                    move_name = dn("skill", move_raw)
                     moves.append(move_name)
             self.moves_label.setText(f"Moves: {(','.join(moves) if moves else 'None')}")
-            passives = [self._PASSMAP.get(p.lower(), p) for p in p_list]
+            passives = []
+            for p in p_list:
+                p_raw = self._PASSMAP.get(p.lower(), p)
+                passives.append(dn("passive", p_raw))
             self.passives_label.setText(f"Passives: {(','.join(passives) if passives else 'None')}")
         except Exception as e:
             pass

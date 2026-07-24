@@ -654,7 +654,7 @@ class FixHostSaveWindow(QWidget):
         self.xgp_browse_btn.setFont(_nf_font)
         self.xgp_browse_btn.setMinimumWidth(110)
         self.xgp_browse_btn.setMaximumWidth(150)
-        self.xgp_browse_btn.setToolTip('Load a GamePass save from the container')
+        self.xgp_browse_btn.setToolTip(t('Load a GamePass save from the container'))
         self.xgp_browse_btn.setEnabled(True)
         file_row.addWidget(self.xgp_browse_btn)
         self.migrate_button = QPushButton(t('Migrate'))

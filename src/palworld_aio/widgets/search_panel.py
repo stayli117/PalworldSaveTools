@@ -2,6 +2,7 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEd
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QFont, QColor
 from i18n import t
+from i18n.pinyin import py_match
 from palworld_aio import constants
 from palworld_aio.ui.chrome.styles import CONTENT_PANEL_STYLE
 _SORT_ROLE = Qt.UserRole + 1
@@ -119,12 +120,12 @@ class SearchPanel(QWidget):
         layout.addWidget(self.tree, stretch=1)
         self._all_items = []
     def _on_search(self, text):
-        text = text.lower()
+        q = text.strip().lower()
         for i in range(self.tree.topLevelItemCount()):
             item = self.tree.topLevelItem(i)
             match = False
             for col in range(item.columnCount()):
-                if text in item.text(col).lower():
+                if py_match(q, item.text(col)):
                     match = True
                     break
             item.setHidden(not match)

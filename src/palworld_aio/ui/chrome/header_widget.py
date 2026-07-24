@@ -212,7 +212,7 @@ class HeaderWidget(QWidget):
             self.logo_label.setPixmap(scaled)
             self.logo_label.setFixedSize(scaled.size())
         else:
-            self.logo_label.setText('PALWORLD SAVE TOOLS')
+            self.logo_label.setText(t('header_widget.title') if t else 'PALWORLD SAVE TOOLS')
             self.logo_label.setFont(QFont('', 14, QFont.Bold))
     def show_warning(self, show=True):
         self.warn_btn.setVisible(show)

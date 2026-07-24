@@ -3,7 +3,8 @@ from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushBu
 from PySide6.QtCore import Qt, Signal, QSize, QTimer
 from PySide6.QtGui import QPixmap, QIcon, QColor, QPainter, QPen, QIntValidator
 from PySide6.QtWidgets import QStyledItemDelegate, QSplitter
-from i18n import t
+from i18n import t, desc_t
+from i18n.pinyin import py_match
 from palworld_aio import constants
 from palworld_aio.inventory.inventory_manager import ItemData
 from palworld_aio.managers.data_manager import get_guilds, get_guild_members
@@ -195,16 +196,18 @@ class PlayerItemActionDialog(QDialog):
                         continue
                     if 'en_text' in name.lower():
                         continue
-                list_item = QListWidgetItem(name)
+                rar = item.get('rarity', 0)
+                rar_sym = ['⬢','◆','◇','✦','★'][min(rar, 4)]
+                list_item = QListWidgetItem(f'{rar_sym} {t(f"item.{name}", name)}')
                 list_item.setData(Qt.UserRole, asset)
-                list_item.setData(Qt.UserRole + 2, item.get('rarity', 0))
+                list_item.setData(Qt.UserRole + 2, rar)
                 list_item.setData(Qt.UserRole + 3, type_a)
                 list_item.setData(Qt.UserRole + 4, item.get('description', ''))
                 list_item.setData(Qt.UserRole + 5, item.get('type_b', ''))
                 desc = item.get('description', '')
-                tip = f'<b>{name}</b><br>({asset})'
+                tip = f'<b>{t(f"item.{name}", name)}</b><br>({asset})'
                 if desc:
-                    cleaned = _clean_desc_for_tooltip(desc)
+                    cleaned = _clean_desc_for_tooltip(desc_t("item", desc))
                     tip += f'<br><br>{wrap_tooltip_text(cleaned)}'
                 list_item.setToolTip(tip)
                 icon_path = item.get('icon', '')
@@ -221,17 +224,20 @@ class PlayerItemActionDialog(QDialog):
                 item = grid.item(i)
                 name = item.text()
                 asset = item.data(Qt.UserRole) or ''
-                item.setHidden(bool(q and q not in name.lower() and (q not in asset.lower())))
+                item.setHidden(bool(q) and not py_match(query, name) and (q not in asset.lower()))
     def _on_item_clicked(self, item: QListWidgetItem):
         self.selected_item_id = item.data(Qt.UserRole)
-        self.selected_item_name = item.text()
+        raw_item_name = item.text()
+        self.selected_item_name = raw_item_name
         type_a = item.data(Qt.UserRole + 3) or ''
         type_b = item.data(Qt.UserRole + 5) or ''
         item_desc = item.data(Qt.UserRole + 4) or ''
-        self.item_info_label.setText(f'{self.selected_item_name}: {self.selected_item_id}')
+        # 翻译物品名称
+        translated_name = t(f"item.{raw_item_name}", raw_item_name)
+        self.item_info_label.setText(f'{translated_name}: {self.selected_item_id}')
         self.item_info_label.setStyleSheet('color: #4ade80; font-weight: bold; padding: 5px;')
         if item_desc:
-            self.item_desc_label.setText(_clean_desc_for_tooltip(item_desc))
+            self.item_desc_label.setText(_clean_desc_for_tooltip(desc_t("item", item_desc)))
             self.item_desc_label.setVisible(True)
         else:
             self.item_desc_label.setVisible(False)
@@ -503,8 +509,9 @@ class PlayerItemActionDialog(QDialog):
         self.ability_widgets = []
         relic_types = sorted(ASSET_TO_RELIC_TYPE.items(), key=lambda x: x[0])
         for asset, relic_type in relic_types:
-            jp_name = RELIC_TO_STATUS_NAME.get(relic_type, relic_type.split('::')[-1])
-            display = f'{jp_name} ({relic_type.split("::")[-1]})'
+            relic_key = relic_type.split('::')[-1]
+            jp_name = RELIC_TO_STATUS_NAME.get(relic_type, relic_key)
+            display = f'{t(f"relic.{relic_key}", jp_name)} ({relic_key})'
             row = QWidget()
             row_layout = QHBoxLayout(row)
             row_layout.setContentsMargins(4, 2, 4, 2)

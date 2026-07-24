@@ -15,7 +15,7 @@ if _resources_path not in sys.path:
     sys.path.insert(0, _resources_path)
 import copy
 import re
-from i18n import t
+from i18n import t, dn
 from loading_manager import run_with_loading, show_information, show_warning, show_question
 from palworld_aio import constants
 from palworld_aio.inventory.base_inventory_manager import BaseInventoryManager, get_container_image_path, find_item_locations_efficient
@@ -24,7 +24,8 @@ from palworld_aio.ui.tabs.inventory_tab import InventoryGridWidget, ItemPickerDi
 from resource_resolver import resource_path
 from palworld_aio.ui.chrome.styled_combo import StyledCombo
 from palworld_aio.utils import format_duration_short, calculate_max_hp
-from i18n import t
+from i18n import t, desc_t
+from i18n.pinyin import py_match
 from palworld_aio.inventory.inventory_manager import ItemData
 from palworld_aio.ui.chrome.styles import MENU_STYLE, DIALOG_STYLE as _DIALOG_STYLE, INPUT_DIALOG_STYLE, PICKER_SEARCH_STYLE, wrap_tooltip_text, CONTENT_PANEL_STYLE, slot_full, slot_selected
 from palworld_aio.editor.edit_pals import _clean_desc_for_tooltip, build_pal_context_menu, _get_cached_pixmap, _get_pal_icon_path, safe_nested_get, extract_value, resolve_name, get_pal_base_data, _resolve_partner_desc, _partner_desc_to_html, StrokedLabel, _get_element_pixmap, PalFrame, _strip_prefix_label, PalInfoWidget, _get_boss_alpha_pixmap, _get_boss_shiny_pixmap, _get_awake_pixmap, _get_ui_icon_pixmap, _export_pal_raw, _generate_pal_save_param, _import_pal_raw, _toggle_boss_raw, _toggle_lucky_raw, _toggle_awake_raw, _toggle_dna_raw, _set_fav_raw, _learn_all_skills_raw, _show_learned_moves_dialog, _register_pal_instance_to_guild, _set_work_suitability, _ensure_friendship_thresholds, _get_raw_from_item
@@ -188,13 +189,14 @@ class GuildItemPickerDialog(QDialog):
                 continue
             name = item.get('name', 'Unknown')
             asset = item.get('asset', '')
-            list_item = QListWidgetItem(name)
+            display_name = t(f"item.{name}", name)
+            list_item = QListWidgetItem(display_name)
             list_item.setData(Qt.UserRole, asset)
-            list_item.setData(Qt.UserRole + 1, name)
+            list_item.setData(Qt.UserRole + 1, display_name)
             list_item.setData(Qt.UserRole + 2, item.get('rarity', 0))
             list_item.setData(Qt.UserRole + 3, item.get('description', ''))
             item_desc = item.get('description', '')
-            tip = f'<b>{name}</b><br>({asset})'
+            tip = f'<b>{display_name}</b><br>({asset})'
             if item_desc:
                 cleaned = _clean_desc_for_tooltip(item_desc)
                 tip += f'<br><br>{wrap_tooltip_text(cleaned)}'
@@ -210,7 +212,7 @@ class GuildItemPickerDialog(QDialog):
             item = self.results_list.item(i)
             name = item.text()
             asset = item.data(Qt.UserRole) or ''
-            item.setHidden(bool(q and q not in name.lower() and (q not in asset.lower())))
+            item.setHidden(bool(q) and not py_match(query, name) and (q not in asset.lower()))
     def _on_item_clicked(self, item: QListWidgetItem):
         self.selected_item_id = item.data(Qt.UserRole)
         self.selected_item_name = item.data(Qt.UserRole + 1)
@@ -499,16 +501,17 @@ class GuildStructurePickerDialog(QDialog):
             lower_basename = os.path.basename(icon_abs).lower()
             if 'unknown' in lower_basename or 'dummy' in lower_basename or not os.path.exists(icon_abs):
                 continue
-            list_item = QListWidgetItem(name)
+            display_name = t(f"structure.{name}", name)
+            list_item = QListWidgetItem(display_name)
             list_item.setData(Qt.UserRole, asset)
-            list_item.setData(Qt.UserRole + 1, name)
+            list_item.setData(Qt.UserRole + 1, display_name)
             item_desc = s.get('description', '')
             list_item.setData(Qt.UserRole + 3, item_desc)
             pixmap = QPixmap(icon_abs)
             if not pixmap.isNull():
                 scaled = pixmap.scaled(48, 48, Qt.KeepAspectRatio, Qt.SmoothTransformation)
                 list_item.setIcon(QIcon(scaled))
-            tip = f'<b>{name}</b><br>({asset})'
+            tip = f'<b>{display_name}</b><br>({asset})'
             if item_desc:
                 cleaned = _clean_desc_for_tooltip(item_desc)
                 tip += f'<br><br>{wrap_tooltip_text(cleaned)}'
@@ -521,7 +524,7 @@ class GuildStructurePickerDialog(QDialog):
             item = self.results_list.item(i)
             name = item.text()
             asset = item.data(Qt.UserRole) or ''
-            item.setHidden(bool(q and q not in name.lower() and (q not in asset.lower())))
+            item.setHidden(bool(q) and not py_match(query, name) and (q not in asset.lower()))
     def _on_structure_clicked(self, item: QListWidgetItem):
         self.selected_structure_asset = item.data(Qt.UserRole)
         self.selected_structure_name = item.data(Qt.UserRole + 1)
@@ -803,7 +806,8 @@ class ReplaceStructureDialog(QDialog):
             'defensewall': 'Defensive Wall', 'fence_reverse': 'Fence (Reverse)',
             'stair_01': 'Stairs', 'stair_02': 'Stairs',
         }
-        return name_map.get(family, family.replace('_', ' ').title())
+        eng = name_map.get(family, family.replace('_', ' ').title())
+        return t(f"base_inventory.family.{family}", eng)
 
     @staticmethod
     def _normalize_family(family):
@@ -827,7 +831,8 @@ class ReplaceStructureDialog(QDialog):
             'sf': 'Clean', 'ancient': 'Ancient', 'japanesestyle': 'Japanese',
             'wire': 'Wire', 'defensewall': 'Stone (Defense)',
         }
-        return name_map.get(element, element.replace('_', ' ').title())
+        eng = name_map.get(element, element.replace('_', ' ').title())
+        return t(f"base_inventory.element.{element}", eng)
 
     def _setup_ui(self):
         layout = QVBoxLayout(self)
@@ -927,10 +932,9 @@ class ReplaceStructureDialog(QDialog):
         self.cancel_btn.setText(t('button.cancel') if t else 'Cancel')
 
     def _filter_list(self, list_widget, query):
-        q = query.lower()
         for i in range(list_widget.count()):
             item = list_widget.item(i)
-            item.setHidden(bool(q and q not in item.text().lower()))
+            item.setHidden(not py_match(query, item.text()))
 
     def _resolve_structure_icon(self, asset):
         base_path = constants.get_base_path() if hasattr(constants, 'get_base_path') else '.'
@@ -980,7 +984,7 @@ class ReplaceStructureDialog(QDialog):
                 fallback_icon = self._resolve_structure_icon(asset)
                 if not fallback_icon.isNull():
                     list_item.setIcon(fallback_icon)
-            list_item.setToolTip(f'<b>{name}</b><br>({asset})<br><br>Count: {count}')
+            list_item.setToolTip(f'<b>{t(f"structure.{name}", name)}</b><br>({asset})<br><br>Count: {count}')
             list_item.setSizeHint(QSize(90, 90))
             self.left_list.addItem(list_item)
 
@@ -1042,7 +1046,7 @@ class ReplaceStructureDialog(QDialog):
             if not t else
             t('base_inventory.replace_confirm').format(
                 count=self._source_count,
-                old_name=source_name,
+                old_name=t(f"structure.{source_name}", source_name),
                 new_name='...'
             )
         )
@@ -1068,7 +1072,7 @@ class ReplaceStructureDialog(QDialog):
         self.info_label.setText(
             t('base_inventory.replace_confirm').format(
                 count=self._source_count,
-                old_name=source_name,
+                old_name=t(f"structure.{source_name}", source_name),
                 new_name=item.text()
             ) if t else f'Replace {self._source_count} {source_name} with {item.text()}?'
         )
@@ -1258,7 +1262,7 @@ class ContainerListWidget(QTreeWidget):
                         dialog.setModal(True)
                         dialog.setStyleSheet(_DIALOG_STYLE)
                         layout = QVBoxLayout(dialog)
-                        details_text = f"\n                        <h3>{container_info['name']}</h3>\n                        <p><b>Type:</b> {container_info['type']}</p>\n                        <p><b>Slots:</b> {container_info['slot_count']}</p>\n                        <p><b>Location:</b> {container_info['location']}</p>\n                        <p><b>Container ID:</b> {container_info['id']}</p>\n                        "
+                        details_text = f"\n                        <h3>{container_info['name']}</h3>\n                        <p><b>{t('base_inventory.detail_type') if t else 'Type'}:</b> {container_info['type']}</p>\n                        <p><b>{t('base_inventory.detail_slots') if t else 'Slots'}:</b> {container_info['slot_count']}</p>\n                        <p><b>{t('base_inventory.detail_location') if t else 'Location'}:</b> {container_info['location']}</p>\n                        <p><b>{t('base_inventory.detail_container_id') if t else 'Container ID'}:</b> {container_info['id']}</p>\n                        "
                         label = QLabel(details_text)
                         label.setTextFormat(Qt.RichText)
                         layout.addWidget(label)
@@ -1678,7 +1682,7 @@ class _BasePalIcon(QFrame):
         pal_name = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP) or cid)
         if nick:
             pal_name = nick
-        tip = f'{pal_name} [Lv.{level}]'
+        tip = f'{dn("pal", pal_name)} [Lv.{level}]'
         base = get_pal_base_data(cid)
         if base:
             pskill_desc = base.get('description', '')
@@ -2335,8 +2339,9 @@ class BasePalsContentWidget(QFrame):
                 return
             cid = extract_value(raw, 'CharacterID', '')
             pal_name = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP) or cid)
+            pal_name_disp = dn("pal", pal_name)
             dlg = FramelessDialog('edit_pals.ctx.bulk_rename', self)
-            dlg.setWindowTitle(f"{t('edit_pals.bulk_rename_title', name=pal_name)}")
+            dlg.setWindowTitle(f"{t('edit_pals.bulk_rename_title', name=pal_name_disp)}")
             dlg.setModal(True)
             dlg.setMinimumSize(500, 450)
             inner = QWidget()
@@ -2347,7 +2352,7 @@ class BasePalsContentWidget(QFrame):
             rename_lbl.setStyleSheet('font-size: 11px; font-weight: 600; color: #7DD3FC; background: transparent; border: none;')
             il.addWidget(rename_lbl)
             rename_edit = QLineEdit()
-            rename_edit.setPlaceholderText(pal_name)
+            rename_edit.setPlaceholderText(dn("pal", pal_name))
             rename_edit.setStyleSheet('QLineEdit { background: rgba(0,0,0,0.4); color: #E2E8F0; border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; padding: 6px 10px; font-size: 12px; } QLineEdit:focus { border-color: #7DD3FC; }')
             il.addWidget(rename_edit)
             list_lbl = QLabel(t('edit_pals.select_pals_to_sync'))
@@ -2369,7 +2374,7 @@ class BasePalsContentWidget(QFrame):
                 cid = extract_value(pr, 'CharacterID', '') if pr else ''
                 nick = extract_value(pr, 'NickName', '') if pr else ''
                 lv = extract_value(pr, 'Level', 1) if pr else 1
-                display = f'Lv.{lv} {nick}' if nick else f'Lv.{lv} {pal_name}'
+                display = f'Lv.{lv} {nick}' if nick else f'Lv.{lv} {pal_name_disp}'
                 row = QWidget()
                 row.setStyleSheet('background: transparent; border: none;')
                 rl = QHBoxLayout(row)
@@ -2409,7 +2414,7 @@ class BasePalsContentWidget(QFrame):
                     return
                 sel = [pi for cb, pi in checkboxes if cb.isChecked()]
                 if not sel:
-                    show_warning(dlg, t('edit_pals.bulk_rename_title', name=pal_name), t('edit_pals.bulk_no_selection'))
+                    show_warning(dlg, t('edit_pals.bulk_rename_title', name=pal_name_disp), t('edit_pals.bulk_no_selection'))
                     return
                 count = 0
                 for pi in sel:
@@ -2419,7 +2424,7 @@ class BasePalsContentWidget(QFrame):
                         count += 1
                 for icon in self._icons:
                     icon.update_display()
-                show_information(dlg, t('edit_pals.ctx.bulk_rename'), t('edit_pals.bulk_rename_success', count=count, name=pal_name))
+                show_information(dlg, t('edit_pals.ctx.bulk_rename'), t('edit_pals.bulk_rename_success', count=count, name=pal_name_disp))
                 dlg.accept()
             apply_btn.clicked.connect(on_bulk_rename)
             dlg.exec()
@@ -2436,8 +2441,9 @@ class BasePalsContentWidget(QFrame):
                 return
             cid = extract_value(raw, 'CharacterID', '')
             pal_name = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP) or cid)
+            pal_name_disp = dn("pal", pal_name)
             dlg = FramelessDialog('edit_pals.ctx.bulk_heal', self)
-            dlg.setWindowTitle(f"{t('edit_pals.bulk_heal_title', name=pal_name)}")
+            dlg.setWindowTitle(f"{t('edit_pals.bulk_heal_title', name=pal_name_disp)}")
             dlg.setModal(True)
             dlg.setMinimumSize(500, 450)
             inner = QWidget()
@@ -2466,7 +2472,7 @@ class BasePalsContentWidget(QFrame):
                 cid = extract_value(pr, 'CharacterID', '') if pr else ''
                 nick = extract_value(pr, 'NickName', '') if pr else ''
                 lv = extract_value(pr, 'Level', 1) if pr else 1
-                display = f'Lv.{lv} {nick}' if nick else f'Lv.{lv} {pal_name}'
+                display = f'Lv.{lv} {nick}' if nick else f'Lv.{lv} {pal_name_disp}'
                 row = QWidget()
                 row.setStyleSheet('background: transparent; border: none;')
                 rl = QHBoxLayout(row)
@@ -2502,7 +2508,7 @@ class BasePalsContentWidget(QFrame):
             def on_bulk_heal():
                 sel = [pi for cb, pi in checkboxes if cb.isChecked()]
                 if not sel:
-                    show_warning(dlg, t('edit_pals.bulk_heal_title', name=pal_name), t('edit_pals.bulk_no_selection'))
+                    show_warning(dlg, t('edit_pals.bulk_heal_title', name=pal_name_disp), t('edit_pals.bulk_no_selection'))
                     return
                 count = 0
                 for pi in sel:
@@ -2544,7 +2550,7 @@ class BasePalsContentWidget(QFrame):
                     count += 1
                 for icon in self._icons:
                     icon.update_display()
-                show_information(dlg, t('edit_pals.ctx.bulk_heal'), t('edit_pals.bulk_heal_success', count=count, name=pal_name))
+                show_information(dlg, t('edit_pals.ctx.bulk_heal'), t('edit_pals.bulk_heal_success', count=count, name=pal_name_disp))
                 dlg.accept()
             apply_btn.clicked.connect(on_bulk_heal)
             dlg.exec()
@@ -2560,10 +2566,11 @@ class BasePalsContentWidget(QFrame):
                     affected.append(p['character_entry'])
             dlg = BulkSyncPalDialog(pal['character_entry'], stub, self, candidates=affected)
             display_name = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP) or cid)
+            display_name_disp = dn("pal", display_name)
             for child in dlg.findChildren(QLabel):
                 text = child.text()
                 if 'found' in text.lower() or text.startswith(t('edit_pals.bulk_sync_found', count=0, name='').split('{')[0] if t else 'Found'):
-                    child.setText(t('edit_pals.bulk_sync_found', count=len(affected), name=display_name) if t else f'Found {len(affected)} pals matching {display_name}')
+                    child.setText(t('edit_pals.bulk_sync_found', count=len(affected), name=display_name_disp) if t else f'Found {len(affected)} pals matching {display_name_disp}')
                     break
             if dlg.exec() == QDialog.Accepted:
                 for icon in self._icons:
@@ -3082,10 +3089,9 @@ class BaseInventoryTab(QWidget):
             item.setData(Qt.UserRole, guild['id'])
             list_widget.addItem(item)
         def apply_filter(text):
-            q = text.lower()
             for i in range(list_widget.count()):
                 item = list_widget.item(i)
-                item.setHidden(bool(q and q not in item.text().lower()))
+                item.setHidden(not py_match(text, item.text()))
         search.textChanged.connect(apply_filter)
         def select_guild(item):
             if item:
@@ -3142,10 +3148,9 @@ class BaseInventoryTab(QWidget):
             item.setData(Qt.UserRole, base['id'])
             list_widget.addItem(item)
         def apply_filter(text):
-            q = text.lower()
             for i in range(list_widget.count()):
                 item = list_widget.item(i)
-                item.setHidden(bool(q and q not in item.text().lower()))
+                item.setHidden(not py_match(text, item.text()))
         search.textChanged.connect(apply_filter)
         def select_base(item):
             if item:

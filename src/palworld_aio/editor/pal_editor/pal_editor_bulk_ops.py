@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QDialog, QHBoxLayout, QLabel, QLineEdit, QPushButton, QScrollArea, QSizePolicy, QVBoxLayout, QWidget
 from palworld_aio.widgets.toggle_check import ToggleCheckBtn
 from PySide6.QtCore import Qt
-from i18n import t
+from i18n import t, dn
 from loading_manager import show_information, show_warning
 from palworld_aio.utils import extract_value, safe_nested_get, calculate_max_hp, resolve_name
 from . import data as _data
@@ -86,8 +86,9 @@ class BulkOperationMixin:
         raw = _get_raw_from_item(candidates[0])
         cid = extract_value(raw, 'CharacterID', '') if raw else ''
         pal_name = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP) or cid)
+        pal_name_disp = dn("pal", pal_name)
         dlg = FramelessDialog('edit_pals.ctx.bulk_rename', self)
-        dlg.setWindowTitle(f"{t('edit_pals.bulk_rename_title', name=pal_name)}")
+        dlg.setWindowTitle(f"{t('edit_pals.bulk_rename_title', name=pal_name_disp)}")
         dlg.setModal(True)
         dlg.setMinimumSize(500, 450)
         inner = QWidget()
@@ -98,7 +99,7 @@ class BulkOperationMixin:
         rename_lbl.setStyleSheet('font-size: 11px; font-weight: 600; color: #7DD3FC; background: transparent; border: none;')
         il.addWidget(rename_lbl)
         rename_edit = QLineEdit()
-        rename_edit.setPlaceholderText(pal_name)
+        rename_edit.setPlaceholderText(pal_name_disp)
         rename_edit.setStyleSheet('QLineEdit { background: rgba(0,0,0,0.4); color: #E2E8F0; border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; padding: 6px 10px; font-size: 12px; } QLineEdit:focus { border-color: #7DD3FC; }')
         il.addWidget(rename_edit)
         list_lbl = QLabel(t('edit_pals.select_pals_to_sync'))
@@ -120,7 +121,7 @@ class BulkOperationMixin:
             nick = extract_value(pr, 'NickName', '') if pr else ''
             lv = extract_value(pr, 'Level', 1) if pr else 1
             cid = extract_value(pr, 'CharacterID', '') if pr else ''
-            display = f'Lv.{lv} {nick}' if nick else f'Lv.{lv} {pal_name}'
+            display = f'Lv.{lv} {nick}' if nick else f'Lv.{lv} {pal_name_disp}'
             row = QWidget()
             row.setStyleSheet('background: transparent; border: none;')
             rl = QHBoxLayout(row)
@@ -160,7 +161,7 @@ class BulkOperationMixin:
                 return
             selected = [pi for cb, pi in checkboxes if cb.isChecked()]
             if not selected:
-                show_warning(dlg, t('edit_pals.bulk_rename_title', name=pal_name), t('edit_pals.bulk_no_selection'))
+                show_warning(dlg, t('edit_pals.bulk_rename_title', name=pal_name_disp), t('edit_pals.bulk_no_selection'))
                 return
             count = 0
             for pi in selected:
@@ -176,7 +177,7 @@ class BulkOperationMixin:
             if self.dps_pals and hasattr(self, '_save_dps'):
                 self._save_dps(force=True)
             result['applied'] = True
-            show_information(dlg, t('edit_pals.ctx.bulk_rename'), t('edit_pals.bulk_rename_success', count=count, name=pal_name))
+            show_information(dlg, t('edit_pals.ctx.bulk_rename'), t('edit_pals.bulk_rename_success', count=count, name=pal_name_disp))
             dlg.accept()
         apply_btn.clicked.connect(on_apply)
         dlg.exec()
@@ -193,8 +194,9 @@ class BulkOperationMixin:
             return
         cid = extract_value(raw_orig, 'CharacterID', '')
         pal_name = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP) or cid)
+        pal_name_disp = dn("pal", pal_name)
         dlg = FramelessDialog('edit_pals.ctx.bulk_heal', self)
-        dlg.setWindowTitle(f"{t('edit_pals.bulk_heal_title', name=pal_name)}")
+        dlg.setWindowTitle(f"{t('edit_pals.bulk_heal_title', name=pal_name_disp)}")
         dlg.setModal(True)
         dlg.setMinimumSize(500, 450)
         inner = QWidget()
@@ -223,7 +225,7 @@ class BulkOperationMixin:
             nick = extract_value(pr, 'NickName', '') if pr else ''
             lv = extract_value(pr, 'Level', 1) if pr else 1
             cid = extract_value(pr, 'CharacterID', '') if pr else ''
-            display = f'Lv.{lv} {nick}' if nick else f'Lv.{lv} {pal_name}'
+            display = f'Lv.{lv} {nick}' if nick else f'Lv.{lv} {pal_name_disp}'
             row = QWidget()
             row.setStyleSheet('background: transparent; border: none;')
             rl = QHBoxLayout(row)
@@ -258,7 +260,7 @@ class BulkOperationMixin:
         def on_apply():
             selected = [pi for cb, pi in checkboxes if cb.isChecked()]
             if not selected:
-                show_warning(dlg, t('edit_pals.bulk_heal_title', name=pal_name), t('edit_pals.bulk_no_selection'))
+                show_warning(dlg, t('edit_pals.bulk_heal_title', name=pal_name_disp), t('edit_pals.bulk_no_selection'))
                 return
             count = 0
             for pi in selected:
@@ -305,7 +307,7 @@ class BulkOperationMixin:
             self.pal_info._refresh()
             if self.dps_pals and hasattr(self, '_save_dps'):
                 self._save_dps(force=True)
-            show_information(dlg, t('edit_pals.ctx.bulk_heal'), t('edit_pals.bulk_heal_success', count=count, name=pal_name))
+            show_information(dlg, t('edit_pals.ctx.bulk_heal'), t('edit_pals.bulk_heal_success', count=count, name=pal_name_disp))
             dlg.accept()
         apply_btn.clicked.connect(on_apply)
         dlg.exec()
@@ -322,8 +324,9 @@ class BulkOperationMixin:
         food_id = food_dlg.selected_food
         cid = extract_value(raw_orig, 'CharacterID', '')
         pal_name = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP) or cid)
+        pal_name_disp = dn("pal", pal_name)
         dlg = FramelessDialog('edit_pals.ctx.bulk_max_buff', self)
-        dlg.setWindowTitle(f"{t('edit_pals.bulk_max_buff_title', name=pal_name)}")
+        dlg.setWindowTitle(f"{t('edit_pals.bulk_max_buff_title', name=pal_name_disp)}")
         dlg.setModal(True)
         dlg.setMinimumSize(500, 450)
         inner = QWidget()
@@ -352,7 +355,7 @@ class BulkOperationMixin:
             nick = extract_value(pr, 'NickName', '') if pr else ''
             lv = extract_value(pr, 'Level', 1) if pr else 1
             pcid = extract_value(pr, 'CharacterID', '') if pr else ''
-            display = f'Lv.{lv} {nick}' if nick else f'Lv.{lv} {pal_name}'
+            display = f'Lv.{lv} {nick}' if nick else f'Lv.{lv} {pal_name_disp}'
             row = QWidget()
             row.setStyleSheet('background: transparent; border: none;')
             rl = QHBoxLayout(row)
@@ -387,7 +390,7 @@ class BulkOperationMixin:
         def on_apply():
             selected = [pi for cb, pi in checkboxes if cb.isChecked()]
             if not selected:
-                show_warning(dlg, t('edit_pals.bulk_max_buff_title', name=pal_name), t('edit_pals.bulk_no_selection'))
+                show_warning(dlg, t('edit_pals.bulk_max_buff_title', name=pal_name_disp), t('edit_pals.bulk_no_selection'))
                 return
             count = 0
             for pi in selected:
@@ -403,7 +406,7 @@ class BulkOperationMixin:
             self.pal_info._refresh()
             if self.dps_pals and hasattr(self, '_save_dps'):
                 self._save_dps(force=True)
-            show_information(dlg, t('edit_pals.ctx.bulk_max_buff'), t('edit_pals.bulk_max_buff_success', count=count, name=pal_name))
+            show_information(dlg, t('edit_pals.ctx.bulk_max_buff'), t('edit_pals.bulk_max_buff_success', count=count, name=pal_name_disp))
             dlg.accept()
         apply_btn.clicked.connect(on_apply)
         dlg.exec()

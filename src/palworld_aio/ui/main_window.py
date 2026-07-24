@@ -11,7 +11,7 @@ from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QL
 from PySide6.QtCore import Qt, QTimer, Signal, QObject, QPoint, QPropertyAnimation, QEasingCurve, QByteArray, QThread
 
 from PySide6.QtGui import QIcon, QFont, QAction, QPixmap, QCloseEvent, QTextCursor
-from i18n import t, set_language, load_resources, get_native_lang_name
+from i18n import t, set_language, load_resources, get_native_lang_name, get_language
 from common import get_versions, get_current_version, get_display_version, is_standalone
 from import_libs import run_with_loading
 from loading_manager import show_question
@@ -223,6 +223,14 @@ class MainWindow(QMainWindow):
         self.lang_map = {'English': 'en_US', '中文': 'zh_CN', 'Русский': 'ru_RU', 'Français': 'fr_FR', 'Español': 'es_ES', 'Deutsch': 'de_DE', '日本語': 'ja_JP', '한국어': 'ko_KR', 'Português (Brasil)': 'pt_BR', 'Português (Portugal)': 'pt_PT'}
         load_exclusions()
         self._load_user_settings()
+        # 关键：构建 UI 之前，先把 i18n 的当前语言同步成用户已保存的语言偏好。
+        # 否则若 config.json['lang']（i18n 真实语言源）与 user.cfg['language']
+        # 不同步（例如 set_language 写 config.json 静默失败），UI 会一直用英文构建，
+        # 且 _change_language 的「old == code」守卫会把第一次点中文误判为「无需切换」而跳过。
+        try:
+            set_language(self.user_settings.get('language', 'en_US'))
+        except Exception:
+            pass
         self._setup_ui()
         self._refresh_exclusions()
         self._load_theme()
@@ -1952,7 +1960,9 @@ class MainWindow(QMainWindow):
             self.user_settings['bulk_sync_apply_nickname'] = nickname_chk.isChecked()
             self._save_user_settings()
     def _change_language(self, code):
-        old_lang = self.user_settings.get('language')
+        # 用 i18n 真实当前语言（get_language）作为守卫基准，
+        # 而非 user.cfg['language']，避免两个存储不同步时把有效切换误判为「无需切换」。
+        old_lang = get_language()
         if old_lang != code:
             self.user_settings['language'] = code
             self._save_user_settings()

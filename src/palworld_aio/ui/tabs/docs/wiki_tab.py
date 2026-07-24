@@ -639,7 +639,7 @@ class WikiDetailPanel(QScrollArea):
                         ll.setStyleSheet('font-size:10px;color:#7DD3FC;font-weight:600;')
                         clo.addWidget(ll)
                     elif src == 'egg':
-                        ll = QLabel('Egg')
+                        ll = QLabel(t('wiki_tab.egg') if t else 'Egg')
                         ll.setStyleSheet('font-size:10px;color:#FBBF24;font-weight:600;')
                         clo.addWidget(ll)
                     clo.addStretch()

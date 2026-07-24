@@ -2,7 +2,18 @@ import sys
 import os
 
 _found_root = None
-if os.path.isfile(sys.executable):
+# 优先：从 __file__ 向上探测 resources 目录（适用于开发环境）
+# 必须放在 sys.executable 探测之前，避免 macOS 上 os.path.realpath() 解析
+# symlink 到 Python 框架路径后，误匹配到框架的 Resources/（不区分大小写）
+if not _found_root:
+    _probe = os.path.dirname(os.path.abspath(__file__))
+    for _ in range(5):
+        if os.path.isdir(os.path.join(_probe, 'resources')):
+            _found_root = _probe
+            break
+        _probe = os.path.dirname(_probe)
+# 备选：从 sys.executable 探测（适用于打包环境）
+if not _found_root and os.path.isfile(sys.executable):
     _exe_dir = os.path.dirname(os.path.realpath(sys.executable))
     if os.path.isdir(os.path.join(_exe_dir, 'resources')):
         _found_root = _exe_dir
@@ -11,14 +22,7 @@ if os.path.isfile(sys.executable):
         if os.path.isdir(os.path.join(_parent, 'resources')):
             _found_root = _parent
 if not _found_root:
-    _probe = os.path.dirname(os.path.abspath(__file__))
-    for _ in range(5):
-        if os.path.isdir(os.path.join(_probe, 'resources')):
-            _found_root = _probe
-            break
-        _probe = os.path.dirname(_probe)
-    if not _found_root:
-        _found_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    _found_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys._PST_BINARY_ROOT = _found_root
 
 import traceback
@@ -81,6 +85,8 @@ except Exception:
 import io
 from contextlib import redirect_stderr
 stderr_capture = io.StringIO()
+# boot_paths 不依赖 PySide6，必须在 i18n 之前导入，确保 sys._PST_BINARY_ROOT 已正确设置
+from boot_paths import ROOT_DIR, RESOURCES_DIR
 try:
     with redirect_stderr(stderr_capture):
         from PySide6.QtWidgets import QApplication
@@ -109,9 +115,9 @@ qInstallMessageHandler(qt_message_handler)
 def run_aio():
     try:
         with redirect_stderr(stderr_capture):
-            init_language('en_US')
+            init_language()
     except Exception:
-        init_language('en_US')
+        init_language()
     if len(sys.argv) > 1 and (not sys.argv[1].startswith('--')):
         path_arg = sys.argv[1].strip().strip('"')
         options = {'logs': False, 'fix': False}

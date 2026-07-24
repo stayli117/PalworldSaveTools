@@ -6,7 +6,17 @@ def _compute_binary_root() -> str:
     if hasattr(sys, '_PST_BINARY_ROOT'):
         return sys._PST_BINARY_ROOT
     _found_root = None
-    if os.path.isfile(sys.executable):
+    # 优先：从 __file__ 向上探测 resources 目录（适用于开发环境如 uv run）
+    # 必须放在 sys.executable 探测之前，避免 macOS 上 os.path.realpath() 解析
+    # symlink 到 Python 框架路径后，误匹配到框架的 Resources/（不区分大小写）
+    _probe = os.path.dirname(os.path.abspath(__file__))
+    for _ in range(5):
+        if os.path.isdir(os.path.join(_probe, 'resources')):
+            _found_root = _probe
+            break
+        _probe = os.path.dirname(_probe)
+    # 备选：从 sys.executable 探测（适用于打包环境）
+    if _found_root is None and os.path.isfile(sys.executable):
         _exe_dir = os.path.dirname(os.path.realpath(sys.executable))
         if os.path.isdir(os.path.join(_exe_dir, 'resources')):
             _found_root = _exe_dir
@@ -15,14 +25,7 @@ def _compute_binary_root() -> str:
             if os.path.isdir(os.path.join(_parent, 'resources')):
                 _found_root = _parent
     if _found_root is None:
-        _probe = os.path.dirname(os.path.abspath(__file__))
-        for _ in range(5):
-            if os.path.isdir(os.path.join(_probe, 'resources')):
-                _found_root = _probe
-                break
-            _probe = os.path.dirname(_probe)
-        if _found_root is None:
-            _found_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        _found_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     return _found_root
 
 

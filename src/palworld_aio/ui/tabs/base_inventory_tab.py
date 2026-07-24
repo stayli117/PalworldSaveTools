@@ -15,8 +15,8 @@ if _resources_path not in sys.path:
     sys.path.insert(0, _resources_path)
 import copy
 import re
-from i18n import t
-from loading_manager import run_with_loading, show_information, show_warning, show_question
+from i18n import t, desc_t
+from loading_manager import show_information, show_warning, show_question, run_with_loading
 from palworld_aio import constants
 from palworld_aio.inventory.base_inventory_manager import BaseInventoryManager, get_container_image_path, find_item_locations_efficient
 from palworld_aio.widgets import StatsPanel
@@ -24,7 +24,7 @@ from palworld_aio.ui.tabs.inventory_tab import InventoryGridWidget, ItemPickerDi
 from resource_resolver import resource_path
 from palworld_aio.ui.chrome.styled_combo import StyledCombo
 from palworld_aio.utils import format_duration_short, calculate_max_hp
-from i18n import t
+from i18n import t, desc_t
 from palworld_aio.inventory.inventory_manager import ItemData
 from palworld_aio.ui.chrome.styles import MENU_STYLE, DIALOG_STYLE as _DIALOG_STYLE, INPUT_DIALOG_STYLE, PICKER_SEARCH_STYLE, wrap_tooltip_text, CONTENT_PANEL_STYLE, slot_full, slot_selected
 from palworld_aio.editor.edit_pals import _clean_desc_for_tooltip, build_pal_context_menu, _get_cached_pixmap, _get_pal_icon_path, safe_nested_get, extract_value, resolve_name, get_pal_base_data, _resolve_partner_desc, _partner_desc_to_html, StrokedLabel, _get_element_pixmap, PalFrame, _strip_prefix_label, PalInfoWidget, _get_boss_alpha_pixmap, _get_boss_shiny_pixmap, _get_awake_pixmap, _get_ui_icon_pixmap, _export_pal_raw, _generate_pal_save_param, _import_pal_raw, _toggle_boss_raw, _toggle_lucky_raw, _toggle_awake_raw, _toggle_dna_raw, _set_fav_raw, _learn_all_skills_raw, _show_learned_moves_dialog, _register_pal_instance_to_guild, _set_work_suitability, _ensure_friendship_thresholds, _get_raw_from_item
@@ -188,13 +188,19 @@ class GuildItemPickerDialog(QDialog):
                 continue
             name = item.get('name', 'Unknown')
             asset = item.get('asset', '')
-            list_item = QListWidgetItem(name)
+            item_desc = item.get('description', '')
+            if not item_desc or item_desc.strip().lower() in ('', 'en text', 'en_text', 'none', '-', '---'):
+                continue
+            rar = item.get('rarity', 0)
+            rar_sym = ['⬢','◆','◇','✦','★'][min(rar, 4)]
+            list_item = QListWidgetItem(f'{rar_sym} {t(f"item.{name}", name)}')
             list_item.setData(Qt.UserRole, asset)
             list_item.setData(Qt.UserRole + 1, name)
-            list_item.setData(Qt.UserRole + 2, item.get('rarity', 0))
-            list_item.setData(Qt.UserRole + 3, item.get('description', ''))
-            item_desc = item.get('description', '')
-            tip = f'<b>{name}</b><br>({asset})'
+            list_item.setData(Qt.UserRole + 2, rar)
+            list_item.setData(Qt.UserRole + 3, desc_t("item", item.get('description', '')))
+            item_desc = desc_t("item", item.get('description', ''))
+            display_name = t(f"item.{name}", name)
+            tip = f'<b>{display_name}</b><br>({asset})'
             if item_desc:
                 cleaned = _clean_desc_for_tooltip(item_desc)
                 tip += f'<br><br>{wrap_tooltip_text(cleaned)}'
@@ -215,7 +221,7 @@ class GuildItemPickerDialog(QDialog):
         self.selected_item_id = item.data(Qt.UserRole)
         self.selected_item_name = item.data(Qt.UserRole + 1)
         item_desc = item.data(Qt.UserRole + 3) or ''
-        self.info_label.setText(self.selected_item_name)
+        self.info_label.setText(t(f"item.{self.selected_item_name}", self.selected_item_name))
         self.info_label.setStyleSheet('color: #4ade80; font-weight: bold; font-size: 13px; padding: 2px;')
         self.code_label.setText(self.selected_item_id)
         self.code_label.setVisible(True)
@@ -499,18 +505,23 @@ class GuildStructurePickerDialog(QDialog):
             lower_basename = os.path.basename(icon_abs).lower()
             if 'unknown' in lower_basename or 'dummy' in lower_basename or not os.path.exists(icon_abs):
                 continue
-            list_item = QListWidgetItem(name)
+            list_item = QListWidgetItem(t(f"structure.{name}", name))
             list_item.setData(Qt.UserRole, asset)
             list_item.setData(Qt.UserRole + 1, name)
             item_desc = s.get('description', '')
             list_item.setData(Qt.UserRole + 3, item_desc)
-            pixmap = QPixmap(icon_abs)
-            if not pixmap.isNull():
-                scaled = pixmap.scaled(48, 48, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-                list_item.setIcon(QIcon(scaled))
-            tip = f'<b>{name}</b><br>({asset})'
+            icon_rel = s.get('icon', '')
+            if icon_rel:
+                icon_clean = icon_rel.lstrip('/')
+                icon_abs = resource_path(base_path, 'game_data', icon_clean)
+                if os.path.exists(icon_abs):
+                    pixmap = QPixmap(icon_abs)
+                    if not pixmap.isNull():
+                        scaled = pixmap.scaled(48, 48, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+                        list_item.setIcon(QIcon(scaled))
+            tip = f'<b>{t(f"structure.{name}", name)}</b><br>({asset})'
             if item_desc:
-                cleaned = _clean_desc_for_tooltip(item_desc)
+                cleaned = _clean_desc_for_tooltip(desc_t("structure", item_desc))
                 tip += f'<br><br>{wrap_tooltip_text(cleaned)}'
             list_item.setToolTip(tip)
             list_item.setSizeHint(QSize(80, 80))
@@ -526,12 +537,12 @@ class GuildStructurePickerDialog(QDialog):
         self.selected_structure_asset = item.data(Qt.UserRole)
         self.selected_structure_name = item.data(Qt.UserRole + 1)
         item_desc = item.data(Qt.UserRole + 3) or ''
-        self.info_label.setText(self.selected_structure_name)
+        self.info_label.setText(t(f"structure.{self.selected_structure_name}", self.selected_structure_name))
         self.info_label.setStyleSheet('color: #4ade80; font-weight: bold; font-size: 13px; padding: 2px;')
         self.code_label.setText(self.selected_structure_asset)
         self.code_label.setVisible(True)
         if item_desc:
-            self.desc_label.setText(_clean_desc_for_tooltip(item_desc))
+            self.desc_label.setText(_clean_desc_for_tooltip(desc_t("structure", item_desc)))
             self.desc_label.setVisible(True)
         else:
             self.desc_label.setVisible(False)
@@ -791,17 +802,30 @@ class ReplaceStructureDialog(QDialog):
 
     def _get_family_display_name(self, family: str) -> str:
         name_map = {
-            'wall': 'Wall', 'foundation': 'Foundation', 'roof': 'Roof',
-            'stair': 'Stairs', 'pillar': 'Pillar',
-            'fence': 'Fence', 'windowwall': 'Window Wall',
-            'trianglewall': 'Triangle Wall', 'slantedroof': 'Slanted Roof',
-            'doorwall': 'Door', 'gate': 'Gate', 'wallgate': 'Wall Gate',
-            'ladder': 'Ladder', 'barricade': 'Barricade',
-            'pyramidroof': 'Pyramid Roof', 'slopedroofcorner': 'Sloped Roof Corner',
-            'trianglefoundation': 'Triangle Foundation', 'trianglestairscorner': 'Triangle Stairs Corner',
-            'triangleroof': 'Triangle Roof', 'diagonalwall': 'Diagonal Wall',
-            'defensewall': 'Defensive Wall', 'fence_reverse': 'Fence (Reverse)',
-            'stair_01': 'Stairs', 'stair_02': 'Stairs',
+            'wall': t('structure.family.wall') if t else 'Wall',
+            'foundation': t('structure.family.foundation') if t else 'Foundation',
+            'roof': t('structure.family.roof') if t else 'Roof',
+            'stair': t('structure.family.stairs') if t else 'Stairs',
+            'pillar': t('structure.family.pillar') if t else 'Pillar',
+            'fence': t('structure.family.fence') if t else 'Fence',
+            'windowwall': t('structure.family.window_wall') if t else 'Window Wall',
+            'trianglewall': t('structure.family.triangle_wall') if t else 'Triangle Wall',
+            'slantedroof': t('structure.family.slanted_roof') if t else 'Slanted Roof',
+            'doorwall': t('structure.family.door') if t else 'Door',
+            'gate': t('structure.family.gate') if t else 'Gate',
+            'wallgate': t('structure.family.wall_gate') if t else 'Wall Gate',
+            'ladder': t('structure.family.ladder') if t else 'Ladder',
+            'barricade': t('structure.family.barricade') if t else 'Barricade',
+            'pyramidroof': t('structure.family.pyramid_roof') if t else 'Pyramid Roof',
+            'slopedroofcorner': t('structure.family.sloped_roof_corner') if t else 'Sloped Roof Corner',
+            'trianglefoundation': t('structure.family.triangle_foundation') if t else 'Triangle Foundation',
+            'trianglestairscorner': t('structure.family.triangle_stairs_corner') if t else 'Triangle Stairs Corner',
+            'triangleroof': t('structure.family.triangle_roof') if t else 'Triangle Roof',
+            'diagonalwall': t('structure.family.diagonal_wall') if t else 'Diagonal Wall',
+            'defensewall': t('structure.family.defensive_wall') if t else 'Defensive Wall',
+            'fence_reverse': t('structure.family.fence_reverse') if t else 'Fence (Reverse)',
+            'stair_01': t('structure.family.stairs') if t else 'Stairs',
+            'stair_02': t('structure.family.stairs') if t else 'Stairs',
         }
         return name_map.get(family, family.replace('_', ' ').title())
 
@@ -822,10 +846,17 @@ class ReplaceStructureDialog(QDialog):
 
     def _get_element_display_name(self, element: str) -> str:
         name_map = {
-            'wooden': 'Wood', 'wood': 'Wood', 'stone': 'Stone',
-            'metal': 'Metal', 'iron': 'Metal', 'glass': 'Glass',
-            'sf': 'Clean', 'ancient': 'Ancient', 'japanesestyle': 'Japanese',
-            'wire': 'Wire', 'defensewall': 'Stone (Defense)',
+            'wooden': t('structure.element.wood') if t else 'Wood',
+            'wood': t('structure.element.wood') if t else 'Wood',
+            'stone': t('structure.element.stone') if t else 'Stone',
+            'metal': t('structure.element.metal') if t else 'Metal',
+            'iron': t('structure.element.metal') if t else 'Metal',
+            'glass': t('structure.element.glass') if t else 'Glass',
+            'sf': t('structure.element.clean') if t else 'Clean',
+            'ancient': t('structure.element.ancient') if t else 'Ancient',
+            'japanesestyle': t('structure.element.japanese') if t else 'Japanese',
+            'wire': t('structure.element.wire') if t else 'Wire',
+            'defensewall': t('structure.element.stone_defense') if t else 'Stone (Defense)',
         }
         return name_map.get(element, element.replace('_', ' ').title())
 
@@ -980,7 +1011,7 @@ class ReplaceStructureDialog(QDialog):
                 fallback_icon = self._resolve_structure_icon(asset)
                 if not fallback_icon.isNull():
                     list_item.setIcon(fallback_icon)
-            list_item.setToolTip(f'<b>{name}</b><br>({asset})<br><br>Count: {count}')
+            list_item.setToolTip(f'<b>{t(f"structure.{name}", name)}</b><br>({asset})<br><br>{t("base_inventory.count") if t else "Count"}: {count}')
             list_item.setSizeHint(QSize(90, 90))
             self.left_list.addItem(list_item)
 
@@ -1154,7 +1185,7 @@ class ContainerListWidget(QTreeWidget):
         layout.addWidget(image_label)
         info_layout = QVBoxLayout()
         info_layout.setSpacing(2)
-        name_label = QLabel(structure_name)
+        name_label = QLabel(t(f"structure.{structure_name}", structure_name))
         name_label.setStyleSheet('QLabel { font-weight: bold; font-size: 12px; color: #A78BFA; background: transparent; }')
         info_layout.addWidget(name_label)
         id_label = QLabel(instance_id[:16] + '...' if len(instance_id) > 16 else instance_id)
@@ -1186,7 +1217,7 @@ class ContainerListWidget(QTreeWidget):
         layout.addWidget(image_label)
         info_layout = QVBoxLayout()
         info_layout.setSpacing(2)
-        name_label = QLabel(container_info['name'])
+        name_label = QLabel(t(f"structure.{container_info['name']}", container_info['name']))
         name_label.setStyleSheet('QLabel { font-weight: bold; font-size: 12px; color: #ffffff; background: transparent; }')
         info_layout.addWidget(name_label)
         details_layout = QHBoxLayout()
@@ -1377,13 +1408,13 @@ class ContainerInfoWidget(QWidget):
         header_layout.addWidget(self.image_label)
         info_layout = QVBoxLayout()
         info_layout.setSpacing(4)
-        self.name_label = QLabel('Container Name')
+        self.name_label = QLabel(t('base_inventory.container_name') if t else 'Container Name')
         self.name_label.setStyleSheet('font-size: 14px; font-weight: bold;')
         info_layout.addWidget(self.name_label)
         self.slots_label = QLabel(t('base_inventory.slots_count').format(count=0) if t else 'Slots: 0')
         self.slots_label.setStyleSheet('font-size: 12px;')
         info_layout.addWidget(self.slots_label)
-        self.id_label = QLabel('Unknown')
+        self.id_label = QLabel(t('base_inventory.unknown') if t else 'Unknown')
         self.id_label.setStyleSheet('font-size: 12px;')
         info_layout.addWidget(self.id_label)
         header_layout.addLayout(info_layout)
@@ -1405,7 +1436,7 @@ class ContainerInfoWidget(QWidget):
     def _update_content(self):
         if not self.container_info:
             return
-        self.name_label.setText(self.container_info['name'])
+        self.name_label.setText(t(f"structure.{self.container_info['name']}", self.container_info['name']))
         self.slots_label.setText(t('base_inventory.slots_count').format(count=self.container_info['slot_count']) if t else f"Slots: {self.container_info['slot_count']}")
         self.id_label.setText(self.container_info['id'])
         image_path = get_container_image_path(self.container_info['type'])
@@ -1666,14 +1697,17 @@ class _BasePalIcon(QFrame):
             lock_badge.show()
             self._children.append(lock_badge)
         PalFrame._load_maps()
-        pal_name = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP) or cid)
+        resolved_name = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP) or cid)
         if nick:
-            pal_name = nick
-        tip = f'{pal_name} [Lv.{level}]'
+            display_name = nick
+        else:
+            display_name = t(f"pal.{resolved_name}", resolved_name)
+        tip = f'{display_name} [Lv.{level}]'
         base = get_pal_base_data(cid)
         if base:
             pskill_desc = base.get('description', '')
             if pskill_desc:
+                pskill_desc_translated = desc_t("pal", pskill_desc)
                 _p = raw.get('PassiveSkillList', {})
                 if isinstance(_p, dict):
                     _pl = _p.get('value', {}).get('values', [])
@@ -1682,7 +1716,7 @@ class _BasePalIcon(QFrame):
                 else:
                     _pl = []
                 _cr = int(extract_value(raw, 'Rank', 0)) if isinstance(extract_value(raw, 'Rank', 0), (int, float)) else 0
-                _res = _resolve_partner_desc(pskill_desc, _pl, _cr, base.get('active_skill_main_value'), base.get('active_skill_overwrite_effect'), base.get('passives', []), reference_passives=base.get('reference_passives', []))
+                _res = _resolve_partner_desc(pskill_desc_translated, _pl, _cr, base.get('active_skill_main_value'), base.get('active_skill_overwrite_effect'), base.get('passives', []), reference_passives=base.get('reference_passives', []))
                 el_colors = PalInfoWidget._ELEMENT_COLORS if hasattr(PalInfoWidget, '_ELEMENT_COLORS') else {}
                 _ht = _partner_desc_to_html(_res, el_colors, tooltip=True)
                 tip += f'<br><br>{_ht}'
@@ -1787,7 +1821,7 @@ class BasePalsContentWidget(QFrame):
         self.prev_page_btn.setStyleSheet('QPushButton { background: rgba(125,211,252,0.08); color: #7DD3FC; border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; font-weight: 600; font-size: 12px; } QPushButton:hover { background: rgba(125,211,252,0.18); color: #FFFFFF; } QPushButton:disabled { background: rgba(100,100,100,0.1); color: #666; border-color: rgba(255,255,255,0.05); }')
         self.prev_page_btn.clicked.connect(self._prev_page)
         page_row.addWidget(self.prev_page_btn)
-        self.page_label = QLabel('Page 1/1')
+        self.page_label = QLabel(t('base_inventory.pagination') if t else 'Page 1/1')
         self.page_label.setStyleSheet('font-size: 11px; font-weight: 600; color: #7DD3FC; padding: 0 4px;')
         page_row.addWidget(self.page_label)
         self.next_page_btn = QPushButton('▶')

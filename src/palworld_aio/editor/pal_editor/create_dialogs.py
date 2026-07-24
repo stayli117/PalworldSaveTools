@@ -5,8 +5,8 @@ from PySide6.QtWidgets import QAbstractItemView, QDialog, QHBoxLayout, QLabel, Q
 from palworld_aio.widgets.toggle_check import ToggleCheckBtn
 from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QIcon
-from i18n import t
-from loading_manager import run_with_loading, show_information, show_warning, show_question
+from i18n import t, desc_t
+from loading_manager import show_information, show_warning, show_question, run_with_loading
 from palworld_aio import constants
 from palworld_aio.ui.chrome.styles import DIALOG_STYLE
 from resource_resolver import resource_path
@@ -64,7 +64,7 @@ def _show_learned_moves_dialog(raw, parent):
     def _make_handler(sv, parent_dlg, slot_widget, outer_layout, count_label):
         def handler(event):
             event.accept()
-            sname = PalFrame._SKILLMAP.get(sv.split('::')[-1].lower(), sv.split('::')[-1])
+            sname = t(f"skill.{sv.split('::')[-1].lower()}", PalFrame._SKILLMAP.get(sv.split('::')[-1].lower(), sv.split('::')[-1]))
             confirm = show_question(parent_dlg, t('edit_pals.learnt_skills_title'), t('edit_pals.confirm_remove_skill', name=sname))
             if not confirm:
                 return
@@ -115,7 +115,8 @@ def _show_learned_moves_dialog(raw, parent):
             if not skill_val:
                 continue
             w_clean = skill_val.split('::')[-1].lower()
-            move_name = PalFrame._SKILLMAP.get(w_clean, skill_val.split('::')[-1])
+            raw_name = PalFrame._SKILLMAP.get(w_clean, skill_val.split('::')[-1])
+            move_name = t(f"skill.{raw_name}", raw_name)
             skill_info = _data._SKILL_DATA.get(w_clean, {}) if isinstance(_data._SKILL_DATA, dict) else {}
             skill_elem = skill_info.get('element', 'Normal')
             skill_power = skill_info.get('power', 0)
@@ -154,14 +155,14 @@ def _show_learned_moves_dialog(raw, parent):
             power_lbl.setStyleSheet('font-size: 9px; font-weight: 700; color: #F59E0B; background: transparent; border: none;')
             slot_layout.addWidget(power_lbl)
             if skill_info:
-                tip_parts = [f'<b>{move_name}</b>', f'Element: {skill_elem}', f'Power: {skill_power}']
+                tip_parts = [f'<b>{move_name}</b>', f'{t("skill.element") if t else "Element"}: {skill_elem}', f'{t("skill.power") if t else "Power"}: {skill_power}']
                 cd = skill_info.get('cooldown', 0)
                 if cd:
-                    tip_parts.append(f'Cooldown: {cd}s')
+                    tip_parts.append(f'{t("skill.cooldown") if t else "Cooldown"}: {cd}s')
                 desc = skill_info.get('description', '')
                 if desc:
                     tip_parts.append('')
-                    tip_parts.append(desc)
+                    tip_parts.append(desc_t("skill", desc))
                 slot.setToolTip('<br>'.join(tip_parts))
             slot.mousePressEvent = _make_handler(skill_val, dlg, slot, scl, count_lbl)
             scl.insertWidget(scl.count() - 1, slot)
@@ -195,7 +196,8 @@ def _show_learned_moves_dialog(raw, parent):
                 if not skill_val:
                     continue
                 w_clean = skill_val.split('::')[-1].lower()
-                move_name = PalFrame._SKILLMAP.get(w_clean, skill_val.split('::')[-1])
+                raw_name = PalFrame._SKILLMAP.get(w_clean, skill_val.split('::')[-1])
+                move_name = t(f"skill.{raw_name}", raw_name)
                 skill_info = _data._SKILL_DATA.get(w_clean, {}) if isinstance(_data._SKILL_DATA, dict) else {}
                 skill_elem = skill_info.get('element', 'Normal')
                 skill_power = skill_info.get('power', 0)
@@ -234,14 +236,14 @@ def _show_learned_moves_dialog(raw, parent):
                 power_lbl.setStyleSheet('font-size: 9px; font-weight: 700; color: #F59E0B; background: transparent; border: none;')
                 slot_layout.addWidget(power_lbl)
                 if skill_info:
-                    tip_parts = [f'<b>{move_name}</b>', f'Element: {skill_elem}', f'Power: {skill_power}']
+                    tip_parts = [f'<b>{move_name}</b>', f'{t("skill.element") if t else "Element"}: {skill_elem}', f'{t("skill.power") if t else "Power"}: {skill_power}']
                     cd = skill_info.get('cooldown', 0)
                     if cd:
-                        tip_parts.append(f'Cooldown: {cd}s')
+                        tip_parts.append(f'{t("skill.cooldown") if t else "Cooldown"}: {cd}s')
                     desc = skill_info.get('description', '')
                     if desc:
                         tip_parts.append('')
-                        tip_parts.append(desc)
+                        tip_parts.append(desc_t("skill", desc))
                     slot.setToolTip('<br>'.join(tip_parts))
                 slot.mousePressEvent = _make_handler(skill_val, dlg, slot, scl, count_lbl)
                 scl.insertWidget(scl.count() - 1, slot)
@@ -292,7 +294,7 @@ def _show_learned_moves_dialog(raw, parent):
     add_skill_btn.clicked.connect(_add_skill_handler)
     btn_row.addWidget(add_skill_btn)
     btn_row.addStretch()
-    close_btn = QPushButton('Close')
+    close_btn = QPushButton(t('common.close') if t else 'Close')
     close_btn.setStyleSheet('QPushButton { background: rgba(125,211,252,0.1); color: #7DD3FC; border: 1px solid rgba(125,211,252,0.25); border-radius: 4px; padding: 6px 20px; font-size: 12px; font-weight: 600; } QPushButton:hover { background: rgba(125,211,252,0.2); color: #FFFFFF; }')
     close_btn.clicked.connect(dlg.accept)
     btn_row.addWidget(close_btn)
@@ -360,7 +362,7 @@ class BulkSyncPalDialog(FramelessDialog):
         header.addWidget(icon_lbl)
         info_col = QVBoxLayout()
         info_col.setSpacing(2)
-        name_lbl = QLabel(pal_name)
+        name_lbl = QLabel(t(f"pal.{pal_name}", pal_name))
         name_lbl.setStyleSheet('font-size: 14px; font-weight: 700; color: #E2E8F0; background: transparent; border: none;')
         info_col.addWidget(name_lbl)
         count_lbl = QLabel(t('edit_pals.bulk_sync_found', count=len(self._all_candidates), name=pal_name))
@@ -668,20 +670,7 @@ class BulkSyncAllDialog(FramelessDialog):
             nick = extract_value(pr, 'NickName', '') if pr else ''
             lv = extract_value(pr, 'Level', 1) if pr else 1
             pname = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP) or cid)
-            display = f'Lv.{lv} {nick}' if nick else f'Lv.{lv} {pname}'
-            row = QWidget()
-            row.setStyleSheet('background: transparent; border: none;')
-            rl = QHBoxLayout(row)
-            rl.setContentsMargins(0, 0, 0, 0)
-            rl.setSpacing(4)
-            if cid:
-                icon_path = _icons._get_pal_icon_path(cid)
-                pix = _icons._get_cached_pixmap(icon_path, 20) if icon_path else None
-                icon_lbl = QLabel()
-                icon_lbl.setFixedSize(20, 20)
-                if pix:
-                    icon_lbl.setPixmap(pix)
-                rl.addWidget(icon_lbl)
+            display = f'Lv.{lv} {nick}' if nick else f'Lv.{lv} {t(f"pal.{pname}", pname)}'
             cb = ToggleCheckBtn(display)
             cb.setChecked(True)
             rl.addWidget(cb, 1)
@@ -763,7 +752,7 @@ class PalCreateDialog(QDialog):
         filter_layout = QHBoxLayout()
         filter_layout.addWidget(QLabel(t('common.search') if t else 'Search:'))
         self._search_edit = QLineEdit()
-        self._search_edit.setPlaceholderText(t('edit_pals.search_placeholder') if t else 'Type to filter pals...')
+        self._search_edit.setPlaceholderText(t('edit_pals.filter_pals') if t else 'Type to filter pals...')
         filter_layout.addWidget(self._search_edit)
         self._show_standard_chk = ToggleCheckBtn(t('edit_pals.show_standard') if t else 'Standard')
         self._show_standard_chk.setChecked(True)
@@ -865,10 +854,9 @@ class PalCreateDialog(QDialog):
         frame_w = self.frameGeometry().width() - self.geometry().width()
         self.setFixedWidth(m.left() + m.right() + frame_w + 16 + 24 + 10 * 80)
         nick_layout = QHBoxLayout()
-        self._nickname_label = QLabel(t('edit_pals.nickname') if t else 'Nickname:')
-        nick_layout.addWidget(self._nickname_label)
+        nick_layout.addWidget(QLabel(t('edit_pals.nickname') if t else 'Nickname:'))
         self.nick_edit = QLineEdit()
-        self.nick_edit.setPlaceholderText(t('edit_pals.nickname_placeholder') if t else 'Optional')
+        self.nick_edit.setPlaceholderText(t('common.optional') if t else 'Optional')
         nick_layout.addWidget(self.nick_edit)
         nick_layout.addStretch()
         ok_btn = QPushButton(t('edit_pals.create'))
@@ -899,7 +887,8 @@ class PalCreateDialog(QDialog):
             del item
         for asset, name in sorted(PalFrame._NAMEMAP.items(), key=lambda kv: (kv[1] or '', kv[0])):
             asset_lower = asset.lower()
-            if search_text and search_text not in name.lower() and (search_text not in asset.lower()):
+            display_name = t(f"pal.{name}", name)
+            if search_text and search_text not in display_name.lower() and search_text not in name.lower() and search_text not in asset_lower:
                 continue
             is_predator = asset.upper().startswith('PREDATOR_')
             is_boss = any((asset.upper().startswith(p) for p in _data._BOSS_PREFIXES)) and not is_predator
@@ -916,16 +905,17 @@ class PalCreateDialog(QDialog):
             lower_basename = os.path.basename(pal_icon_path).lower()
             if not pal_icon_path or 'unknown' in lower_basename or 'dummy' in lower_basename:
                 continue
-            li = QListWidgetItem(name)
+            display_name = t(f"pal.{name}", name)
+            li = QListWidgetItem(display_name)
             li.setData(Qt.UserRole, asset)
             pix = _icons._get_cached_pixmap(pal_icon_path, 48)
             if pix:
                 li.setIcon(QIcon(pix))
             pdesc = self._pal_descs_cache.get(asset.lower(), '')
             passives = self._pal_passives_cache.get(asset.lower(), [])
-            tip = f'<b>{name}</b><br>ID: {asset}'
+            tip = f'<b>{display_name}</b><br>ID: {asset}'
             if pdesc:
-                resolved = _icons._resolve_partner_desc(pdesc, passives, 0, self._pal_main_values_cache.get(asset.lower()), self._pal_overwrite_effects_cache.get(asset.lower()), passives, reference_passives=self._pal_reference_passives_cache.get(asset.lower(), []))
+                resolved = _icons._resolve_partner_desc(desc_t("pal", pdesc), passives, 0, self._pal_main_values_cache.get(asset.lower()), self._pal_overwrite_effects_cache.get(asset.lower()), passives, reference_passives=self._pal_reference_passives_cache.get(asset.lower(), []))
                 elem_colors = PalInfoWidget._ELEMENT_COLORS if hasattr(PalInfoWidget, '_ELEMENT_COLORS') else {}
                 html_desc = _partner_desc_to_html(resolved, elem_colors, tooltip=True)
                 tip += f'<br><br>{html_desc}'
@@ -1188,7 +1178,8 @@ class BulkSpeciesDialog(FramelessDialog):
         result = []
         for cid_upper in self._species_map:
             name = resolve_name(cid_upper, PalFrame._NAMEMAP) or cid_upper
-            if search and search not in name.lower() and search not in cid_upper.lower():
+            display_name = t(f"pal.{name}", name)
+            if search and search not in display_name.lower() and search not in name.lower() and search not in cid_upper.lower():
                 continue
             is_predator = cid_upper.startswith('PREDATOR_')
             is_boss = any(cid_upper.startswith(p) for p in _BOSS_PREFIXES) and not is_predator
@@ -1202,7 +1193,7 @@ class BulkSpeciesDialog(FramelessDialog):
             if (not is_predator and not is_boss and not is_npc) and not show_standard:
                 continue
             pals = self._species_map[cid_upper]
-            result.append((name, cid_upper, len(pals), is_boss, is_predator))
+            result.append((display_name, cid_upper, len(pals), is_boss, is_predator))
         result.sort(key=lambda x: (x[1], x[0]))
         return result
     def _rebuild_grid(self):
@@ -1216,8 +1207,8 @@ class BulkSpeciesDialog(FramelessDialog):
         except:
             pass
         entries = self._build_species_sorted()
-        for name, cid_upper, count, is_boss, is_predator in entries:
-            li = QListWidgetItem(f'{name}  ({count})')
+        for display_name, cid_upper, count, is_boss, is_predator in entries:
+            li = QListWidgetItem(f'{display_name}  ({count})')
             li.setData(Qt.UserRole, cid_upper)
             pal_icon_path = _icons._get_pal_icon_path(cid_upper)
             if pal_icon_path:

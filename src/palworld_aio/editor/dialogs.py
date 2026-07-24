@@ -566,7 +566,7 @@ class RadiusPreviewDialog(ThemedDialog):
         self.value_display.setText(f'{percent}%')
         self.actual_display.setText(f'{actual}')
         self.progress_bar.setValue(percent)
-        self.preview_status.setText(f'Preview: {percent}% ({actual}) - Drag slider or enter value to adjust')
+        self.preview_status.setText(f"{(t('base.radius.preview.status') if t else 'Preview: {percent}% ({actual}) - Drag slider or enter value to adjust').format(percent=percent, actual=actual)}")
         self.current_percent = percent
         self.current_actual_radius = actual
     def _reset_to_default(self):
@@ -881,7 +881,7 @@ class PalDefenderDialog(ThemedDialog):
         guild_item.setText(self.COL_PLAYER_UID, player_uids)
         guild_item.setText(self.COL_PALS, str(total_pals))
         guild_item.setData(self.COL_GUILD, Qt.UserRole, ge['id'])
-        guild_item.setToolTip(self.COL_GUILD, f"Guild ID: {ge['id']}")
+        guild_item.setToolTip(self.COL_GUILD, f"{t('guild.id') if t else 'Guild ID'}: {ge['id']}")
         guild_item.setToolTip(self.COL_PLAYER_UID, player_uids)
         if has_bases:
             guild_item.setFlags(guild_item.flags() | Qt.ItemIsUserCheckable)

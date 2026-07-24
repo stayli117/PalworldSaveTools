@@ -1536,7 +1536,7 @@ def modify_container_slots(new_slot_num, parent=None, container_id=None):
                     if new_slot_num < current_items:
                         if parent:
                             from PySide6.QtWidgets import QMessageBox
-                            QMessageBox.warning(parent, 'Invalid Operation', f'Cannot reduce container slots below current item count ({current_items})')
+                            QMessageBox.warning(parent, t('func_manager.invalid_operation') if t else 'Invalid Operation', f"{(t('func_manager.cannot_reduce_slots') if t else 'Cannot reduce container slots below current item count ({count})').format(count=current_items)}")
                         return 0
                     if current_slot_num == new_slot_num:
                         return 0
@@ -1562,7 +1562,7 @@ def modify_container_slots(new_slot_num, parent=None, container_id=None):
             else:
                 if parent:
                     from PySide6.QtWidgets import QMessageBox
-                    QMessageBox.warning(parent, 'Container Not Found', f'Container with ID {container_id} not found')
+                    QMessageBox.warning(parent, t('func_manager.container_not_found') if t else 'Container Not Found', f"{(t('func_manager.container_not_found_id') if t else 'Container with ID {id} not found').format(id=container_id)}")
                 return 0
         else:
             for cont in item_containers:
@@ -1795,7 +1795,7 @@ def check_dynamic_containers_with_reporting(parent=None):
             import textwrap
             message = f"\n📊 Dynamic Container Analysis Report\n{'=' * 50}\n\n🔍 Items Found in Containers: {report['total_items_in_containers']}\n📦 Items in Registry: {report['total_items_in_registry']}\n\n❌ Missing Items (referenced but not in registry): {report['total_missing']}\n{(chr(10).join((f'   • {item}' for item in report['missing_items'])) if report['missing_items'] else '   None')}\n\n🗑️  Orphaned Items (in registry but not referenced): {report['total_orphaned']}\n{(chr(10).join((f'   • {item}' for item in report['orphaned_items'])) if report['orphaned_items'] else '   None')}\n\n✅ Status: {('SUCCESS' if report['success'] else 'FAILED')}\n{('All dynamic items are properly synchronized!' if report['success'] else 'Some dynamic items may be missing or orphaned.')}\n"
             msg_box = QMessageBox(parent)
-            msg_box.setWindowTitle('Dynamic Container Analysis')
+            msg_box.setWindowTitle(t('func_manager.dynamic_container_analysis') if t else 'Dynamic Container Analysis')
             msg_box.setText(message.strip())
             msg_box.setIcon(QMessageBox.Information if report['success'] else QMessageBox.Warning)
             msg_box.setStandardButtons(QMessageBox.Ok)
@@ -1804,7 +1804,7 @@ def check_dynamic_containers_with_reporting(parent=None):
     except Exception as e:
         if parent:
             from PySide6.QtWidgets import QMessageBox
-            QMessageBox.warning(parent, 'Error', f'Failed to analyze dynamic containers: {str(e)}')
+            QMessageBox.warning(parent, t('func_manager.analysis_error') if t else 'Error', f"{(t('func_manager.analysis_failed') if t else 'Failed to analyze dynamic containers: {error}').format(error=str(e))}")
         return False
 def check_is_illegal_pal(raw):
     try:

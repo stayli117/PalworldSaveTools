@@ -4,7 +4,7 @@ from palsav import json_tools
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QListWidget, QListWidgetItem, QGroupBox, QMessageBox, QAbstractItemView, QListView, QTabWidget, QWidget, QStyledItemDelegate, QFrame, QSizePolicy
 from PySide6.QtCore import Qt, Signal, QSize, QTimer, QPoint
 from PySide6.QtGui import QPixmap, QIcon, QPainter, QColor, QCursor, QFont, QFontMetrics
-from i18n import t
+from i18n import t, desc_t
 from palworld_aio import constants
 from palworld_aio.editor.edit_pals import PalFrame, _get_boss_alpha_pixmap, _composite_badge, _BOSS_PREFIXES, _get_element_pixmap, _ensure_element_data, _resolve_partner_desc, _partner_desc_to_html, _get_cached_pixmap, _get_pal_icon_path, PalInfoWidget
 from palworld_aio.editor.pal_editor.widgets import PassiveEffectOverlay
@@ -309,19 +309,16 @@ class PlayerPalActionDialog(QDialog):
                 continue
             if (not is_predator and not is_boss and not is_npc) and not self._show_standard_chk.isChecked():
                 continue
-            if query_lower and query_lower not in name.lower() and (query_lower not in asset.lower()):
+            display_name = t(f"pal.{name}", name)
+            if query_lower and query_lower not in display_name.lower() and (query_lower not in name.lower()) and (query_lower not in asset.lower()):
                 continue
-            pal_icon_path = _get_pal_icon_path(asset)
-            lower_basename = os.path.basename(pal_icon_path).lower()
-            if 'unknown' in lower_basename or 'dummy' in lower_basename:
-                continue
-            list_item = QListWidgetItem(name)
+            list_item = QListWidgetItem(t(f"pal.{name}", name))
             list_item.setData(Qt.UserRole, asset)
-            tip = f'<b>{name}</b><br>({asset})'
+            tip = f'<b>{t(f"pal.{name}", name)}</b><br>({asset})'
             pdesc = self._pal_desc_map.get(asset.lower(), '')
             passives = self._pal_passives_map.get(asset.lower(), [])
             if pdesc:
-                resolved = _resolve_partner_desc(pdesc, passives, 0, self._pal_main_value_map.get(asset.lower()), self._pal_overwrite_effect_map.get(asset.lower()), passives, reference_passives=self._pal_reference_passives_map.get(asset.lower(), []))
+                resolved = _resolve_partner_desc(desc_t("pal", pdesc), passives, 0, self._pal_main_value_map.get(asset.lower()), self._pal_overwrite_effect_map.get(asset.lower()), passives, reference_passives=self._pal_reference_passives_map.get(asset.lower(), []))
                 elem_colors = PalInfoWidget._ELEMENT_COLORS if hasattr(PalInfoWidget, '_ELEMENT_COLORS') else {}
                 html_desc = _partner_desc_to_html(resolved, elem_colors, tooltip=True)
                 tip += f'<br><br>{html_desc}'
@@ -343,7 +340,7 @@ class PlayerPalActionDialog(QDialog):
     def _on_pal_clicked(self, item):
         self.selected_pal_id = item.data(Qt.UserRole)
         self.selected_pal_name = item.text()
-        self.pal_info_label.setText(f'{self.selected_pal_name}: {self.selected_pal_id}')
+        self.pal_info_label.setText(f'{t(f"pal.{self.selected_pal_name}", self.selected_pal_name)}: {self.selected_pal_id}')
         self.pal_info_label.setStyleSheet('color: #4ade80; font-weight: bold; padding: 5px;')
         self.delete_pal_btn.setEnabled(True)
     def _on_active_skill_pick(self):
@@ -356,7 +353,8 @@ class PlayerPalActionDialog(QDialog):
             self._clear_active_skill()
             return
         self.selected_active_skill_id = result
-        self.selected_active_skill_name = PalFrame._SKILLMAP.get(result, result)
+        raw_name = PalFrame._SKILLMAP.get(result, result)
+        self.selected_active_skill_name = t(f"skill.{raw_name}", raw_name)
         self.active_skill_label.setText(f'Active: {self.selected_active_skill_name}')
         self.active_skill_label.setStyleSheet('color: #7DD3FC; font-weight: bold; padding: 5px;')
         self.active_clear_btn.setVisible(True)
@@ -371,7 +369,8 @@ class PlayerPalActionDialog(QDialog):
             self._clear_passive_skill()
             return
         self.selected_passive_skill_id = result
-        self.selected_passive_skill_name = PalFrame._PASSMAP.get(result, result)
+        raw_name = PalFrame._PASSMAP.get(result, result)
+        self.selected_passive_skill_name = t(f"passive.{raw_name}", raw_name)
         asset_lower = (self.selected_passive_skill_id or '').lower()
         rank = PalFrame._PASSRANK.get(asset_lower, 1)
         bg, bd, tc = PalFrame._passive_rank_color(asset_lower)
@@ -530,7 +529,7 @@ class PlayerPalActionDialog(QDialog):
         if not self.selected_passive_skill_name:
             self.passive_skill_label.setText(t('player_pal.no_passive_selected') if t else 'No passive skill selected')
         if self.selected_pal_id:
-            self.pal_info_label.setText(f'{self.selected_pal_name}: {self.selected_pal_id}')
+            self.pal_info_label.setText(f'{t(f"pal.{self.selected_pal_name}", self.selected_pal_name)}: {self.selected_pal_id}')
         else:
             self.pal_info_label.setText(t('player_pal.select_pal') if t else 'Select a pal to delete from everywhere')
         self.skills_info_label.setText(t('player_pal.select_skill_info') if t else 'Select active and/or passive skills to remove from ALL pals everywhere.')

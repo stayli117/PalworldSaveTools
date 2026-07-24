@@ -5,7 +5,7 @@ from functools import partial
 from PySide6.QtWidgets import QApplication, QDialog, QFrame, QGraphicsOpacityEffect, QGridLayout, QHBoxLayout, QInputDialog, QLabel, QListWidget, QListWidgetItem, QProgressBar, QPushButton, QScrollArea, QScrollBar, QSizePolicy, QVBoxLayout, QWidget
 from PySide6.QtCore import Qt, QEvent, QObject, QPoint, QSize, QTimer, Signal
 from PySide6.QtGui import QFontMetrics, QIcon, QShortcut, QKeySequence
-from i18n import t
+from i18n import t, desc_t
 import nerdfont as nf
 from loading_manager import show_information, show_warning, show_question
 from palworld_aio import constants
@@ -31,6 +31,7 @@ class PalInfoDisplayMixin:
         if hasattr(self, '_stat_tip'):
             self._stat_tip.hide()
         try:
+            PalFrame._load_maps()
             if 'data' in pal_data:
                 raw = pal_data['data']
             elif 'value' in pal_data:
@@ -46,10 +47,11 @@ class PalInfoDisplayMixin:
             level = extract_value(raw, 'Level', 1)
             nick = extract_value(raw, 'NickName', '')
             pal_name = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP) or cid)
+            pal_name_translated = t(f'pal.{pal_name}', pal_name)
             if nick:
                 full = nick
             else:
-                full = pal_name
+                full = pal_name_translated
             self.name_lbl.setText(full)
             self.level_num_lbl.setText(str(level))
             gender_data = extract_value(raw, 'Gender', {})
@@ -415,7 +417,8 @@ class PalInfoDisplayMixin:
                     e = e.get('value', '')
                 if e:
                     w_clean = e.split('::')[-1].lower()
-                    move_name = PalFrame._SKILLMAP.get(w_clean, e.split('::')[-1])
+                    raw_name = PalFrame._SKILLMAP.get(w_clean, e.split('::')[-1])
+                    move_name = t(f'skill.{raw_name}', raw_name)
                     skill_info = _data._SKILL_DATA.get(w_clean, {}) if isinstance(_data._SKILL_DATA, dict) else {}
                     skill_elem = skill_info.get('element', 'Normal')
                     skill_power = skill_info.get('power', 0)
@@ -466,6 +469,7 @@ class PalInfoDisplayMixin:
                         tip_parts.append(f'Cooldown: {cd}s')
                     desc = skill_info.get('description', '')
                     if desc:
+                        desc = desc_t('skill', desc, desc)
                         tip_parts.append('')
                         tip_parts.append(desc)
                     slot.setToolTip('<br>'.join(tip_parts))
@@ -500,7 +504,8 @@ class PalInfoDisplayMixin:
                         p_clean = p_val.lower()
                     else:
                         p_clean = str(p_val) if p_val else ''
-                    display_name = PalFrame._PASSMAP.get(p_clean, str(p_val))
+                    raw_name = PalFrame._PASSMAP.get(p_clean, str(p_val))
+                    display_name = t(f'passive.{raw_name}', raw_name)
                     bg, bd, tc = PalFrame._passive_rank_color(p_clean)
                     rank = PalFrame._PASSRANK.get(p_clean, 1)
                     if rank >= 5:
@@ -532,9 +537,10 @@ class PalInfoDisplayMixin:
                         self.passive_rank_icons[si].hide()
                     p_desc = p_info.get('description', '')
                     tip_parts = [f'<b style="color:{tc}">{display_name}</b>']
-                    rank_labels = {1: 'Common', 2: 'Rare', 3: 'Rare', 4: 'Epic', 5: 'Epic', -99: 'Negative'}
+                    rank_labels = {1: t('passive.rank_common', 'Common'), 2: t('passive.rank_rare', 'Rare'), 3: t('passive.rank_rare', 'Rare'), 4: t('passive.rank_epic', 'Epic'), 5: t('passive.rank_epic', 'Epic'), -99: t('passive.rank_negative', 'Negative')}
                     tip_parts.append(f"<i>{rank_labels.get(rank, f'Rank {rank}')}</i>")
                     if p_desc:
+                        p_desc = desc_t('passive', p_desc, p_desc)
                         p_desc = p_desc.replace('{CharacterName}', 'Pal')
                         for ei in range(1, 5):
                             ev = p_info.get(f'effect{ei}', 0)
@@ -554,7 +560,8 @@ class PalInfoDisplayMixin:
                 self._ps_next_btn.setVisible(ps_pages > 1)
             pskill_name = base.get('partner_skill', '') if base else ''
             pal_desc = base.get('description', '') if base else ''
-            self.partner_name_lbl.setText(pskill_name or pal_name)
+            partner_display = t(f'pal.{pskill_name}', pskill_name) if pskill_name else pal_name_translated
+            self.partner_name_lbl.setText(partner_display)
             self.partner_lvl_lbl.setText(f'Lv {max(1, condenser_rank)}')
             if pal_desc:
                 resolved = _icons._resolve_partner_desc(pal_desc, p_list, condenser_rank, base.get('active_skill_main_value'), base.get('active_skill_overwrite_effect'), base.get('passives', []), reference_passives=base.get('reference_passives', []))

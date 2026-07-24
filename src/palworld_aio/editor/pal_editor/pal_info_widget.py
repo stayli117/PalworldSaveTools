@@ -249,7 +249,7 @@ class PalInfoWidget(PalInfoDisplayMixin, PalInfoHandlerMixin, QFrame):
         next_row = QHBoxLayout()
         next_row.setContentsMargins(0, 0, 0, 0)
         next_row.setSpacing(3)
-        next_label = QLabel('NEXT')
+        next_label = QLabel(t('pal_info_widget.next_level') if t else 'NEXT')
         next_label.setStyleSheet('font-size: 9px; font-weight: 600; color: #9CA3AF; background: transparent; border: none;')
         next_row.addWidget(next_label)
         self.next_lbl = QLabel('0')

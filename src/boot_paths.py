@@ -7,7 +7,16 @@ def _compute_root() -> Path:
     if hasattr(sys, '_PST_BINARY_ROOT'):
         return Path(sys._PST_BINARY_ROOT)
     _found_root: Path | None = None
-    if os.path.isfile(sys.executable):
+    # 优先：从 __file__ 向上探测 resources 目录（适用于开发环境如 uv run）
+    # 探测深度 6 层：src/palworld_aio/ → src/ → project-root/ → 留 3 层余量
+    _probe = Path(__file__).resolve().parent
+    for _ in range(6):
+        if (_probe / 'resources').is_dir():
+            _found_root = _probe
+            break
+        _probe = _probe.parent
+    # 备选：从 sys.executable 探测（适用于打包环境）
+    if _found_root is None and os.path.isfile(sys.executable):
         _exe_dir = Path(os.path.realpath(sys.executable)).parent
         if (_exe_dir / 'resources').is_dir():
             _found_root = _exe_dir
@@ -16,14 +25,7 @@ def _compute_root() -> Path:
             if (_parent / 'resources').is_dir():
                 _found_root = _parent
     if _found_root is None:
-        _probe = Path(__file__).resolve().parent
-        for _ in range(5):
-            if (_probe / 'resources').is_dir():
-                _found_root = _probe
-                break
-            _probe = _probe.parent
-        if _found_root is None:
-            _found_root = Path(__file__).resolve().parent.parent
+        _found_root = Path(__file__).resolve().parent.parent
     return _found_root
 
 

@@ -4,7 +4,7 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QLineEdit, QListWidget, QLis
 from PySide6.QtCore import Qt, QTimer, QRectF, QSize, QPoint, QThread
 from PySide6.QtGui import QPainter, QColor, QPen, QBrush, QLinearGradient, QIcon, QCursor, QFontMetrics
 from PySide6.QtWidgets import QStyle
-from i18n import t
+from i18n import t, desc_t
 from palworld_aio import constants as palworld_constants
 from palworld_aio.editor.pal_editor import _get_cached_pixmap, _get_element_pixmap, _ensure_skill_data, _ensure_passive_data, _clean_desc_for_tooltip
 from palworld_aio.editor.pal_editor import data as _pedata
@@ -249,22 +249,23 @@ class SkillPicker(QWidget):
                 if use_exclusions:
                     if key not in learnset_keys and any((pat.lower() in key for pat in dm._SKILL_EXCLUSION_PATTERNS)):
                         continue
-                item = QListWidgetItem(name)
+                item = QListWidgetItem(t(f"skill.{name}", name))
                 info = _pedata._SKILL_DATA.get(key, {}) if isinstance(_pedata._SKILL_DATA, dict) else {}
                 elem = info.get('element', 'Normal')
                 pwr = info.get('power', 0)
                 item.setData(Qt.UserRole + 1, elem)
                 item.setData(Qt.UserRole + 2, pwr)
-                item.setText(name)
+                item.setText(t(f"skill.{name}", name))
+                display_name = t(f"skill.{name}", name)
                 item.setData(Qt.UserRole, name)
-                tip_parts = [f'<b>{name}</b>', f'Element: {elem}', f'Power: {pwr}']
+                tip_parts = [f'<b>{display_name}</b>', f'{t("skill.element") if t else "Element"}: {elem}', f'{t("skill.power") if t else "Power"}: {pwr}']
                 cd = info.get('cooldown', 0)
                 if cd:
-                    tip_parts.append(f'Cooldown: {cd}s')
+                    tip_parts.append(f'{t("skill.cooldown") if t else "Cooldown"}: {cd}s')
                 desc = info.get('description', '')
                 if desc:
                     tip_parts.append('')
-                    tip_parts.append(_clean_desc_for_tooltip(desc))
+                    tip_parts.append(_clean_desc_for_tooltip(desc_t("skill", desc)))
                 item.setToolTip('<br>'.join(tip_parts))
                 self._list.addItem(item)
                 if skip_items and asset in skip_items:
@@ -282,7 +283,7 @@ class SkillPicker(QWidget):
                         break
                 if not asset:
                     continue
-                item = QListWidgetItem(name)
+                item = QListWidgetItem(t(f"passive.{name}", name))
                 rank = 1
                 bg, bd, tc = dm.passive_rank_color(1)
                 p_info = {}
@@ -300,8 +301,22 @@ class SkillPicker(QWidget):
                 item.setData(Qt.UserRole + 3, tc)
                 item.setData(Qt.UserRole + 4, bd)
                 item.setForeground(QColor(tc))
-                p_desc = dm.format_passive_description(p_info) if isinstance(p_info, dict) else ''
-                tip_parts = [f'<b style="color:{tc}">{name}</b>', f"<i>{dm.rank_labels.get(rank, f'Rank {rank}')}</i>"]
+                # 先翻译原始模板（保留 {CharacterName}/{EffectValueN} 占位符），再替换占位符
+                p_desc = ''
+                if isinstance(p_info, dict):
+                    raw_desc = p_info.get('description', '')
+                    if raw_desc:
+                        # 步骤1: 先翻译带占位符的原始文本 → 得到带占位符的中文
+                        translated = desc_t("passive", raw_desc)
+                        # 步骤2: 对中文结果替换占位符
+                        p_desc = translated.replace('{CharacterName}', 'Pal')
+                        for ei in range(1, 5):
+                            ev = p_info.get(f'effect{ei}', 0)
+                            ev_str = str(int(ev)) if isinstance(ev, float) and ev == int(ev) else f'{ev:.0f}' if isinstance(ev, float) else str(ev)
+                            p_desc = p_desc.replace(f'{{EffectValue{ei}}}', ev_str)
+                rank_label = t(f"passive.rank_{rank}") if t else dm.rank_labels.get(rank, f'Rank {rank}')
+                display_name = t(f"passive.{name}", name)
+                tip_parts = [f'<b style="color:{tc}">{display_name}</b>', f"<i>{rank_label}</i>"]
                 if p_desc:
                     tip_parts.append('')
                     tip_parts.append(_clean_desc_for_tooltip(p_desc))

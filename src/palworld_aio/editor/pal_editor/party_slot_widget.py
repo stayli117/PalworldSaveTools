@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QMenu, QProgressBar, QSizePolicy, QVBoxLayout, QWidget
 from PySide6.QtCore import Qt, Signal
-from i18n import t
+from i18n import t, desc_t
 from palworld_aio.ui.chrome.styles import slot_full, slot_selected, slot_multi_selected
 from palworld_aio.utils import calculate_max_hp, extract_value, resolve_name, safe_nested_get, _hp_breakdown, stat_breakdown_tooltip
 
@@ -291,9 +291,13 @@ class PartySlotWidget(QFrame):
 
         if nick:
 
-            pal_name = f'{nick}'
+            display_name = nick
 
-        tip = f'{pal_name} [Lv.{level}]'
+        else:
+
+            display_name = t(f"pal.{pal_name}", pal_name)
+
+        tip = f'{display_name} [Lv.{level}]'
 
         base = get_pal_base_data(cid)
 
@@ -319,7 +323,8 @@ class PartySlotWidget(QFrame):
 
                 _cr = int(extract_value(raw, 'Rank', 0)) if isinstance(extract_value(raw, 'Rank', 0), (int, float)) else 0
 
-                _res = _resolve_partner_desc(pskill_desc, _pl, _cr, base.get('active_skill_main_value'), base.get('active_skill_overwrite_effect'), base.get('passives', []), reference_passives=base.get('reference_passives', []))
+                _translated_desc = desc_t("pal", pskill_desc)
+                _res = _resolve_partner_desc(_translated_desc, _pl, _cr, base.get('active_skill_main_value'), base.get('active_skill_overwrite_effect'), base.get('passives', []), reference_passives=base.get('reference_passives', []))
 
                 _ht = _partner_desc_to_html(_res, PalInfoWidget._ELEMENT_COLORS if hasattr(PalInfoWidget, '_ELEMENT_COLORS') else {}, tooltip=True)
 
@@ -435,7 +440,7 @@ class PartySlotWidget(QFrame):
 
         name_row.setSpacing(4)
 
-        name_lbl = QLabel(f'Lv.{level} {pal_name}')
+        name_lbl = QLabel(f'Lv.{level} {display_name}')
 
         name_lbl.setStyleSheet('color: #E2E8F0; font-size: 12px; font-weight: 600; background: transparent;')
 

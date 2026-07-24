@@ -6,8 +6,9 @@ from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QFont, QCursor, QPixmap, QIcon
 from palworld_aio import constants
 from resource_resolver import resource_path
-from i18n import t
-from palworld_aio.editor.pal_editor import PalFrame, PalCreateDialog, _get_pal_icon_path, _get_cached_pixmap, _BOSS_PREFIXES
+from i18n import t, desc_t
+from palworld_aio.editor.pal_editor import PalFrame, PalCreateDialog, _get_pal_icon_path, _get_cached_pixmap
+from palworld_aio.editor.pal_editor.data import _BOSS_PREFIXES
 try:
     import nerdfont as nf
     ARROW_RIGHT = nf.icons.get('nf-fa-arrow_right', '\u2192')
@@ -96,7 +97,8 @@ class _SelectPalDialog(PalCreateDialog):
             if info.get('ignore_combi') and asset not in self._unique_combo_children:
                 continue
             name = info.get('name', asset)
-            if search_text and search_text not in name.lower() and search_text not in asset.lower():
+            display_name = t(f"pal.{name}", name)
+            if search_text and search_text not in display_name.lower() and search_text not in name.lower() and search_text not in asset.lower():
                 continue
             asset_lower = asset.lower()
             is_predator = asset.upper().startswith('PREDATOR_')
@@ -114,7 +116,7 @@ class _SelectPalDialog(PalCreateDialog):
             lower_basename = os.path.basename(pal_icon_path).lower()
             if not pal_icon_path or 'unknown' in lower_basename or 'dummy' in lower_basename:
                 continue
-            li = QListWidgetItem(name)
+            li = QListWidgetItem(t(f"pal.{name}", name))
             li.setData(Qt.UserRole, asset)
             pix = _get_cached_pixmap(pal_icon_path, 48)
             if pix:
@@ -335,12 +337,12 @@ class BreedingTab(QWidget):
                 self._selected_tribe = tribe
                 self._selected_name = info.get('name', dlg.selected_name)
                 self._selected_icon = icon
-                self._selected_label.setText(self._selected_name)
+                self._selected_label.setText(t(f"pal.{self._selected_name}", self._selected_name))
             else:
                 self._selected_tribe = asset
                 self._selected_name = dlg.selected_name
                 self._selected_icon = ''
-                self._selected_label.setText(dlg.selected_name)
+                self._selected_label.setText(t(f"pal.{dlg.selected_name}", dlg.selected_name))
             self._update_results()
 
     def _show_parents(self, target_tribe, target_name, target_icon, bd, pal_info, target_info=None):
@@ -355,7 +357,7 @@ class BreedingTab(QWidget):
         target_row.setSpacing(8)
         icon_lbl = PalIconLabel(target_icon, 48)
         target_row.addWidget(icon_lbl)
-        name_lbl = QLabel(f'<b style="color:#7DD3FC;font-size:15px;">{target_name}</b>')
+        name_lbl = QLabel(f'<b style="color:#7DD3FC;font-size:15px;">{t(f"pal.{target_name}", target_name)}</b>')
         name_lbl.setTextFormat(Qt.RichText)
         target_row.addWidget(name_lbl)
         target_row.addStretch()
@@ -406,7 +408,7 @@ class BreedingTab(QWidget):
         target_row.setSpacing(8)
         icon_lbl = PalIconLabel(target_icon, 48)
         target_row.addWidget(icon_lbl)
-        name_lbl = QLabel(f'<b style="color:#7DD3FC;font-size:15px;">{target_name}</b>')
+        name_lbl = QLabel(f'<b style="color:#7DD3FC;font-size:15px;">{t(f"pal.{target_name}", target_name)}</b>')
         name_lbl.setTextFormat(Qt.RichText)
         target_row.addWidget(name_lbl)
         target_row.addStretch()
@@ -447,9 +449,10 @@ class BreedingTab(QWidget):
             filtered = []
             for d in self._page_data:
                 if d['type'] == 'pair':
-                    names = [pal_info_map.get(x, {}).get('name', '').lower() for x in (d['a'], d['b'], d['child'])]
+                    raw = [pal_info_map.get(x, {}).get('name', '') for x in (d['a'], d['b'], d['child'])]
                 else:
-                    names = [pal_info_map.get(x, {}).get('name', '').lower() for x in (d['parent'], d['partner'], d['child'])]
+                    raw = [pal_info_map.get(x, {}).get('name', '') for x in (d['parent'], d['partner'], d['child'])]
+                names = [n.lower() for n in raw] + [t(f"pal.{n}", n).lower() for n in raw]
                 if any(self._filter_text in n for n in names):
                     filtered.append(d)
             display_data = filtered
@@ -558,7 +561,7 @@ class BreedingTab(QWidget):
         unit.addStretch(1)
         il = PalIconLabel(icon, 48)
         unit.addWidget(il)
-        nl = QLabel(f'<b style="font-size:14px;color:#e2e8f0;">{name}</b>')
+        nl = QLabel(f'<b style="font-size:14px;color:#e2e8f0;">{t(f"pal.{name}", name)}</b>')
         nl.setTextFormat(Qt.RichText)
         unit.addWidget(nl)
         unit.addStretch(1)

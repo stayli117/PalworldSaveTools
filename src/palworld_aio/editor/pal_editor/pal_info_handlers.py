@@ -3,7 +3,7 @@ from functools import partial
 from PySide6.QtWidgets import QApplication, QDialog, QFrame, QGridLayout, QHBoxLayout, QInputDialog, QLabel, QListWidget, QListWidgetItem, QPushButton, QVBoxLayout, QWidget
 from PySide6.QtCore import Qt, QEvent, QPoint, QTimer
 from PySide6.QtGui import QPixmap
-from i18n import t
+from i18n import t, desc_t
 import nerdfont as nf
 from loading_manager import show_information, show_warning, show_question
 from palworld_aio import constants
@@ -149,7 +149,7 @@ class PalInfoHandlerMixin:
             cur = 1
         max_lv = 255 if PalFrame._cheat_mode else 80
         dlg = QInputDialog(self)
-        dlg.setWindowTitle('Set Level')
+        dlg.setWindowTitle(t('pal_info_handlers.set_level') if t else 'Set Level')
         dlg.setLabelText(f'Level (1-{max_lv}):')
         dlg.setInputMode(QInputDialog.IntInput)
         dlg.setIntRange(1, max_lv)
@@ -269,7 +269,7 @@ class PalInfoHandlerMixin:
         key, lo, hi = mapping.get(lbl, ('Talent_HP', 0, cap))
         cur = int(extract_value(self._raw, key, 0))
         dlg = QInputDialog(self)
-        dlg.setWindowTitle('Set Talent')
+        dlg.setWindowTitle(t('pal_info_handlers.set_talent') if t else 'Set Talent')
         dlg.setLabelText(f'{key} (0-{cap}):')
         dlg.setInputMode(QInputDialog.IntInput)
         dlg.setIntRange(lo, hi)
@@ -286,7 +286,7 @@ class PalInfoHandlerMixin:
         key, lo, hi = mapping.get(lbl, ('Rank_HP', 0, cap))
         cur = int(extract_value(self._raw, key, 0))
         dlg = QInputDialog(self)
-        dlg.setWindowTitle('Set Soul')
+        dlg.setWindowTitle(t('pal_info_handlers.set_soul') if t else 'Set Soul')
         dlg.setLabelText(f'{key} (0-{cap}):')
         dlg.setInputMode(QInputDialog.IntInput)
         dlg.setIntRange(lo, hi)
@@ -436,7 +436,7 @@ class PalInfoHandlerMixin:
         list_widget.setMouseTracking(True)
         list_widget.setStyleSheet('QListWidget { background: rgba(10,14,20,0.95); border: 1px solid rgba(125,211,252,0.15); border-radius: 4px; color: #E2E8F0; font-size: 10px; } QListWidget::item { padding: 6px 8px; } QListWidget::item:hover { background: rgba(125,211,252,0.08); } QListWidget::item:selected { background: rgba(125,211,252,0.15); color: #7DD3FC; }')
         for name in sorted(loadouts.keys()):
-            item = QListWidgetItem(name)
+            item = QListWidgetItem(t(f"pal.{name}", name))
             item.setData(Qt.UserRole, name)
             list_widget.addItem(item)
         il.addWidget(list_widget, 1)
@@ -581,7 +581,8 @@ class PalInfoHandlerMixin:
                     if isinstance(p_val, dict):
                         p_val = p_val.get('value', '')
                     p_clean = str(p_val).lower() if p_val else ''
-                    display_name = PalFrame._PASSMAP.get(p_clean, str(p_val))
+                    raw_name = PalFrame._PASSMAP.get(p_clean, str(p_val))
+                    display_name = t(f"passive.{raw_name}", raw_name)
                     bg, bd, tc = PalFrame._passive_rank_color(p_clean)
                     rank = PalFrame._PASSRANK.get(p_clean, 1)
                     if rank >= 5:
@@ -618,10 +619,12 @@ class PalInfoHandlerMixin:
                     ov.set_mode(None)
                 if p_clean:
                     tip_parts = [f'<b style="color:{tc}">{display_name}</b>']
-                    rank_labels = {1: 'Common', 2: 'Rare', 3: 'Rare', 4: 'Epic', 5: 'Epic', -99: 'Negative'}
-                    tip_parts.append(f"<i>{rank_labels.get(rank, f'Rank {rank}')}</i>")
+                    rank_label = t(f"passive.rank_{rank}") if t else {1: 'Common', 2: 'Rare', 3: 'Rare', 4: 'Epic', 5: 'Epic', -99: 'Negative'}.get(rank, f'Rank {rank}')
+                    tip_parts.append(f"<i>{rank_label}</i>")
                     p_desc = p_info.get('description', '')
                     if p_desc:
+                        # 先翻译带占位符的原始文本，再替换占位符
+                        p_desc = desc_t("passive", p_desc)
                         p_desc = p_desc.replace('{CharacterName}', 'Pal')
                         for ei in range(1, 5):
                             ev = p_info.get(f'effect{ei}', 0)

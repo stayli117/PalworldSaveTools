@@ -5,7 +5,7 @@ from palworld_aio.widgets.toggle_check import ToggleCheckBtn
 from PySide6.QtCore import Qt, Signal, QSize, QEvent
 from PySide6.QtGui import QShowEvent
 from PySide6.QtGui import QPixmap, QIcon, QFont
-from i18n import t
+from i18n import t, desc_t
 from palworld_aio import constants
 from palworld_aio.utils import sav_to_gvasfile, gvasfile_to_sav
 from palworld_aio.managers.data_manager import get_guilds, get_guild_members
@@ -179,16 +179,17 @@ class PlayerTechnologyActionDialog(QDialog):
             self._display_technologies(self.tech_data)
             return
         query_lower = query.lower()
-        filtered = [t for t in self.tech_data if query_lower in t.get('name', '').lower() or query_lower in t.get('asset', '').lower()]
+        filtered = [t for t in self.tech_data if query_lower in t.get('name', '').lower() or query_lower in t.get('asset', '').lower() or query_lower in t(f"technology.{t.get('name', '')}", t.get('name', '')).lower()]
         self._display_technologies(filtered)
     def _make_tech_frame(self, tech):
         asset = tech.get('asset', '')
         name = tech.get('name', '')
+        display_name = t(f"technology.{name}", name)
         frame = QFrame()
         frame.setFixedSize(76, 76)
         frame.setCursor(Qt.PointingHandCursor)
         frame._tech_asset = asset
-        frame._tech_name = name
+        frame._tech_name = display_name
         frame.installEventFilter(self)
         frame.setStyleSheet('QFrame { background: rgba(125,211,252,0.06); border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; } QFrame:hover { background: rgba(125,211,252,0.12); }')
         vl = QVBoxLayout(frame); vl.setContentsMargins(2, 2, 2, 2); vl.setSpacing(0)
@@ -202,15 +203,14 @@ class PlayerTechnologyActionDialog(QDialog):
                 il.setPixmap(pix.scaled(36, 36, Qt.KeepAspectRatio, Qt.SmoothTransformation))
                 il.setAlignment(Qt.AlignCenter)
                 vl.addWidget(il, 1)
-        nl = QLabel(tech.get('name', ''))
+        nl = QLabel(display_name)
         nl.setAlignment(Qt.AlignCenter)
         nl.setStyleSheet('font-size: 7px; color: #e2e8f0; background: transparent;')
         vl.addWidget(nl)
-        a2 = tech.get('asset', '')
-        tip = f'<b>{name}</b><br>({a2})'
+        tip = f'<b>{display_name}</b><br>({asset})'
         td = tech.get('description', '')
         if td:
-            tip += f'<br><br>{wrap_tooltip_text(_clean_desc_for_tooltip(td))}'
+            tip += f'<br><br>{wrap_tooltip_text(_clean_desc_for_tooltip(desc_t("technology", td)))}'
         tip += f'<br><br>Level {tech.get("level_cap",0)}  Cost: {tech.get("cost",0)}'
         frame.setToolTip(tip)
         return frame
@@ -228,7 +228,7 @@ class PlayerTechnologyActionDialog(QDialog):
                 count = len(self._selected_techs)
                 if count:
                     if count == 1:
-                        self.tech_info_label.setText(f'Selected: {name} ({asset})')
+                        self.tech_info_label.setText(f'{t("player_technology.selected")} {name} ({asset})')
                     else:
                         self.tech_info_label.setText(f'Selected {count} technologies')
                     self.tech_info_label.setStyleSheet('color: #4ade80; font-weight: bold; padding: 5px;')

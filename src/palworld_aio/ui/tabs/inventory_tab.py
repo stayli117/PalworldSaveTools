@@ -4,7 +4,7 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QS
 from PySide6.QtCore import Qt, QSize, Signal, QPoint, QTimer, QThread, QEvent
 from PySide6.QtGui import QPixmap, QIcon, QFont, QCursor, QColor, QPainter, QPen, QIntValidator
 from PySide6.QtWidgets import QStyledItemDelegate
-from i18n import t
+from i18n import t, desc_t
 from palworld_aio.ui.chrome.styles import DIALOG_STYLE as DARK_THEME_STYLE, STATS_PANEL_STYLE, MENU_STYLE, PICKER_BG_STYLE, PICKER_SEARCH_STYLE, PICKER_LIST_STYLE, wrap_tooltip_text, slot_full, slot_rarity, slot_selected, slot_multi_selected, CONTENT_PANEL_STYLE, SLOT_EMPTY_STYLE, SLOT_HOVER_STYLE, INPUT_DIALOG_STYLE
 from palworld_aio.widgets.toggle_check import ToggleCheckBtn
 from palsav import json_tools
@@ -22,6 +22,34 @@ EQUIP_SLOT_FILTERS = {'weapon': {'type_a': ['EPalItemTypeA::Weapon', 'EPalItemTy
 GRID_COLS = 6
 GRID_ROWS = 9
 SLOT_SIZE = 56
+
+_RARITY_SYMBOLS = {
+    0: '\u2B22',   # ⬢ 灰色菱形
+    1: '\u25C6',   # ◆ 绿色菱形
+    2: '\u25C7',   # ◇ 蓝色菱形
+    3: '\u2726',   # ✦ 紫色星形
+    4: '\u2605',   # ★ 金色星
+}
+_RARITY_COLOR_MAP = {
+    0: '#aaaaaa',
+    1: '#4ade80',
+    2: '#60a5fa',
+    3: '#a855f7',
+    4: '#fbbf24',
+}
+
+def _rarity_prefix(rarity: int) -> str:
+    """返回稀有度对应的彩色 Unicode 符号前缀，用于物品名称前显示。"""
+    if rarity <= 0:
+        return _RARITY_SYMBOLS[0]
+    elif rarity <= 1:
+        return _RARITY_SYMBOLS[1]
+    elif rarity <= 2:
+        return _RARITY_SYMBOLS[2]
+    elif rarity <= 3:
+        return _RARITY_SYMBOLS[3]
+    else:
+        return _RARITY_SYMBOLS[4]
 class ItemSlotWidget(QFrame):
     clicked = Signal(object)
     double_clicked = Signal(object)
@@ -111,18 +139,19 @@ class ItemSlotWidget(QFrame):
             item_desc = self.slot_data.get('description', '')
             is_booth = self.slot_data.get('is_booth_product', False)
             is_booth_ask = self.slot_data.get('is_booth_asking', False)
+            display_name = t(f"item.{item_name}", item_name)
             if is_booth:
                 cost_name = self.slot_data.get('cost_name', 'Unknown')
                 cost_count = self.slot_data.get('cost_count', 0)
-                tooltip = f'<b>{item_name}</b><br><i>{item_id}</i>'
-                tooltip += f'<br><br><span style="color:#fbbf24;font-weight:bold">&#xf0ec;</span> <b>{cost_name}</b> x{cost_count}'
+                tooltip = f'<b>{display_name}</b><br><i>{item_id}</i>'
+                tooltip += f'<br><br><span style="color:#fbbf24;font-weight:bold">&#xf0ec;</span> <b>{t(f"item.{cost_name}", cost_name)}</b> x{cost_count}'
             elif is_booth_ask:
-                tooltip = f'<b>{item_name}</b><br>Qty: {qty}<br><i>{item_id}</i>'
+                tooltip = f'<b>{display_name}</b><br>Qty: {qty}<br><i>{item_id}</i>'
                 tooltip += f'<br><br><span style="color:#fbbf24;font-weight:bold">&#xf0ec; Asking Price</span>'
             else:
-                tooltip = f'<b>{item_name}</b><br>Qty: {qty}<br><i>{item_id}</i>'
+                tooltip = f'<b>{display_name}</b><br>Qty: {qty}<br><i>{item_id}</i>'
             if item_desc:
-                cleaned = _clean_desc_for_tooltip(item_desc)
+                cleaned = _clean_desc_for_tooltip(desc_t("item", item_desc))
                 tooltip += f'<br><br><span style="color:#94a3b8;font-size:11px">{wrap_tooltip_text(cleaned)}</span>'
             QToolTip.showText(QCursor.pos(), tooltip)
         super().enterEvent(event)
@@ -182,9 +211,11 @@ class EquipmentSlotWidget(QFrame):
         if icon_path:
             pixmap = ItemData.get_item_icon(icon_path, QSize(36, 36))
             self.icon_label.setPixmap(pixmap)
-        name = slot_data.get('item_name', '')
-        if len(name) > 10:
-            name = name[:8] + '..'
+        name = t(f"item.{slot_data.get('item_name', '')}", slot_data.get('item_name', ''))
+        rarity = slot_data.get('rarity', 0)
+        name = f'{_rarity_prefix(rarity)} {name}'
+        if len(name) > 12:
+            name = name[:10] + '..'
         self.name_label.setText(name)
         stack_count = slot_data.get('stack_count', 1)
         self.qty_label.setText(str(stack_count))
@@ -258,9 +289,10 @@ class EquipmentSlotWidget(QFrame):
             item_name = self.current_item.get('item_name', 'Unknown')
             item_id = self.current_item.get('item_id', '')
             item_desc = self.current_item.get('description', '')
-            tooltip = f'<b>{item_name}</b><br><i>{item_id}</i>'
+            display_name = t(f"item.{item_name}", item_name)
+            tooltip = f'<b>{display_name}</b><br><i>{item_id}</i>'
             if item_desc:
-                cleaned = _clean_desc_for_tooltip(item_desc)
+                cleaned = _clean_desc_for_tooltip(desc_t("item", item_desc))
                 tooltip += f'<br><br><span style="color:#94a3b8;font-size:11px">{wrap_tooltip_text(cleaned)}</span>'
             QToolTip.showText(QCursor.pos(), tooltip)
         super().enterEvent(event)
@@ -1679,16 +1711,10 @@ class ItemPickerDialog(QDialog):
                     continue
             if 'en_text' in item.get('name', '').lower():
                 continue
-            icon_path = item.get('icon', '')
-            if not icon_path:
-                continue
-            resolved = ItemData._resolve_icon_path(icon_path)
-            lower_basename = os.path.basename(resolved).lower()
-            if 'unknown' in lower_basename or 'dummy' in lower_basename or not os.path.exists(resolved):
-                continue
-            list_item = QListWidgetItem(item.get('name', 'Unknown'))
+            rar = item.get('rarity', 0)
+            list_item = QListWidgetItem(f'{_rarity_prefix(rar)} {t(f"item.{item.get("name", "Unknown")}", item.get("name", "Unknown"))}')
             list_item.setData(Qt.UserRole, item.get('asset', ''))
-            list_item.setData(Qt.UserRole + 2, item.get('rarity', 0))
+            list_item.setData(Qt.UserRole + 2, rar)
             list_item.setData(Qt.UserRole + 3, type_a)
             list_item.setData(Qt.UserRole + 4, item.get('description', ''))
             list_item.setData(Qt.UserRole + 5, item.get('type_b', ''))
@@ -1700,9 +1726,10 @@ class ItemPickerDialog(QDialog):
             item_id = item.get('asset', '')
             item_desc = item.get('description', '')
             category = item.get('category', 'misc')
-            tooltip = f'<b>{item_name}</b><br>ID: {item_id}<br>Category: {category}'
+            display_name = t(f"item.{item_name}", item_name)
+            tooltip = f'<b>{display_name}</b><br>{t("item.id") if t else "ID"}: {item_id}<br>{t("item.category") if t else "Category"}: {category}'
             if item_desc:
-                cleaned = _clean_desc_for_tooltip(item_desc)
+                cleaned = _clean_desc_for_tooltip(desc_t("item", item_desc))
                 tooltip += f'<br><br><span style="color:#94a3b8;font-size:11px">{wrap_tooltip_text(cleaned)}</span>'
             list_item.setToolTip(tooltip)
             list_item.setSizeHint(QSize(80, 80))
@@ -1733,7 +1760,7 @@ class ItemPickerDialog(QDialog):
             if is_singleton:
                 self.qty_input.setText('1')
         if item_desc:
-            self.desc_label.setText(_clean_desc_for_tooltip(item_desc))
+            self.desc_label.setText(_clean_desc_for_tooltip(desc_t("item", item_desc)))
             self.desc_label.setVisible(True)
         else:
             self.desc_label.setVisible(False)

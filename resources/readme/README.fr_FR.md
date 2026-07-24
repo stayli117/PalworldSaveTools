@@ -65,10 +65,6 @@ Que vous ayez besoin de gérer un serveur dédié, de migrer entre des serveurs 
 - [Licence](#licence)
 - [L'équipe Palworld](#léquipe-palworld)
 
-- [Assistance](#assistance)
-- [Licence](#licence)
-- [Remerciements](#reconnaissances)
-
 
 
 
@@ -109,7 +105,7 @@ Que vous ayez besoin de gérer un serveur dédié, de migrer entre des serveurs 
 
 ### Pal Editor
 
-Une interface d'édition approfondie pour n'importe quel Pal appartenant à n'importe quel joueur. Les Pals sont organisés par **Party** (équipe active) et **Palbox** (stockage).
+Une interface d'édition approfondie pour n'importe quel Pal appartenant à n'importe quel joueur. Pals sont organisés par **Party** (équipe active) et **Palbox** (stockage).
 
 - **Statistiques et IVs** — HP, attaque, défense (IV 0-100), niveau (1-80), rang de confiance (0-10).
 - **Âmes** — HP, Attaque, Défense, Vitesse d'artisanat (0–20).
@@ -341,7 +337,7 @@ PST peut déverrouiller la carte complète (tous les points de déplacement rapi
 
 Déplacez votre monde coopératif (que vous hébergez depuis votre PC) vers un serveur dédié afin que d'autres puissent jouer même lorsque vous êtes hors ligne.
 
-**Comment ça marche :** Les sauvegardes coopératives utilisent `0001.sav` pour le joueur hôte. Ce n'est pas le cas des serveurs dédiés : chaque joueur a un UID standard. Fix Host Save échange votre personnage `0001.sav` dans un emplacement UID standard afin que le serveur vous reconnaisse.
+**Comment ça marche :** Les sauvegardes coopératives utilisent `0001.sav` pour le joueur hôte. Ce n'est pas le cas des serveurs dédiés : chaque joueur a un UID standard. Fix Host Save **échange** deux fichiers de joueur (comme les sièges d'échange), pas une copie. Votre personnage coopératif dans `0001.sav` est échangé dans l'emplacement du serveur.
 
 1. **Copiez votre sauvegarde coopérative sur le serveur.**
    - Emplacement de sauvegarde en coopération : `%localappdata%\Pal\Saved\SaveGames\YOURID\RANDOMID\`
@@ -357,10 +353,10 @@ Déplacez votre monde coopératif (que vous hébergez depuis votre PC) vers un s
    - Accédez au `Level.sav` du serveur.
    - **Source Player** : sélectionnez votre personnage coopératif (celui de `0001.sav` — répertorié comme hôte).
    - **Joueur cible** : Sélectionnez le personnage temporaire que vous venez de créer.
-   - Cliquez sur le bouton pour exécuter le swap.
+- Cliquez sur le bouton pour exécuter le swap.
 
 4. **Démarrez le serveur.**
-- Votre personnage coopératif d'origine (avec toute la progression, Pals, bases) est désormais lié au serveur. L'espace réservé temporaire a disparu.
+   - Votre personnage coopératif d'origine (avec toute la progression, Pals, bases) est désormais lié au serveur. L'espace réservé temporaire a disparu.
 
 </details>
 
@@ -371,7 +367,7 @@ Déplacez votre monde coopératif (que vous hébergez depuis votre PC) vers un s
 
 Ramenez votre personnage de serveur dédié dans une sauvegarde coopérative locale – utile si vous arrêtez de louer un serveur ou si vous souhaitez jouer hors ligne.
 
-**Comment ça marche :** Même échange de GUID à l'envers. Votre personnage de serveur (UID normal) est remplacé par `0001.sav` (l'emplacement hôte) afin que vous puissiez héberger une coopération avec la progression de votre serveur.
+**Comment ça marche :** Même échange de GUID à l'envers — Correction de l'enregistrement de l'hôte **échange** deux fichiers, pas une copie. Votre personnage de serveur (UID normal) est remplacé par `0001.sav` (l'emplacement hôte) afin que vous puissiez héberger une coopération avec la progression de votre serveur.
 
 1. **Copiez la sauvegarde de votre serveur sur votre PC local.**
    - Emplacement de sauvegarde du serveur : `steamapps\common\Palworld\Pal\Saved\SaveGames\0\RANDOMSERVERID\`
@@ -390,7 +386,7 @@ Ramenez votre personnage de serveur dédié dans une sauvegarde coopérative loc
    - Cliquez sur le bouton pour exécuter le swap.
 
 4. **Hébergez normalement une coopérative.**
-   - Votre personnage serveur est désormais l'hôte (`0001.sav`). Tous les progrès, Pals, et bases intactes.
+   - Votre personnage serveur est désormais l'hôte (`0001.sav`). Tous les progrès, Pals, et les bases intactes.
 
 </details>
 
@@ -468,12 +464,19 @@ Puisqu'un échange déplace le joueur B dans l'emplacement hôte mais laisse les
 <details>
 <summary>Cliquez pour agrandir</summary>
 
-Transférez des personnages entre différents mondes ou serveurs tout en préservant les personnages, Pals, l'inventaire et la technologie :
+Copiez un joueur (avec tous les Pals, l'inventaire, la technologie et la progression) d'un monde à un autre – utile pour déplacer votre personnage entre un monde coopératif et un serveur dédié, ou entre deux serveurs.
 
-1. Ouvrez l'outil **Transfert de personnage** depuis l'onglet Outils.
-2. Sélectionnez la sauvegarde source et la sauvegarde cible.
-3. Transférez un seul joueur ou tous les joueurs.
-4. Utile pour migrer entre des serveurs coopératifs et dédiés.
+**Comment ça marche :** Contrairement à Fix Host Save (qui **échange** deux fichiers), Character Transfer **copie** un joueur d'un `Level.sav` vers un autre. La sauvegarde source est intacte.
+
+1. Ouvrez PST → **Outils** → **Transfert de caractères**.
+2. **Chargez la sauvegarde source** — cliquez sur le bouton Source et sélectionnez le `Level.sav` qui contient le caractère que vous souhaitez copier (par exemple, votre ancien serveur).
+3. **Chargez la sauvegarde cible** — cliquez sur le bouton Cible et sélectionnez le `Level.sav` dans lequel vous souhaitez copier (par exemple, votre nouveau serveur).
+4. **Sélectionnez le joueur** à transférer dans la liste des lecteurs sources sur la gauche.
+5. **Choisissez où les placer** dans la liste Joueur cible à droite : vous pouvez écraser un joueur existant ou le laisser vide pour un nouvel emplacement.
+6. Cliquez sur **Transférer**. Le personnage, Pals, l'inventaire et l'appartenance à la guilde sont copiés dans la sauvegarde cible.
+7. Enregistrez les modifications. Des sauvegardes automatiques sont créées.
+
+Vous pouvez également transférer **tous les joueurs** en même temps en utilisant le bouton « Transférer tout ».
 
 </details>
 
@@ -658,7 +661,7 @@ Les développeurs ne sont pas responsables de toute perte de données de sauvega
 
 </div>
 
-- **Discord :** [Join us for support, base builds, and more!](https://discord.gg/sYcZwcT4cT)
+-**Discord :** [Join us for support, base builds, and more!](https://discord.gg/sYcZwcT4cT)
 - **GitHub Problèmes :** [Report a bug](https://github.com/deafdudecomputers/PalworldSaveTools/issues)
 - **Mods Nexus :** [Download & discuss](https://www.nexusmods.com/palworld/mods/3190)
 
@@ -711,7 +714,6 @@ Ce projet n'existerait pas sans les personnes qui le soutiennent.
 **[dkoz](https://github.com/dkoz)** — L'homme derrière les pièces d'identité. Fournit des identifiants de données de jeu, un aperçu structurel des codes d'identification et une connaissance approfondie de la manière dont les données de Palworld sont reliées entre elles, ce qui garantit la précision de l'outil à chaque mise à jour du jeu.
 
 **[oMaN-Rod](https://github.com/oMaN-Rod)** — Fourni l'analyseur de sauvegarde d'origine à partir duquel ce projet est dérivé. Sans son travail fondamental sur le piratage du format de sauvegarde Palworld, rien de tout cela n’existerait. Le fork a rationalisé et simplifié son analyseur pour en faire ce qu'est PST aujourd'hui.
-
 **[Okaetsu](https://github.com/Okaetsu)** — Informations sur le modding qui ont rendu possible l'importation/exportation de base. Sa compréhension de la façon dont Palworld structure les données de base du côté du modding a comblé le fossé entre le modding et l'édition de sauvegarde, faisant de cette fonctionnalité une réalité.
 
 

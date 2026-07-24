@@ -66,10 +66,10 @@ Ya sea que necesite administrar un servidor dedicado, migrar entre servidores co
 - [El equipo de Palworld](#el-equipo-de-palworld)
 - [Construyendo desde la fuente] (#construcción-desde-la-fuente)
 - [Contribuyendo](#contribuyendo)
-- [El equipo Palworld](#el-equipo-palworld)
-
+- [Descargo de responsabilidad](#descargo de responsabilidad)
 - [Soporte](#soporte)
 - [Licencia](#licencia)
+- [El equipo Palworld](#el-equipo-palworld)
 - [Agradecimientos](#agradecimientos)
 
 
@@ -124,7 +124,7 @@ Una interfaz de edición profunda para cualquier Pal propiedad de cualquier juga
 - **Modo de trampa**: alternar para expandir todo en mayúsculas: nivel, IVs, almas, rango del condensador a 255; Desbloquea habilidades activas/pasivas ilimitadas y se permiten duplicados.
 - **Exportar/Importar**: haga clic con el botón derecho en cualquier pal para exportarlo como `.pstpal` (comprimido) o `.json`. Importe a espacios vacíos entre los trabajadores del grupo, palbox, DPS o base. Funciona entre partidas guardadas y jugadores.
 - **Max All Pals**: maximiza todas las estadísticas (IVs, almas, rango, nivel) para todos los pals del grupo, todas las páginas de palbox o todos los trabajadores de la base; respeta los límites del modo trampa.
-- **Reparar Pals** ilegal: detecta y limita pals con estadísticas, habilidades o rasgos ilegales por jugador.
+- **Reparar Pals** ilegal: detecta y limita a pals con estadísticas, habilidades o rasgos ilegales por jugador.
 - **Clonar/Eliminar masivamente**: cuadro de diálogo de selección de especies con controles de cantidad y alternancia de fuentes (Party/Palbox/DPS) para operaciones por lotes.
 - Agregue un nuevo Pals o elimine rápidamente con doble clic.
 
@@ -190,7 +190,7 @@ Accesible desde la pestaña **Herramientas** como tarjetas en las que se puede h
 |------|-------------|
 | **Convertir guardados** | Convertir entre formatos SAV y JSON |
 | **Convertir GamePass → Steam** | Convertir archivos guardados de Xbox/GamePass al formato Steam |
-| **Convertir SteamID** | Convierta ID Steam a UID Palworld |
+| **Convertir SteamID** | Convierta ID de Steam a UID de Palworld |
 | **Restaurar mapa** | Aplicar el progreso del mapa completamente desbloqueado a todos los mundos/servidores |
 | **Inyector de ranura** | Aumentar espacios de palbox por jugador |
 | **Modificar Guardar** | Abrir y modificar datos guardados sin procesar |
@@ -344,7 +344,7 @@ PST puede desbloquear el mapa completo (todos los puntos de viaje rápido) para 
 
 Mueve tu mundo cooperativo (donde alojas desde tu PC) a un servidor dedicado para que otros puedan jugar incluso cuando no estés conectado.
 
-**Cómo funciona:** Los guardados cooperativos usan `0001.sav` para el jugador anfitrión. Los servidores dedicados no: cada jugador tiene un UID normal. Fix Host Save cambia tu carácter `0001.sav` a una ranura UID normal para que el servidor te reconozca.
+**Cómo funciona:** Los guardados cooperativos usan `0001.sav` para el jugador anfitrión. Los servidores dedicados no: cada jugador tiene un UID normal. Fix Host Save **intercambia** dos archivos de reproductor (como asientos intercambiables), no una copia. Tu personaje cooperativo en `0001.sav` se intercambia en la ranura del servidor.
 
 1. **Copia tu guardado cooperativo en el servidor.**
    - Ubicación de guardado cooperativo: `%localappdata%\Pal\Saved\SaveGames\YOURID\RANDOMID\`
@@ -360,10 +360,10 @@ Mueve tu mundo cooperativo (donde alojas desde tu PC) a un servidor dedicado par
    - Busque el `Level.sav` del servidor.
    - **Reproductor fuente**: selecciona tu personaje cooperativo (el de `0001.sav`, que figura como anfitrión).
    - **Jugador objetivo**: selecciona el personaje temporal que acabas de crear.
-   - Haga clic en el botón para ejecutar el intercambio.
+- Haga clic en el botón para ejecutar el intercambio.
 
 4. **Inicie el servidor.**
-- Tu personaje cooperativo original (con todo el progreso, Pals, bases) ahora está vinculado al servidor. El marcador de posición temporal desapareció.
+   - Tu personaje cooperativo original (con todo el progreso, Pals, bases) ahora está vinculado al servidor. El marcador de posición temporal desapareció.
 
 </details>
 
@@ -374,7 +374,7 @@ Mueve tu mundo cooperativo (donde alojas desde tu PC) a un servidor dedicado par
 
 Lleva tu personaje del servidor dedicado a un guardado cooperativo local, algo útil si dejas de alquilar un servidor o quieres jugar sin conexión.
 
-**Cómo funciona:** El mismo intercambio de GUID a la inversa. El personaje de tu servidor (UID normal) se intercambia en `0001.sav` (la ranura del host) para que puedas hospedar en modo cooperativo con el progreso de tu servidor.
+**Cómo funciona:** El mismo intercambio de GUID a la inversa: Fix Host Save **intercambia** dos archivos, no una copia. El personaje de tu servidor (UID normal) se intercambia en `0001.sav` (la ranura del host) para que puedas hospedar en modo cooperativo con el progreso de tu servidor.
 
 1. **Copie el servidor guardado en su PC local.**
    - Ubicación para guardar el servidor: `steamapps\common\Palworld\Pal\Saved\SaveGames\0\RANDOMSERVERID\`
@@ -410,7 +410,7 @@ Dado que un intercambio mueve al jugador B a la ranura del anfitrión pero deja 
 
 ---
 
-**Starting state:**
+**Estado inicial:**
 ```
 0001.sav  = Player A (current host)
 1234.sav  = Player B (current client)
@@ -424,7 +424,7 @@ Dado que un intercambio mueve al jugador B a la ranura del anfitrión pero deja 
 - **Fuente**: Jugador A (`0001.sav`). **Objetivo**: Jugador B (`1234.sav`).
 - Haga clic en el botón. Fix Host Save intercambia los dos archivos.
 
-**After step 1:**
+**Después del paso 1:**
 ```
 0001.sav  = Player B  ← now the host with B's character
 1234.sav  = Player A  ← A's data is here, but this UID no longer exists in the game
@@ -437,7 +437,7 @@ Dado que un intercambio mueve al jugador B a la ranura del anfitrión pero deja 
 - Dado que A ya no es el host, Palworld asigna un UID nuevo para el carácter temporal de A (por ejemplo, `9999.sav`).
 - El jugador A alcanza el **Nivel 2** con el personaje temporal y luego todos salen del juego.
 
-**After step 2:**
+**Después del paso 2:**
 ```
 0001.sav  = Player B (host, correct)
 1234.sav  = Player A's original data (not linked to any active UID)
@@ -449,7 +449,7 @@ Dado que un intercambio mueve al jugador B a la ranura del anfitrión pero deja 
 **Paso 3: intercambia los datos originales de A por el nuevo UID de A.**
 - Abra **Fix Host Save** nuevamente con el mismo `Level.sav`.
 - **Fuente**: `1234.sav` (datos originales del jugador A). **Objetivo**: `9999.sav` (personaje temporal del jugador A).
-- Haga clic en el botón. They swap again.
+- Haga clic en el botón. Se intercambian de nuevo.
 
 **Después del paso 3:**
 ```
@@ -471,12 +471,19 @@ Dado que un intercambio mueve al jugador B a la ranura del anfitrión pero deja 
 <details>
 <summary>Haga clic para ampliar</summary>
 
-Transfiere personajes entre diferentes mundos o servidores mientras conservas los personajes, Pals, el inventario y la tecnología:
+Copia a un jugador (con todo Pals, inventario, tecnología y progreso) de un mundo a otro, lo que resulta útil para mover tu personaje entre un mundo cooperativo y un servidor dedicado, o entre dos servidores.
 
-1. Abra la herramienta **Transferencia de personajes** desde la pestaña Herramientas.
-2. Seleccione el guardado de origen y el guardado de destino.
-3. Transferir un solo jugador o todos los jugadores.
-4. Útil para migrar entre servidores cooperativos y dedicados.
+**Cómo funciona:** A diferencia de Fix Host Save (que **intercambia** dos archivos), Character Transfer **copia** un reproductor de un `Level.sav` a otro. La fuente guardada está intacta.
+
+1. Abra PST → **Herramientas** → **Transferencia de personajes**.
+2. **Cargue el código fuente guardado**: haga clic en el botón Fuente y seleccione el `Level.sav` que tiene el carácter que desea copiar (por ejemplo, su servidor anterior).
+3. **Cargue el destino guardado**: haga clic en el botón Destino y seleccione el `Level.sav` al que desea copiar (por ejemplo, su nuevo servidor).
+4. **Seleccione el reproductor** para transferir desde la lista de reproductores de origen a la izquierda.
+5. **Elige dónde colocarlos** en la lista de jugadores objetivo a la derecha. Puedes sobrescribir un jugador existente o dejarlo vacío para un nuevo espacio.
+6. Haga clic en **Transferir**. El personaje, Pals, el inventario y la membresía del gremio se copian en el guardado de destino.
+7. Guarde los cambios. Se crean copias de seguridad automáticas.
+
+También puedes transferir **todos los jugadores** a la vez usando el botón "Transferir todos".
 
 </details>
 
@@ -714,8 +721,7 @@ Este proyecto no existiría sin las personas que lo respaldan.
 **[dkoz](https://github.com/dkoz)** — El hombre detrás de las identificaciones. Proporciona ID de datos del juego, información estructural sobre los códigos de ID y un conocimiento profundo de cómo se conectan los datos de Palworld que mantiene la herramienta precisa con cada actualización del juego.
 
 **[oMaN-Rod](https://github.com/oMaN-Rod)**: proporcionó el analizador de guardado original del que se bifurcó este proyecto. Sin su trabajo fundamental para descifrar el formato de guardado de Palworld, nada de esto existiría. La bifurcación simplificó y simplificó su analizador hasta convertirlo en lo que es PST hoy.
-
-**[Okaetsu](https://github.com/Okaetsu)** — Información sobre modificaciones que hicieron posible la importación/exportación básica. Su comprensión de cómo Palworld estructura los datos básicos desde el lado de la modificación cerró la brecha entre la modificación y la edición guardada, haciendo de esta característica una realidad.
+**[Okaetsu](https://github.com/Okaetsu)** — Información sobre modificaciones que hizo posible la importación/exportación básica. Su comprensión de cómo Palworld estructura los datos básicos desde el lado de la modificación cerró la brecha entre la modificación y la edición guardada, haciendo de esta característica una realidad.
 
 
 
@@ -737,7 +743,7 @@ Este proyecto no existiría sin las personas que lo respaldan.
 Un enorme agradecimiento a:
 
 - **Palworld** desarrollado por Pocketpair, Inc. — para el juego que nos unió a todos.
-- **Los reporteros de errores**: cada problema presentado, cada caso extremo encontrado, cada registro pegado en Discord. Usted hace que esta herramienta sea más sólida con cada informe.
+- **Los reporteros de errores**: cada problema presentado, cada caso límite encontrado, cada registro pegado en Discord. Usted hace que esta herramienta sea más sólida con cada informe.
 - **La comunidad de modding de Palworld**: compañeros modders, desarrolladores de herramientas y expertos que comparten conocimientos, realizan ingeniería inversa en formatos e impulsan el ecosistema hacia adelante. Este proyecto se sustenta sobre los hombros de ese esfuerzo colectivo.
 - **Todos los contribuyentes y miembros de la comunidad**: ya sea que enviaron un PR, respondieron una pregunta en Discord o simplemente le contaron a un amigo sobre PST, gracias.
 

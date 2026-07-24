@@ -61,10 +61,10 @@ Whether you need to manage a dedicated server, migrate between co-op and dedicat
 - [Troubleshooting](#troubleshooting)
 - [Building from Source](#building-from-source)
 - [Contributing](#contributing)
-- [The Palworld Team](#the-palworld-team)
-
+- [Disclaimer](#disclaimer)
 - [Support](#support)
 - [License](#license)
+- [The Palworld Team](#the-palworld-team)
 - [Acknowledgments](#acknowledgments)
 
 
@@ -339,7 +339,7 @@ PST can unlock the full map (all fast-travel points) for your save:
 
 Move your co-op world (where you host from your PC) to a dedicated server so others can play even when you're offline.
 
-**How it works:** Co-op saves use `0001.sav` for the host player. Dedicated servers don't — every player has a regular UID. Fix Host Save swaps your `0001.sav` character into a regular UID slot so the server recognizes you.
+**How it works:** Co-op saves use `0001.sav` for the host player. Dedicated servers don't — every player has a regular UID. Fix Host Save **exchanges** two player files (like trading seats), not a copy. Your co-op character in `0001.sav` gets swapped into the server's slot.
 
 1. **Copy your co-op save to the server.**
    - Co-op save location: `%localappdata%\Pal\Saved\SaveGames\YOURID\RANDOMID\`
@@ -369,7 +369,7 @@ Move your co-op world (where you host from your PC) to a dedicated server so oth
 
 Take your dedicated server character back to a local co-op save — useful if you stop renting a server or want to play offline.
 
-**How it works:** Same GUID swap in reverse. Your server character (regular UID) gets swapped into `0001.sav` (the host slot) so you can host co-op with your server progress.
+**How it works:** Same GUID swap in reverse — Fix Host Save **exchanges** two files, not a copy. Your server character (regular UID) gets swapped into `0001.sav` (the host slot) so you can host co-op with your server progress.
 
 1. **Copy your server save to your local PC.**
    - Server save location: `steamapps\common\Palworld\Pal\Saved\SaveGames\0\RANDOMSERVERID\`
@@ -466,12 +466,19 @@ Since one swap moves Player B into the host slot but leaves Player A's data sitt
 <details>
 <summary>Click to expand</summary>
 
-Transfer characters between different worlds or servers while preserving characters, Pals, inventory, and technology:
+Copy a player (with all Pals, inventory, technology, and progress) from one world to another — useful for moving your character between a co-op world and a dedicated server, or between two servers.
 
-1. Open the **Character Transfer** tool from the Tools tab.
-2. Select the source save and target save.
-3. Transfer a single player or all players.
-4. Useful for migrating between co-op and dedicated servers.
+**How it works:** Unlike Fix Host Save (which **exchanges** two files), Character Transfer **copies** a player from one `Level.sav` into another. The source save is untouched.
+
+1. Open PST → **Tools** → **Character Transfer**.
+2. **Load the source save** — click the Source button and select the `Level.sav` that has the character you want to copy (e.g., your old server).
+3. **Load the target save** — click the Target button and select the `Level.sav` you want to copy into (e.g., your new server).
+4. **Select the player** to transfer from the Source player list on the left.
+5. **Choose where to place them** in the Target player list on the right — you can overwrite an existing player or leave it empty for a fresh slot.
+6. Click **Transfer**. The character, Pals, inventory, and guild membership are copied to the target save.
+7. Save changes. Automatic backups are created.
+
+You can also transfer **all players** at once using the "Transfer All" button.
 
 </details>
 

@@ -30,7 +30,7 @@
 
 Palworld Save Tools (PST) é um aplicativo de desktop rápido e completo para inspecionar e editar arquivos salvos do Palworld. Construído com Python e PySide6, ele lê e grava diretamente o formato de salvamento compactado do jogo - sem necessidade de mods de jogo.
 
-Se você precisa gerenciar um servidor dedicado, migrar entre servidores cooperativos e dedicados, limpar dados abandonados ou ajustar Pals individual, o PST fornece uma interface unificada única para tudo isso.
+Se você precisa gerenciar um servidor dedicado, migrar entre servidores cooperativos e dedicados, limpar dados abandonados ou ajustar Pals individual, o PST fornece uma interface unificada para tudo isso.
 
 ### Destaques
 
@@ -68,10 +68,6 @@ Se você precisa gerenciar um servidor dedicado, migrar entre servidores coopera
 - [A Equipe Palworld](#a-equipe-palworld)
 - [Agradecimentos](#agradecimentos)
 
-- [Suporte](#suporte)
-- [Licença](#licença)
-- [Agradecimentos](#agradecimentos)
-
 
 
 
@@ -107,7 +103,7 @@ Se você precisa gerenciar um servidor dedicado, migrar entre servidores coopera
 - Edite nomes de jogadores, níveis, estatísticas e pontos de tecnologia.
 - **Aba Estatísticas** — Estatísticas do herói (Saúde, Vigor, Ataque, Defesa, Velocidade de Trabalho, Peso) com valores corretos computados no jogo; Habilidades de relíquia com alternadores e giradores.
 - **Max All Stats** — Limite instantaneamente todas as estatísticas ao máximo (50 pontos).
-- **Operações em massa** entre vários jogadores: gerenciamento de itens, gerenciamento de pal e desbloqueio de tecnologia.
+- **Operações em massa** entre vários jogadores: gerenciamento de itens, gerenciamento pal e desbloqueio de tecnologia.
 - Excluir jogadores inativos por limite de tempo; remova duplicatas.
 
 ### Pal Editor
@@ -124,7 +120,7 @@ Uma interface de edição profunda para qualquer Pal de propriedade de qualquer 
 - **Cheat Mode** — Alterne para expandir todos os limites: nível, IVs, almas, classificação do condensador para 255; desbloquear habilidades ativas/passivas ilimitadas com duplicatas permitidas.
 - **Exportar/Importar** — Clique com o botão direito em qualquer pal para exportar como `.pstpal` (compactado) ou `.json`. Importe para slots vazios em party, palbox, DPS ou trabalhadores de base. Funciona em salvamentos e jogadores.
 - **Max All Pals** — Maximize todas as estatísticas (IVs, almas, classificação, nível) para todos os pals no grupo, todas as páginas palbox ou todos os trabalhadores da base — respeita os limites do modo de trapaça.
-- **Consertar Illegal Pals** — Detecta e limita pals com estatísticas, habilidades ou características ilegais por jogador.
+- **Consertar Illegal Pals** — Detecte e limite pals com estatísticas, habilidades ou características ilegais por jogador.
 - **Bulk Clone/Delete** — Diálogo de seleção de espécies com controles de quantidade e alternadores de origem (Party/Palbox/DPS) para operações em lote.
 - Adicione novo Pals ou exclua rapidamente com clique duplo.
 
@@ -344,7 +340,7 @@ O PST pode desbloquear o mapa completo (todos os pontos de viagem rápida) para 
 
 Mova seu mundo cooperativo (onde você hospeda seu PC) para um servidor dedicado para que outras pessoas possam jogar mesmo quando você estiver offline.
 
-**Como funciona:** Os salvamentos cooperativos usam `0001.sav` para o jogador anfitrião. Servidores dedicados não — cada jogador tem um UID regular. Fix Host Save troca seu caractere `0001.sav` em um slot UID normal para que o servidor o reconheça.
+**Como funciona:** Os salvamentos cooperativos usam `0001.sav` para o jogador anfitrião. Servidores dedicados não — cada jogador tem um UID regular. Fix Host Save **troca** arquivos de dois jogadores (como assentos de negociação), não uma cópia. Seu personagem cooperativo em `0001.sav` é trocado no slot do servidor.
 
 1. **Copie seu salvamento cooperativo para o servidor.**
    - Local de salvamento cooperativo: `%localappdata%\Pal\Saved\SaveGames\YOURID\RANDOMID\`
@@ -360,10 +356,10 @@ Mova seu mundo cooperativo (onde você hospeda seu PC) para um servidor dedicado
    - Navegue até o `Level.sav` do servidor.
    - **Jogador Fonte**: Selecione seu personagem cooperativo (aquele em `0001.sav` – listado como o anfitrião).
    - **Jogador alvo**: Selecione o personagem temporário que você acabou de criar.
-   - Clique no botão para executar a troca.
+- Clique no botão para executar a troca.
 
 4. **Inicie o servidor.**
-- Seu personagem cooperativo original (com todo o progresso, Pals, bases) agora está vinculado ao servidor. O espaço reservado temporário desapareceu.
+   - Seu personagem cooperativo original (com todo o progresso, Pals, bases) agora está vinculado ao servidor. O espaço reservado temporário desapareceu.
 
 </details>
 
@@ -374,7 +370,7 @@ Mova seu mundo cooperativo (onde você hospeda seu PC) para um servidor dedicado
 
 Leve seu personagem de servidor dedicado de volta para um salvamento cooperativo local – útil se você parar de alugar um servidor ou quiser jogar offline.
 
-**Como funciona:** A mesma troca de GUID ao contrário. O personagem do seu servidor (UID normal) é trocado para `0001.sav` (o slot do host) para que você possa hospedar o modo cooperativo com o progresso do seu servidor.
+**Como funciona:** A mesma troca de GUID ao contrário — Fix Host Save **troca** dois arquivos, não uma cópia. O personagem do seu servidor (UID normal) é trocado para `0001.sav` (o slot do host) para que você possa hospedar o modo cooperativo com o progresso do seu servidor.
 
 1. **Copie o arquivo salvo do servidor para o seu PC local.**
    - Local de salvamento do servidor: `steamapps\common\Palworld\Pal\Saved\SaveGames\0\RANDOMSERVERID\`
@@ -471,12 +467,19 @@ Como uma troca move o Jogador B para o slot de host, mas deixa os dados do Jogad
 <details>
 <summary>Clique para expandir</summary>
 
-Transfira personagens entre diferentes mundos ou servidores preservando personagens, Pals, inventário e tecnologia:
+Copie um jogador (com todos os Pals, inventário, tecnologia e progresso) de um mundo para outro — útil para mover seu personagem entre um mundo cooperativo e um servidor dedicado ou entre dois servidores.
 
-1. Abra a ferramenta **Transferência de personagem** na guia Ferramentas.
-2. Selecione o salvamento de origem e o salvamento de destino.
-3. Transferir um único jogador ou todos os jogadores.
-4. Útil para migrar entre servidores cooperativos e dedicados.
+**Como funciona:** Ao contrário do Fix Host Save (que **troca** dois arquivos), o Character Transfer **copia** um jogador de um `Level.sav` para outro. O salvamento da fonte permanece intacto.
+
+1. Abra PST → **Ferramentas** → **Transferência de personagem**.
+2. **Carregue o arquivo fonte** — clique no botão Fonte e selecione o `Level.sav` que contém o caractere que você deseja copiar (por exemplo, seu servidor antigo).
+3. **Carregue o destino salvo** — clique no botão Destino e selecione o `Level.sav` para o qual deseja copiar (por exemplo, seu novo servidor).
+4. **Selecione o jogador** para transferir na lista de jogadores de origem à esquerda.
+5. **Escolha onde colocá-los** na lista de jogadores alvo à direita — você pode substituir um jogador existente ou deixá-lo vazio para um novo slot.
+6. Clique em **Transferir**. O personagem, Pals, inventário e associação à guilda são copiados para o salvamento de destino.
+7. Salve as alterações. Backups automáticos são criados.
+
+Você também pode transferir **todos os jogadores** de uma só vez usando o botão "Transferir todos".
 
 </details>
 
@@ -714,7 +717,6 @@ Este projeto não existiria sem as pessoas por trás dele.
 **[dkoz](https://github.com/dkoz)** — O homem por trás das identidades. Fornece IDs de dados de jogos, visão estrutural sobre os códigos de ID e conhecimento profundo de como os dados do Palworld são conectados, o que mantém a ferramenta precisa a cada atualização do jogo.
 
 **[oMaN-Rod](https://github.com/oMaN-Rod)** — Fornecido o analisador de salvamento original do qual este projeto se bifurcou. Sem seu trabalho fundamental para quebrar o formato de salvamento do Palworld, nada disso existiria. O fork simplificou e simplificou seu analisador no que o PST é hoje.
-
 **[Okaetsu](https://github.com/Okaetsu)** — Modificação de insights que tornaram possível a importação/exportação básica. Sua compreensão de como o Palworld estrutura os dados básicos do lado do modding preencheu a lacuna entre o modding e a edição salva, tornando esse recurso uma realidade.
 
 

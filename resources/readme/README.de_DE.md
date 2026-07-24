@@ -30,12 +30,12 @@
 
 Palworld Save Tools (PST) ist eine schnelle All-in-One-Desktopanwendung zum Überprüfen und Bearbeiten von Palworld-Sicherungsdateien. Es wurde mit Python und PySide6 erstellt und liest und schreibt das komprimierte Speicherformat des Spiels direkt – keine Spielmodifikationen erforderlich.
 
-Ganz gleich, ob Sie einen dedizierten Server verwalten, zwischen kooperativen und dedizierten Servern migrieren, aufgegebene Daten bereinigen oder einzelne Pals optimieren müssen, PST bietet für alles eine einzige einheitliche Schnittstelle.
+Ganz gleich, ob Sie einen dedizierten Server verwalten, zwischen Co-op- und dedizierten Servern migrieren, aufgegebene Daten bereinigen oder einzelne Pals optimieren müssen, PST bietet für alles eine einzige einheitliche Schnittstelle.
 
 ### Highlights
 
 - **Plattformübergreifend** – Vorgefertigte Binärdateien für **Windows**, **Linux** und **macOS**.
-- **Schnelles natives Parsen** – Einer der schnellsten verfügbaren Lesegeräte für gespeicherte Dateien, angetrieben durch die [`palsav`](src/palsav)-Engine.
+- **Schnelles natives Parsen** – Einer der schnellsten verfügbaren Lesegeräte für gespeicherte Dateien, angetrieben von der [`palsav`](src/palsav)-Engine.
 - **Visuelle Karte** – Interaktive Weltkarte mit Basis-/Spielermarkierungen, Sperrzonen und Koordinatenkalibrierung.
 - **Umfassende Pal-Bearbeitung** – Volle Kontrolle über Statistiken, IVs, Seelen, Fähigkeiten, passives, Arbeitseignungen, Rang und Aussehensflaggen.
 - **Tools auf Serverniveau** – Massenlöschung, Bereinigung, Konvertierung und Zeichenübertragung für Administratoren.
@@ -64,10 +64,6 @@ Ganz gleich, ob Sie einen dedizierten Server verwalten, zwischen kooperativen un
 - [Mitwirken](#mitwirken)
 - [Lizenz](#lizenz)
 - [Das Palworld-Team](#das-palworld-team)
-
-- [Unterstützung](#support)
-- [Lizenz](#license)
-- [Danksagungen](#acknowledgments)
 
 
 
@@ -119,7 +115,7 @@ Eine umfassende Bearbeitungsoberfläche für jedes Pal, das einem beliebigen Spi
 - **Aussehensflaggen** – Boss/Alpha, Lucky/Shiny, Predator, Awakened und Imported/DNA umschalten.
 - **Rang & Sperre** – Rang und bevorzugte Sperrstufe festlegen (0–3).
 - **Cheat-Modus** – Umschalten, um alle Obergrenzen zu erweitern: Level, IVs, Seelen, Kondensatorrang auf 255; Schalten Sie unbegrenzte Aktiv-/Passivfähigkeiten frei, wobei Duplikate zulässig sind.
-- **Exportieren/Importieren** – Klicken Sie mit der rechten Maustaste auf ein beliebiges pal, um es als `.pstpal` (komprimiert) oder `.json` zu exportieren. Importieren Sie in leere Slots über Gruppen-, Palbox-, DPS- oder Basisarbeiter hinweg. Funktioniert für alle Spielstände und Spieler.
+- **Exportieren/Importieren** – Klicken Sie mit der rechten Maustaste auf einen beliebigen pal, um ihn als `.pstpal` (komprimiert) oder `.json` zu exportieren. Importieren Sie in leere Slots über Gruppen-, Palbox-, DPS- oder Basisarbeiter hinweg. Funktioniert für alle Spielstände und Spieler.
 - **Max. Alle Pals** – Max. aller Statistiken (IVs, Seelen, Rang, Level) für alle pals in der Gruppe, alle Palbox-Seiten oder alle Basisarbeiter – berücksichtigt die Obergrenzen für den Cheat-Modus.
 - **Illegales Pals beheben** – pals mit illegalen Statistiken, Fertigkeiten oder Eigenschaften pro Spieler erkennen und begrenzen.
 - **Massenklonen/Löschen** – Artenauswahldialog mit Mengensteuerung und Quellenumschaltung (Party/Palbox/DPS) für Stapelvorgänge.
@@ -199,7 +195,7 @@ Schutzlisten, die Spieler, Gilden und Stützpunkte vor Aufräumarbeiten schütze
 Diese Server-Vorgänge sind über **Menü → Funktionen** zugänglich und umfassen:
 
 - **Löschen** – Leere Gilden, inaktive Basen/Spieler, doppelte Spieler, nicht referenzierte Daten löschen.
-- **Bereinigung** – Entfernen Sie ungültige/modifizierte Elemente, ungültige pals und passives, ungültige Strukturen; illegales pals beheben (Grenze auf zulässiges Maximum); Luftabwehrtürme zurücksetzen; entsperren private chests; alle Strukturen reparieren.
+- **Bereinigung** – Entfernen Sie ungültige/modifizierte Elemente, ungültige pals und passives, ungültige Strukturen; unzulässiges pals beheben (Grenze auf zulässiges Maximum); Luftabwehrtürme zurücksetzen; entsperren private chests; alle Strukturen reparieren.
 - **Zurücksetzen** – Missionen, Dungeons, Bohrinsel, Eindringling, Versorgungslieferungen zurücksetzen.
 - **Zeitstempel** – Negative Zeitstempel korrigieren; Spielerzeiten zurücksetzen.
 - **PalDefender** – `killnearestbase`-Befehle generieren.
@@ -231,7 +227,7 @@ Vorgefertigte Binärdateien sind für alle drei Hauptplattformen ab [GitHub Rele
 | **Linux** | `PalworldSaveTools-*-linux` | Jede moderne Distribution |
 | **macOS** | `PalworldSaveTools-*-macos.dmg` | macOS 12+ (Monterey oder höher) |
 
-Auch erhältlich unter [Nexus Mods](https://www.nexusmods.com/palworld/mods/3190).
+Auch erhältlich für [Nexus Mods](https://www.nexusmods.com/palworld/mods/3190).
 
 1. Laden Sie den passenden Build für Ihre Plattform herunter.
 2. Extrahieren Sie die ausführbare Datei (falls archiviert) und führen Sie sie aus.
@@ -341,7 +337,7 @@ PST kann die vollständige Karte (alle Schnellreisepunkte) für Ihren Speicherst
 
 Verschieben Sie Ihre Koop-Welt (die Sie von Ihrem PC aus hosten) auf einen dedizierten Server, damit andere auch dann spielen können, wenn Sie offline sind.
 
-**So funktioniert es:** Koop-Speicherungen verwenden `0001.sav` für den Host-Spieler. Bei dedizierten Servern ist das nicht der Fall – jeder Spieler hat eine reguläre UID. Fix Host Save tauscht Ihr `0001.sav`-Zeichen in einen regulären UID-Slot aus, damit der Server Sie erkennt.
+**So funktioniert es:** Koop-Speicherungen verwenden `0001.sav` für den Host-Spieler. Bei dedizierten Servern ist das nicht der Fall – jeder Spieler hat eine reguläre UID. Fix Host Save **tauscht** zwei Spielerdateien aus (wie beim Tauschen von Plätzen), keine Kopie. Dein Koop-Charakter in `0001.sav` wird in den Slot des Servers getauscht.
 
 1. **Kopieren Sie Ihren Koop-Speicher auf den Server.**
    - Koop-Speicherort: `%localappdata%\Pal\Saved\SaveGames\YOURID\RANDOMID\`
@@ -357,10 +353,10 @@ Verschieben Sie Ihre Koop-Welt (die Sie von Ihrem PC aus hosten) auf einen dediz
    - Navigieren Sie zum `Level.sav` des Servers.
    - **Quellspieler**: Wählen Sie Ihren Koop-Charakter aus (den in `0001.sav` – aufgeführt als Host).
    - **Zielspieler**: Wählen Sie den temporären Charakter aus, den Sie gerade erstellt haben.
-   - Klicken Sie auf die Schaltfläche, um den Austausch durchzuführen.
+- Klicken Sie auf die Schaltfläche, um den Austausch durchzuführen.
 
 4. **Starten Sie den Server.**
-- Ihr ursprünglicher Koop-Charakter (mit allen Fortschritten, Pals, Basen) ist jetzt mit dem Server verknüpft. Der temporäre Platzhalter ist verschwunden.
+   - Ihr ursprünglicher Koop-Charakter (mit allen Fortschritten, Pals, Basen) ist jetzt mit dem Server verknüpft. Der temporäre Platzhalter ist verschwunden.
 
 </details>
 
@@ -371,7 +367,7 @@ Verschieben Sie Ihre Koop-Welt (die Sie von Ihrem PC aus hosten) auf einen dediz
 
 Bringen Sie Ihren dedizierten Server-Charakter zurück zu einem lokalen Koop-Speicher – nützlich, wenn Sie keinen Server mehr mieten oder offline spielen möchten.
 
-**So funktioniert es:** Gleicher GUID-Austausch in umgekehrter Reihenfolge. Ihr Server-Charakter (reguläre UID) wird in `0001.sav` (den Host-Slot) verschoben, sodass Sie mit Ihrem Server-Fortschritt im Koop-Modus hosten können.
+**So funktioniert es:** Gleicher GUID-Austausch in umgekehrter Reihenfolge – Fix Host Save **tauscht** zwei Dateien aus, keine Kopie. Ihr Server-Charakter (reguläre UID) wird in `0001.sav` (den Host-Slot) verschoben, sodass Sie mit Ihrem Server-Fortschritt im Koop-Modus hosten können.
 
 1. **Kopieren Sie Ihren Serverspeicher auf Ihren lokalen PC.**
    - Speicherort des Servers: `steamapps\common\Palworld\Pal\Saved\SaveGames\0\RANDOMSERVERID\`
@@ -468,12 +464,19 @@ Da ein Austausch Spieler B in den Host-Slot verschiebt, die Daten von Spieler A 
 <details>
 <summary>Zum Erweitern klicken</summary>
 
-Übertragen Sie Charaktere zwischen verschiedenen Welten oder Servern und bewahren Sie dabei Charaktere, Pals, Inventar und Technologie:
+Kopieren Sie einen Spieler (mit allen Pals, Inventar, Technologie und Fortschritt) von einer Welt in eine andere – nützlich, um Ihren Charakter zwischen einer Koop-Welt und einem dedizierten Server oder zwischen zwei Servern zu bewegen.
 
-1. Öffnen Sie das Tool **Charakterübertragung** auf der Registerkarte Extras.
-2. Wählen Sie den Quellspeicher und den Zielspeicher aus.
-3. Transferieren Sie einen einzelnen Spieler oder alle Spieler.
-4. Nützlich für die Migration zwischen Koop- und dedizierten Servern.
+**So funktioniert es:** Im Gegensatz zu Fix Host Save (bei dem zwei Dateien **ausgetauscht** werden) **kopiert** die Charakterübertragung einen Spieler von einem `Level.sav` in ein anderes. Die Quellspeicherung bleibt unberührt.
+
+1. Öffnen Sie PST → **Tools** → **Zeichenübertragung**.
+2. **Laden Sie den Quellspeicher** – klicken Sie auf die Schaltfläche „Quelle“ und wählen Sie den `Level.sav` aus, der das Zeichen enthält, das Sie kopieren möchten (z. B. Ihr alter Server).
+3. **Laden Sie den Zielspeicher** – klicken Sie auf die Schaltfläche „Ziel“ und wählen Sie den `Level.sav` aus, in den Sie kopieren möchten (z. B. Ihren neuen Server).
+4. **Wählen Sie den zu übertragenden Spieler** aus der Liste der Quellspieler auf der linken Seite aus.
+5. **Wählen Sie in der Liste „Zielspieler“ auf der rechten Seite aus, wo sie platziert werden sollen. Sie können einen vorhandenen Spieler überschreiben oder ihn für einen neuen Platz leer lassen.
+6. Klicken Sie auf **Übertragen**. Der Charakter, Pals, das Inventar und die Gildenmitgliedschaft werden in den Zielspeicher kopiert.
+7. Änderungen speichern. Es werden automatische Backups erstellt.
+
+Sie können auch **alle Spieler** auf einmal übertragen, indem Sie auf die Schaltfläche „Alle übertragen“ klicken.
 
 </details>
 
@@ -711,7 +714,6 @@ Ohne die Menschen dahinter gäbe es dieses Projekt nicht.
 **[dkoz](https://github.com/dkoz)** – Der Mann hinter den Ausweisen. Bietet Spieldaten-IDs, strukturelle Einblicke in die ID-Codes und umfassende Kenntnisse darüber, wie die Daten von Palworld miteinander verknüpft sind, sodass das Tool bei jedem Spielupdate korrekt bleibt.
 
 **[oMaN-Rod](https://github.com/oMaN-Rod)** – Stellte den ursprünglichen Speicherparser bereit, von dem dieses Projekt geforkt wurde. Ohne seine grundlegende Arbeit zum Knacken des Palworld-Speicherformats gäbe es das alles nicht. Der Fork hat seinen Parser zu dem optimiert und vereinfacht, was PST heute ist.
-
 **[Okaetsu](https://github.com/Okaetsu)** – Modding-Erkenntnisse, die den Basisimport/-export ermöglichten. Sein Verständnis dafür, wie Palworld Basisdaten von der Modding-Seite aus strukturiert, überbrückte die Lücke zwischen Modding und Save Editing und machte dieses Feature Wirklichkeit.
 
 

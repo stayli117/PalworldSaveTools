@@ -276,6 +276,18 @@ class SkillPicker(QWidget):
                     item.setFlags(item.flags() & ~Qt.ItemIsSelectable)
         else:
             _ensure_passive_data()
+            # 按稀有度 rank 排序（高稀有在前，同 rank 内按中文名）
+            _v2a = {}
+            for a, n in skill_map.items():
+                _v2a.setdefault(n, a)
+            def _prank(nm):
+                a = _v2a.get(nm)
+                if a and isinstance(_pedata._PASSIVE_DATA, dict):
+                    pi = _pedata._PASSIVE_DATA.get(a.lower(), {})
+                    if isinstance(pi, dict):
+                        return pi.get('rank', 1)
+                return 1
+            names = sorted(names, key=lambda nm: (-_prank(nm), t(f"passive.{nm}", nm)))
             for name in names:
                 if not name:
                     continue

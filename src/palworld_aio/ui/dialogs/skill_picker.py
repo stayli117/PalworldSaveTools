@@ -10,6 +10,7 @@ from palworld_aio.editor.pal_editor import _get_cached_pixmap, _get_element_pixm
 from palworld_aio.editor.pal_editor import data as _pedata
 import palworld_aio.managers.data_manager as dm
 from palworld_aio.ui.chrome.styles import PICKER_BG_STYLE, PICKER_SEARCH_STYLE, PICKER_LIST_STYLE
+from palworld_aio.widgets.ime_popup import setup_ime_popup, show_ime_popup
 from resource_resolver import resource_path
 from palsav import json_tools
 
@@ -176,7 +177,9 @@ class _ActiveSkillDelegate(QStyledItemDelegate):
 class SkillPicker(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowFlags(Qt.Popup | Qt.FramelessWindowHint)
+        # Qt.Popup 在 Windows 上不会激活窗口，IME（中文输入法）无法附着，
+        # 改用可激活的 Qt.Tool 无边框窗口 + 失活自动关闭（见 ime_popup.py）
+        setup_ime_popup(self)
         self.setStyleSheet(PICKER_BG_STYLE)
         layout = QVBoxLayout(self)
         layout.setContentsMargins(4, 4, 4, 4)
@@ -338,7 +341,7 @@ class SkillPicker(QWidget):
         self._list.setUpdatesEnabled(True)
         move_pos = pos if pos else QCursor.pos()
         self.move(move_pos)
-        self.show()
+        show_ime_popup(self)
         self._search.setFocus()
         while self.isVisible():
             QApplication.processEvents()

@@ -2,11 +2,12 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QLineEdit, QListWidget, QLis
 from PySide6.QtCore import Qt, QThread, QPoint
 from i18n import t
 from palworld_aio.ui.chrome.styles import PICKER_SEARCH_STYLE, PICKER_LIST_STYLE, PICKER_BG_STYLE
+from palworld_aio.widgets.ime_popup import setup_ime_popup, show_ime_popup
 
 
 def show_player_select_popup(anchor_btn, player_list, current_uid=None):
     popup = QWidget()
-    popup.setWindowFlags(Qt.Popup | Qt.FramelessWindowHint)
+    setup_ime_popup(popup)
     popup.setStyleSheet(PICKER_BG_STYLE)
     layout = QVBoxLayout(popup)
     layout.setContentsMargins(4, 4, 4, 4)
@@ -41,7 +42,7 @@ def show_player_select_popup(anchor_btn, player_list, current_uid=None):
         ph = popup.sizeHint().height()
         if popup.y() + ph > screen_geo.bottom() and popup.y() - ph > screen_geo.top():
             popup.move(popup.x(), popup.y() - ph - anchor_btn.height())
-    popup.show()
+    show_ime_popup(popup)
     search.setFocus()
 
     result = {'value': None}

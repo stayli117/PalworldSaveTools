@@ -3,6 +3,7 @@ import sys
 from functools import partial
 from palsav import json_tools
 from palworld_aio.widgets.toggle_check import ToggleCheckBtn
+from palworld_aio.widgets.ime_popup import setup_ime_popup, show_ime_popup
 import time
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QComboBox, QCheckBox, QTreeWidget, QTreeWidgetItem, QSplitter, QFrame, QScrollArea, QGridLayout, QGroupBox, QMenu, QHeaderView, QMessageBox, QFileDialog, QInputDialog, QDialog, QSpinBox, QDoubleSpinBox, QSizePolicy, QAbstractItemView, QSpacerItem, QTabWidget, QTabBar, QStyleOptionTab, QStyle, QApplication, QStyledItemDelegate, QListWidget, QListWidgetItem, QLineEdit, QListView, QStackedWidget
 from PySide6.QtCore import Qt, Signal, QTimer, QPropertyAnimation, QEasingCurve, QSize, QPoint, QRect, QEvent, QMargins, QThread
@@ -3047,7 +3048,8 @@ class BaseInventoryTab(QWidget):
             pass
     def _show_guild_popup(self):
         popup = QWidget()
-        popup.setWindowFlags(Qt.Popup | Qt.FramelessWindowHint)
+        setup_ime_popup(popup)
+        self._guild_popup = popup
         popup.setStyleSheet('QWidget { background: rgba(18,20,24,0.98); border: 1px solid rgba(125,211,252,0.2); border-radius: 8px; }')
         layout = QVBoxLayout(popup)
         layout.setContentsMargins(4, 4, 4, 4)
@@ -3093,7 +3095,8 @@ class BaseInventoryTab(QWidget):
             ph = popup.sizeHint().height()
             if popup.y() + ph > screen_geo.bottom() and popup.y() - ph > screen_geo.top():
                 popup.move(popup.x(), popup.y() - ph - self.guild_button.height())
-        popup.show()
+        show_ime_popup(popup)
+        search.setFocus()
     def _clear_guild_selection(self):
         self._current_guild_id = None
         self._current_guild_name = ''
@@ -3107,7 +3110,8 @@ class BaseInventoryTab(QWidget):
         if not self._current_guild_id:
             return
         popup = QWidget()
-        popup.setWindowFlags(Qt.Popup | Qt.FramelessWindowHint)
+        setup_ime_popup(popup)
+        self._base_popup = popup
         popup.setStyleSheet('QWidget { background: rgba(18,20,24,0.98); border: 1px solid rgba(125,211,252,0.2); border-radius: 8px; }')
         layout = QVBoxLayout(popup)
         layout.setContentsMargins(4, 4, 4, 4)
@@ -3153,7 +3157,8 @@ class BaseInventoryTab(QWidget):
             ph = popup.sizeHint().height()
             if popup.y() + ph > screen_geo.bottom() and popup.y() - ph > screen_geo.top():
                 popup.move(popup.x(), popup.y() - ph - self.base_button.height())
-        popup.show()
+        show_ime_popup(popup)
+        search.setFocus()
     def _clear_base_selection(self):
         self._current_base_id = None
         self._current_base_name = ''

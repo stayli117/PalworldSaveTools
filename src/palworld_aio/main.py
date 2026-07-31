@@ -83,7 +83,7 @@ try:
     with redirect_stderr(stderr_capture):
         from PySide6.QtWidgets import QApplication
         from PySide6.QtGui import QIcon
-        from PySide6.QtCore import Qt, qInstallMessageHandler, QtMsgType
+        from PySide6.QtCore import Qt, qInstallMessageHandler
         from i18n import init_language
         from import_libs import center_window
         from palworld_aio import constants
@@ -93,17 +93,32 @@ try:
 except Exception:
     from PySide6.QtWidgets import QApplication
     from PySide6.QtGui import QIcon
-    from PySide6.QtCore import Qt, qInstallMessageHandler, QtMsgType
+    from PySide6.QtCore import Qt, qInstallMessageHandler
     from i18n import init_language
     from import_libs import center_window
     from palworld_aio import constants
     from palworld_aio.ui import MainWindow
     from palworld_aio.managers.save_manager import save_manager
     from loading_manager import show_error_screen
-def qt_message_handler(mode, context, message):
-    if 'QThreadStorage' in str(message) and 'destroyed before end of thread' in str(message):
-        return
-qInstallMessageHandler(qt_message_handler)
+from palworld_aio import crashlog
+# 安装全局崩溃捕获：sys.excepthook + Qt 消息处理器（替代原来的空操作）。
+# 必须在创建 QApplication 之前安装，以便捕获事件循环内被吞掉的异常。
+crashlog.install_crash_reporting()
+
+
+class CrashApp(QApplication):
+    """重写 notify，捕获 Qt 事件循环里被吞掉的异常（例如槽函数内崩溃）。
+
+    普通异常经 sys.excepthook 落盘；但 Qt 在事件分发时抛出的异常既不进 excepthook
+    也不进可见 stderr（Windows 双击启动尤为明显），必须在 notify 这一层拦截。
+    """
+    def notify(self, receiver, event):
+        try:
+            return super().notify(receiver, event)
+        except Exception:
+            et, ev, tb = sys.exc_info()
+            crashlog.report_exception(et, ev, tb, context='QtEventLoop')
+            return False
 
 def _apply_dpi_awareness():
     """在创建任何窗口前声明 DPI 感知，否则 Windows 会把进程当成 96DPI 位图由系统拉伸，
@@ -292,7 +307,7 @@ def run_aio():
         from palworld_aio.widgets import LoadingPopup
         app = QApplication.instance()
         if app is None:
-            app = QApplication(sys.argv)
+            app = CrashApp(sys.argv)
         popup = LoadingPopup()
         popup.show_with_fade()
         def hide_popup():
@@ -302,7 +317,7 @@ def run_aio():
         sys.exit(app.exec())
     app = QApplication.instance()
     if app is None:
-        app = QApplication(sys.argv)
+        app = CrashApp(sys.argv)
     try:
         app.setHighDpiScaleFactorRoundingPolicy(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
     except Exception:

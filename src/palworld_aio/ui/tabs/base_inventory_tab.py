@@ -3556,6 +3556,7 @@ class BaseInventoryTab(QWidget):
             self.container_info.empty_slots_label.setText(t('base_inventory.empty').format(count=empty_slots) if t else f'Empty: {empty_slots}')
     def _on_item_count_changed(self, slot_index, new_count):
         self._update_container_stats()
+
     def _add_item(self):
         if not self.manager.inventory_container:
             self._show_warning(t('base_inventory.select_container_first') if t else 'Please select a container first')

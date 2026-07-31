@@ -694,6 +694,7 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
         self.pal_info.set_clicked_pal(None)
         self._mark_dps_modified()
         self._update_box_label()
+
     def _add_new_dps_pal(self, slot_index):
         from .create_dialogs import PalCreateDialog
         dlg = PalCreateDialog(self, False, slot_index, is_dps=True)
@@ -1528,6 +1529,7 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
             self._save_dps(force=True)
         show_information(self, t('edit_pals.ctx.bulk_max_buff'), t('edit_pals.bulk_max_buff_success_all', count=count))
         self._update_dashboard_stats()
+
     def _add_new_pal_at_slot(self, slot_index):
         sender = self.sender()
         is_party = sender in self.party_slots

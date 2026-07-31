@@ -2502,6 +2502,7 @@ class ItemPickerDialog(QDialog):
             return max(1, int(self.qty_input.text()))
         except ValueError:
             return 1
+
     def _add_item(self):
         qty = self._current_qty()
         if self._multi_select:

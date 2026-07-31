@@ -415,6 +415,7 @@ class PlayerItemActionDialog(QDialog):
         if reply == QMessageBox.Yes:
             self.item_action_selected.emit(self.selected_item_id, 'remove_all', selected_players)
             self._refresh_after_action()
+
     def _on_add_item(self):
         if not self.selected_item_id:
             return

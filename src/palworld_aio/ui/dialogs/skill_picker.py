@@ -30,6 +30,20 @@ def _load_learnset():
     except Exception:
         _LEARNSET_CACHE = {}
         _LEARNSET_CI = {}
+
+# 主动技能「其余」分组时的元素排列顺序（按游戏常规元素序；未知元素排最后）
+_ELEM_ORDER = {
+    'normal': 0,
+    'fire': 1,
+    'water': 2,
+    'leaf': 3,
+    'electricity': 4,
+    'ice': 5,
+    'earth': 6,
+    'dragon': 7,
+    'dark': 8,
+    'none': 9,
+}
 class _PassiveSkillDelegate(QStyledItemDelegate):
     def paint(self, painter, option, index):
         painter.save()
@@ -186,12 +200,12 @@ class SkillPicker(QWidget):
         layout.setContentsMargins(4, 4, 4, 4)
         layout.setSpacing(2)
         self._search = QLineEdit()
-        self._search.setPlaceholderText('Search...')
+        self._search.setPlaceholderText(t('common.search') if t else 'Search...')
         self._search.setStyleSheet(PICKER_SEARCH_STYLE)
         layout.addWidget(self._search)
         self._list = QListWidget()
         self._list.setStyleSheet(PICKER_LIST_STYLE)
-        self._list.setMaximumHeight(100)
+        self._list.setMaximumHeight(200)
         self._list.setMinimumWidth(220)
         layout.addWidget(self._list)
         self._anim_timer = None
@@ -230,15 +244,32 @@ class SkillPicker(QWidget):
         if is_active:
             self._list.setItemDelegate(_ActiveSkillDelegate(self._list))
             _ensure_skill_data()
-            learnset_keys = set()
+            learnset_info = {}
+            pal_elements = []
             if pal_asset:
                 _load_learnset()
                 ls = _LEARNSET_CACHE.get(pal_asset) or _LEARNSET_CI.get(pal_asset.lower(), [])
                 if not ls:
-                    stripped = re.sub('_v\\d+$', '', pal_asset)
+                    stripped = re.sub(r'_v\d+$', '', pal_asset)
                     if stripped != pal_asset:
                         ls = _LEARNSET_CACHE.get(stripped) or _LEARNSET_CI.get(stripped.lower(), [])
-                learnset_keys = {m.get('WazaID', '').replace('EPalWazaID::', '').lower() for m in ls}
+                for m in ls:
+                    wk = m.get('WazaID', '').replace('EPalWazaID::', '').lower()
+                    if wk:
+                        learnset_info[wk] = (m.get('level'), m.get('source'))
+            learnset_keys = set(learnset_info)
+            # 帕鲁属性（有序：主属性在前、次属性其次），用于主动技能排序时同属性优先展示
+            try:
+                from palworld_aio.editor.pal_editor import get_pal_base_data
+                _pa = re.sub(r'_v\d+$', '', pal_asset)
+                _entry = get_pal_base_data(_pa) or get_pal_base_data(_pa.lower())
+                if _entry and isinstance(_entry.get('elements'), dict):
+                    pal_elements = list(_entry['elements'].keys())
+            except Exception:
+                pal_elements = []
+            elem_rank = {e.lower(): i for i, e in enumerate(pal_elements)}
+            # 先收集候选（含属性优先级），再统一排序，避免逐项插入打乱顺序
+            active_entries = []
             for name in names:
                 if not name:
                     continue
@@ -253,10 +284,21 @@ class SkillPicker(QWidget):
                 if use_exclusions:
                     if key not in learnset_keys and any((pat.lower() in key for pat in dm._SKILL_EXCLUSION_PATTERNS)):
                         continue
-                item = QListWidgetItem(t(f"skill.{name}", name))
                 info = _pedata._SKILL_DATA.get(key, {}) if isinstance(_pedata._SKILL_DATA, dict) else {}
                 elem = info.get('element', 'Normal')
-                pwr = info.get('power', 0)
+                pwr = info.get('power', 0) or 0
+                prio = elem_rank.get(elem.lower(), 999) if pal_elements else 0
+                learn = learnset_info.get(key)
+                learnable = learn is not None
+                active_entries.append({'name': name, 'asset': asset, 'key': key, 'info': info, 'elem': elem, 'pwr': pwr, 'prio': prio, 'learn': learn, 'learnable': learnable})
+            if pal_elements:
+                # 可自然习得置顶分组；组内同属性优先(主→次→其余)，再按元素聚拢、威力降序、中文名
+                active_entries.sort(key=lambda e: (0 if e['learnable'] else 1, e['prio'], _ELEM_ORDER.get(e['elem'].lower(), 999), -e['pwr'], e['name']))
+            else:
+                active_entries.sort(key=lambda e: e['name'])
+            for e in active_entries:
+                name = e['name']; asset = e['asset']; key = e['key']; info = e['info']; elem = e['elem']; pwr = e['pwr']
+                item = QListWidgetItem(t(f"skill.{name}", name))
                 item.setData(Qt.UserRole + 1, elem)
                 item.setData(Qt.UserRole + 2, pwr)
                 item.setText(t(f"skill.{name}", name))
@@ -271,6 +313,13 @@ class SkillPicker(QWidget):
                 cd = info.get('cooldown', 0)
                 if cd:
                     tip_parts.append(f"{t('skill.tooltip.cooldown')}: {cd}s")
+                learn = e.get('learn')
+                if learn:
+                    lvl, src = learn
+                    if src == 'blueprint':
+                        tip_parts.append(t('skill.learn_blueprint', 'Blueprint'))
+                    elif lvl:
+                        tip_parts.append(t('skill.learn_level', 'Lv{level} learn').format(level=lvl))
                 desc = info.get('description', '')
                 if desc:
                     tip_parts.append('')

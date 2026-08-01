@@ -1,0 +1,71 @@
+name: Build on Push (Windows standalone)
+
+# 每次推送到 main_cn 自动构建 Windows 单机版并上传为 Artifact（不发布、不上传 Nexus）。
+# 适合自用：推送完即可在 Actions 运行页的 Artifacts 区下载 PST_standalone_v*.zip。
+# 新推送会取消上一次还在排队的构建，避免浪费 Runner 分钟。
+
+on:
+  push:
+    branches:
+      - main_cn
+    paths-ignore:
+      - '**/*.md'
+      - 'README*'
+      - 'changelogs.md'
+      - 'LICENSE'
+      - 'license'
+      - '.workbuddy/**'
+  # 手动触发兜底：当 push 因推送身份（自动化令牌）未自动派发时，
+  # 可到 Actions 页面手动点 "Run workflow" 触发。
+  workflow_dispatch:
+
+concurrency:
+  group: build-on-push-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build-windows-standalone:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
+
+      - name: Bootstrap environment
+        id: env
+        uses: ./.github/actions/setup-build-env
+
+      - name: Add 7-Zip to PATH
+        shell: pwsh
+        run: |
+          $paths = @(
+            "C:\Program Files\7-Zip"
+            "C:\Program Files (x86)\7-Zip"
+          )
+          foreach ($p in $paths) {
+            if (Test-Path "$p\7z.exe") {
+              echo "Found 7z at: $p\7z.exe"
+              echo "$p" >> $env:GITHUB_PATH
+              break
+            }
+          }
+
+      - name: Build cx_Freeze standalone
+        run: uv run python build/cx_freeze/build_cx.py
+
+      - name: List standalone build output
+        shell: bash
+        run: |
+          echo "=== .7z archive ==="
+          ls -la *.7z 2>/dev/null || echo "No .7z files"
+
+      - name: Upload standalone artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: windows-standalone
+          path: PST_standalone_v*.7z
+          if-no-files-found: error

@@ -1,7 +1,7 @@
 import copy
 import os
 from functools import partial
-from PySide6.QtWidgets import QApplication, QDialog, QFrame, QGridLayout, QHBoxLayout, QInputDialog, QLabel, QListWidget, QListWidgetItem, QPushButton, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QApplication, QDialog, QFrame, QGridLayout, QHBoxLayout, QInputDialog, QLabel, QLineEdit, QListWidget, QListWidgetItem, QPushButton, QVBoxLayout, QWidget
 from PySide6.QtCore import Qt, QEvent, QPoint, QTimer
 from PySide6.QtGui import QPixmap
 from i18n import t, desc_t
@@ -491,6 +491,89 @@ class PalInfoHandlerMixin:
         self._refresh()
         show_information(self, t('edit_pals.all_passives_btn'), t('edit_pals.all_passives_done', count=len(all_keys)))
 
+    def _on_select_passives(self):
+        if not PalFrame._cheat_mode:
+            show_warning(self, t('edit_pals.passive_loadouts'), t('edit_pals.all_passives_cheat_only'))
+            return
+        if not self._raw:
+            show_warning(self, t('edit_pals.passive_loadouts'), t('edit_pals.loadouts_no_pal'))
+            return
+        _ensure_passive_data()
+        PalFrame._load_maps()
+        all_keys = sorted(PalFrame._PASSMAP.keys())
+        if not all_keys:
+            show_warning(self, t('edit_pals.passive_loadouts'), t('edit_pals.loadouts_no_passives'))
+            return
+        cur_set = set(self._get_current_passive_list())
+        from palworld_aio.editor.dialogs import ThemedDialog
+        dlg = ThemedDialog(self)
+        dlg.setWindowTitle(t('edit_pals.select_passives_title'))
+        dlg.setMinimumSize(440, 540)
+        dlg.setMaximumSize(560, 640)
+        inner = QWidget()
+        inner.setStyleSheet('QWidget { background: transparent; }')
+        il = QVBoxLayout(inner)
+        il.setContentsMargins(8, 4, 8, 8)
+        il.setSpacing(6)
+        search = QLineEdit()
+        search.setPlaceholderText(t('edit_pals.select_passives_search'))
+        search.setStyleSheet('QLineEdit { background: rgba(10,14,20,0.95); border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; color: #E2E8F0; font-size: 11px; padding: 6px 8px; } QLineEdit:focus { border: 1px solid rgba(125,211,252,0.5); }')
+        il.addWidget(search)
+        list_widget = QListWidget()
+        list_widget.setStyleSheet('QListWidget { background: rgba(10,14,20,0.95); border: 1px solid rgba(125,211,252,0.15); border-radius: 4px; color: #E2E8F0; font-size: 10px; } QListWidget::item { padding: 4px 8px; } QListWidget::item:hover { background: rgba(125,211,252,0.08); } QListWidget::item:selected { background: rgba(125,211,252,0.15); color: #7DD3FC; }')
+        items = []
+        for key in all_keys:
+            english = PalFrame._PASSMAP.get(key, key)
+            label = t(f'passive.{english}', english)
+            item = QListWidgetItem(label)
+            item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
+            item.setCheckState(Qt.Checked if key in cur_set else Qt.Unchecked)
+            item.setData(Qt.UserRole, key)
+            list_widget.addItem(item)
+            items.append(item)
+        il.addWidget(list_widget, 1)
+
+        def _filter(text):
+            text = text.strip().lower()
+            for it in items:
+                name = it.text().lower()
+                key = str(it.data(Qt.UserRole)).lower()
+                it.setHidden(text not in name and text not in key)
+        search.textChanged.connect(_filter)
+
+        btn_row = QHBoxLayout()
+        btn_row.setSpacing(4)
+        select_all_btn = QPushButton(t('edit_pals.select_passives_select_all'))
+        select_all_btn.setStyleSheet('QPushButton { background: rgba(125,211,252,0.08); color: #7DD3FC; border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; padding: 6px 10px; font-size: 10px; font-weight: 600; } QPushButton:hover { background: rgba(125,211,252,0.16); }')
+        select_all_btn.clicked.connect(lambda: [it.setCheckState(Qt.Checked) for it in items])
+        btn_row.addWidget(select_all_btn)
+        deselect_all_btn = QPushButton(t('edit_pals.select_passives_deselect_all'))
+        deselect_all_btn.setStyleSheet('QPushButton { background: rgba(125,211,252,0.08); color: #7DD3FC; border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; padding: 6px 10px; font-size: 10px; font-weight: 600; } QPushButton:hover { background: rgba(125,211,252,0.16); }')
+        deselect_all_btn.clicked.connect(lambda: [it.setCheckState(Qt.Unchecked) for it in items])
+        btn_row.addWidget(deselect_all_btn)
+        btn_row.addStretch()
+        apply_btn = QPushButton(t('edit_pals.select_passives_apply'))
+        apply_btn.setStyleSheet('QPushButton { background: rgba(16,185,129,0.12); color: #4ADE80; border: 1px solid rgba(16,185,129,0.25); border-radius: 4px; padding: 6px 18px; font-size: 10px; font-weight: 700; } QPushButton:hover { background: rgba(16,185,129,0.22); color: #FFFFFF; }')
+        btn_row.addWidget(apply_btn)
+        cancel_btn = QPushButton(t('edit_pals.cancel'))
+        cancel_btn.setStyleSheet('QPushButton { background: rgba(125,211,252,0.08); color: #7DD3FC; border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; padding: 6px 18px; font-size: 10px; font-weight: 600; } QPushButton:hover { background: rgba(125,211,252,0.16); }')
+        btn_row.addWidget(cancel_btn)
+        il.addLayout(btn_row)
+
+        def _apply():
+            selected = [it.data(Qt.UserRole) for it in items if it.checkState() == Qt.Checked]
+            if not selected:
+                show_warning(dlg, t('edit_pals.select_passives_title'), t('edit_pals.select_passives_none'))
+                return
+            self._raw['PassiveSkillList'] = {'array_type': 'NameProperty', 'id': None, 'value': {'values': selected}, 'type': 'ArrayProperty'}
+            self._ps_page = 0
+            self._refresh()
+            show_information(dlg, t('edit_pals.select_passives_title'), t('edit_pals.select_passives_done', count=len(selected)))
+            dlg.accept()
+        apply_btn.clicked.connect(_apply)
+        cancel_btn.clicked.connect(dlg.reject)
+        dlg.exec()
+
     def _on_passive_loadout(self):
         from resource_resolver import get_user_config_dir
         loadouts_path = os.path.join(get_user_config_dir(), 'passive_loadouts.json')
@@ -805,6 +888,8 @@ class PalInfoHandlerMixin:
         PalFrame._cheat_mode = self.info_cheat_btn.isChecked()
         if hasattr(self, '_all_passives_btn'):
             self._all_passives_btn.setVisible(PalFrame._cheat_mode)
+        if hasattr(self, '_select_passives_btn'):
+            self._select_passives_btn.setVisible(PalFrame._cheat_mode)
         self._as_page = 0
         self._ps_page = 0
         self._refresh()

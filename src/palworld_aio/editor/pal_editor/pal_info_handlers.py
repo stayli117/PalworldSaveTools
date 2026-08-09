@@ -1,9 +1,9 @@
 import copy
 import os
 from functools import partial
-from PySide6.QtWidgets import QApplication, QDialog, QFrame, QGridLayout, QHBoxLayout, QInputDialog, QLabel, QLineEdit, QListWidget, QListWidgetItem, QPushButton, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QApplication, QComboBox, QDialog, QFrame, QGridLayout, QHBoxLayout, QInputDialog, QLabel, QLineEdit, QListWidget, QListWidgetItem, QPushButton, QVBoxLayout, QWidget
 from PySide6.QtCore import Qt, QEvent, QPoint, QTimer
-from PySide6.QtGui import QPixmap
+from PySide6.QtGui import QColor, QPixmap
 from i18n import t, desc_t
 import nerdfont as nf
 from loading_manager import show_information, show_warning, show_question
@@ -505,6 +505,18 @@ class PalInfoHandlerMixin:
             show_warning(self, t('edit_pals.passive_loadouts'), t('edit_pals.loadouts_no_passives'))
             return
         cur_set = set(self._get_current_passive_list())
+        import palworld_aio.managers.data_manager as dm
+        _rank_names = {1: t('passive.rank_common', 'Common'), 2: t('passive.rank_rare', 'Rare'), 3: t('passive.rank_rare', 'Rare'), 4: t('passive.rank_epic', 'Epic'), 5: t('passive.rank_epic', 'Epic')}
+
+        def _rank_label(rank):
+            return _rank_names.get(rank, t('passive.rank_negative', 'Negative')) if rank > 0 else t('passive.rank_negative', 'Negative')
+
+        entries = []
+        for key in all_keys:
+            english = PalFrame._PASSMAP.get(key, key)
+            info = _data._PASSIVE_DATA.get(key.lower(), {}) if isinstance(_data._PASSIVE_DATA, dict) else {}
+            rank = info.get('rank', 1) if isinstance(info, dict) else 1
+            entries.append({'key': key, 'label': t(f'passive.{english}', english), 'rank': rank})
         from palworld_aio.editor.dialogs import ThemedDialog
         dlg = ThemedDialog(self)
         dlg.setWindowTitle(t('edit_pals.select_passives_title'))
@@ -515,22 +527,25 @@ class PalInfoHandlerMixin:
         il = QVBoxLayout(inner)
         il.setContentsMargins(8, 4, 8, 8)
         il.setSpacing(6)
+        top_row = QHBoxLayout()
+        top_row.setSpacing(4)
         search = QLineEdit()
         search.setPlaceholderText(t('edit_pals.select_passives_search'))
         search.setStyleSheet('QLineEdit { background: rgba(10,14,20,0.95); border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; color: #E2E8F0; font-size: 11px; padding: 6px 8px; } QLineEdit:focus { border: 1px solid rgba(125,211,252,0.5); }')
-        il.addWidget(search)
+        top_row.addWidget(search, 1)
+        sort_combo = QComboBox()
+        sort_combo.setStyleSheet('QComboBox { background: rgba(10,14,20,0.95); border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; color: #E2E8F0; font-size: 10px; padding: 5px 8px; } QComboBox:hover { border: 1px solid rgba(125,211,252,0.4); } QComboBox::drop-down { border: none; width: 16px; } QComboBox QAbstractItemView { background: #0A0E14; border: 1px solid rgba(125,211,252,0.25); color: #E2E8F0; selection-background-color: rgba(125,211,252,0.18); selection-color: #7DD3FC; }')
+        sort_combo.addItem(t('edit_pals.select_passives_sort_rank_desc', 'Rarity (high to low)'), 'rank_desc')
+        sort_combo.addItem(t('edit_pals.select_passives_sort_rank_asc', 'Rarity (low to high)'), 'rank_asc')
+        sort_combo.addItem(t('edit_pals.select_passives_sort_name', 'Name'), 'name')
+        sort_combo.addItem(t('edit_pals.select_passives_sort_checked', 'Selected first'), 'checked')
+        sort_combo.setToolTip(t('edit_pals.select_passives_sort', 'Sort by'))
+        top_row.addWidget(sort_combo)
+        il.addLayout(top_row)
         list_widget = QListWidget()
         list_widget.setStyleSheet('QListWidget { background: rgba(10,14,20,0.95); border: 1px solid rgba(125,211,252,0.15); border-radius: 4px; color: #E2E8F0; font-size: 10px; } QListWidget::item { padding: 4px 8px; } QListWidget::item:hover { background: rgba(125,211,252,0.08); } QListWidget::item:selected { background: rgba(125,211,252,0.15); color: #7DD3FC; }')
         items = []
-        for key in all_keys:
-            english = PalFrame._PASSMAP.get(key, key)
-            label = t(f'passive.{english}', english)
-            item = QListWidgetItem(label)
-            item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
-            item.setCheckState(Qt.Checked if key in cur_set else Qt.Unchecked)
-            item.setData(Qt.UserRole, key)
-            list_widget.addItem(item)
-            items.append(item)
+        chosen = set(cur_set)
         il.addWidget(list_widget, 1)
 
         def _filter(text):
@@ -539,7 +554,41 @@ class PalInfoHandlerMixin:
                 name = it.text().lower()
                 key = str(it.data(Qt.UserRole)).lower()
                 it.setHidden(text not in name and text not in key)
+
+        def _sync_chosen():
+            for it in items:
+                key = it.data(Qt.UserRole)
+                if it.checkState() == Qt.Checked:
+                    chosen.add(key)
+                else:
+                    chosen.discard(key)
+
+        def _rebuild():
+            _sync_chosen()
+            mode = sort_combo.currentData()
+            if mode == 'rank_asc':
+                ordered = sorted(entries, key=lambda e: (e['rank'], e['label']))
+            elif mode == 'name':
+                ordered = sorted(entries, key=lambda e: e['label'])
+            elif mode == 'checked':
+                ordered = sorted(entries, key=lambda e: (0 if e['key'] in chosen else 1, -e['rank'], e['label']))
+            else:
+                ordered = sorted(entries, key=lambda e: (-e['rank'], e['label']))
+            list_widget.clear()
+            items.clear()
+            for e in ordered:
+                item = QListWidgetItem(e['label'])
+                item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
+                item.setCheckState(Qt.Checked if e['key'] in chosen else Qt.Unchecked)
+                item.setData(Qt.UserRole, e['key'])
+                item.setForeground(QColor(dm.passive_rank_color(e['rank'])[2]))
+                item.setToolTip(f"{e['label']} · {_rank_label(e['rank'])}")
+                list_widget.addItem(item)
+                items.append(item)
+            _filter(search.text())
         search.textChanged.connect(_filter)
+        sort_combo.currentIndexChanged.connect(lambda _: _rebuild())
+        _rebuild()
 
         btn_row = QHBoxLayout()
         btn_row.setSpacing(4)
@@ -561,7 +610,8 @@ class PalInfoHandlerMixin:
         il.addLayout(btn_row)
 
         def _apply():
-            selected = [it.data(Qt.UserRole) for it in items if it.checkState() == Qt.Checked]
+            _sync_chosen()
+            selected = [e['key'] for e in entries if e['key'] in chosen]
             if not selected:
                 show_warning(dlg, t('edit_pals.select_passives_title'), t('edit_pals.select_passives_none'))
                 return

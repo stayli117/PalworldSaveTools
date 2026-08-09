@@ -15,6 +15,11 @@ from palworld_aio.widgets.ime_popup import setup_ime_popup, show_ime_popup
 from resource_resolver import resource_path
 from palsav import json_tools
 
+def _PASSIVE_RANK_LABEL(rank):
+    """被动品质标签。统一委托 dm.passive_rank_label，避免 passive.rank_* 与
+    passive.rank.* 两套键并存（键统一为 passive.rank.common/rare/epic/negative/value）。"""
+    return dm.passive_rank_label(rank)
+
 _LEARNSET_CACHE = None
 _LEARNSET_CI = None
 def _load_learnset():
@@ -384,8 +389,9 @@ class SkillPicker(QWidget):
                             ev = p_info.get(f'effect{ei}', 0)
                             ev_str = str(int(ev)) if isinstance(ev, float) and ev == int(ev) else f'{ev:.0f}' if isinstance(ev, float) else str(ev)
                             p_desc = p_desc.replace(f'{{EffectValue{ei}}}', ev_str)
+                rank_label = _PASSIVE_RANK_LABEL(rank)
                 display_name = t(f"passive.{name}", name)
-                tip_parts = [f'<b style="color:{tc}">{display_name}</b>', f"<i>{dm.passive_rank_label(rank)}</i>"]
+                tip_parts = [f'<b style="color:{tc}">{display_name}</b>', f"<i>{rank_label}</i>"]
                 if p_desc:
                     tip_parts.append('')
                     tip_parts.append(_clean_desc_for_tooltip(p_desc))

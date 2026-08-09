@@ -572,6 +572,9 @@ class PalInfoHandlerMixin:
             dlg.accept()
         apply_btn.clicked.connect(_apply)
         cancel_btn.clicked.connect(dlg.reject)
+        dlg_layout = QVBoxLayout(dlg)
+        dlg_layout.setContentsMargins(0, 0, 0, 0)
+        dlg_layout.addWidget(inner)
         dlg.exec()
 
     def _on_passive_loadout(self):

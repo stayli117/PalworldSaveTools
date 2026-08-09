@@ -4,7 +4,10 @@ import sys, os
 # palsav.core resolution in cx_Freeze's module finder.
 sys.path.insert(0, os.path.abspath('src/palsav'))
 sys.path.insert(0, os.path.abspath('src'))
-sys.path.insert(0, os.path.abspath('resources'))
+# resources 必须排在 src 之后：resources/i18n 与 src/i18n 同名，但前者是上游
+# 精简版（无 pinyin/dn/desc_t）。若 resources 抢先，cx_Freeze 会把 i18n 解析成
+# resources/i18n 并漏打 src/i18n/pinyin.py，运行时报 No module named 'i18n.pinyin'。
+sys.path.append(os.path.abspath('resources'))
 from cx_Freeze import setup, Executable
 
 # 声明 DPI 感知，避免 Windows 高分屏下窗口被系统拉伸模糊（main.py 内也会用 API 再次声明 PerMonitorV2）
@@ -29,7 +32,7 @@ def find_pyside6_assets():
         pass
     return None
 _PYSIDE6_EXCLUDES = ['PySide6.QtQuick', 'PySide6.QtQml', 'PySide6.QtDesigner', 'PySide6.QtHelp', 'PySide6.QtTest', 'PySide6.QtDBus', 'PySide6.QtPrintSupport', 'PySide6.QtSql', 'PySide6.QtUiTools', 'PySide6.QtSvgWidgets', 'PySide6.QtXml', 'PySide6.QtQuickWidgets', 'PySide6.QtQuickControls2', 'PySide6.QtQuickTemplates2', 'PySide6.QtQuickDialogs2', 'PySide6.QtQuickDialogs2QuickImpl', 'PySide6.QtQuickDialogs2Utils', 'PySide6.QtQuickLayouts', 'PySide6.QtQuickParticles', 'PySide6.QtQuickEffects', 'PySide6.QtQuickShapes', 'PySide6.QtQuickTest', 'PySide6.QtQuickTimeline', 'PySide6.QtQuickVectorImage', 'PySide6.QtQuickVectorImageGenerator', 'PySide6.QtQuickVectorImageHelpers', 'PySide6.QtLabsAnimation', 'PySide6.QtLabsFolderListModel', 'PySide6.QtLabsPlatform', 'PySide6.QtLabsQmlModels', 'PySide6.QtLabsSettings', 'PySide6.QtLabsSharedImage', 'PySide6.QtLabsStyleKit', 'PySide6.QtLabsStyleKitImpl', 'PySide6.QtLabsSynchronizer', 'PySide6.QtLabsWavefrontMesh', 'PySide6.QtLottie', 'PySide6.QtLottieVectorImageGenerator', 'PySide6.QtQmlCore', 'PySide6.QtQmlLocalStorage', 'PySide6.QtQmlMeta', 'PySide6.QtQmlModels', 'PySide6.QtQmlNetwork', 'PySide6.QtQmlWorkerScript', 'PySide6.QtQmlXmlListModel', 'PySide6.QtQmlCompiler']
-_BUILD_PACKAGES = ['subprocess', 'pathlib', 'shutil', 'json', 'uuid', 'time', 'datetime', 'struct', 'enum', 'collections', 'itertools', 'math', 'zlib', 'gzip', 'zipfile', 'threading', 'multiprocessing', 'io', 'base64', 'binascii', 'hashlib', 'hmac', 'secrets', 'ssl', 'socket', 'urllib', 'http', 'mimetypes', 'tempfile', 'glob', 'fnmatch', 'argparse', 'configparser', 'logging', 'traceback', 'string', 'random', 're', 'copy', 'ctypes', 'gc', 'importlib', 'palooz', 'pickle', 'platform', 'PySide6.QtCore', 'PySide6.QtGui', 'PySide6.QtWidgets', 'nerdfont', 'concurrent.futures', 'palworld_toolsets', 'palworld_xgp_import', 'palsav.core']
+_BUILD_PACKAGES = ['subprocess', 'pathlib', 'shutil', 'json', 'uuid', 'time', 'datetime', 'struct', 'enum', 'collections', 'itertools', 'math', 'zlib', 'gzip', 'zipfile', 'threading', 'multiprocessing', 'io', 'base64', 'binascii', 'hashlib', 'hmac', 'secrets', 'ssl', 'socket', 'urllib', 'http', 'mimetypes', 'tempfile', 'glob', 'fnmatch', 'argparse', 'configparser', 'logging', 'traceback', 'string', 'random', 're', 'copy', 'ctypes', 'gc', 'importlib', 'palooz', 'pickle', 'platform', 'PySide6.QtCore', 'PySide6.QtGui', 'PySide6.QtWidgets', 'nerdfont', 'concurrent.futures', 'palworld_toolsets', 'palworld_xgp_import', 'palsav.core', 'i18n']
 _BUILD_EXCLUDES = ['pandas', 'numpy', 'email', 'unittest', 'unittest.mock', 'test', 'pdb', 'tkinter.test', 'lib2to3', 'distutils', 'setuptools', 'pip', 'wheel', 'venv', 'ensurepip', 'msgpack', 'palsav.pyooz'] + _PYSIDE6_EXCLUDES
 build_exe_options = {'packages': _BUILD_PACKAGES, 'excludes': _BUILD_EXCLUDES, 'include_files': [('resources/', 'resources/'), ('src/data/', 'src/data/'), ('src/games.json', 'games.json')], 'zip_include_packages': [], 'zip_exclude_packages': ['*'], 'build_exe': 'PST_standalone', 'optimize': 2}
 ps6_a = find_pyside6_assets()

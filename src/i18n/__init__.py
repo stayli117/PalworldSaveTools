@@ -37,8 +37,10 @@ def _get_resources_dir() -> str:
         except Exception:
             r = get_resources_dir()
         _RESOURCES_DIR_CACHE = r
+        # 追加而非插到最前：resources/i18n 与本包同名，插到 sys.path[0] 会让
+        # resources 抢占顶层模块解析，导致 i18n.pinyin 等子模块找不到。
         if _RESOURCES_DIR_CACHE not in sys.path:
-            sys.path.insert(0, _RESOURCES_DIR_CACHE)
+            sys.path.append(_RESOURCES_DIR_CACHE)
     return _RESOURCES_DIR_CACHE
 
 

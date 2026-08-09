@@ -63,12 +63,16 @@ if src_dir not in sys.path:
     sys.path.insert(0, src_dir)
 for sub in ['palworld_coord', 'palsav', 'palworld_xgp_import', 'resources', 'palworld_aio']:
     p = os.path.join(src_dir, sub)
-    if os.path.isdir(p) and p not in sys.path:
-        sys.path.insert(0, p)
-    elif sub == 'resources':
-        p = os.path.join(base_dir, 'resources')
+    if sub == 'resources':
+        # resources 必须排在 src 之后（append 而非 insert(0)）：resources/i18n 与
+        # src/i18n 顶层包同名，前者是上游精简版（无 pinyin/dn/desc_t），一旦抢占
+        # sys.path 前排，import i18n 就会命中它，导致 i18n.pinyin 找不到。
+        if not os.path.isdir(p):
+            p = os.path.join(base_dir, 'resources')
         if os.path.isdir(p) and p not in sys.path:
-            sys.path.insert(0, p)
+            sys.path.append(p)
+    elif os.path.isdir(p) and p not in sys.path:
+        sys.path.insert(0, p)
 try:
     from bootup import _migrate_configs
     _migrate_configs()

@@ -13,7 +13,9 @@ from PySide6.QtCore import QMimeData
 from boot_paths import RESOURCES_DIR
 _resources_path = str(RESOURCES_DIR)
 if _resources_path not in sys.path:
-    sys.path.insert(0, _resources_path)
+    # append 而非 insert(0)：resources/i18n 与 src/i18n 顶层包同名，抢占前排会
+    # 让 import i18n 命中上游精简版（无 pinyin/dn/desc_t）。
+    sys.path.append(_resources_path)
 import copy
 import re
 from i18n import t, dn

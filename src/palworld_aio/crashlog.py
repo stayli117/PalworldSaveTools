@@ -130,4 +130,3 @@ def install_crash_reporting():
     except Exception:
         pass
 
-

@@ -21,6 +21,19 @@ except:
         icons = {'nf-fa-times': '\uf00d'}
 from resource_resolver import resource_path
 
+
+def _skill_asset_from_picker_result(skill_map, result):
+    """Convert SkillPicker's raw display-name result into the asset ID."""
+    if not result:
+        return result
+    if result in skill_map:
+        return result
+    for asset, name in skill_map.items():
+        if name == result:
+            return asset
+    return None
+
+
 class PalSlotDelegate(QStyledItemDelegate):
     def paint(self, painter, option, index):
         super().paint(painter, option, index)
@@ -367,8 +380,11 @@ class PlayerPalActionDialog(QDialog):
         if result == '':
             self._clear_active_skill()
             return
-        self.selected_active_skill_id = result
-        raw_name = PalFrame._SKILLMAP.get(result, result)
+        asset = _skill_asset_from_picker_result(PalFrame._SKILLMAP, result)
+        if not asset:
+            return
+        self.selected_active_skill_id = asset
+        raw_name = PalFrame._SKILLMAP.get(asset, result)
         self.selected_active_skill_name = t(f"skill.{raw_name}", raw_name)
         self.active_skill_label.setText(f'Active: {self.selected_active_skill_name}')
         self.active_skill_label.setStyleSheet('color: #7DD3FC; font-weight: bold; padding: 5px;')
@@ -383,10 +399,13 @@ class PlayerPalActionDialog(QDialog):
         if result == '':
             self._clear_passive_skill()
             return
-        self.selected_passive_skill_id = result
-        raw_name = PalFrame._PASSMAP.get(result, result)
+        asset = _skill_asset_from_picker_result(PalFrame._PASSMAP, result)
+        if not asset:
+            return
+        self.selected_passive_skill_id = asset
+        raw_name = PalFrame._PASSMAP.get(asset, result)
         self.selected_passive_skill_name = t(f"passive.{raw_name}", raw_name)
-        asset_lower = (self.selected_passive_skill_id or '').lower()
+        asset_lower = asset.lower()
         rank = PalFrame._PASSRANK.get(asset_lower, 1)
         bg, bd, tc = PalFrame._passive_rank_color(asset_lower)
         self.passive_skill_label.setText(self.selected_passive_skill_name)

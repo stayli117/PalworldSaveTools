@@ -243,7 +243,10 @@ class PalInfoDisplayMixin:
             self.hunger_bar.setValue(hunger_pct)
             self.hunger_bar.setFormat(f'{int(hunger_full)} / {int(hunger_max)}')
             self.exp_header_bar.setValue(exp_pct)
-            self.next_lbl.setText(t('pal_info.max_level', 'MAX') if t else 'MAX' if int(level) >= 80 else str(int(exp_val)))
+            if int(level) >= 80:
+                self.next_lbl.setText(t('pal_info.max_level', 'MAX'))
+            else:
+                self.next_lbl.setText(str(int(exp_val)))
             san_val = extract_value(raw, 'SanityValue', 100.0)
             san_pct = int(min(float(san_val), 100))
             self.san_bar.setValue(san_pct)

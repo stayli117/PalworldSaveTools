@@ -1,7 +1,7 @@
 name: Build on Push (Windows standalone)
 
 # 每次推送到 main_cn 自动构建 Windows 单机版并上传为 Artifact（不发布、不上传 Nexus）。
-# 适合自用：推送完即可在 Actions 运行页的 Artifacts 区下载 PST_standalone_v*.zip。
+# 适合自用：推送完即可在 Actions 运行页的 Artifacts 区下载 PST_standalone_v*.7z。
 # 新推送会取消上一次还在排队的构建，避免浪费 Runner 分钟。
 
 on:

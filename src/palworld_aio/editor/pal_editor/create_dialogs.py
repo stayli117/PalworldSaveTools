@@ -1927,11 +1927,12 @@ class CloneBulkDialog(FramelessDialog):
         cid = extract_value(raw, 'CharacterID', '') if raw else ''
         nick = (extract_value(raw, 'NickName', '') or '') if raw else ''
         species = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP) or cid) or cid
+        species_display = dn("pal", species)
         try:
             level = int(extract_value(raw, 'Level', 1) or 1)
         except (TypeError, ValueError):
             level = 1
-        label = f'{nick} ({species})' if nick and nick != species else species
+        label = f'{nick} ({species_display})' if nick and nick != species_display else species_display
         name_lbl = QLabel(label)
         name_lbl.setStyleSheet('font-size: 11px; color: #E2E8F0; background: transparent; border: none;')
         row.addWidget(name_lbl, 1)

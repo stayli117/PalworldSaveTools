@@ -36,6 +36,52 @@ def _load_learnset():
         _LEARNSET_CACHE = {}
         _LEARNSET_CI = {}
 
+
+def _pal_asset_candidates(pal_asset):
+    """Return ordered asset candidates for a save CharacterID or asset name."""
+    if not pal_asset:
+        return []
+    raw = str(pal_asset).split('::')[-1].strip().lower()
+    candidates = []
+
+    def add(value):
+        if value and value not in candidates:
+            candidates.append(value)
+
+    add(raw)
+    base = re.sub(r'_c(?:_\d+)?$', '', raw)
+    base = re.sub(r'_v\d+$', '', base)
+    base = re.sub(r'_avatar$', '', base)
+    add(base)
+    if base.startswith('pal_'):
+        add(base[4:])
+    if base.startswith('npc_'):
+        add(base[4:])
+    if base.startswith('boss_'):
+        # BOSS_BOSS_<asset>_C -> boss_<asset>; retain this first.
+        add(base[5:])
+        if base[5:].startswith('boss_'):
+            add(base[5:][5:])
+    return candidates
+
+
+def _learnset_for_pal(pal_asset):
+    """Resolve a save CharacterID to its game-data learnset entries.
+
+    Save files use IDs such as PAL_SheepBall_C and BOSS_BOSS_Alpaca_C,
+    while pals_learnset.json is keyed by assets such as SheepBall and
+    Boss_Alpaca. Preserve the boss asset prefix before falling back to the
+    ordinary species key so boss variants do not accidentally use the base
+    pal's learnset.
+    """
+    if not isinstance(_LEARNSET_CI, dict):
+        return []
+    for candidate in _pal_asset_candidates(pal_asset):
+        entries = _LEARNSET_CI.get(candidate)
+        if entries:
+            return entries
+    return []
+
 # 主动技能「其余」分组时的元素排列顺序（按游戏常规元素序；未知元素排最后）
 _ELEM_ORDER = {
     'normal': 0,
@@ -253,12 +299,7 @@ class SkillPicker(QWidget):
             pal_elements = []
             if pal_asset:
                 _load_learnset()
-                ls = _LEARNSET_CACHE.get(pal_asset) or _LEARNSET_CI.get(pal_asset.lower(), [])
-                if not ls:
-                    stripped = re.sub(r'_v\d+$', '', pal_asset)
-                    if stripped != pal_asset:
-                        ls = _LEARNSET_CACHE.get(stripped) or _LEARNSET_CI.get(stripped.lower(), [])
-                for m in ls:
+                for m in _learnset_for_pal(pal_asset):
                     wk = m.get('WazaID', '').replace('EPalWazaID::', '').lower()
                     if wk:
                         learnset_info[wk] = (m.get('level'), m.get('source'))
@@ -266,10 +307,11 @@ class SkillPicker(QWidget):
             # 帕鲁属性（有序：主属性在前、次属性其次），用于主动技能排序时同属性优先展示
             try:
                 from palworld_aio.editor.pal_editor import get_pal_base_data
-                _pa = re.sub(r'_v\d+$', '', pal_asset)
-                _entry = get_pal_base_data(_pa) or get_pal_base_data(_pa.lower())
-                if _entry and isinstance(_entry.get('elements'), dict):
-                    pal_elements = list(_entry['elements'].keys())
+                for candidate in _pal_asset_candidates(pal_asset):
+                    _entry = get_pal_base_data(candidate)
+                    if _entry and isinstance(_entry.get('elements'), dict):
+                        pal_elements = list(_entry['elements'].keys())
+                        break
             except Exception:
                 pal_elements = []
             elem_rank = {e.lower(): i for i, e in enumerate(pal_elements)}

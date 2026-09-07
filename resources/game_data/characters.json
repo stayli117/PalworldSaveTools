@@ -46130,6 +46130,21 @@
             }
         },
         {
+            "name": "Alpaca",
+            "asset": "Alpaca",
+            "icon": "/icons/npcs/T_Alpaca_icon_normal.webp"
+        },
+        {
+            "name": "Amaterasu Wolf",
+            "asset": "AmaterasuWolf",
+            "icon": "/icons/npcs/T_AmaterasuWolf_icon_normal.webp"
+        },
+        {
+            "name": "Amaterasu Wolf Dark",
+            "asset": "AmaterasuWolf_Dark",
+            "icon": "/icons/npcs/T_AmaterasuWolf_Dark_icon_normal.webp"
+        },
+        {
             "name": "Desert Town Ambassador ",
             "asset": "Ambassador01",
             "icon": "/icons/npcs/T_Male_DesertPeople01_icon_normal.webp",
@@ -46160,6 +46175,11 @@
                 "Transport": 0,
                 "MonsterFarm": 0
             }
+        },
+        {
+            "name": "Anubis",
+            "asset": "Anubis",
+            "icon": "/icons/npcs/T_Anubis_icon_normal.webp"
         },
         {
             "name": "Arena Shop",
@@ -46224,6 +46244,31 @@
                 "Transport": 3,
                 "MonsterFarm": 0
             }
+        },
+        {
+            "name": "Bad Cat Girl",
+            "asset": "BadCatGirl",
+            "icon": "/icons/npcs/T_BadCatgirl_icon_normal.webp"
+        },
+        {
+            "name": "Baphomet",
+            "asset": "Baphomet",
+            "icon": "/icons/npcs/T_Baphomet_icon_normal.webp"
+        },
+        {
+            "name": "Baphomet Dark",
+            "asset": "Baphomet_Dark",
+            "icon": "/icons/npcs/T_Baphomet_Dark_icon_normal.webp"
+        },
+        {
+            "name": "Bastet",
+            "asset": "Bastet",
+            "icon": "/icons/npcs/T_Bastet_icon_normal.webp"
+        },
+        {
+            "name": "Bastet Ice",
+            "asset": "Bastet_Ice",
+            "icon": "/icons/npcs/T_Bastet_Ice_icon_normal.webp"
         },
         {
             "name": "Free Pal Alliance Believer",
@@ -46578,6 +46623,51 @@
             }
         },
         {
+            "name": "Berry Goat",
+            "asset": "BerryGoat",
+            "icon": "/icons/npcs/T_BerryGoat_icon_normal.webp"
+        },
+        {
+            "name": "Berry Goat Dark",
+            "asset": "BerryGoat_Dark",
+            "icon": "/icons/npcs/T_BerryGoat_Dark_icon_normal.webp"
+        },
+        {
+            "name": "Bird Dragon",
+            "asset": "BirdDragon",
+            "icon": "/icons/npcs/T_BirdDragon_icon_normal.webp"
+        },
+        {
+            "name": "Bird Dragon Ice",
+            "asset": "BirdDragon_Ice",
+            "icon": "/icons/npcs/T_BirdDragon_Ice_icon_normal.webp"
+        },
+        {
+            "name": "Black Centaur",
+            "asset": "BlackCentaur",
+            "icon": "/icons/npcs/T_BlackCentaur_icon_normal.webp"
+        },
+        {
+            "name": "Black Griffon",
+            "asset": "BlackGriffon",
+            "icon": "/icons/npcs/T_BlackGriffon_icon_normal.webp"
+        },
+        {
+            "name": "Black Metal Dragon",
+            "asset": "BlackMetalDragon",
+            "icon": "/icons/npcs/T_BlackMetalDragon_icon_normal.webp"
+        },
+        {
+            "name": "Black Puppy",
+            "asset": "BlackPuppy",
+            "icon": "/icons/npcs/T_BlackPuppy_icon_normal.webp"
+        },
+        {
+            "name": "Black Puppy Ice",
+            "asset": "BlackPuppy_Ice",
+            "icon": "/icons/npcs/T_BlackPuppy_Ice_icon_normal.webp"
+        },
+        {
             "name": "Blacksmith in Training",
             "asset": "Blacksmith01",
             "icon": "/icons/npcs/T_MobuCitizen_Male_icon_normal.webp",
@@ -46610,6 +46700,51 @@
             }
         },
         {
+            "name": "Blue Dragon",
+            "asset": "BlueDragon",
+            "icon": "/icons/npcs/T_BlueDragon_icon_normal.webp"
+        },
+        {
+            "name": "Blue Dragon Ice",
+            "asset": "BlueDragon_Ice",
+            "icon": "/icons/npcs/T_BlueDragon_Ice_icon_normal.webp"
+        },
+        {
+            "name": "Blue Platypus Fire",
+            "asset": "BluePlatypus_Fire",
+            "icon": "/icons/npcs/T_BluePlatypus_Fire_icon_normal.webp"
+        },
+        {
+            "name": "Blue Sky Dragon",
+            "asset": "BlueSkyDragon",
+            "icon": "/icons/npcs/T_BlueSkyDragon_icon_normal.webp"
+        },
+        {
+            "name": "Blue Thunder Horse",
+            "asset": "BlueThunderHorse",
+            "icon": "/icons/npcs/T_BlueThunderHorse_icon_normal.webp"
+        },
+        {
+            "name": "Blueberry Fairy",
+            "asset": "BlueberryFairy",
+            "icon": "/icons/npcs/T_BlueberryFairy_icon_normal.webp"
+        },
+        {
+            "name": "Blueplatypus",
+            "asset": "Blueplatypus",
+            "icon": "/icons/npcs/T_BluePlatypus_icon_normal.webp"
+        },
+        {
+            "name": "Boar",
+            "asset": "Boar",
+            "icon": "/icons/npcs/T_Boar_icon_normal.webp"
+        },
+        {
+            "name": "Anubis",
+            "asset": "Boss_Anubis",
+            "icon": "/icons/npcs/T_Anubis_icon_normal.webp"
+        },
+        {
             "name": "Guard",
             "asset": "BountyTrader",
             "icon": "/icons/npcs/T_Police_icon_normal.webp",
@@ -46640,6 +46775,36 @@
                 "Transport": 0,
                 "MonsterFarm": 0
             }
+        },
+        {
+            "name": "Brown Rabbit",
+            "asset": "BrownRabbit",
+            "icon": "/icons/npcs/T_BrownRabbit_icon_normal.webp"
+        },
+        {
+            "name": "Cactus Doll",
+            "asset": "CactusDoll",
+            "icon": "/icons/npcs/T_CactusDoll_icon_normal.webp"
+        },
+        {
+            "name": "Cactus Doll Dark",
+            "asset": "CactusDoll_Dark",
+            "icon": "/icons/npcs/T_CactusDoll_Dark_icon_normal.webp"
+        },
+        {
+            "name": "Candle Ghost",
+            "asset": "CandleGhost",
+            "icon": "/icons/npcs/T_CandleGhost_icon_normal.webp"
+        },
+        {
+            "name": "Captain Penguin",
+            "asset": "CaptainPenguin",
+            "icon": "/icons/npcs/T_CaptainPenguin_icon_normal.webp"
+        },
+        {
+            "name": "Captain Penguin Black",
+            "asset": "CaptainPenguin_Black",
+            "icon": "/icons/npcs/T_CaptainPenguin_Black_icon_normal.webp"
         },
         {
             "name": "Caravan Leader",
@@ -46770,6 +46935,126 @@
             }
         },
         {
+            "name": "Carbunclo",
+            "asset": "Carbunclo",
+            "icon": "/icons/npcs/T_Carbunclo_icon_normal.webp"
+        },
+        {
+            "name": "Cat Bat",
+            "asset": "CatBat",
+            "icon": "/icons/npcs/T_CatBat_icon_normal.webp"
+        },
+        {
+            "name": "Cat Mage",
+            "asset": "CatMage",
+            "icon": "/icons/npcs/T_CatMage_icon_normal.webp"
+        },
+        {
+            "name": "Cat Mage Fire",
+            "asset": "CatMage_Fire",
+            "icon": "/icons/npcs/T_CatMage_Fire_icon_normal.webp"
+        },
+        {
+            "name": "Cat Vampire",
+            "asset": "CatVampire",
+            "icon": "/icons/npcs/T_CatVampire_icon_normal.webp"
+        },
+        {
+            "name": "Chicken Pal",
+            "asset": "ChickenPal",
+            "icon": "/icons/npcs/T_ChickenPal_icon_normal.webp"
+        },
+        {
+            "name": "Clione Twins",
+            "asset": "ClioneTwins",
+            "icon": "/icons/npcs/T_ClioneTwins_icon_normal.webp"
+        },
+        {
+            "name": "Clover Fairy",
+            "asset": "CloverFairy",
+            "icon": "/icons/npcs/T_CloverFairy_icon_normal.webp"
+        },
+        {
+            "name": "Clown Rabbit",
+            "asset": "ClownRabbit",
+            "icon": "/icons/npcs/T_ClownRabbit_icon_normal.webp"
+        },
+        {
+            "name": "Colorful Bird",
+            "asset": "ColorfulBird",
+            "icon": "/icons/npcs/T_ColorfulBird_icon_normal.webp"
+        },
+        {
+            "name": "Cowpal",
+            "asset": "Cowpal",
+            "icon": "/icons/npcs/T_CowPal_icon_normal.webp"
+        },
+        {
+            "name": "Cube Turtle",
+            "asset": "CubeTurtle",
+            "icon": "/icons/npcs/T_CubeTurtle_icon_normal.webp"
+        },
+        {
+            "name": "Cube Turtle Neutral",
+            "asset": "CubeTurtle_Neutral",
+            "icon": "/icons/npcs/T_CubeTurtle_Neutral_icon_normal.webp"
+        },
+        {
+            "name": "Cute Butterfly",
+            "asset": "CuteButterfly",
+            "icon": "/icons/npcs/T_CuteButterfly_icon_normal.webp"
+        },
+        {
+            "name": "Cute Fox",
+            "asset": "CuteFox",
+            "icon": "/icons/npcs/T_CuteFox_icon_normal.webp"
+        },
+        {
+            "name": "Cute Mole",
+            "asset": "CuteMole",
+            "icon": "/icons/npcs/T_CuteMole_icon_normal.webp"
+        },
+        {
+            "name": "Dandelion Girl",
+            "asset": "DandelionGirl",
+            "icon": "/icons/npcs/T_DandelionGirl_icon_normal.webp"
+        },
+        {
+            "name": "Dark Alien",
+            "asset": "DarkAlien",
+            "icon": "/icons/npcs/T_DarkAlien_icon_normal.webp"
+        },
+        {
+            "name": "Dark Crow",
+            "asset": "DarkCrow",
+            "icon": "/icons/npcs/T_DarkCrow_icon_normal.webp"
+        },
+        {
+            "name": "Dark Flame Fox",
+            "asset": "DarkFlameFox",
+            "icon": "/icons/npcs/T_DarkFlameFox_icon_normal.webp"
+        },
+        {
+            "name": "Dark Mecha Dragon",
+            "asset": "DarkMechaDragon",
+            "icon": "/icons/npcs/T_DarkMechaDragon_icon_normal.webp"
+        },
+        {
+            "name": "Dark Mutant",
+            "asset": "DarkMutant",
+            "icon": "/icons/npcs/T_dummy_icon.webp"
+        },
+        {
+            "name": "Dark Scorpion",
+            "asset": "DarkScorpion",
+            "icon": "/icons/npcs/T_DarkScorpion_icon_normal.webp"
+        },
+        {
+            "name": "Dark Scorpion Ground",
+            "asset": "DarkScorpion_Ground",
+            "icon": "/icons/npcs/T_DarkScorpion_Ground_icon_normal.webp"
+        },
+        {
             "name": "Veteran Pal Tamer",
             "asset": "DeathPenalty_guide",
             "icon": "/icons/npcs/T_Female_Soldier03_icon_normal.webp",
@@ -46802,6 +47087,16 @@
             }
         },
         {
+            "name": "Deer",
+            "asset": "Deer",
+            "icon": "/icons/npcs/T_Deer_icon_normal.webp"
+        },
+        {
+            "name": "Deer Ground",
+            "asset": "Deer_Ground",
+            "icon": "/icons/npcs/T_Deer_Ground_icon_normal.webp"
+        },
+        {
             "name": "Islander",
             "asset": "Doctor",
             "icon": "/icons/npcs/T_Doctor_icon_normal.webp",
@@ -46832,6 +47127,61 @@
                 "Transport": 0,
                 "MonsterFarm": 0
             }
+        },
+        {
+            "name": "Dome Armor Dragon",
+            "asset": "DomeArmorDragon",
+            "icon": "/icons/npcs/T_DomeArmorDragon_icon_normal.webp"
+        },
+        {
+            "name": "Dream Demon",
+            "asset": "DreamDemon",
+            "icon": "/icons/npcs/T_DreamDemon_icon_normal.webp"
+        },
+        {
+            "name": "Drill Game",
+            "asset": "DrillGame",
+            "icon": "/icons/npcs/T_DrillGame_icon_normal.webp"
+        },
+        {
+            "name": "Eagle",
+            "asset": "Eagle",
+            "icon": "/icons/npcs/T_Eagle_icon_normal.webp"
+        },
+        {
+            "name": "Elec Cat",
+            "asset": "ElecCat",
+            "icon": "/icons/npcs/T_ElecCat_icon_normal.webp"
+        },
+        {
+            "name": "Elec Lion",
+            "asset": "ElecLion",
+            "icon": "/icons/npcs/ElecLion_icon_normal.webp"
+        },
+        {
+            "name": "Elec Lizard",
+            "asset": "ElecLizard",
+            "icon": "/icons/npcs/T_ElecLizard_icon_normal.webp"
+        },
+        {
+            "name": "Elec Panda",
+            "asset": "ElecPanda",
+            "icon": "/icons/npcs/T_ElecPanda_icon_normal.webp"
+        },
+        {
+            "name": "Elec Pomeranian",
+            "asset": "ElecPomeranian",
+            "icon": "/icons/npcs/T_ElecPomeranian_icon_normal.webp"
+        },
+        {
+            "name": "Elec Snail",
+            "asset": "ElecSnail",
+            "icon": "/icons/npcs/T_ElecSnail_icon_normal.webp"
+        },
+        {
+            "name": "Elec Snail Ground",
+            "asset": "ElecSnail_Ground",
+            "icon": "/icons/npcs/T_ElecSnail_Ground_icon_normal.webp"
         },
         {
             "name": "Emote Tester",
@@ -47536,6 +47886,21 @@
                 "Transport": 0,
                 "MonsterFarm": 0
             }
+        },
+        {
+            "name": "Fairy Dragon",
+            "asset": "FairyDragon",
+            "icon": "/icons/npcs/T_FairyDragon_icon_normal.webp"
+        },
+        {
+            "name": "Fairy Dragon Water",
+            "asset": "FairyDragon_Water",
+            "icon": "/icons/npcs/T_FairyDragon_Water_icon_normal.webp"
+        },
+        {
+            "name": "Feather Ostrich",
+            "asset": "FeatherOstrich",
+            "icon": "/icons/npcs/T_FeatherOstrich_icon_normal.webp"
         },
         {
             "name": "Islander",
@@ -48754,6 +49119,16 @@
             }
         },
         {
+            "name": "Fengyun Deeper",
+            "asset": "FengyunDeeper",
+            "icon": "/icons/npcs/T_FengyunDeeper_icon_normal.webp"
+        },
+        {
+            "name": "Fengyun Deeper Electric",
+            "asset": "FengyunDeeper_Electric",
+            "icon": "/icons/npcs/T_FengyunDeeper_Electric_icon_normal.webp"
+        },
+        {
             "name": "Brothers of the Eternal Pyre Martyr",
             "asset": "FireCult_FlameThrower",
             "icon": "/icons/npcs/T_FireCult_icon_normal.webp",
@@ -49074,6 +49449,146 @@
             }
         },
         {
+            "name": "Fire Kirin",
+            "asset": "FireKirin",
+            "icon": "/icons/npcs/T_FireKirin_icon_normal.webp"
+        },
+        {
+            "name": "Fire Kirin Dark",
+            "asset": "FireKirin_Dark",
+            "icon": "/icons/npcs/T_FireKirin_Dark_icon_normal.webp"
+        },
+        {
+            "name": "Flame Bambi",
+            "asset": "FlameBambi",
+            "icon": "/icons/npcs/T_FlameBambi_icon_normal.webp"
+        },
+        {
+            "name": "Flame Buffalo",
+            "asset": "FlameBuffalo",
+            "icon": "/icons/npcs/T_FlameBuffalo_icon_normal.webp"
+        },
+        {
+            "name": "Flower Dinosaur",
+            "asset": "FlowerDinosaur",
+            "icon": "/icons/npcs/T_FlowerDinosaur_icon_normal.webp"
+        },
+        {
+            "name": "Flower Dinosaur Electric",
+            "asset": "FlowerDinosaur_Electric",
+            "icon": "/icons/npcs/T_FlowerDinosaur_Electric_icon_normal.webp"
+        },
+        {
+            "name": "Flower Doll",
+            "asset": "FlowerDoll",
+            "icon": "/icons/npcs/T_FlowerDoll_icon_normal.webp"
+        },
+        {
+            "name": "Flower Doll Fire",
+            "asset": "FlowerDoll_Fire",
+            "icon": "/icons/npcs/T_FlowerDoll_Fire_icon_normal.webp"
+        },
+        {
+            "name": "Flower Prince",
+            "asset": "FlowerPrince",
+            "icon": "/icons/npcs/T_FlowerPrince_icon_normal.webp"
+        },
+        {
+            "name": "Flower Rabbit",
+            "asset": "FlowerRabbit",
+            "icon": "/icons/npcs/T_FlowerRabbit_icon_normal.webp"
+        },
+        {
+            "name": "Fluffy Bird",
+            "asset": "FluffyBird",
+            "icon": "/icons/npcs/T_FluffyBird_icon_normal.webp"
+        },
+        {
+            "name": "Flying Manta",
+            "asset": "FlyingManta",
+            "icon": "/icons/npcs/T_FlyingManta_icon_normal.webp"
+        },
+        {
+            "name": "Flying Manta Thunder",
+            "asset": "FlyingManta_Thunder",
+            "icon": "/icons/npcs/T_FlyingManta_Thunder_icon_normal.webp"
+        },
+        {
+            "name": "Fox Exorcist",
+            "asset": "FoxExorcist",
+            "icon": "/icons/npcs/T_FoxExorcist_icon_normal.webp"
+        },
+        {
+            "name": "Fox Mage",
+            "asset": "FoxMage",
+            "icon": "/icons/npcs/T_FoxMage_icon_normal.webp"
+        },
+        {
+            "name": "Fox Mage Dark",
+            "asset": "FoxMage_Dark",
+            "icon": "/icons/npcs/T_FoxMage_Dark_icon_normal.webp"
+        },
+        {
+            "name": "Elec Panda Otomo",
+            "asset": "GYM_ElecPanda_Otomo",
+            "icon": "/icons/npcs/T_Human_GYM_ElecPanda_Otomo_icon_normal.webp"
+        },
+        {
+            "name": "Ganesha",
+            "asset": "Ganesha",
+            "icon": "/icons/npcs/T_Ganesha_icon_normal.webp"
+        },
+        {
+            "name": "Garm",
+            "asset": "Garm",
+            "icon": "/icons/npcs/T_Garm_icon_normal.webp"
+        },
+        {
+            "name": "Ghost Anglerfish",
+            "asset": "GhostAnglerfish",
+            "icon": "/icons/npcs/T_GhostAnglerfish_icon_normal.webp"
+        },
+        {
+            "name": "Ghost Anglerfish Fire",
+            "asset": "GhostAnglerfish_Fire",
+            "icon": "/icons/npcs/T_GhostAnglerfish_Fire_icon_normal.webp"
+        },
+        {
+            "name": "Ghost Beast",
+            "asset": "GhostBeast",
+            "icon": "/icons/npcs/T_GhostBeast_icon_normal.webp"
+        },
+        {
+            "name": "Ghost Black Cat",
+            "asset": "GhostBlackCat",
+            "icon": "/icons/npcs/T_GhostBlackCat_icon_normal.webp"
+        },
+        {
+            "name": "Ghost Dragon",
+            "asset": "GhostDragon",
+            "icon": "/icons/npcs/T_GhostDragon_icon_normal.webp"
+        },
+        {
+            "name": "Ghost Dragon Fire",
+            "asset": "GhostDragon_Fire",
+            "icon": "/icons/npcs/T_GhostDragon_Fire_icon_normal.webp"
+        },
+        {
+            "name": "Ghost Rabbit",
+            "asset": "GhostRabbit",
+            "icon": "/icons/npcs/T_GhostRabbit_icon_normal.webp"
+        },
+        {
+            "name": "Ghost Rabbit Grass",
+            "asset": "GhostRabbit_Grass",
+            "icon": "/icons/npcs/T_GhostRabbit_Grass_icon_normal.webp"
+        },
+        {
+            "name": "Golden Horse",
+            "asset": "GoldenHorse",
+            "icon": "/icons/npcs/T_GoldenHorse_icon_normal.webp"
+        },
+        {
             "name": "Pal Merchant",
             "asset": "GoodwillAmbassador",
             "icon": "/icons/npcs/T_Female_MobuCitizen_icon_normal.webp",
@@ -49106,6 +49621,16 @@
             }
         },
         {
+            "name": "Gorilla",
+            "asset": "Gorilla",
+            "icon": "/icons/npcs/T_Gorilla_icon_normal.webp"
+        },
+        {
+            "name": "Gorilla Ground",
+            "asset": "Gorilla_Ground",
+            "icon": "/icons/npcs/T_Gorilla_Ground_icon_normal.webp"
+        },
+        {
             "name": "Zoe",
             "asset": "GrassBoss",
             "icon": "/icons/npcs/T_Human_GrassBoss_icon_normal.webp",
@@ -49136,6 +49661,56 @@
                 "Transport": 0,
                 "MonsterFarm": 0
             }
+        },
+        {
+            "name": "Grass Golem",
+            "asset": "GrassGolem",
+            "icon": "/icons/npcs/T_GrassGolem_icon_normal.webp"
+        },
+        {
+            "name": "Grass Golem Dark",
+            "asset": "GrassGolem_Dark",
+            "icon": "/icons/npcs/T_GrassGolem_Dark_icon_normal.webp"
+        },
+        {
+            "name": "Grass Mammoth",
+            "asset": "GrassMammoth",
+            "icon": "/icons/npcs/T_GrassMammoth_icon_normal.webp"
+        },
+        {
+            "name": "Grass Mammoth Ice",
+            "asset": "GrassMammoth_Ice",
+            "icon": "/icons/npcs/T_GrassMammoth_Ice_icon_normal.webp"
+        },
+        {
+            "name": "Grass Minotaur",
+            "asset": "GrassMinotaur",
+            "icon": "/icons/npcs/T_GrassMinotaur_icon_normal.webp"
+        },
+        {
+            "name": "Grass Minotaur Ice",
+            "asset": "GrassMinotaur_Ice",
+            "icon": "/icons/npcs/T_GrassMinotaur_Ice_icon_normal.webp"
+        },
+        {
+            "name": "Grass Panda",
+            "asset": "GrassPanda",
+            "icon": "/icons/npcs/T_GrassPanda_icon_normal.webp"
+        },
+        {
+            "name": "Grass Panda Electric",
+            "asset": "GrassPanda_Electric",
+            "icon": "/icons/npcs/T_GrassPanda_Electric_icon_normal.webp"
+        },
+        {
+            "name": "Grass Rabbit Man",
+            "asset": "GrassRabbitMan",
+            "icon": "/icons/npcs/T_GrassRabbitMan_icon_normal.webp"
+        },
+        {
+            "name": "Grim Girl",
+            "asset": "GrimGirl",
+            "icon": "/icons/npcs/T_GrimGirl_icon_normal.webp"
         },
         {
             "name": "Guard",
@@ -49200,6 +49775,36 @@
                 "Transport": 0,
                 "MonsterFarm": 0
             }
+        },
+        {
+            "name": "Guardian Dog",
+            "asset": "GuardianDog",
+            "icon": "/icons/npcs/T_GuardianDog_icon_normal.webp"
+        },
+        {
+            "name": "Hades Bird",
+            "asset": "HadesBird",
+            "icon": "/icons/npcs/T_HadesBird_icon_normal.webp"
+        },
+        {
+            "name": "Hades Bird Electric",
+            "asset": "HadesBird_Electric",
+            "icon": "/icons/npcs/T_HadesBird_Electric_icon_normal.webp"
+        },
+        {
+            "name": "Hawk Bird",
+            "asset": "HawkBird",
+            "icon": "/icons/npcs/T_HawkBird_icon_normal.webp"
+        },
+        {
+            "name": "Hedgehog",
+            "asset": "Hedgehog",
+            "icon": "/icons/npcs/T_Hedgehog_icon_normal.webp"
+        },
+        {
+            "name": "Hedgehog Ice",
+            "asset": "Hedgehog_Ice",
+            "icon": "/icons/npcs/T_Hedgehog_Ice_icon_normal.webp"
         },
         {
             "name": "Islander",
@@ -49328,6 +49933,31 @@
                 "Transport": 0,
                 "MonsterFarm": 0
             }
+        },
+        {
+            "name": "Hercules Beetle",
+            "asset": "HerculesBeetle",
+            "icon": "/icons/npcs/T_HerculesBeetle_icon_normal.webp"
+        },
+        {
+            "name": "Hercules Beetle Ground",
+            "asset": "HerculesBeetle_Ground",
+            "icon": "/icons/npcs/T_HerculesBeetle_Ground_icon_normal.webp"
+        },
+        {
+            "name": "Hood Ghost",
+            "asset": "HoodGhost",
+            "icon": "/icons/npcs/T_HoodGhost_icon_normal.webp"
+        },
+        {
+            "name": "Horus",
+            "asset": "Horus",
+            "icon": "/icons/npcs/T_Horus_icon_normal.webp"
+        },
+        {
+            "name": "Horus Water",
+            "asset": "Horus_Water",
+            "icon": "/icons/npcs/T_Horus_Water_icon_normal.webp"
         },
         {
             "name": "Human",
@@ -51063,6 +51693,56 @@
             }
         },
         {
+            "name": "Ice Crocodile",
+            "asset": "IceCrocodile",
+            "icon": "/icons/npcs/T_IceCrocodile_icon_normal.webp"
+        },
+        {
+            "name": "Ice Deer",
+            "asset": "IceDeer",
+            "icon": "/icons/npcs/T_IceDeer_icon_normal.webp"
+        },
+        {
+            "name": "Ice Fox",
+            "asset": "IceFox",
+            "icon": "/icons/npcs/T_IceFox_icon_normal.webp"
+        },
+        {
+            "name": "Ice Horse",
+            "asset": "IceHorse",
+            "icon": "/icons/npcs/T_IceHorse_icon_normal.webp"
+        },
+        {
+            "name": "Ice Horse Dark",
+            "asset": "IceHorse_Dark",
+            "icon": "/icons/npcs/T_IceHorse_Dark_icon_normal.webp"
+        },
+        {
+            "name": "Ice Narwhal",
+            "asset": "IceNarwhal",
+            "icon": "/icons/npcs/T_IceNarwhal_icon_normal.webp"
+        },
+        {
+            "name": "Ice Narwhal Fire",
+            "asset": "IceNarwhal_Fire",
+            "icon": "/icons/npcs/T_IceNarwhal_Fire_icon_normal.webp"
+        },
+        {
+            "name": "Ice Seal",
+            "asset": "IceSeal",
+            "icon": "/icons/npcs/T_IceSeal_icon_normal.webp"
+        },
+        {
+            "name": "Ice Seal Ground",
+            "asset": "IceSeal_Ground",
+            "icon": "/icons/npcs/T_IceSeal_Ground_icon_normal.webp"
+        },
+        {
+            "name": "Ice Witch",
+            "asset": "IceWitch",
+            "icon": "/icons/npcs/T_IceWitch_icon_normal.webp"
+        },
+        {
             "name": "Pal Merchant",
             "asset": "Inspector",
             "icon": "/icons/npcs/T_Female_MobuCitizen_icon_normal.webp",
@@ -51093,6 +51773,181 @@
                 "Transport": 0,
                 "MonsterFarm": 0
             }
+        },
+        {
+            "name": "Jellyfish Fairy",
+            "asset": "JellyfishFairy",
+            "icon": "/icons/npcs/T_JellyfishFairy_icon_normal.webp"
+        },
+        {
+            "name": "Jellyfish Ghost",
+            "asset": "JellyfishGhost",
+            "icon": "/icons/npcs/T_JellyfishGhost_icon_normal.webp"
+        },
+        {
+            "name": "Jet Dragon",
+            "asset": "JetDragon",
+            "icon": "/icons/npcs/T_JetDragon_icon_normal.webp"
+        },
+        {
+            "name": "Kabuki Man",
+            "asset": "KabukiMan",
+            "icon": "/icons/npcs/T_KabukiMan_icon_normal.webp"
+        },
+        {
+            "name": "Kelpie",
+            "asset": "Kelpie",
+            "icon": "/icons/npcs/T_Kelpie_icon_normal.webp"
+        },
+        {
+            "name": "Kelpie Fire",
+            "asset": "Kelpie_Fire",
+            "icon": "/icons/npcs/T_Kelpie_Fire_icon_normal.webp"
+        },
+        {
+            "name": "Kendo Frog",
+            "asset": "KendoFrog",
+            "icon": "/icons/npcs/T_KendoFrog_icon_normal.webp"
+        },
+        {
+            "name": "Kendo Frog Dark",
+            "asset": "KendoFrog_Dark",
+            "icon": "/icons/npcs/T_KendoFrog_Dark_icon_normal.webp"
+        },
+        {
+            "name": "King Alpaca",
+            "asset": "KingAlpaca",
+            "icon": "/icons/npcs/T_KingAlpaca_icon_normal.webp"
+        },
+        {
+            "name": "King Alpaca ice",
+            "asset": "KingAlpaca_ice",
+            "icon": "/icons/npcs/T_KingAlpaca_Ice_icon_normal.webp"
+        },
+        {
+            "name": "King Bahamut",
+            "asset": "KingBahamut",
+            "icon": "/icons/npcs/T_KingBahamut_icon_normal.webp"
+        },
+        {
+            "name": "King Bahamut Dragon",
+            "asset": "KingBahamut_Dragon",
+            "icon": "/icons/npcs/T_KingBahamut_Dragon_icon_normal.webp"
+        },
+        {
+            "name": "King Sunfish",
+            "asset": "KingSunfish",
+            "icon": "/icons/npcs/T_KingSunfish_icon_normal.webp"
+        },
+        {
+            "name": "King Sunfish Thunder",
+            "asset": "KingSunfish_Thunder",
+            "icon": "/icons/npcs/T_KingSunfish_Thunder_icon_normal.webp"
+        },
+        {
+            "name": "King Whale",
+            "asset": "KingWhale",
+            "icon": "/icons/npcs/T_KingWhale_icon_normal.webp"
+        },
+        {
+            "name": "Kirin",
+            "asset": "Kirin",
+            "icon": "/icons/npcs/T_Kirin_icon_normal.webp"
+        },
+        {
+            "name": "Kirin ice",
+            "asset": "Kirin_ice",
+            "icon": "/icons/npcs/T_Kirin_Ice_icon_normal.webp"
+        },
+        {
+            "name": "Kitsunebi",
+            "asset": "Kitsunebi",
+            "icon": "/icons/npcs/T_Kitsunebi_icon_normal.webp"
+        },
+        {
+            "name": "Kitsunebi Ice",
+            "asset": "Kitsunebi_Ice",
+            "icon": "/icons/npcs/T_Kitsunebi_Ice_icon_normal.webp"
+        },
+        {
+            "name": "Lantern Butler",
+            "asset": "LanternButler",
+            "icon": "/icons/npcs/T_LanternButler_icon_normal.webp"
+        },
+        {
+            "name": "Lava Girl",
+            "asset": "LavaGirl",
+            "icon": "/icons/npcs/T_LavaGirl_icon_normal.webp"
+        },
+        {
+            "name": "Lazy Catfish",
+            "asset": "LazyCatfish",
+            "icon": "/icons/npcs/T_LazyCatfish_icon_normal.webp"
+        },
+        {
+            "name": "Lazy Catfish Gold",
+            "asset": "LazyCatfish_Gold",
+            "icon": "/icons/npcs/T_LazyCatfish_Gold_icon_normal.webp"
+        },
+        {
+            "name": "Lazy Dragon",
+            "asset": "LazyDragon",
+            "icon": "/icons/npcs/T_LazyDragon_icon_normal.webp"
+        },
+        {
+            "name": "Lazy Dragon Electric",
+            "asset": "LazyDragon_Electric",
+            "icon": "/icons/npcs/T_LazyDragon_Electric_icon_normal.webp"
+        },
+        {
+            "name": "Leaf Momonga",
+            "asset": "LeafMomonga",
+            "icon": "/icons/npcs/T_LeafMomonga_icon_normal.webp"
+        },
+        {
+            "name": "Leaf Princess",
+            "asset": "LeafPrincess",
+            "icon": "/icons/npcs/T_LeafPrincess_icon_normal.webp"
+        },
+        {
+            "name": "Legend Deer",
+            "asset": "LegendDeer",
+            "icon": "/icons/npcs/T_LegendDeer_icon_normal.webp"
+        },
+        {
+            "name": "Lily Queen",
+            "asset": "LilyQueen",
+            "icon": "/icons/npcs/T_LilyQueen_icon_normal.webp"
+        },
+        {
+            "name": "Lily Queen Dark",
+            "asset": "LilyQueen_Dark",
+            "icon": "/icons/npcs/T_LilyQueen_Dark_icon_normal.webp"
+        },
+        {
+            "name": "Little Briar Rose",
+            "asset": "LittleBriarRose",
+            "icon": "/icons/npcs/T_LittleBriarRose_icon_normal.webp"
+        },
+        {
+            "name": "Lizard Man",
+            "asset": "LizardMan",
+            "icon": "/icons/npcs/T_LizardMan_icon_normal.webp"
+        },
+        {
+            "name": "Lizard Man Fire",
+            "asset": "LizardMan_Fire",
+            "icon": "/icons/npcs/T_LizardMan_Fire_icon_normal.webp"
+        },
+        {
+            "name": "Long Cat",
+            "asset": "LongCat",
+            "icon": "/icons/npcs/T_LongCat_icon_normal.webp"
+        },
+        {
+            "name": "Lotus Dragon",
+            "asset": "LotusDragon",
+            "icon": "/icons/npcs/T_LotusDragon_icon_normal.webp"
         },
         {
             "name": "Islander",
@@ -53303,6 +54158,21 @@
             }
         },
         {
+            "name": "Manticore",
+            "asset": "Manticore",
+            "icon": "/icons/npcs/T_Manticore_icon_normal.webp"
+        },
+        {
+            "name": "Manticore Dark",
+            "asset": "Manticore_Dark",
+            "icon": "/icons/npcs/T_Manticore_Dark_icon_normal.webp"
+        },
+        {
+            "name": "Mimic Dog",
+            "asset": "MimicDog",
+            "icon": "/icons/npcs/T_MimicDog_icon_normal.webp"
+        },
+        {
             "name": "Islander",
             "asset": "MobuCitizen",
             "icon": "/icons/npcs/T_Female_MobuCitizen_icon_normal.webp",
@@ -53399,6 +54269,76 @@
             }
         },
         {
+            "name": "Monkey",
+            "asset": "Monkey",
+            "icon": "/icons/npcs/T_Monkey_icon_normal.webp"
+        },
+        {
+            "name": "Monkey Fire",
+            "asset": "Monkey_Fire",
+            "icon": "/icons/npcs/T_Monkey_Fire_icon_normal.webp"
+        },
+        {
+            "name": "Monochrome Queen",
+            "asset": "MonochromeQueen",
+            "icon": "/icons/npcs/T_MonochromeQueen_icon_normal.webp"
+        },
+        {
+            "name": "Moon Child",
+            "asset": "MoonChild",
+            "icon": "/icons/npcs/T_MoonChild_icon_normal.webp"
+        },
+        {
+            "name": "Moon Queen",
+            "asset": "MoonQueen",
+            "icon": "/icons/npcs/T_MoonQueen_icon_normal.webp"
+        },
+        {
+            "name": "Mop Baby",
+            "asset": "MopBaby",
+            "icon": "/icons/npcs/T_MopBaby_icon_normal.webp"
+        },
+        {
+            "name": "Mop King",
+            "asset": "MopKing",
+            "icon": "/icons/npcs/T_MopKing_icon_normal.webp"
+        },
+        {
+            "name": "Mothman",
+            "asset": "Mothman",
+            "icon": "/icons/npcs/T_Mothman_icon_normal.webp"
+        },
+        {
+            "name": "Mummy Pal",
+            "asset": "MummyPal",
+            "icon": "/icons/npcs/T_MummyPal_icon_normal.webp"
+        },
+        {
+            "name": "Mushroom Dragon",
+            "asset": "MushroomDragon",
+            "icon": "/icons/npcs/T_MushroomDragon_icon_normal.webp"
+        },
+        {
+            "name": "Mushroom Dragon Dark",
+            "asset": "MushroomDragon_Dark",
+            "icon": "/icons/npcs/T_MushroomDragon_Dark_icon_normal.webp"
+        },
+        {
+            "name": "Mushroom Lady",
+            "asset": "MushroomLady",
+            "icon": "/icons/npcs/T_MushroomLady_icon_normal.webp"
+        },
+        {
+            "name": "Mutant",
+            "asset": "Mutant",
+            "icon": "/icons/npcs/T_Mutant_icon_normal.webp"
+        },
+        {
+            "name": "Mystery Mask",
+            "asset": "MysteryMask",
+            "icon": "/icons/npcs/T_MysteryMask_icon_normal.webp"
+        },
+        {
             "name": "Islander",
             "asset": "NPC_FoodRequire_1",
             "icon": "/icons/npcs/T_Female_MobuCitizen_icon_normal.webp",
@@ -53463,6 +54403,26 @@
             }
         },
         {
+            "name": "Naughty Cat",
+            "asset": "NaughtyCat",
+            "icon": "/icons/npcs/T_NaughtyCat_icon_normal.webp"
+        },
+        {
+            "name": "Negative Koala",
+            "asset": "NegativeKoala",
+            "icon": "/icons/npcs/T_NegativeKoala_icon_normal.webp"
+        },
+        {
+            "name": "Negative Octopus",
+            "asset": "NegativeOctopus",
+            "icon": "/icons/npcs/T_NegativeOctopus_icon_normal.webp"
+        },
+        {
+            "name": "Negative Octopus Neutral",
+            "asset": "NegativeOctopus_Neutral",
+            "icon": "/icons/npcs/T_NegativeOctopus_Neutral_icon_normal.webp"
+        },
+        {
             "name": "Negotiator",
             "asset": "Negotiator",
             "icon": "/icons/npcs/T_Male_People02_icon_normal.webp",
@@ -53493,6 +54453,31 @@
                 "Transport": 0,
                 "MonsterFarm": 0
             }
+        },
+        {
+            "name": "Night Blue Horse",
+            "asset": "NightBlueHorse",
+            "icon": "/icons/npcs/T_NightBlueHorse_icon_normal.webp"
+        },
+        {
+            "name": "Night Blue Horse Neutral",
+            "asset": "NightBlueHorse_Neutral",
+            "icon": "/icons/npcs/T_NightBlueHorse_Neutral_icon_normal.webp"
+        },
+        {
+            "name": "Night Fox",
+            "asset": "NightFox",
+            "icon": "/icons/npcs/T_NightFox_icon_normal.webp"
+        },
+        {
+            "name": "Night Lady",
+            "asset": "NightLady",
+            "icon": "/icons/npcs/T_NightLady_icon_normal.webp"
+        },
+        {
+            "name": "Night Lady Dark",
+            "asset": "NightLady_Dark",
+            "icon": "/icons/npcs/T_NightLady_Dark_icon_normal.webp"
         },
         {
             "name": "Moonflower Genin",
@@ -53815,6 +54800,21 @@
             }
         },
         {
+            "name": "Octopus GIrl",
+            "asset": "OctopusGIrl",
+            "icon": "/icons/npcs/T_OctopusGirl_icon_normal.webp"
+        },
+        {
+            "name": "Octopus Girl Neutral",
+            "asset": "OctopusGirl_Neutral",
+            "icon": "/icons/npcs/T_OctopusGirl_Neutral_icon_normal.webp"
+        },
+        {
+            "name": "Oni Ghost Girl",
+            "asset": "OniGhostGirl",
+            "icon": "/icons/npcs/T_OniGhostGirl_icon_normal.webp"
+        },
+        {
             "name": "Pal Merchant",
             "asset": "PalDealer",
             "icon": "/icons/npcs/T_PalDealer_icon_normal.webp",
@@ -53973,6 +54973,56 @@
                 "Transport": 0,
                 "MonsterFarm": 0
             }
+        },
+        {
+            "name": "Panda Girl",
+            "asset": "PandaGirl",
+            "icon": "/icons/npcs/T_PandaGirl_icon_normal.webp"
+        },
+        {
+            "name": "Penguin",
+            "asset": "Penguin",
+            "icon": "/icons/npcs/T_Penguin_icon_normal.webp"
+        },
+        {
+            "name": "Penguin Electric",
+            "asset": "Penguin_Electric",
+            "icon": "/icons/npcs/T_Penguin_Electric_icon_normal.webp"
+        },
+        {
+            "name": "Pink Cat",
+            "asset": "PinkCat",
+            "icon": "/icons/npcs/T_PinkCat_icon_normal.webp"
+        },
+        {
+            "name": "Pink Kangaroo",
+            "asset": "PinkKangaroo",
+            "icon": "/icons/npcs/T_dummy_icon.webp"
+        },
+        {
+            "name": "Pink Lizard",
+            "asset": "PinkLizard",
+            "icon": "/icons/npcs/T_PinkLizard_icon_normal.webp"
+        },
+        {
+            "name": "Pink Rabbit",
+            "asset": "PinkRabbit",
+            "icon": "/icons/npcs/T_PinkRabbit_icon_normal.webp"
+        },
+        {
+            "name": "Pink Rabbit Grass",
+            "asset": "PinkRabbit_Grass",
+            "icon": "/icons/npcs/T_PinkRabbit_Grass_icon_normal.webp"
+        },
+        {
+            "name": "Plant Slime",
+            "asset": "PlantSlime",
+            "icon": "/icons/npcs/T_PlantSlime_icon_normal.webp"
+        },
+        {
+            "name": "Plesiosaur",
+            "asset": "Plesiosaur",
+            "icon": "/icons/npcs/T_Plesiosaur_icon_normal.webp"
         },
         {
             "name": "PIDF Rifleman",
@@ -54711,6 +55761,21 @@
             }
         },
         {
+            "name": "Poseidon Orca",
+            "asset": "PoseidonOrca",
+            "icon": "/icons/npcs/T_PoseidonOrca_icon_normal.webp"
+        },
+        {
+            "name": "Purple Spider",
+            "asset": "PurpleSpider",
+            "icon": "/icons/npcs/T_PurpleSpider_icon_normal.webp"
+        },
+        {
+            "name": "Queen Bee",
+            "asset": "QueenBee",
+            "icon": "/icons/npcs/T_QueenBee_icon_normal.webp"
+        },
+        {
             "name": "Quest Client",
             "asset": "QuestMan",
             "icon": "/icons/npcs/T_Female_MobuCitizen_icon_normal.webp",
@@ -54999,6 +56064,16 @@
             }
         },
         {
+            "name": "Raijin Daughter",
+            "asset": "RaijinDaughter",
+            "icon": "/icons/npcs/T_RaijinDaughter_icon_normal.webp"
+        },
+        {
+            "name": "Raijin Daughter Water",
+            "asset": "RaijinDaughter_Water",
+            "icon": "/icons/npcs/T_RaijinDaughter_Water_icon_normal.webp"
+        },
+        {
             "name": "Pal Merchant",
             "asset": "RandomEventShop",
             "icon": "/icons/npcs/T_PalDealer_icon_normal.webp",
@@ -55029,6 +56104,16 @@
                 "Transport": 0,
                 "MonsterFarm": 0
             }
+        },
+        {
+            "name": "Red Armor Bird",
+            "asset": "RedArmorBird",
+            "icon": "/icons/npcs/T_RedArmorBird_icon_normal.webp"
+        },
+        {
+            "name": "Red Flower Bird",
+            "asset": "RedFlowerBird",
+            "icon": "/icons/npcs/T_RedFlowerBird_icon_normal.webp"
         },
         {
             "name": "Friendly Pal Tamer",
@@ -55895,6 +56980,51 @@
             }
         },
         {
+            "name": "Robin Hood",
+            "asset": "RobinHood",
+            "icon": "/icons/npcs/T_RobinHood_icon_normal.webp"
+        },
+        {
+            "name": "Robin Hood Ground",
+            "asset": "RobinHood_Ground",
+            "icon": "/icons/npcs/T_RobinHood_Ground_icon_normal.webp"
+        },
+        {
+            "name": "Rock Beast",
+            "asset": "RockBeast",
+            "icon": "/icons/npcs/T_RockBeast_icon_normal.webp"
+        },
+        {
+            "name": "Rock Beast Ice",
+            "asset": "RockBeast_Ice",
+            "icon": "/icons/npcs/T_RockBeast_Ice_icon_normal.webp"
+        },
+        {
+            "name": "Ronin",
+            "asset": "Ronin",
+            "icon": "/icons/npcs/T_Ronin_icon_normal.webp"
+        },
+        {
+            "name": "Ronin Dark",
+            "asset": "Ronin_Dark",
+            "icon": "/icons/npcs/T_Ronin_Dark_icon_normal.webp"
+        },
+        {
+            "name": "Saint Centaur",
+            "asset": "SaintCentaur",
+            "icon": "/icons/npcs/T_SaintCentaur_icon_normal.webp"
+        },
+        {
+            "name": "Sakura Saurus",
+            "asset": "SakuraSaurus",
+            "icon": "/icons/npcs/T_SakuraSaurus_icon_normal.webp"
+        },
+        {
+            "name": "Sakura Saurus Water",
+            "asset": "SakuraSaurus_Water",
+            "icon": "/icons/npcs/T_SakuraSaurus_Water_icon_normal.webp"
+        },
+        {
             "name": "Wandering Merchant",
             "asset": "SalesPerson",
             "icon": "/icons/npcs/T_SalesPerson_icon_normal.webp",
@@ -56087,6 +57217,11 @@
             }
         },
         {
+            "name": "Samurai Dog",
+            "asset": "SamuraiDog",
+            "icon": "/icons/npcs/T_SamuraiDog_icon_normal.webp"
+        },
+        {
             "name": "PAL Genetic Research Unit Executioner",
             "asset": "Scientist_FlameThrower",
             "icon": "/icons/npcs/T_Male_Scientist01_icon_normal.webp",
@@ -56247,6 +57382,151 @@
             }
         },
         {
+            "name": "Scorpion Man",
+            "asset": "ScorpionMan",
+            "icon": "/icons/npcs/T_ScorpionMan_icon_normal.webp"
+        },
+        {
+            "name": "Scorpion Man Electric",
+            "asset": "ScorpionMan_Electric",
+            "icon": "/icons/npcs/T_ScorpionMan_Electric_icon_normal.webp"
+        },
+        {
+            "name": "Sekhmet",
+            "asset": "Sekhmet",
+            "icon": "/icons/npcs/T_Sekhmet_icon_normal.webp"
+        },
+        {
+            "name": "Serpent",
+            "asset": "Serpent",
+            "icon": "/icons/npcs/T_Serpent_icon_normal.webp"
+        },
+        {
+            "name": "Serpent Ground",
+            "asset": "Serpent_Ground",
+            "icon": "/icons/npcs/T_Serpent_Ground_icon_normal.webp"
+        },
+        {
+            "name": "Shark Kid",
+            "asset": "SharkKid",
+            "icon": "/icons/npcs/T_SharkKid_icon_normal.webp"
+        },
+        {
+            "name": "Shark Kid Fire",
+            "asset": "SharkKid_Fire",
+            "icon": "/icons/npcs/T_SharkKid_Fire_icon_normal.webp"
+        },
+        {
+            "name": "Sheep Ball",
+            "asset": "SheepBall",
+            "icon": "/icons/npcs/T_SheepBall_icon_normal.webp"
+        },
+        {
+            "name": "Sifu Dog",
+            "asset": "SifuDog",
+            "icon": "/icons/npcs/T_SifuDog_icon_normal.webp"
+        },
+        {
+            "name": "Sky Dragon",
+            "asset": "SkyDragon",
+            "icon": "/icons/npcs/T_SkyDragon_icon_normal.webp"
+        },
+        {
+            "name": "Sky Dragon Grass",
+            "asset": "SkyDragon_Grass",
+            "icon": "/icons/npcs/T_SkyDragon_Grass_icon_normal.webp"
+        },
+        {
+            "name": "Sleeve Rabbit",
+            "asset": "SleeveRabbit",
+            "icon": "/icons/npcs/T_SleeveRabbit_icon_normal.webp"
+        },
+        {
+            "name": "Small Armadillo",
+            "asset": "SmallArmadillo",
+            "icon": "/icons/npcs/T_SmallArmadillo_icon_normal.webp"
+        },
+        {
+            "name": "Small Yeti",
+            "asset": "SmallYeti",
+            "icon": "/icons/npcs/T_SmallYeti_icon_normal.webp"
+        },
+        {
+            "name": "Snake Girl",
+            "asset": "SnakeGirl",
+            "icon": "/icons/npcs/T_SnakeGirl_icon_normal.webp"
+        },
+        {
+            "name": "Snow Peafowl",
+            "asset": "SnowPeafowl",
+            "icon": "/icons/npcs/T_SnowPeafowl_icon_normal.webp"
+        },
+        {
+            "name": "Snow Tiger Beast Man",
+            "asset": "SnowTigerBeastMan",
+            "icon": "/icons/npcs/T_SnowTigerBeastman_icon_normal.webp"
+        },
+        {
+            "name": "Soldier Bee",
+            "asset": "SoldierBee",
+            "icon": "/icons/npcs/T_SoldierBee_icon_normal.webp"
+        },
+        {
+            "name": "Stuffed Shark",
+            "asset": "StuffedShark",
+            "icon": "/icons/npcs/T_StuffedShark_icon_normal.webp"
+        },
+        {
+            "name": "Stuffed Shark Fire",
+            "asset": "StuffedShark_Fire",
+            "icon": "/icons/npcs/T_StuffedShark_Fire_icon_normal.webp"
+        },
+        {
+            "name": "Sumo Dog",
+            "asset": "SumoDog",
+            "icon": "/icons/npcs/T_SumoDog_icon_normal.webp"
+        },
+        {
+            "name": "Suzaku",
+            "asset": "Suzaku",
+            "icon": "/icons/npcs/T_Suzaku_icon_normal.webp"
+        },
+        {
+            "name": "Suzaku Water",
+            "asset": "Suzaku_Water",
+            "icon": "/icons/npcs/T_Suzaku_Water_icon_normal.webp"
+        },
+        {
+            "name": "Sweets Sheep",
+            "asset": "SweetsSheep",
+            "icon": "/icons/npcs/T_SweetsSheep_icon_normal.webp"
+        },
+        {
+            "name": "Sweets Sheep Ground",
+            "asset": "SweetsSheep_Ground",
+            "icon": "/icons/npcs/T_SweetsSheep_Ground_icon_normal.webp"
+        },
+        {
+            "name": "Sword Cutlass Fish",
+            "asset": "SwordCutlassFish",
+            "icon": "/icons/npcs/T_SwordCutlassfish_icon_normal.webp"
+        },
+        {
+            "name": "Sword Cutlass Fish Fire",
+            "asset": "SwordCutlassFish_Fire",
+            "icon": "/icons/npcs/T_SwordCutlassfish_Fire_icon_normal.webp"
+        },
+        {
+            "name": "Tentacle Turtle",
+            "asset": "TentacleTurtle",
+            "icon": "/icons/npcs/T_TentacleTurtle_icon_normal.webp"
+        },
+        {
+            "name": "Tentacle Turtle Ground",
+            "asset": "TentacleTurtle_Ground",
+            "icon": "/icons/npcs/T_TentacleTurtle_Ground_icon_normal.webp"
+        },
+        {
             "name": "Test Assassin",
             "asset": "TestAssassin",
             "icon": "/icons/npcs/T_Female_MobuCitizen_icon_normal.webp",
@@ -56277,6 +57557,61 @@
                 "Transport": 0,
                 "MonsterFarm": 0
             }
+        },
+        {
+            "name": "Thief Bird",
+            "asset": "ThiefBird",
+            "icon": "/icons/npcs/T_ThiefBird_icon_normal.webp"
+        },
+        {
+            "name": "Thunder Bird",
+            "asset": "ThunderBird",
+            "icon": "/icons/npcs/T_ThunderBird_icon_normal.webp"
+        },
+        {
+            "name": "Thunder Bird Ice",
+            "asset": "ThunderBird_Ice",
+            "icon": "/icons/npcs/T_ThunderBird_Ice_icon_normal.webp"
+        },
+        {
+            "name": "Thunder Dog",
+            "asset": "ThunderDog",
+            "icon": "/icons/npcs/T_ThunderDog_icon_normal.webp"
+        },
+        {
+            "name": "Thunder Dog Ice",
+            "asset": "ThunderDog_Ice",
+            "icon": "/icons/npcs/T_Thunderdog_Ice_icon_normal.webp"
+        },
+        {
+            "name": "Thunder Dragon Man",
+            "asset": "ThunderDragonMan",
+            "icon": "/icons/npcs/T_ThunderDragonMan_icon_normal.webp"
+        },
+        {
+            "name": "Thunder Fluffy Bird",
+            "asset": "ThunderFluffyBird",
+            "icon": "/icons/npcs/T_ThunderFluffyBird_icon_normal.webp"
+        },
+        {
+            "name": "Tropical Ostrich",
+            "asset": "TropicalOstrich",
+            "icon": "/icons/npcs/T_TropicalOstrich_icon_normal.webp"
+        },
+        {
+            "name": "Umihebi",
+            "asset": "Umihebi",
+            "icon": "/icons/npcs/T_Umihebi_icon_normal.webp"
+        },
+        {
+            "name": "Umihebi Fire",
+            "asset": "Umihebi_Fire",
+            "icon": "/icons/npcs/T_Umihebi_Fire_icon_normal.webp"
+        },
+        {
+            "name": "Venus Flytrap",
+            "asset": "VenusFlytrap",
+            "icon": "/icons/npcs/T_VenusFlytrap_icon_normal.webp"
         },
         {
             "name": "Feybreak Warrior",
@@ -56567,6 +57902,11 @@
             }
         },
         {
+            "name": "Violet Fairy",
+            "asset": "VioletFairy",
+            "icon": "/icons/npcs/T_VioletFairy_icon_normal.webp"
+        },
+        {
             "name": "Visitor",
             "asset": "VisitingMerchant",
             "icon": "/icons/npcs/T_Female_MobuCitizen_icon_normal.webp",
@@ -56695,6 +58035,26 @@
             }
         },
         {
+            "name": "Volcanic Monster Ice",
+            "asset": "VolcanicMonster_Ice",
+            "icon": "/icons/npcs/T_VolcanicMonster_Ice_icon_normal.webp"
+        },
+        {
+            "name": "Volcanicmonster",
+            "asset": "Volcanicmonster",
+            "icon": "/icons/npcs/T_VolcanicMonster_icon_normal.webp"
+        },
+        {
+            "name": "Volcano Dragon",
+            "asset": "VolcanoDragon",
+            "icon": "/icons/npcs/T_VolcanoDragon_icon_normal.webp"
+        },
+        {
+            "name": "Volcano Dragon Ice",
+            "asset": "VolcanoDragon_Ice",
+            "icon": "/icons/npcs/T_VolcanoDragon_Ice_icon_normal.webp"
+        },
+        {
             "name": "Weapons Dealer",
             "asset": "WeaponsDealer",
             "icon": "/icons/npcs/T_Female_MobuCitizen_icon_normal.webp",
@@ -56725,6 +58085,156 @@
                 "Transport": 0,
                 "MonsterFarm": 0
             }
+        },
+        {
+            "name": "Weasel Dragon",
+            "asset": "WeaselDragon",
+            "icon": "/icons/npcs/T_WeaselDragon_icon_normal.webp"
+        },
+        {
+            "name": "Weasel Dragon Fire",
+            "asset": "WeaselDragon_Fire",
+            "icon": "/icons/npcs/T_WeaselDragon_Fire_icon_normal.webp"
+        },
+        {
+            "name": "Werewolf",
+            "asset": "Werewolf",
+            "icon": "/icons/npcs/T_Werewolf_icon_normal.webp"
+        },
+        {
+            "name": "Werewolf Ice",
+            "asset": "Werewolf_Ice",
+            "icon": "/icons/npcs/T_Werewolf_Ice_icon_normal.webp"
+        },
+        {
+            "name": "White Alien Dragon",
+            "asset": "WhiteAlienDragon",
+            "icon": "/icons/npcs/T_WhiteAlienDragon_icon_normal.webp"
+        },
+        {
+            "name": "White Deer",
+            "asset": "WhiteDeer",
+            "icon": "/icons/npcs/T_WhiteDeer_icon_normal.webp"
+        },
+        {
+            "name": "White Deer Dark",
+            "asset": "WhiteDeer_Dark",
+            "icon": "/icons/npcs/T_WhiteDeer_Dark_icon_normal.webp"
+        },
+        {
+            "name": "White Moth",
+            "asset": "WhiteMoth",
+            "icon": "/icons/npcs/T_WhiteMoth_icon_normal.webp"
+        },
+        {
+            "name": "White Moth Neutral",
+            "asset": "WhiteMoth_Neutral",
+            "icon": "/icons/npcs/T_WhiteMoth_Neutral_icon_normal.webp"
+        },
+        {
+            "name": "White Shield Dragon",
+            "asset": "WhiteShieldDragon",
+            "icon": "/icons/npcs/T_WhiteShieldDragon_icon_normal.webp"
+        },
+        {
+            "name": "White Tiger",
+            "asset": "WhiteTiger",
+            "icon": "/icons/npcs/T_WhiteTiger_icon_normal.webp"
+        },
+        {
+            "name": "White Tiger Ground",
+            "asset": "WhiteTiger_Ground",
+            "icon": "/icons/npcs/T_WhiteTiger_Ground_icon_normal.webp"
+        },
+        {
+            "name": "Wind Chimes",
+            "asset": "WindChimes",
+            "icon": "/icons/npcs/T_WindChimes_icon_normal.webp"
+        },
+        {
+            "name": "Wind Chimes Ice",
+            "asset": "WindChimes_Ice",
+            "icon": "/icons/npcs/T_WindChimes_Ice_icon_normal.webp"
+        },
+        {
+            "name": "Wing Golem",
+            "asset": "WingGolem",
+            "icon": "/icons/npcs/T_WingGolem_icon_normal.webp"
+        },
+        {
+            "name": "Wing Golem Fire",
+            "asset": "WingGolem_Fire",
+            "icon": "/icons/npcs/T_WingGolem_Fire_icon_normal.webp"
+        },
+        {
+            "name": "Wizard Owl",
+            "asset": "WizardOwl",
+            "icon": "/icons/npcs/T_WizardOwl_icon_normal.webp"
+        },
+        {
+            "name": "Wool Fox",
+            "asset": "WoolFox",
+            "icon": "/icons/npcs/T_WoolFox_icon_normal.webp"
+        },
+        {
+            "name": "World Tree Dragon",
+            "asset": "WorldTreeDragon",
+            "icon": "/icons/npcs/T_WorldTreeDragon_icon_normal.webp"
+        },
+        {
+            "name": "Yakushima Boss001",
+            "asset": "YakushimaBoss001",
+            "icon": "/icons/npcs/T_YakushimaBoss001_icon_normal.webp"
+        },
+        {
+            "name": "Yakushima Boss001 Small",
+            "asset": "YakushimaBoss001_Small",
+            "icon": "/icons/npcs/T_YakushimaBoss001_Small_icon_normal.webp"
+        },
+        {
+            "name": "Yakushima Monster001",
+            "asset": "YakushimaMonster001",
+            "icon": "/icons/npcs/T_YakushimaMonster001_icon_normal.webp"
+        },
+        {
+            "name": "Yakushima Monster001 Blue",
+            "asset": "YakushimaMonster001_Blue",
+            "icon": "/icons/npcs/T_YakushimaMonster001_Blue_icon_normal.webp"
+        },
+        {
+            "name": "Yakushima Monster001 Pink",
+            "asset": "YakushimaMonster001_Pink",
+            "icon": "/icons/npcs/T_YakushimaMonster001_Pink_icon_normal.webp"
+        },
+        {
+            "name": "Yakushima Monster001 Purple",
+            "asset": "YakushimaMonster001_Purple",
+            "icon": "/icons/npcs/T_YakushimaMonster001_Purple_icon_normal.webp"
+        },
+        {
+            "name": "Yakushima Monster001 Rainbow",
+            "asset": "YakushimaMonster001_Rainbow",
+            "icon": "/icons/npcs/T_YakushimaMonster001_Rainbow_icon_normal.webp"
+        },
+        {
+            "name": "Yakushima Monster001 Red",
+            "asset": "YakushimaMonster001_Red",
+            "icon": "/icons/npcs/T_YakushimaMonster001_Red_icon_normal.webp"
+        },
+        {
+            "name": "Yakushima Monster002",
+            "asset": "YakushimaMonster002",
+            "icon": "/icons/npcs/T_YakushimaMonster002_icon_normal.webp"
+        },
+        {
+            "name": "Yakushima Monster003",
+            "asset": "YakushimaMonster003",
+            "icon": "/icons/npcs/T_YakushimaMonster003_icon_normal.webp"
+        },
+        {
+            "name": "Yakushima Monster003 Purple",
+            "asset": "YakushimaMonster003_Purple",
+            "icon": "/icons/npcs/T_YakushimaMonster003_Purple_icon_normal.webp"
         },
         {
             "name": "Islander",
@@ -56885,6 +58395,16 @@
                 "Transport": 0,
                 "MonsterFarm": 0
             }
+        },
+        {
+            "name": "Yeti",
+            "asset": "Yeti",
+            "icon": "/icons/npcs/T_Yeti_icon_normal.webp"
+        },
+        {
+            "name": "Yeti Grass",
+            "asset": "Yeti_Grass",
+            "icon": "/icons/npcs/T_Yeti_Grass_icon_normal.webp"
         },
         {
             "name": "Veteran Hunter",

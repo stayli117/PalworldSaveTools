@@ -35197,7 +35197,7 @@
             "drop_item_type": "EPalDropItemType::None"
         },
         {
-            "name": "Foxicle Bounty Token",
+            "name": "Foxcicle Bounty Token",
             "asset": "BossDefeatReward_IceFox",
             "icon": "/icons/items/T_icon_item_BossDefeatReward_IceFox.webp",
             "rarity": 0,
@@ -35206,7 +35206,7 @@
             "type_a_display": "Essential",
             "type_b_display": "",
             "sort_id": 20094,
-            "description": "Proof of defeating [Foxicle, Frostbound Fox]. Simply possessing it permanently increases the stats of the Pals in your team.",
+            "description": "Proof of defeating [Foxcicle, Frostbound Fox]. Simply possessing it permanently increases the stats of the Pals in your team.",
             "weight": 0.0,
             "price": 1,
             "max_stack": 9999,
@@ -45454,7 +45454,7 @@
             "type_a_display": "Consumable",
             "type_b_display": "",
             "sort_id": 62,
-            "description": "Bait that lures in Pals. \r\nImproved from Simple Bait to increase the chances of Pals biting the bait.",
+            "description": "Bait that lures in Pals.\r\nImproved so that Pals bite the bait more easily,\r\nand the amount of items obtained from fishing now increases ever so slightly.",
             "weight": 0.025,
             "price": 240,
             "max_stack": 9999,
@@ -45580,7 +45580,7 @@
             "type_a_display": "Consumable",
             "type_b_display": "",
             "sort_id": 63,
-            "description": "Bait that lures in Pals. \r\nImproved to slightly enlarge the size of the bar in the fishing minigame.",
+            "description": "Bait that lures in Pals.\r\nImproved so that the bar in the minigame is slightly larger,\r\nand the amount of items obtained from fishing now increases slightly.",
             "weight": 0.025,
             "price": 350,
             "max_stack": 9999,
@@ -72829,7 +72829,7 @@
             "drop_item_type": "EPalDropItemType::None"
         },
         {
-            "name": "Disposable Implant: Skymarcher",
+            "name": "Disposable Implant: Sky Strider",
             "asset": "PalPassiveSkillChange_Consumable_RideJumpCount_Increase2",
             "icon": "/icons/items/T_itemicon_Material_PalPassiveSkillChange_Consumable.webp",
             "rarity": 4,
@@ -84043,7 +84043,7 @@
             "drop_item_type": "EPalDropItemType::None"
         },
         {
-            "name": "Dragon Skill Fruit: Comet",
+            "name": "Dragon Skill Fruit: Comet Strike",
             "asset": "SkillCard_Commet",
             "icon": "/icons/items/T_itemicon_Consume_SkillCard_Dragon.webp",
             "rarity": 2,

@@ -1,3 +1,8 @@
+#2.4.4
+- **Equipment slots now unlock the slot you clicked** — clicking a locked Food, Accessory or Weapon slot now unlocks the exact slot you clicked instead of always the next one in line. Clicking Food 5 with only slot 1 unlocked now adds only AutoMealPouch Tier 5 to unlock Food 5 alone, leaving other slots as they were, and the same per-slot unlocking now applies to accessory and weapon slots.
+- Updated game data to v1.0.4
+- Bumped version to 2.4.4
+
 #2.4.3
 - **Pal Markets stay intact** — just opening and saving a world no longer cleared the Pal Market listings, and rebuilding guilds no longer broke private locks for the booth owner. Booths with pals now keep their stock, prices, sellers and private-lock access exactly as they were, so the owner can still manage their market after any save or rebuild.
 - **Fix All Guilds now leaves Pal Booths and Item Booths alone** — Pal Booths and Item Booths are skipped during Fix All Guilds so their markets, trade listings and private locks are never touched.

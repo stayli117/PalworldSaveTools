@@ -3051,26 +3051,38 @@ class PlayerInventoryTab(QWidget):
             merged = container_items + bounty_items + effigy_items
             key_slot_count = max(50, len(merged) + 10)
             self.key_grid.load_items(merged, max_slots=key_slot_count)
-        unlocked_food_slots = self.inventory.get_unlocked_food_slots() if self.inventory else 0
-        unlocked_accessory_slots = self.inventory.get_unlocked_accessory_slots() if self.inventory else 2
-        unlocked_weapon_slots = self.inventory.get_unlocked_weapon_slots() if self.inventory else 4
+        # Per-slot unlock: each equipment slot is tied to its specific pouch/unlock item.
+        # Clicking food5 unlocks only Tier5, not Tier2-4.
+        key_container = self.inventory.get_container('key') if self.inventory else None
+        owned_ids = set()
+        if key_container is not None:
+            for _s in key_container.slots:
+                owned_ids.add(_s.get('item_id', ''))
         for i in range(1, 6):
             slot_name = f'food{i}'
             if slot_name in self.equip_slots:
                 slot_widget = self.equip_slots[slot_name]
-                is_locked = i > unlocked_food_slots
+                fid = FOOD_POUCH_ITEMS[i - 1] if 1 <= i <= len(FOOD_POUCH_ITEMS) else None
+                is_locked = fid not in owned_ids if fid else True
                 slot_widget.set_locked(is_locked, lock_type='food' if is_locked else None)
         for i in range(1, 5):
             slot_name = f'accessory{i}'
             if slot_name in self.equip_slots:
                 slot_widget = self.equip_slots[slot_name]
-                is_locked = i > unlocked_accessory_slots
+                if i <= 2:
+                    is_locked = False
+                else:
+                    idx = i - 3  # accessory3->0, accessory4->1
+                    fid = ACCESSORY_UNLOCK_ITEMS[idx] if 0 <= idx < len(ACCESSORY_UNLOCK_ITEMS) else None
+                    is_locked = fid not in owned_ids if fid else True
                 slot_widget.set_locked(is_locked, lock_type='accessory' if is_locked else None)
         for i in range(5, 7):
             slot_name = f'weapon{i}'
             if slot_name in self.equip_slots:
                 slot_widget = self.equip_slots[slot_name]
-                is_locked = i > unlocked_weapon_slots
+                idx = i - 5  # weapon5->0, weapon6->1
+                fid = WEAPON_UNLOCK_ITEMS[idx] if 0 <= idx < len(WEAPON_UNLOCK_ITEMS) else None
+                is_locked = fid not in owned_ids if fid else True
                 slot_widget.set_locked(is_locked, lock_type='weapon' if is_locked else None)
         equipment = self.inventory.get_equipment()
         for slot_name, item in equipment.items():
@@ -3082,37 +3094,68 @@ class PlayerInventoryTab(QWidget):
     def _on_slot_unlock_request(self, slot_name: str):
         if not self.inventory:
             return
+        owned_ids = set()
+        try:
+            kc = self.inventory.get_container('key')
+            if kc is not None:
+                for _s in kc.slots:
+                    owned_ids.add(_s.get('item_id', ''))
+        except Exception:
+            pass
+        unlock_item_id: str | None = None
+        unlock_item_name: str | None = None
         if slot_name.startswith('food'):
-            unlocked_food = self.inventory.get_unlocked_food_slots()
-            next_pouch_index = unlocked_food
-            if next_pouch_index < len(FOOD_POUCH_ITEMS):
-                unlock_item_id = FOOD_POUCH_ITEMS[next_pouch_index]
-                unlock_item_name = f'AutoMealPouch Tier {next_pouch_index + 1}'
-            else:
+            try:
+                target = int(slot_name[4:])
+            except ValueError:
+                return
+            if not 1 <= target <= len(FOOD_POUCH_ITEMS):
                 self._themed_message_box(QMessageBox.Information, t('inventory.unlock_failed', default='Unlock Failed'), t('inventory.max_food_slots', default='All food slots are already unlocked!'), QMessageBox.Ok)
                 return
-            slot_type = 'food'
+            fid = FOOD_POUCH_ITEMS[target - 1]
+            if fid in owned_ids:
+                return
+            unlock_item_id = fid
+            unlock_item_name = f'AutoMealPouch Tier {target}'
         elif slot_name.startswith('accessory'):
-            unlocked_acc = self.inventory.get_unlocked_accessory_slots()
-            unlock_index = unlocked_acc - 2
-            if unlock_index < len(ACCESSORY_UNLOCK_ITEMS):
-                unlock_item_id = ACCESSORY_UNLOCK_ITEMS[unlock_index]
-                unlock_item_name = f'Accessory Slot Unlock {unlock_index + 1}'
-            else:
+            try:
+                target = int(slot_name[len('accessory'):])
+            except ValueError:
+                return
+            if target <= 2:
+                return  # base slots are never locked
+            if target not in (3, 4):
+                return
+            idx = target - 3  # accessory3->0, accessory4->1
+            if not 0 <= idx < len(ACCESSORY_UNLOCK_ITEMS):
                 self._themed_message_box(QMessageBox.Information, t('inventory.unlock_failed', default='Unlock Failed'), t('inventory.max_accessory_slots', default='All accessory slots are already unlocked!'), QMessageBox.Ok)
                 return
-            slot_type = 'accessory'
+            fid = ACCESSORY_UNLOCK_ITEMS[idx]
+            if fid in owned_ids:
+                return
+            unlock_item_id = fid
+            unlock_item_name = f'Accessory Slot Unlock {idx + 1}'
         elif slot_name.startswith('weapon'):
-            unlocked_weapon = self.inventory.get_unlocked_weapon_slots()
-            unlock_index = unlocked_weapon - 4
-            if unlock_index < len(WEAPON_UNLOCK_ITEMS):
-                unlock_item_id = WEAPON_UNLOCK_ITEMS[unlock_index]
-                unlock_item_name = f'Weapon Slot Unlock {unlock_index + 1}'
-            else:
+            try:
+                target = int(slot_name[len('weapon'):])
+            except ValueError:
+                return
+            if target in (1, 2, 3, 4):
+                return  # base slots are never locked
+            if target not in (5, 6):
+                return
+            idx = target - 5  # weapon5->0, weapon6->1
+            if not 0 <= idx < len(WEAPON_UNLOCK_ITEMS):
                 self._themed_message_box(QMessageBox.Information, t('inventory.unlock_failed', default='Unlock Failed'), t('inventory.max_weapon_slots', default='All weapon slots are already unlocked!'), QMessageBox.Ok)
                 return
-            slot_type = 'weapon'
+            fid = WEAPON_UNLOCK_ITEMS[idx]
+            if fid in owned_ids:
+                return
+            unlock_item_id = fid
+            unlock_item_name = f'Weapon Slot Unlock {idx + 1}'
         else:
+            return
+        if not unlock_item_id:
             return
         slot_display = slot_name.replace('_', ' ').title()
         message = t('inventory.unlock_confirm', slot=slot_display, item=unlock_item_name, default=f'Unlock {slot_display}?\n\nThis will add "{unlock_item_name}" to your key items.')

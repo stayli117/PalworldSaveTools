@@ -1631,9 +1631,16 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
             elif st == 'dps' and si in self.dps_pals:
                 pal = self.dps_pals[si]
             if pal:
-                iid = str(pal.get('key', {}).get('InstanceId', {}).get('value', ''))
-                if iid not in seen:
-                    seen.add(iid)
+                if st == 'dps':
+                    key = ('dps', si)
+                else:
+                    iid = str(pal.get('key', {}).get('InstanceId', {}).get('value', ''))
+                    if iid and iid != '00000000-0000-0000-0000-000000000000':
+                        key = iid
+                    else:
+                        key = ('obj', id(pal))
+                if key not in seen:
+                    seen.add(key)
                     pals.append(pal)
         for slot_type, abs_idx in self._multi_selected:
             pal = None
@@ -1647,9 +1654,16 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
                 if abs_idx in self.dps_pals:
                     pal = self.dps_pals[abs_idx]
             if pal:
-                iid = str(pal.get('key', {}).get('InstanceId', {}).get('value', ''))
-                if iid not in seen:
-                    seen.add(iid)
+                if slot_type == 'dps':
+                    key = ('dps', abs_idx)
+                else:
+                    iid = str(pal.get('key', {}).get('InstanceId', {}).get('value', ''))
+                    if iid and iid != '00000000-0000-0000-0000-000000000000':
+                        key = iid
+                    else:
+                        key = ('obj', id(pal))
+                if key not in seen:
+                    seen.add(key)
                     pals.append(pal)
         return pals
     def _reapply_multi_highlights(self):

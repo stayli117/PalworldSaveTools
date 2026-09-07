@@ -1,5 +1,6 @@
 #2.4.4
 - **Equipment slots now unlock the slot you clicked** — clicking a locked Food, Accessory or Weapon slot now unlocks the exact slot you clicked instead of always the next one in line. Clicking Food 5 with only slot 1 unlocked now adds only AutoMealPouch Tier 5 to unlock Food 5 alone, leaving other slots as they were, and the same per-slot unlocking now applies to accessory and weapon slots.
+- **DPS bulk actions now work on every selected pal** — using Select All in DPS and then Delete, All Skills, Max, Heal, Rename or feeding food only affected one pal even when hundreds or thousands were selected. All of those bulk actions now correctly apply to every pal you selected.
 - Updated game data to v1.0.4
 - Bumped version to 2.4.4
 

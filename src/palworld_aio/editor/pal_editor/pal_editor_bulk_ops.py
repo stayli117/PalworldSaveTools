@@ -27,6 +27,8 @@ class BulkOperationMixin:
             pr = _get_raw_from_item(pi)
             if pr and extract_value(pr, 'CharacterID', '').lower().replace('boss_', '') == base_id:
                 inst_id = str(pi.get('key', {}).get('InstanceId', {}).get('value', ''))
+                if not inst_id or inst_id == '00000000-0000-0000-0000-000000000000':
+                    inst_id = f"party:{id(pi)}"
                 if inst_id not in seen:
                     seen.add(inst_id)
                     items.append(pi)
@@ -34,6 +36,8 @@ class BulkOperationMixin:
             pr = _get_raw_from_item(pi)
             if pr and extract_value(pr, 'CharacterID', '').lower().replace('boss_', '') == base_id:
                 inst_id = str(pi.get('key', {}).get('InstanceId', {}).get('value', ''))
+                if not inst_id or inst_id == '00000000-0000-0000-0000-000000000000':
+                    inst_id = f"box:{id(pi)}"
                 if inst_id not in seen:
                     seen.add(inst_id)
                     items.append(pi)
@@ -41,7 +45,10 @@ class BulkOperationMixin:
             for pi in self.dps_pals.values():
                 pr = _get_raw_from_item(pi)
                 if pr and extract_value(pr, 'CharacterID', '').lower().replace('boss_', '') == base_id:
-                    inst_id = str(pr.get('InstanceId', {}).get('value', ''))
+                    raw_inst = pr.get('InstanceId')
+                    inst_id = str(raw_inst.get('value', '')) if isinstance(raw_inst, dict) else ''
+                    if not inst_id or inst_id == '00000000-0000-0000-0000-000000000000':
+                        inst_id = f"dps:{id(pi)}"
                     if inst_id not in seen:
                         seen.add(inst_id)
                         items.append(pi)

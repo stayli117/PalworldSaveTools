@@ -345,7 +345,7 @@
       "description": "若它在队伍中，雷属性帕鲁的攻击力会提升(15~30)%。（不可叠加） 将它分派到家畜牧场，它就有机会掉落发电器官。"
     },
     "ElecLion": {
-      "name": "zh_Hans_Text"
+      "name": "电鬃"
     },
     "ElecLizard": {
       "name": "电懒懒",
@@ -1613,7 +1613,7 @@
       "description": "可骑在它的背上移动。 骑乘期间可以进行2段跳跃，发动双枪一闪后，会召唤出1只队伍中的圣光骑士，一起进行攻击。 科技61"
     },
     "BOSS_BlackFurDragon": {
-      "name": "zh_Hans_Text（头目）"
+      "name": "噬魂兽（头目）"
     },
     "BOSS_BlackGriffon": {
       "name": "异构格里芬（头目）",
@@ -1866,7 +1866,7 @@
       "description": "若它在队伍中，雷属性帕鲁的攻击力会提升(15~30)%。（不可叠加） 将它分派到家畜牧场，它就有机会掉落发电器官。"
     },
     "BOSS_ElecLion": {
-      "name": "zh_Hans_Text（头目）"
+      "name": "电鬃（头目）"
     },
     "BOSS_ElecLizard": {
       "name": "电懒懒（头目）",
@@ -3045,7 +3045,7 @@
       "name": "暗魔羊"
     },
     "BlackFurDragon": {
-      "name": "zh_Hans_Text"
+      "name": "噬魂兽"
     },
     "DarkAlien_Oilrig": {
       "name": "杰诺贝达"
